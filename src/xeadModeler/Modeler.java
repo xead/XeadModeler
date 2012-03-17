@@ -65,7 +65,7 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M39";
+	public static final String FULL_VERSION  = "V1.R3.M41";
 	public static final String FORMAT_VERSION  = "1.1";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -256,6 +256,7 @@ public class Modeler extends JFrame {
 	ImageIcon imageIconForeignFunction;
 	ImageIcon imageIconForeignTable;
 	ImageIcon imageIconTree;
+	ImageIcon imageIconModel;
 	/**
 	 * Desktop Color
 	 */
@@ -1266,6 +1267,7 @@ public class Modeler extends JFrame {
 		imageIconForeignFunction = new ImageIcon(xeadModeler.Modeler.class.getResource("ifncf.png"));
 		imageIconForeignTable = new ImageIcon(xeadModeler.Modeler.class.getResource("itblf.png"));
 		imageIconTree = new ImageIcon(xeadModeler.Modeler.class.getResource("itree.png"));
+		imageIconModel = new ImageIcon(xeadModeler.Modeler.class.getResource("imodel.png"));
 		/**
 		 * Title Name and Title Icon
 		 */
@@ -3249,7 +3251,7 @@ public class Modeler extends JFrame {
 		jPanelTableList.add(jTabbedPaneTableList,  BorderLayout.CENTER);
 		jTabbedPaneTableList.addTab(res.getString("S464"), imageIconTable, jScrollPaneNativeTableList);
 		jTabbedPaneTableList.addTab(res.getString("S465"), imageIconForeignTable, jScrollPaneForeignTableList);
-		jTabbedPaneTableList.addTab(res.getString("S466"), imageIconTree, jScrollPaneDatamodel);
+		jTabbedPaneTableList.addTab(res.getString("S466"), imageIconModel, jScrollPaneDatamodel);
 		jTabbedPaneTableList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTabbedPaneTableList.addChangeListener(new TabbedPaneChangeListener());
 		jViewportNativeTableList.add(jTableNativeTableList, null);
@@ -5293,6 +5295,7 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToMoveRight.setEnabled(true);
 		jMenuItemComponentToDelete.setEnabled(true);
 		jPopupMenuComponent.removeAll();
+		jMenuItemComponentToShowTips.setText(res.getString("S879"));
 		//
 		if (e.getComponent().equals(jScrollPaneSystemDepartmentList)) {
 			componentType_jPopupMenuComponent = "SystemDepartmentList";
@@ -6169,6 +6172,7 @@ public class Modeler extends JFrame {
 			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
 			jPopupMenuComponent.addSeparator();
+			jMenuItemComponentToShowTips.setText(res.getString("S993"));
 			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
 		}
 		if (e.getComponent().equals(jTableTableKeyList)) {
@@ -9531,15 +9535,19 @@ public class Modeler extends JFrame {
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2.setPaint(new GradientPaint(10, 30, Color.LIGHT_GRAY, 91, 30, Color.DARK_GRAY));
 				int[] x1={10,91,91,10};
-				int[] y1={10,10,53,53};
+				//int[] y1={10,10,53,53};
+				int[] y1={10,10,54,54};
 				g2.fillPolygon(x1,y1,4);
-				g2.fillOval(10,27,80,47);
+				//g2.fillOval(10,27,80,47);
+				g2.fillOval(10,37,80,37);
 				g2.setColor(Color.LIGHT_GRAY);
 				g2.fillOval(10, 0,80,20);
 				g2.setColor(Color.BLACK);
-				g2.drawLine(90,10,90,51);
+				//g2.drawLine(90,10,90,51);
+				g2.drawLine(90,10,90,54);
 				g2.setPaint(new GradientPaint(10, 37, Color.LIGHT_GRAY, 80, 37, Color.BLACK));
-				g2.drawArc(10,27,80,47,180,180);
+				//g2.drawArc(10,27,80,47,180,180);
+				g2.drawArc(10,37,80,37,180,180);
 				g2.setPaint(new GradientPaint(10, 10, Color.WHITE, 80, 10, Color.DARK_GRAY));
 				g2.drawOval(10,0,80,20);
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -10002,9 +10010,9 @@ public class Modeler extends JFrame {
 				pointArray[1] = new Point(pointNode.x + 70, pointNode.y - 13);
 				pointArray[2] = new Point(pointNode.x + 91, pointNode.y + 15);
 				pointArray[3] = new Point(pointNode.x + 91, pointNode.y + 38);
-				pointArray[4] = new Point(pointNode.x + 70, pointNode.y + 72);
-				pointArray[5] = new Point(pointNode.x + 41, pointNode.y + 75);
-				pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 72);
+				pointArray[4] = new Point(pointNode.x + 70, pointNode.y + 74);
+				pointArray[5] = new Point(pointNode.x + 41, pointNode.y + 76);
+				pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 73);
 				pointArray[7] = new Point(pointNode.x -  5, pointNode.y + 38);
 				pointArray[8] = new Point(pointNode.x -  5, pointNode.y + 15);
 				pointArray[9] = new Point(pointNode.x + 12, pointNode.y - 13);
@@ -12618,8 +12626,8 @@ public class Modeler extends JFrame {
 		// |------------------ jPanel1 ---------------|
 		// |------ jPanel2 ------|-------jPanel4------|
 		// |                     |-------jPanel3------|
-		// |-     LabelName     -| ScrollPaneElements |
-		// |                     |-  PanelElements  - |
+		// |-     jLabelName    -| ScrollPaneElements |
+		// |                     |-  jPanelElements - |
 		// |---------------------|--------------------|
 		//
 		//Constructor//
@@ -12714,6 +12722,7 @@ public class Modeler extends JFrame {
 						jPanelElements.add(elementLabel);
 						//
 						elementLabel = new ElementLabel(node, partOfPrimaryKey);
+						elementLabelArray.add(elementLabel);
 						jPanelElements.add(elementLabel);
 					}
 				} else {
@@ -13846,7 +13855,8 @@ public class Modeler extends JFrame {
 				}
 			}
 			if (this.isPrimaryKeyField()) {
-				str = mark + "*" + this.getName();
+				//str = mark + "*" + this.getName();
+				str = "<html><strong>" + mark + this.getName();
 			} else {
 				str = mark + this.getName();
 			}
@@ -17285,10 +17295,12 @@ public class Modeler extends JFrame {
 				element = (org.w3c.dom.Element)node.getElement();
 				Object[] Cell = new Object[9];
 				Cell[0] =  new TableRowNumber(i+1, element);
-				Cell[1] = node.getElement().getAttribute("Alias");
+				//Cell[1] = node.getElement().getAttribute("Alias");
 				if (node.isPrimaryKeyField()) {
-					Cell[2] = "*" + node.getElement().getAttribute("Name");
+					Cell[1] = "*" + node.getElement().getAttribute("Alias");
+					Cell[2] = "*" + node.getElement().getAttribute("Name"); 
 				} else {
+					Cell[1] = node.getElement().getAttribute("Alias");
 					Cell[2] = node.getElement().getAttribute("Name");
 				}
 				if (node.getElement().getAttribute("AttributeType").equals("NATIVE")) {
@@ -27579,10 +27591,15 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSystemDepartmentWhereUsedList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-			int selectedRow = jTableSystemDepartmentWhereUsedList.rowAtPoint(e.getPoint());
-			jTableSystemDepartmentWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
-			showPopupMenuComponent(e);
+		if (e.getClickCount() >= 2 && jTableSystemDepartmentWhereUsedList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SystemDepartmentWhereUsedList";
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				int selectedRow = jTableSystemDepartmentWhereUsedList.rowAtPoint(e.getPoint());
+				jTableSystemDepartmentWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27590,10 +27607,15 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSystemTableTypeWhereUsedList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-			int selectedRow = jTableSystemTableTypeWhereUsedList.rowAtPoint(e.getPoint());
-			jTableSystemTableTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
-			showPopupMenuComponent(e);
+		if (e.getClickCount() >= 2 && jTableSystemTableTypeWhereUsedList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SystemTableTypeWhereUsedList";
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				int selectedRow = jTableSystemTableTypeWhereUsedList.rowAtPoint(e.getPoint());
+				jTableSystemTableTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27601,10 +27623,15 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSystemDataTypeWhereUsedList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-			int selectedRow = jTableSystemDataTypeWhereUsedList.rowAtPoint(e.getPoint());
-			jTableSystemDataTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
-			showPopupMenuComponent(e);
+		if (e.getClickCount() >= 2 && jTableSystemDataTypeWhereUsedList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SystemDataTypeWhereUsedList";
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				int selectedRow = jTableSystemDataTypeWhereUsedList.rowAtPoint(e.getPoint());
+				jTableSystemDataTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27612,10 +27639,15 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSystemFunctionTypeWhereUsedList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-			int selectedRow = jTableSystemFunctionTypeWhereUsedList.rowAtPoint(e.getPoint());
-			jTableSystemFunctionTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
-			showPopupMenuComponent(e);
+		if (e.getClickCount() >= 2 && jTableSystemFunctionTypeWhereUsedList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SystemFunctionTypeWhereUsedList";
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				int selectedRow = jTableSystemFunctionTypeWhereUsedList.rowAtPoint(e.getPoint());
+				jTableSystemFunctionTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27633,10 +27665,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSubjectAreaList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableSubjectAreaList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SubjectAreaList";
 			selectedRow_jTableSubjectAreaList = jTableSubjectAreaList.rowAtPoint(e.getPoint());
-			jTableSubjectAreaList.setRowSelectionInterval(selectedRow_jTableSubjectAreaList, selectedRow_jTableSubjectAreaList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableSubjectAreaList = jTableSubjectAreaList.rowAtPoint(e.getPoint());
+				jTableSubjectAreaList.setRowSelectionInterval(selectedRow_jTableSubjectAreaList, selectedRow_jTableSubjectAreaList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27654,10 +27692,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableRoleList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableRoleList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "RoleList";
 			selectedRow_jTableRoleList = jTableRoleList.rowAtPoint(e.getPoint());
-			jTableRoleList.setRowSelectionInterval(selectedRow_jTableRoleList, selectedRow_jTableRoleList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableRoleList = jTableRoleList.rowAtPoint(e.getPoint());
+				jTableRoleList.setRowSelectionInterval(selectedRow_jTableRoleList, selectedRow_jTableRoleList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27675,10 +27719,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTaskList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTaskList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TaskList";
 			selectedRow_jTableTaskList = jTableTaskList.rowAtPoint(e.getPoint());
-			jTableTaskList.setRowSelectionInterval(selectedRow_jTableTaskList, selectedRow_jTableTaskList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTaskList = jTableTaskList.rowAtPoint(e.getPoint());
+				jTableTaskList.setRowSelectionInterval(selectedRow_jTableTaskList, selectedRow_jTableTaskList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27870,10 +27920,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableSubsystemList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableSubsystemList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SubsystemList";
 			selectedRow_jTableSubsystemList = jTableSubsystemList.rowAtPoint(e.getPoint());
-			jTableSubsystemList.setRowSelectionInterval(selectedRow_jTableSubsystemList, selectedRow_jTableSubsystemList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableSubsystemList = jTableSubsystemList.rowAtPoint(e.getPoint());
+				jTableSubsystemList.setRowSelectionInterval(selectedRow_jTableSubsystemList, selectedRow_jTableSubsystemList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27881,10 +27937,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableFunctionsStructureTableIOList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableFunctionsStructureTableIOList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "FunctionsStructureTableIOList";
 			selectedRow_jTableFunctionsStructureTableIOList = jTableFunctionsStructureTableIOList.rowAtPoint(e.getPoint());
-			jTableFunctionsStructureTableIOList.setRowSelectionInterval(selectedRow_jTableFunctionsStructureTableIOList, selectedRow_jTableFunctionsStructureTableIOList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableFunctionsStructureTableIOList = jTableFunctionsStructureTableIOList.rowAtPoint(e.getPoint());
+				jTableFunctionsStructureTableIOList.setRowSelectionInterval(selectedRow_jTableFunctionsStructureTableIOList, selectedRow_jTableFunctionsStructureTableIOList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27902,10 +27964,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableNativeTableList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableNativeTableList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "NativeTableList";
 			selectedRow_jTableNativeTableList = jTableNativeTableList.rowAtPoint(e.getPoint());
-			jTableNativeTableList.setRowSelectionInterval(selectedRow_jTableNativeTableList, selectedRow_jTableNativeTableList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableNativeTableList = jTableNativeTableList.rowAtPoint(e.getPoint());
+				jTableNativeTableList.setRowSelectionInterval(selectedRow_jTableNativeTableList, selectedRow_jTableNativeTableList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27923,10 +27991,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableFunctionList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableFunctionList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "FunctionList";
 			selectedRow_jTableFunctionList = jTableFunctionList.rowAtPoint(e.getPoint());
-			jTableFunctionList.setRowSelectionInterval(selectedRow_jTableFunctionList, selectedRow_jTableFunctionList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableFunctionList = jTableFunctionList.rowAtPoint(e.getPoint());
+				jTableFunctionList.setRowSelectionInterval(selectedRow_jTableFunctionList, selectedRow_jTableFunctionList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27944,10 +28018,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableForeignFunctionList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableForeignFunctionList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "ForeignFunctionList";
 			selectedRow_jTableForeignFunctionList = jTableForeignFunctionList.rowAtPoint(e.getPoint());
-			jTableForeignFunctionList.setRowSelectionInterval(selectedRow_jTableForeignFunctionList, selectedRow_jTableForeignFunctionList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableForeignFunctionList = jTableForeignFunctionList.rowAtPoint(e.getPoint());
+				jTableForeignFunctionList.setRowSelectionInterval(selectedRow_jTableForeignFunctionList, selectedRow_jTableForeignFunctionList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -27965,10 +28045,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableFunctionIOList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableFunctionIOList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "FunctionIOList";
 			selectedRow_jTableFunctionIOList = jTableFunctionIOList.rowAtPoint(e.getPoint());
-			jTableFunctionIOList.setRowSelectionInterval(selectedRow_jTableFunctionIOList, selectedRow_jTableFunctionIOList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableFunctionIOList = jTableFunctionIOList.rowAtPoint(e.getPoint());
+				jTableFunctionIOList.setRowSelectionInterval(selectedRow_jTableFunctionIOList, selectedRow_jTableFunctionIOList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28013,10 +28099,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableFieldList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableFieldList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableFieldList";
 			selectedRow_jTableTableFieldList = jTableTableFieldList.rowAtPoint(e.getPoint());
-			jTableTableFieldList.setRowSelectionInterval(selectedRow_jTableTableFieldList, selectedRow_jTableTableFieldList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				//selectedRow_jTableTableFieldList = jTableTableFieldList.rowAtPoint(e.getPoint());
+				//jTableTableFieldList.setRowSelectionInterval(selectedRow_jTableTableFieldList, selectedRow_jTableTableFieldList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28025,12 +28117,12 @@ public class Modeler extends JFrame {
 	 */
 	void jTableTableFieldList_mousePressed(MouseEvent e) {
 		jTableTableFieldList.setRowSelectionAllowed(true);
-		selectedRow_jTableTableFieldList = -1;
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+		//selectedRow_jTableTableFieldList = -1;
+		//if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 			selectedRow_jTableTableFieldList = jTableTableFieldList.rowAtPoint(e.getPoint());
 			targetRow_jTableTableFieldList = selectedRow_jTableTableFieldList;
 			jTableTableFieldList.setRowSelectionInterval(selectedRow_jTableTableFieldList, selectedRow_jTableTableFieldList);
-		}
+		//}
 	}
 	/**
 	 * Event Handler for jTableTableFieldList in case mouse released
@@ -28313,10 +28405,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableKeyList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableKeyList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableKeyList";
 			selectedRow_jTableTableKeyList = jTableTableKeyList.rowAtPoint(e.getPoint());
-			jTableTableKeyList.setRowSelectionInterval(selectedRow_jTableTableKeyList, selectedRow_jTableTableKeyList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableKeyList = jTableTableKeyList.rowAtPoint(e.getPoint());
+				jTableTableKeyList.setRowSelectionInterval(selectedRow_jTableTableKeyList, selectedRow_jTableTableKeyList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28334,10 +28432,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableForeignTableList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableForeignTableList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "ForeignTableList";
 			selectedRow_jTableForeignTableList = jTableForeignTableList.rowAtPoint(e.getPoint());
-			jTableForeignTableList.setRowSelectionInterval(selectedRow_jTableForeignTableList, selectedRow_jTableForeignTableList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableForeignTableList = jTableForeignTableList.rowAtPoint(e.getPoint());
+				jTableForeignTableList.setRowSelectionInterval(selectedRow_jTableForeignTableList, selectedRow_jTableForeignTableList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28345,10 +28449,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableKeyFieldList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableKeyFieldList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableKeyFieldList";
 			selectedRow_jTableTableKeyFieldList = jTableTableKeyFieldList.rowAtPoint(e.getPoint());
-			jTableTableKeyFieldList.setRowSelectionInterval(selectedRow_jTableTableKeyFieldList, selectedRow_jTableTableKeyFieldList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableKeyFieldList = jTableTableKeyFieldList.rowAtPoint(e.getPoint());
+				jTableTableKeyFieldList.setRowSelectionInterval(selectedRow_jTableTableKeyFieldList, selectedRow_jTableTableKeyFieldList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28356,10 +28466,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableRelationshipList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableRelationshipList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "RelationshipList";
 			selectedRow_jTableRelationshipList = jTableRelationshipList.rowAtPoint(e.getPoint());
-			jTableRelationshipList.setRowSelectionInterval(selectedRow_jTableRelationshipList, selectedRow_jTableRelationshipList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableRelationshipList = jTableRelationshipList.rowAtPoint(e.getPoint());
+				jTableRelationshipList.setRowSelectionInterval(selectedRow_jTableRelationshipList, selectedRow_jTableRelationshipList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28367,10 +28483,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableFunctionsUsedByThis_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableFunctionsUsedByThis.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "FunctionsUsedByThis";
 			selectedRow_jTableFunctionsUsedByThis = jTableFunctionsUsedByThis.rowAtPoint(e.getPoint());
-			jTableFunctionsUsedByThis.setRowSelectionInterval(selectedRow_jTableFunctionsUsedByThis, selectedRow_jTableFunctionsUsedByThis);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableFunctionsUsedByThis = jTableFunctionsUsedByThis.rowAtPoint(e.getPoint());
+				jTableFunctionsUsedByThis.setRowSelectionInterval(selectedRow_jTableFunctionsUsedByThis, selectedRow_jTableFunctionsUsedByThis);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28527,10 +28649,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableIOTableFieldList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableIOTableFieldList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "IOTableFieldList";
 			selectedRow_jTableIOTableFieldList = jTableIOTableFieldList.rowAtPoint(e.getPoint());
-			jTableIOTableFieldList.setRowSelectionInterval(selectedRow_jTableIOTableFieldList, selectedRow_jTableIOTableFieldList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableIOTableFieldList = jTableIOTableFieldList.rowAtPoint(e.getPoint());
+				jTableIOTableFieldList.setRowSelectionInterval(selectedRow_jTableIOTableFieldList, selectedRow_jTableIOTableFieldList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28569,10 +28697,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableUsageList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableUsageList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableUsageList";
 			selectedRow_jTableTableUsageList = jTableTableUsageList.rowAtPoint(e.getPoint());
-			jTableTableUsageList.setRowSelectionInterval(selectedRow_jTableTableUsageList, selectedRow_jTableTableUsageList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableUsageList = jTableTableUsageList.rowAtPoint(e.getPoint());
+				jTableTableUsageList.setRowSelectionInterval(selectedRow_jTableTableUsageList, selectedRow_jTableTableUsageList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28590,10 +28724,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableForeignUsageList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableForeignUsageList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableForeignUsageList";
 			selectedRow_jTableTableForeignUsageList = jTableTableForeignUsageList.rowAtPoint(e.getPoint());
-			jTableTableForeignUsageList.setRowSelectionInterval(selectedRow_jTableTableForeignUsageList, selectedRow_jTableTableForeignUsageList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableForeignUsageList = jTableTableForeignUsageList.rowAtPoint(e.getPoint());
+				jTableTableForeignUsageList.setRowSelectionInterval(selectedRow_jTableTableForeignUsageList, selectedRow_jTableTableForeignUsageList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28611,10 +28751,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableFieldUsageList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableFieldUsageList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableFieldUsageList";
 			selectedRow_jTableTableFieldUsageList = jTableTableFieldUsageList.rowAtPoint(e.getPoint());
-			jTableTableFieldUsageList.setRowSelectionInterval(selectedRow_jTableTableFieldUsageList, selectedRow_jTableTableFieldUsageList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableFieldUsageList = jTableTableFieldUsageList.rowAtPoint(e.getPoint());
+				jTableTableFieldUsageList.setRowSelectionInterval(selectedRow_jTableTableFieldUsageList, selectedRow_jTableTableFieldUsageList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28632,10 +28778,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTableFieldForeignUsageList_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTableFieldForeignUsageList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TableFieldForeignUsageList";
 			selectedRow_jTableTableFieldForeignUsageList = jTableTableFieldForeignUsageList.rowAtPoint(e.getPoint());
-			jTableTableFieldForeignUsageList.setRowSelectionInterval(selectedRow_jTableTableFieldForeignUsageList, selectedRow_jTableTableFieldForeignUsageList);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTableFieldForeignUsageList = jTableTableFieldForeignUsageList.rowAtPoint(e.getPoint());
+				jTableTableFieldForeignUsageList.setRowSelectionInterval(selectedRow_jTableTableFieldForeignUsageList, selectedRow_jTableTableFieldForeignUsageList);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28643,10 +28795,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableFunctionsUsingThis_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableFunctionsUsingThis.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "FunctionsUsingThis";
 			selectedRow_jTableFunctionsUsingThis = jTableFunctionsUsingThis.rowAtPoint(e.getPoint());
-			jTableFunctionsUsingThis.setRowSelectionInterval(selectedRow_jTableFunctionsUsingThis, selectedRow_jTableFunctionsUsingThis);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableFunctionsUsingThis = jTableFunctionsUsingThis.rowAtPoint(e.getPoint());
+				jTableFunctionsUsingThis.setRowSelectionInterval(selectedRow_jTableFunctionsUsingThis, selectedRow_jTableFunctionsUsingThis);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
@@ -28654,10 +28812,16 @@ public class Modeler extends JFrame {
 	 * @param e :Mouse Event
 	 */
 	void jTableTasksUsingThis_mouseClicked(MouseEvent e) {
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+		if (e.getClickCount() >= 2 && jTableTasksUsingThis.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "TasksUsingThis";
 			selectedRow_jTableTasksUsingThis = jTableTasksUsingThis.rowAtPoint(e.getPoint());
-			jTableTasksUsingThis.setRowSelectionInterval(selectedRow_jTableTasksUsingThis, selectedRow_jTableTasksUsingThis);
-			showPopupMenuComponent(e);
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				selectedRow_jTableTasksUsingThis = jTableTasksUsingThis.rowAtPoint(e.getPoint());
+				jTableTasksUsingThis.setRowSelectionInterval(selectedRow_jTableTasksUsingThis, selectedRow_jTableTasksUsingThis);
+				showPopupMenuComponent(e);
+			}
 		}
 	}
 	/**
