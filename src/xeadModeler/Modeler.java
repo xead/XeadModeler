@@ -65,7 +65,7 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M41";
+	public static final String FULL_VERSION  = "V1.R3.M42";
 	public static final String FORMAT_VERSION  = "1.1";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -791,6 +791,7 @@ public class Modeler extends JFrame {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		}
 	};
+	boolean sizeOfTableOnModelChanged = false;
 	/**
 	 * Definition components on jPanelTable
 	 */
@@ -13356,21 +13357,26 @@ public class Modeler extends JFrame {
 					jPanelCanvas.add(jPanelMoveGuide, null);
 				}
 			}
+			sizeOfTableOnModelChanged = false;
 		}
 		//
 		private void jPanel1_mouseReleased(MouseEvent e) {
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-				jPanelCanvas.remove(jPanelMoveGuide);
-				if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
-					int width = e.getX();
-					if (width < 189) {
-						width = 189;
+				//if (jPanelMoveGuide.getParent() != null && jPanelMoveGuide.getParent().equals(jPanelCanvas)) {
+				if (sizeOfTableOnModelChanged) {
+					jPanelCanvas.remove(jPanelMoveGuide);
+					if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
+						int width = e.getX();
+						if (width < 189) {
+							width = 189;
+						}
+						this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, width, BOX_HEIGHT));
 					}
-					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, width, BOX_HEIGHT));
+					jPanelCanvas.updateUI();
+					informationOnThisPageChanged = true;
 				}
-				jPanelCanvas.updateUI();
-				informationOnThisPageChanged = true;
 			}
+			sizeOfTableOnModelChanged = false;
 		}
 		//
 		private void jPanel1_mouseDragged(MouseEvent e) {
@@ -13380,6 +13386,7 @@ public class Modeler extends JFrame {
 					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
 				}
 			}
+			sizeOfTableOnModelChanged = true;
 		}
 		//
 		private void jPanel1_mouseEntered(MouseEvent e) {
