@@ -130,7 +130,7 @@ public class DialogDataflowLine extends JDialog {
 		jTextFieldNode1Name.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldNode1Name.setDoubleBuffered(false);
 		jTextFieldNode1Name.setEditable(false);
-		jTextFieldNode1Name.setBounds(new Rectangle(103, 93, 149, 21));
+		jTextFieldNode1Name.setBounds(new Rectangle(103, 93, 149, 22));
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowLine02"));
@@ -231,10 +231,10 @@ public class DialogDataflowLine extends JDialog {
 		jLabel3.setBounds(new Rectangle(13, 12, 84, 15));
 		jTextFieldName.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldName.setText("jTextField1");
-		jTextFieldName.setBounds(new Rectangle(103, 11, 130, 21));
+		jTextFieldName.setBounds(new Rectangle(103, 11, 130, 22));
 		jTextFieldNameExt.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldNameExt.setText("jTextField2");
-		jTextFieldNameExt.setBounds(new Rectangle(103, 36, 130, 21));
+		jTextFieldNameExt.setBounds(new Rectangle(103, 36, 130, 22));
 		jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel4.setText(res.getString("DialogDataflowLine28"));
 		jLabel4.setBounds(new Rectangle(11, 222, 121, 15));

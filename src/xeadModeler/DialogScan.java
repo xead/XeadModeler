@@ -151,7 +151,7 @@ public class DialogScan extends JDialog {
 		jLabel1.setBounds(new Rectangle(8, 13, 80, 15));
 		jTextFieldScan.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldScan.setText("");
-		jTextFieldScan.setBounds(new Rectangle(96, 11, 215, 21));
+		jTextFieldScan.setBounds(new Rectangle(96, 11, 215, 22));
 		jTextFieldScan.addKeyListener(new DialogScan_jTextFieldScan_keyAdapter(this));
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -159,7 +159,7 @@ public class DialogScan extends JDialog {
 		jLabel2.setBounds(new Rectangle(322, 13, 80, 15));
 		jTextFieldReplace.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldReplace.setText("");
-		jTextFieldReplace.setBounds(new Rectangle(408, 13, 215, 21));
+		jTextFieldReplace.setBounds(new Rectangle(408, 13, 215, 22));
 		jTextFieldReplace.addKeyListener(new DialogScan_jTextFieldReplace_keyAdapter(this));
 		jCheckBoxCaseSensitive.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxCaseSensitive.setText(res.getString("DialogScan04"));

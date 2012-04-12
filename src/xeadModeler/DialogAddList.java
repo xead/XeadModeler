@@ -176,8 +176,8 @@ public class DialogAddList extends JDialog {
 		jTextFieldID1.setBounds(new Rectangle(41, 28, 86, 21));
 		jTextFieldName1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldName1.setText("");
-		jTextFieldName1.setBounds(new Rectangle(136, 28, 249, 21));
-		jTextFieldName2.setBounds(new Rectangle(136, 55, 249, 21));
+		jTextFieldName1.setBounds(new Rectangle(136, 28, 249, 22));
+		jTextFieldName2.setBounds(new Rectangle(136, 55, 249, 22));
 		jTextFieldName2.setText("");
 		jTextFieldName2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID2.setBounds(new Rectangle(41, 55, 86, 21));
@@ -186,7 +186,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo2.setBounds(new Rectangle(12, 56, 19, 15));
 		jLabelNo2.setText("2");
 		jLabelNo2.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName3.setBounds(new Rectangle(136, 82, 249, 21));
+		jTextFieldName3.setBounds(new Rectangle(136, 82, 249, 22));
 		jTextFieldName3.setText("");
 		jTextFieldName3.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID3.setBounds(new Rectangle(41, 82, 86, 21));
@@ -195,7 +195,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo3.setBounds(new Rectangle(12, 83, 19, 15));
 		jLabelNo3.setText("3");
 		jLabelNo3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName4.setBounds(new Rectangle(136, 109, 249, 21));
+		jTextFieldName4.setBounds(new Rectangle(136, 109, 249, 22));
 		jTextFieldName4.setText("");
 		jTextFieldName4.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID4.setBounds(new Rectangle(41, 109, 86, 21));
@@ -204,7 +204,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo4.setBounds(new Rectangle(12, 110, 19, 15));
 		jLabelNo4.setText("4");
 		jLabelNo4.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName5.setBounds(new Rectangle(136, 136, 249, 21));
+		jTextFieldName5.setBounds(new Rectangle(136, 136, 249, 22));
 		jTextFieldName5.setText("");
 		jTextFieldName5.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID5.setBounds(new Rectangle(41, 136, 86, 21));
@@ -213,7 +213,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo5.setBounds(new Rectangle(12, 137, 19, 15));
 		jLabelNo5.setText("5");
 		jLabelNo5.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName6.setBounds(new Rectangle(136, 164, 249, 21));
+		jTextFieldName6.setBounds(new Rectangle(136, 164, 249, 22));
 		jTextFieldName6.setText("");
 		jTextFieldName6.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID6.setBounds(new Rectangle(41, 164, 86, 21));
@@ -222,7 +222,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo6.setBounds(new Rectangle(12, 165, 19, 15));
 		jLabelNo6.setText("6");
 		jLabelNo6.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName7.setBounds(new Rectangle(136, 191, 249, 21));
+		jTextFieldName7.setBounds(new Rectangle(136, 191, 249, 22));
 		jTextFieldName7.setText("");
 		jTextFieldName7.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID7.setBounds(new Rectangle(41, 191, 86, 21));
@@ -231,7 +231,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo7.setBounds(new Rectangle(12, 192, 19, 15));
 		jLabelNo7.setText("7");
 		jLabelNo7.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName8.setBounds(new Rectangle(136, 218, 249, 21));
+		jTextFieldName8.setBounds(new Rectangle(136, 218, 249, 22));
 		jTextFieldName8.setText("");
 		jTextFieldName8.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID8.setBounds(new Rectangle(41, 218, 86, 21));
@@ -240,7 +240,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo8.setBounds(new Rectangle(12, 219, 19, 15));
 		jLabelNo8.setText("8");
 		jLabelNo8.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName9.setBounds(new Rectangle(136, 245, 249, 21));
+		jTextFieldName9.setBounds(new Rectangle(136, 245, 249, 22));
 		jTextFieldName9.setText("");
 		jTextFieldName9.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID9.setBounds(new Rectangle(41, 245, 86, 21));
@@ -249,7 +249,7 @@ public class DialogAddList extends JDialog {
 		jLabelNo9.setBounds(new Rectangle(12, 246, 19, 15));
 		jLabelNo9.setText("9");
 		jLabelNo9.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName10.setBounds(new Rectangle(136, 272, 249, 21));
+		jTextFieldName10.setBounds(new Rectangle(136, 272, 249, 22));
 		jTextFieldName10.setText("");
 		jTextFieldName10.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldID10.setBounds(new Rectangle(41, 272, 86, 21));

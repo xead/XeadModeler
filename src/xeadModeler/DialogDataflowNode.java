@@ -32,9 +32,9 @@ package xeadModeler;
  */
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class DialogDataflowNode extends JDialog {
@@ -46,9 +46,11 @@ public class DialogDataflowNode extends JDialog {
 	JLabel jLabel2 = new JLabel();
 	JComboBox jComboBoxType = new JComboBox();
 	JTextField jTextFieldType = new JTextField();
+	JComboBox jComboBoxEventPos = new JComboBox();
 	JLabel jLabel3 = new JLabel();
 	JLabel jLabel4 = new JLabel();
 	JLabel jLabel5 = new JLabel();
+	JLabel jLabel6 = new JLabel();
 	JButton jButtonOK = new JButton();
 	JButton jButtonCancel = new JButton();
 	JSpinner jSpinnerSlideNumber = new JSpinner();
@@ -79,14 +81,14 @@ public class DialogDataflowNode extends JDialog {
 		this.setModal(true);
 		this.setResizable(false);
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(270, 260));
+		panelMain.setPreferredSize(new Dimension(270, 288));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogDataflowNode01"));
 		jLabel1.setBounds(new Rectangle(20, 16, 70, 15));
 		jTextFieldLabel.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldLabel.setBounds(new Rectangle(97, 15, 115, 21));
+		jTextFieldLabel.setBounds(new Rectangle(97, 15, 115, 22));
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowNode02"));
@@ -106,7 +108,7 @@ public class DialogDataflowNode extends JDialog {
 		jComboBoxType.addItem(res.getString("DialogDataflowNode18")); //:10
 		jComboBoxType.setMaximumRowCount(20);
 		jTextFieldType.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldType.setBounds(new Rectangle(97, 47, 115, 21));
+		jTextFieldType.setBounds(new Rectangle(97, 47, 115, 22));
 		jTextFieldType.setEditable(false);
 		jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -116,19 +118,25 @@ public class DialogDataflowNode extends JDialog {
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel4.setText(res.getString("DialogDataflowNode12"));
 		jLabel4.setBounds(new Rectangle(11, 82, 79, 15));
+		jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel6.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel6.setText(res.getString("DialogDataflowNode21"));
+		jLabel6.setBounds(new Rectangle(5, 113, 85, 15));
+		jComboBoxEventPos.setFont(new java.awt.Font("Dialog", 0, 12));
+		jComboBoxEventPos.setBounds(new Rectangle(97, 110, 60, 21));
 		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowNode20"));
-		jLabel5.setBounds(new Rectangle(11, 115, 79, 15));
+		jLabel5.setBounds(new Rectangle(11, 143, 79, 15));
 		jTextAreaDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTextAreaDescriptions.setLineWrap(true);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
-		jScrollPaneDescriptions.setBounds(new Rectangle(97, 114, 155, 90));
-		jButtonOK.setBounds(new Rectangle(60, 220, 73, 25));
+		jScrollPaneDescriptions.setBounds(new Rectangle(97, 140, 155, 90));
+		jButtonOK.setBounds(new Rectangle(40, 248, 73, 25));
 		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogDataflowNode_jButtonOK_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(159, 220, 73, 25));
+		jButtonCancel.setBounds(new Rectangle(169, 248, 73, 25));
 		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonCancel.setText(res.getString("DialogDataflowNode13"));
 		jButtonCancel.addActionListener(new DialogDataflowNode_jButtonCancel_actionAdapter(this));
@@ -140,8 +148,16 @@ public class DialogDataflowNode extends JDialog {
 		element_ = element;
 		action_ = action;
 		//
+		jLabel6.setEnabled(false);
+		jComboBoxEventPos.setEnabled(false);
+		jComboBoxEventPos.removeAllItems();
+		//
 		if (element.getAttribute("Type").equals("Process")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode14"));
+			jLabel6.setEnabled(true);
+			jComboBoxEventPos.setEnabled(true);
+			jComboBoxEventPos.addItem(res.getString("DialogDataflowNode22")); //:0
+			jComboBoxEventPos.addItem(res.getString("DialogDataflowNode23")); //:0
 		}
 		if (element.getAttribute("Type").equals("Ledger")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode03"));
@@ -183,6 +199,8 @@ public class DialogDataflowNode extends JDialog {
 		panelMain.add(jTextFieldLabel, null);
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel4, null);
+		panelMain.add(jLabel6, null);
+		panelMain.add(jComboBoxEventPos, null);
 		panelMain.add(jLabel5, null);
 		panelMain.add(jScrollPaneDescriptions, null);
 		panelMain.add(jButtonOK, null);
@@ -209,6 +227,11 @@ public class DialogDataflowNode extends JDialog {
 				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(node.getElement().getAttribute("Descriptions"), "\n"));
 				jTextAreaDescriptions.setBackground(SystemColor.control);
 				jTextAreaDescriptions.setEditable(false);
+				if (node.getElement().getAttribute("EventPos").equals("") || node.getElement().getAttribute("EventPos").equals("L")) {
+					jComboBoxEventPos.setSelectedIndex(0);
+				} else {
+					jComboBoxEventPos.setSelectedIndex(1);
+				}
 			} else {
 				jTextFieldLabel.setText(element.getAttribute("Name"));
 				jTextFieldLabel.setBackground(Color.white);
@@ -238,7 +261,14 @@ public class DialogDataflowNode extends JDialog {
 		//
 		//Update and return parameter value//
 		if (buttonOKIsPressed) {
-			if (!element.getAttribute("Type").equals("Process")) {
+			if (element.getAttribute("Type").equals("Process")) {
+				if (jComboBoxEventPos.getSelectedIndex() == 0) {
+					element.setAttribute("EventPos", "L");
+				}
+				if (jComboBoxEventPos.getSelectedIndex() == 1) {
+					element.setAttribute("EventPos", "R");
+				}
+			} else {
 				//
 				//Update DOM element//
 				element.setAttribute("Name", jTextFieldLabel.getText());

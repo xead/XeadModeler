@@ -50,10 +50,8 @@ import javax.swing.text.*;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
 import org.apache.xerces.parsers.*;
-//import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
-
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -65,7 +63,7 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M42";
+	public static final String FULL_VERSION  = "V1.R3.M43";
 	public static final String FORMAT_VERSION  = "1.1";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -792,6 +790,8 @@ public class Modeler extends JFrame {
 		}
 	};
 	boolean sizeOfTableOnModelChanged = false;
+	org.w3c.dom.Element draggingKeyElement = null;
+	DialogAddRelationshipOnDatamodel dialogAddRelationshipOnDatamodel = new DialogAddRelationshipOnDatamodel(this);
 	/**
 	 * Definition components on jPanelTable
 	 */
@@ -1009,6 +1009,18 @@ public class Modeler extends JFrame {
 	Border borderOriginal3;
 	JLabel jLabelIOPanelCaretPosition = new JLabel();
 	int iOPanelFontSize,iOPanelCharLengthX,iOPanelCharLengthY;
+	private Action actionUndoIOPanelImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			undoAction.actionPerformed(e);
+		}
+	};
+	private Action actionRedoIOPanelImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			redoAction.actionPerformed(e);
+		}
+	};
 	/**
 	 * Definition components on jPanelIOSpool
 	 */
@@ -1040,6 +1052,18 @@ public class Modeler extends JFrame {
 	JLabel jLabelIOSpoolCaretPosition = new JLabel();
 	JPanel jPanelIOSpoolImage = new JPanel();
 	int iOSpoolFontSize,iOSpoolCharLengthX,iOSpoolCharLengthY;
+	private Action actionUndoIOSpoolImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			undoAction.actionPerformed(e);
+		}
+	};
+	private Action actionRedoIOSpoolImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			redoAction.actionPerformed(e);
+		}
+	};
 	/**
 	 * Definition components on jPanelIOTable
 	 */
@@ -1780,7 +1804,9 @@ public class Modeler extends JFrame {
 		jMenuItemIOImageChangeSelectedCharColorToMagenta.setText("MAGENTA");
 		jMenuItemIOImageChangeSelectedCharColorToMagenta.addActionListener(new Modeler_jMenuItemIOImageChangeSelectedCharColor_actionAdapter(this));
 		jMenuItemIOImageUndo.setText(res.getString("S176"));
+		jMenuItemIOImageUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageRedo.setText(res.getString("S177"));
+		jMenuItemIOImageRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageCut.setText(res.getString("S178"));
 		jMenuItemIOImageCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageCopy.setText(res.getString("S179"));
@@ -4270,6 +4296,14 @@ public class Modeler extends JFrame {
 		jPanelIOPanelImage.addMouseMotionListener(new Modeler_jPanelIOPanelImage_mouseMotionAdapter(this));
 		jScrollPaneIOPanelImage1.setBorder(null);
 		jScrollPaneIOPanelImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		InputMap inputMap = jScrollPaneIOPanelImage1.getInputMap(JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		inputMap.clear();
+		ActionMap actionMap = jScrollPaneIOPanelImage1.getActionMap();
+		actionMap.clear();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "UNDO");
+		actionMap.put("UNDO", actionUndoIOPanelImage);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "REDO");
+		actionMap.put("REDO", actionRedoIOPanelImage);
 		jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 		jTextPaneIOPanelImage.setBackground(SystemColor.control);
 		jTextPaneIOPanelImage.addKeyListener(new Modeler_jTextPaneIOPanelImage_keyAdapter(this));
@@ -4418,6 +4452,14 @@ public class Modeler extends JFrame {
 		jPanelIOSpool6.setLayout(new BorderLayout());
 		jScrollPaneIOSpoolImage1.setBorder(null);
 		jScrollPaneIOSpoolImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		InputMap inputMap = jScrollPaneIOSpoolImage1.getInputMap(JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		inputMap.clear();
+		ActionMap actionMap = jScrollPaneIOSpoolImage1.getActionMap();
+		actionMap.clear();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "UNDO");
+		actionMap.put("UNDO", actionUndoIOSpoolImage);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "REDO");
+		actionMap.put("REDO", actionRedoIOSpoolImage);
 		jScrollPaneIOSpoolImage2.setBorder(BorderFactory.createLoweredBevelBorder());
 		jLabelIOSpoolImage.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelIOSpoolImage.setText(res.getString("S727"));
@@ -5242,6 +5284,28 @@ public class Modeler extends JFrame {
 		}
 		return element;
 	}
+
+	org.w3c.dom.Document getDomDocument() {
+		return domDocument;
+	}
+
+	int incrementLastIDOfRelationship() {
+		lastIDOfRelationship++;
+		return lastIDOfRelationship;
+	}
+
+	org.w3c.dom.Element getSystemElement() {
+		return systemNode.getElement();
+	}
+
+	XeadTreeNode getCurrentMainTreenode() {
+		return currentMainTreeNode;
+	}
+
+	XeadUndoManager getXeadUndoManager() {
+		return xeadUndoManager;
+	}
+
 	/**
 	 * Setup components for taskActionNode
 	 */
@@ -9010,6 +9074,7 @@ public class Modeler extends JFrame {
 		private JMenuItem jMenuItemDataflowNodeRemove = new JMenuItem();
 		private boolean slideNumberIsShown = false;
 		private boolean clickable_;
+		private String eventPos = "";
 		//
 		//Constructor//
 		public DataflowNode(org.w3c.dom.Element element, JPanel jpanel1, JPanel jpanel2, boolean clickable) {
@@ -9060,12 +9125,22 @@ public class Modeler extends JFrame {
 				taskID = dataflowNodeElement_.getAttribute("TaskID");
 				XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", taskID, null);
 				XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", taskNode.getElement().getAttribute("RoleID"), null);
+				eventPos = dataflowNodeElement_.getAttribute("EventPos");
+				if (eventPos.equals("")) {
+					eventPos = "L";
+				}
 				//
 				jLabelID.setFont(new java.awt.Font("SansSerif", 0, 12));
-				jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
 				jLabelID.setForeground(Color.lightGray);
 				jLabelID.setText(taskNode.getElement().getAttribute("SortKey"));
-				jLabelID.setBounds(new Rectangle(63, 45, 50, 15));
+				if (eventPos.equals("L")) {
+					jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
+					jLabelID.setBounds(new Rectangle(63, 45, 50, 15));
+				}
+				if (eventPos.equals("R")) {
+					jLabelID.setHorizontalAlignment(SwingConstants.LEFT);
+					jLabelID.setBounds(new Rectangle(33, 45, 50, 15));
+				}
 				this.add(jLabelID,null);
 				//
 				jTextFieldNodeName.setText(taskNode.getElement().getAttribute("Name"));
@@ -9101,23 +9176,45 @@ public class Modeler extends JFrame {
 				jTextAreaEvent.setFocusable(false);
 				String work = taskNode.getElement().getAttribute("Event");
 				jTextAreaEvent.setText(work);
-				if (work.getBytes().length <= 5) {
-					jTextAreaEvent.setBounds(new Rectangle(25, 22, 44, 42));
+				if (eventPos.equals("L")) {
+					if (work.getBytes().length <= 5) {
+						jTextAreaEvent.setBounds(new Rectangle(25, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 5) && (work.getBytes().length <= 7)) {
+						jTextAreaEvent.setBounds(new Rectangle(20, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 7) && (work.getBytes().length <= 9)) {
+						jTextAreaEvent.setBounds(new Rectangle(15, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 9) && (work.getBytes().length <= 18)) {
+						jTextAreaEvent.setBounds(new Rectangle(15, 16, 44, 42));
+					}
+					if ((work.getBytes().length > 18) && (work.getBytes().length <= 25)) {
+						jTextAreaEvent.setBounds(new Rectangle(15, 11, 44, 42));
+					}
+					if (work.getBytes().length > 25) {
+						jTextAreaEvent.setBounds(new Rectangle(11, 11, 53, 42));
+					}
 				}
-				if ((work.getBytes().length > 5) && (work.getBytes().length <= 7)) {
-					jTextAreaEvent.setBounds(new Rectangle(20, 22, 44, 42));
-				}
-				if ((work.getBytes().length > 7) && (work.getBytes().length <= 9)) {
-					jTextAreaEvent.setBounds(new Rectangle(15, 22, 44, 42));
-				}
-				if ((work.getBytes().length > 9) && (work.getBytes().length <= 18)) {
-					jTextAreaEvent.setBounds(new Rectangle(15, 16, 44, 42));
-				}
-				if ((work.getBytes().length > 18) && (work.getBytes().length <= 25)) {
-					jTextAreaEvent.setBounds(new Rectangle(15, 11, 44, 42));
-				}
-				if (work.getBytes().length > 25) {
-					jTextAreaEvent.setBounds(new Rectangle(11, 11, 53, 42));
+				if (eventPos.equals("R")) {
+					if (work.getBytes().length <= 5) {
+						jTextAreaEvent.setBounds(new Rectangle(100, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 5) && (work.getBytes().length <= 7)) {
+						jTextAreaEvent.setBounds(new Rectangle(95, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 7) && (work.getBytes().length <= 9)) {
+						jTextAreaEvent.setBounds(new Rectangle(90, 22, 44, 42));
+					}
+					if ((work.getBytes().length > 9) && (work.getBytes().length <= 18)) {
+						jTextAreaEvent.setBounds(new Rectangle(90, 16, 44, 42));
+					}
+					if ((work.getBytes().length > 18) && (work.getBytes().length <= 25)) {
+						jTextAreaEvent.setBounds(new Rectangle(90, 11, 44, 42));
+					}
+					if (work.getBytes().length > 25) {
+						jTextAreaEvent.setBounds(new Rectangle(86, 11, 53, 42));
+					}
 				}
 				this.add(jTextAreaEvent, null);
 				//
@@ -9367,8 +9464,12 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Process")) {
 				painted = true;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				int[] xs={ 5,15,15,25,28,35,42,45,55,55,65,60,70,60,65,55,55,45,42,35,28,25,15,15, 5,10, 0,10};
-				int[] ys={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
+				//int[] xs={ 5,15,15,25,28,35,42,45,55,55,65,60,70,60,65,55,55,45,42,35,28,25,15,15, 5,10, 0,10};
+				//int[] ys={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
+				int[] xs0={ 5,15,15,25,28,35,42,45,55,55,65,60,65,60,65,55,55,45,42,35,28,25,15,15, 5,10, 5,10};
+				int[] ys0={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
+				int[] xs1={ 80,90,90,100,103,110,117,120,130,130,140,135,140,135,140,130,130,120,117,110,103,100,90,90,80,85,80,85};
+				int[] ys1={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
 				//
 				if (inPrintMode) {
 					g2.setColor(Color.lightGray);
@@ -9376,9 +9477,16 @@ public class Modeler extends JFrame {
 					g2.setColor(Color.black);
 					g2.drawOval( 8, 35, 130, 86);
 					g2.setColor(Color.WHITE);
-					g2.fillPolygon(xs,ys,28);
-					g2.setColor(Color.BLACK);
-					g2.drawPolygon(xs,ys,28);
+					if (eventPos.equals("L")) {
+						g2.fillPolygon(xs0,ys0,28);
+						g2.setColor(Color.BLACK);
+						g2.drawPolygon(xs0,ys0,28);
+					}
+					if (eventPos.equals("R")) {
+						g2.fillPolygon(xs1,ys1,28);
+						g2.setColor(Color.BLACK);
+						g2.drawPolygon(xs1,ys1,28);
+					}
 				} else {
 					g2.setColor(Color.BLUE);
 					g2.fillOval( 8, 35, 130, 86);
@@ -9386,9 +9494,16 @@ public class Modeler extends JFrame {
 					g2.drawOval( 8, 35, 130, 86);
 					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 					g2.setColor(Color.YELLOW);
-					g2.fillPolygon(xs,ys,28);
-					g2.setColor(Color.WHITE);
-					g2.drawPolygon(xs,ys,28);
+					if (eventPos.equals("L")) {
+						g2.fillPolygon(xs0,ys0,28);
+						g2.setColor(Color.WHITE);
+						g2.drawPolygon(xs0,ys0,28);
+					}
+					if (eventPos.equals("R")) {
+						g2.fillPolygon(xs1,ys1,28);
+						g2.setColor(Color.WHITE);
+						g2.drawPolygon(xs1,ys1,28);
+					}
 				}
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -9958,18 +10073,25 @@ public class Modeler extends JFrame {
 			Point[] pointArray = new Point[10];
 			Point pointNode = this.getLocation();
 			//
-			//if (nodeType.equals("Process")) {
-			pointArray[0] = new Point(pointNode.x + 70, pointNode.y + 19);
-			pointArray[1] = new Point(pointNode.x + 100, pointNode.y + 23);
-			pointArray[2] = new Point(pointNode.x + 131, pointNode.y + 41);
-			pointArray[3] = new Point(pointNode.x + 140, pointNode.y + 71);
-			pointArray[4] = new Point(pointNode.x + 131, pointNode.y + 101);
-			pointArray[5] = new Point(pointNode.x + 103, pointNode.y + 118);
-			pointArray[6] = new Point(pointNode.x + 31, pointNode.y + 119);
-			pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 101);
-			pointArray[8] = new Point(pointNode.x - 8, pointNode.y + 71);
-			pointArray[9] = new Point(pointNode.x +  1, pointNode.y + 43);
-			//}
+			if (nodeType.equals("Process")) {
+				if (eventPos.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 65, pointNode.y + 19);
+					//pointArray[1] = new Point(pointNode.x + 100, pointNode.y + 23);
+					pointArray[1] = new Point(pointNode.x + 105, pointNode.y + 25);
+				}
+				if (eventPos.equals("R")) {
+					pointArray[0] = new Point(pointNode.x + 25, pointNode.y + 25);
+					pointArray[1] = new Point(pointNode.x + 65, pointNode.y + 19);
+				}
+				pointArray[2] = new Point(pointNode.x + 131, pointNode.y + 41);
+				pointArray[3] = new Point(pointNode.x + 140, pointNode.y + 71);
+				pointArray[4] = new Point(pointNode.x + 131, pointNode.y + 101);
+				pointArray[5] = new Point(pointNode.x + 103, pointNode.y + 118);
+				pointArray[6] = new Point(pointNode.x + 31, pointNode.y + 119);
+				pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 101);
+				pointArray[8] = new Point(pointNode.x - 8, pointNode.y + 71);
+				pointArray[9] = new Point(pointNode.x +  1, pointNode.y + 43);
+			}
 			if (nodeType.equals("Subject")) {
 				pointArray[0] = new Point(pointNode.x + 40, pointNode.y - 15);
 				pointArray[1] = new Point(pointNode.x + 80, pointNode.y - 15);
@@ -10108,16 +10230,24 @@ public class Modeler extends JFrame {
 		public int[] getArrowDirections() {
 			int[] directionArray = new int[10];
 			//
-			directionArray[0] = 8;
-			directionArray[1] = 9;
-			directionArray[2] = 11;
-			directionArray[3] = 12;
-			directionArray[4] = 13;
-			directionArray[5] = 15;
-			directionArray[6] = 1;
-			directionArray[7] = 3;
-			directionArray[8] = 4;
-			directionArray[9] = 5;
+			if (nodeType.equals("Process")) {
+				if (eventPos.equals("L")) {
+					directionArray[0] = 8;
+					directionArray[1] = 9;
+				}
+				if (eventPos.equals("R")) {
+					directionArray[0] = 7;
+					directionArray[1] = 8;
+				}
+				directionArray[2] = 11;
+				directionArray[3] = 12;
+				directionArray[4] = 13;
+				directionArray[5] = 15;
+				directionArray[6] = 1;
+				directionArray[7] = 3;
+				directionArray[8] = 4;
+				directionArray[9] = 5;
+			}
 			//
 			if (nodeType.equals("Subject")) {
 				directionArray[0] = 8;
@@ -12592,7 +12722,7 @@ public class Modeler extends JFrame {
 		private Border draggingBorder;
 		private Border printBorder;
 		private JPanel jPanel1 = new JPanel();
-		private JPanel jPanel2 = new JPanel();
+		private DropAcceptablePanel jPanel2 = null;
 		private JPanel jPanel3 = new JPanel();
 		private JPanel jPanel4 = new JPanel();
 		private JPanel jPanel4LeftMargin = new JPanel();
@@ -12722,7 +12852,11 @@ public class Modeler extends JFrame {
 						elementLabelArray.add(elementLabel);
 						jPanelElements.add(elementLabel);
 						//
-						elementLabel = new ElementLabel(node, partOfPrimaryKey);
+						if (partOfPrimaryKey) {
+							elementLabel = new ElementLabel(node, true, primaryKeyNode.getElement(), this);
+						} else {
+							elementLabel = new ElementLabel(node, false, null, this);
+						}
 						elementLabelArray.add(elementLabel);
 						jPanelElements.add(elementLabel);
 					}
@@ -12771,7 +12905,7 @@ public class Modeler extends JFrame {
 										elementLabelArray.add(elementLabel);
 										jPanelElements.add(elementLabel);
 									}
-									elementLabel = new ElementLabel(node, false);
+									elementLabel = new ElementLabel(node, false, keyNode.getElement(), this);
 									elementLabelArray.add(elementLabel);
 									jPanelElements.add(elementLabel);
 									firstFieldOfTheKey = false;
@@ -12819,6 +12953,7 @@ public class Modeler extends JFrame {
 			int preferredHeightOfElementsPanel = rowNumberOfElementLabels * HEIGHT_OF_ELEMENT_LABEL_CHAR;
 			jPanelElements.setPreferredSize(new Dimension(widthOfElementsPanel, preferredHeightOfElementsPanel));
 			//
+			jPanel2 = new DropAcceptablePanel(tableNode_);
 			jLabelNo.setForeground(Color.white);
 			jLabelName.setForeground(Color.white);
 			jLabelSubsystemName.setForeground(Color.GRAY);
@@ -12834,7 +12969,6 @@ public class Modeler extends JFrame {
 				XeadTreeNode ownerSubsystemNode = getSpecificXeadTreeNode("Subsystem", tableNode_.getElement().getAttribute("SubsystemID"), null);
 				jLabelSubsystemName.setText(ownerSubsystemNode.getElement().getAttribute("Name"));
 			}
-			//
 			jPanel2.setLayout(null);
 			jPanel2.setBorder(null);
 			jPanel2.setPreferredSize(new Dimension(184, 40));
@@ -12847,6 +12981,7 @@ public class Modeler extends JFrame {
 			} else {
 				jPanel2.setToolTipText(getFirstSentence(strwork));
 			}
+		 	//
 			jLabelName.setFont(new java.awt.Font("SansSerif", 0, 12));
 			jLabelName.setHorizontalAlignment(SwingConstants.CENTER);
 			jLabelName.setText(tableNode_.getElement().getAttribute("Name"));
@@ -12978,6 +13113,10 @@ public class Modeler extends JFrame {
 			jLabelNo.setText(Integer.toString(number));
 		}
 		//
+		public XeadTreeNode getTableNode() {
+			return tableNode_;
+		}
+		//
 		public String getTableID() {
 			return subsystemTableNodeElement_.getAttribute("TableID");
 		}
@@ -13054,13 +13193,20 @@ public class Modeler extends JFrame {
 			private XeadTreeNode elementNode_;
 			private JPopupMenu jPopupMenuElementLabel = new JPopupMenu();
 			private JMenuItem jMenuItemElementLabelJump = new JMenuItem(res.getString("S2870"));
+			private boolean isKey_;
+			private DatamodelEntityBox entityBox_;
+			private org.w3c.dom.Element keyElement_;
 			//
-			public ElementLabel(XeadTreeNode node, boolean isKey){
+			public ElementLabel(XeadTreeNode node, boolean isKey, org.w3c.dom.Element keyElement, DatamodelEntityBox entityBox){
 				super();
 				elementNode_ = node;
+				isKey_ = isKey;
+				keyElement_ = keyElement;
+				entityBox_ = entityBox;
+				//
 				setFont(new java.awt.Font("Monospaced", 0, 12));
 				if (elementNode_.getElement().getAttribute("AttributeType").equals("NATIVE")) {
-					if (isKey) {
+					if (isKey_) {
 						setText("<html><u>" + elementNode_.getElement().getAttribute("Name"));
 					} else {
 						setText(elementNode_.getElement().getAttribute("Name"));
@@ -13120,6 +13266,30 @@ public class Modeler extends JFrame {
 				setForeground(Color.black);
 			}
 			//
+			public String getID() {
+				if (elementNode_ == null) {
+					return "";
+				} else {
+					return elementNode_.getElement().getAttribute("ID");
+				}
+			}
+			//
+			public org.w3c.dom.Element getKeyElement() {
+				return keyElement_;
+			}
+			//
+			public boolean isKey() {
+				return isKey_;
+			}
+			//
+			public void setColorToStartDragging(boolean isToStart) {
+				if (isToStart) {
+					setForeground(Color.cyan);
+				} else {
+					setForeground(Color.black);
+				}
+			}
+			//
 			public ElementLabel(String label, String toolTipText){
 				super(label);
 				setFont(new java.awt.Font("Monospaced", 0, 12));
@@ -13133,16 +13303,50 @@ public class Modeler extends JFrame {
 				elementLabel_mouseAdapter(ElementLabel adaptee) {
 					this.adaptee = adaptee;
 				}
+				public void mousePressed(MouseEvent e) {
+					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK && keyElement_ != null) {
+						draggingKeyElement = keyElement_;
+						entityBox_.setupToDragKey();
+					}
+				}
+				public void mouseReleased(MouseEvent e) {
+					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+							&& draggingKeyElement != null) {
+						MouseEvent eventOnPanel = SwingUtilities.convertMouseEvent((Component)e.getSource(), e, (Component)jPanelDatamodel);
+						dropTargetComponent = jPanelDatamodel.findComponentAt(eventOnPanel.getX(), eventOnPanel.getY());
+						if (dropTargetComponent instanceof JLabel) {
+							dropTargetComponent = dropTargetComponent.getParent();
+						}
+						if (dropTargetComponent instanceof DropAcceptablePanel) {
+							XeadTreeNode dropTargetTableNode = ((DropAcceptablePanel)dropTargetComponent).getTableNode();
+							if (dialogAddRelationshipOnDatamodel.request(entityBox_.getTableNode(), draggingKeyElement, dropTargetTableNode)) {
+								jTreeMain.updateUI();
+								currentMainTreeNode.activateContentsPane();
+							}
+						}
+						//
+						entityBox_.resetColorOfKeyDragging();
+					}
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
 				public void mouseClicked(MouseEvent e) {
 					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 						jPopupMenuElementLabel.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
 				public void mouseEntered(MouseEvent e) {
-					setForeground(Color.magenta);
+					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+							&& draggingKeyElement != null) {
+					} else {
+						setForeground(Color.magenta);
+					}
 				}
 				public void mouseExited(MouseEvent e) {
-					setForeground(Color.black);
+					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+							&& draggingKeyElement != null) {
+					} else {
+						setForeground(Color.black);
+					}
 				}
 			}
 			//
@@ -13156,6 +13360,18 @@ public class Modeler extends JFrame {
 					jTreeMain.setSelectionPath(tp);
 					setupContentsPaneForTreeNodeSelected(elementNode_, false);
 				}
+			}
+		}
+		//
+		class DropAcceptablePanel extends JPanel {
+			private static final long serialVersionUID = 1L;
+			private XeadTreeNode tableNode_;
+			public DropAcceptablePanel(XeadTreeNode tableNode) {
+				super();
+				tableNode_ = tableNode;
+			}
+			public XeadTreeNode getTableNode() {
+				return tableNode_;
 			}
 		}
 		//
@@ -13238,6 +13454,32 @@ public class Modeler extends JFrame {
 			}
 		}
 		//
+//		class jPanelElements_mouseAdapter extends java.awt.event.MouseAdapter {
+//			DatamodelEntityBox adaptee;
+//			jPanelElements_mouseAdapter(DatamodelEntityBox adaptee) {
+//				this.adaptee = adaptee;
+//			}
+//			public void mouseReleased(MouseEvent e) {
+//				adaptee.jPanelElements_mouseReleased(e);
+//			}
+//			public void mouseEntered(MouseEvent e) {
+//				adaptee.jPanelElements_mouseEntered(e);
+//			}
+//		}
+//		//
+//		private void jPanelElements_mouseReleased(MouseEvent e) {
+//			if (draggingKeyElement != null) {
+//				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//			}
+//		}
+//		//
+//		private void jPanelElements_mouseEntered(MouseEvent e) {
+//			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+//					&& draggingKeyElement == null) {
+//				setCursor(DragSource.DefaultLinkNoDrop);
+//			}
+//		}
+		//
 		class jPanel2_mouseAdapter extends java.awt.event.MouseAdapter {
 			DatamodelEntityBox adaptee;
 			jPanel2_mouseAdapter(DatamodelEntityBox adaptee) {
@@ -13311,6 +13553,7 @@ public class Modeler extends JFrame {
 				jPanelCanvas.updateUI();
 				informationOnThisPageChanged = true;
 			}
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		//
 		public void changePositionTo(int posX, int posY) {
@@ -13340,13 +13583,18 @@ public class Modeler extends JFrame {
 		}
 		//
 		private void jPanel2_mouseEntered(MouseEvent e) {
-			setCursor(new Cursor(Cursor.MOVE_CURSOR));
 			jLabelName.setForeground(Color.magenta);
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+					&& draggingKeyElement != null) {
+				setCursor(DragSource.DefaultLinkDrop);
+			} else {
+				setCursor(new Cursor(Cursor.MOVE_CURSOR));
+			}
 		}
 		//
 		private void jPanel2_mouseExited(MouseEvent e) {
-			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			jLabelName.setForeground(Color.white);
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		//
 		private void jPanel1_mousePressed(MouseEvent e) {
@@ -13362,7 +13610,6 @@ public class Modeler extends JFrame {
 		//
 		private void jPanel1_mouseReleased(MouseEvent e) {
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-				//if (jPanelMoveGuide.getParent() != null && jPanelMoveGuide.getParent().equals(jPanelCanvas)) {
 				if (sizeOfTableOnModelChanged) {
 					jPanelCanvas.remove(jPanelMoveGuide);
 					if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
@@ -13524,6 +13771,27 @@ public class Modeler extends JFrame {
 				}
 				jPopupMenuEntityBox.show(e.getComponent(), e.getX(), e.getY());
 			}
+		}
+		//
+		public void setupToDragKey() {
+			int countOfKeyField = 0;
+			for (int i = 0; i < elementLabelArray.size(); i++) {
+				if (elementLabelArray.get(i).getKeyElement() != null
+						&& elementLabelArray.get(i).getKeyElement().equals(draggingKeyElement)) {
+					countOfKeyField++;
+					elementLabelArray.get(i).setColorToStartDragging(true);
+					if (i > 0 && elementLabelArray.get(i-1).getID().equals("") && countOfKeyField > 1) {
+						elementLabelArray.get(i-1).setColorToStartDragging(true);
+					}
+				}
+			}
+		}
+		//
+		public void resetColorOfKeyDragging() {
+			for (int i = 0; i < elementLabelArray.size(); i++) {
+				elementLabelArray.get(i).setColorToStartDragging(false);
+			}
+			draggingKeyElement = null;
 		}
 		//
 		class jPanel1_mouseMotionAdapter extends java.awt.event.MouseMotionAdapter {
@@ -15645,7 +15913,7 @@ public class Modeler extends JFrame {
 			}
 		}
 		//
-		private void createSubsystemAttributesForRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element subsystemElement) {
+		public void createSubsystemAttributesForRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element subsystemElement) {
 			org.w3c.dom.Element elementSubsystemTable, elementSubsystemRelationship, newElement;
 			boolean table1OK, table2OK, needToAdd;
 			NodeList subsystemTableList = subsystemElement.getElementsByTagName("SubsystemTable");
@@ -15865,7 +16133,7 @@ public class Modeler extends JFrame {
 			if (nodeType_.equals("TableKey")) {
 				element = (org.w3c.dom.Element)domNode_.cloneNode(true);
 				//
-				//Create clone of all relationship and subsystem-relationship related to the key//
+				//Create clone of all relationship related to the key//
 				org.w3c.dom.Element relationshipElement;
 				XeadTreeNode tableNode = (XeadTreeNode)this.getParent().getParent();
 				String tableID = tableNode.getElement().getAttribute("ID");
@@ -18067,7 +18335,7 @@ public class Modeler extends JFrame {
 				//
 				//Setup undo-controller//
 				jTextPaneIOPanelImage.getDocument().addUndoableEditListener(textPaneUndoableEditListener);
-				//
+				textPaneUndoManager.discardAllEdits();
 			}
 			//
 			//Setup IOPanelFieldList//
@@ -18211,6 +18479,10 @@ public class Modeler extends JFrame {
 				StyledDocument styledDocument = jTextPaneIOSpoolImage.getStyledDocument();
 				NodeList textStyleList = this.getElement().getElementsByTagName("IOSpoolStyle");
 				setTextStyleToDocument(styledDocument, textStyleList);
+				//
+				//Setup undo-controller//
+				jTextPaneIOSpoolImage.getDocument().addUndoableEditListener(textPaneUndoableEditListener);
+				textPaneUndoManager.discardAllEdits();
 			}
 			//
 			//Setup IOSpoolFieldList//
@@ -21938,6 +22210,12 @@ public class Modeler extends JFrame {
 		}
 		//
 		void undo() {
+			//////////////////////////////////////////////////////////////////////
+			// This step is required even if executed twice eventually by       //
+			// showing Edit Menu. Because usually Edit Menu is not used to undo //                    //
+			//////////////////////////////////////////////////////////////////////
+			currentMainTreeNode.updateFields();
+			//
 			undoRedoActionBeingExecuted = true;
 			if (indexOfLastUndo > -1) {
 				if (actionArray[indexOfLastUndo].equals("Add")) {
@@ -21959,6 +22237,7 @@ public class Modeler extends JFrame {
 				jMenuItemEditRedo.setEnabled(true);
 			}
 			undoRedoActionBeingExecuted = false;
+			jTreeMain.updateUI();
 		}
 		//
 		void redo() {
@@ -21984,6 +22263,7 @@ public class Modeler extends JFrame {
 				jMenuItemEditUndo.setEnabled(true);
 			}
 			undoRedoActionBeingExecuted = false;
+			jTreeMain.updateUI();
 		}
 		//
 		void resetLog() {
@@ -28091,6 +28371,32 @@ public class Modeler extends JFrame {
 			showPopupMenuComponent(e);
 		}
 	}
+//	/**
+//	 * Event Handler for jPanelDatamodel in case mouse released
+//	 * @param e :Mouse Event
+//	 */
+//	void jPanelDatamodel_mouseReleased(MouseEvent e) {
+//		if (draggingKeyElement != null) {
+//			org.w3c.dom.Element tableElement = (org.w3c.dom.Element)draggingKeyElement.getParentNode();
+//			String tableID = tableElement.getAttribute("ID");
+//			for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+//				if (datamodelEntityBoxArray.get(i).getTableID().equals(tableID)) {
+//					datamodelEntityBoxArray.get(i).resetColorOfKeyDragging();
+//				}
+//			}
+//			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//		}
+//	}
+//	/**
+//	 * Event Handler for jPanelDatamodel in case mouse entered
+//	 * @param e :Mouse Event
+//	 */
+//	void jPanelDatamodel_mouseEntered(MouseEvent e) {
+//		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+//				&& draggingKeyElement != null) {
+//			setCursor(DragSource.DefaultLinkNoDrop);
+//		}
+//	}
 	/**
 	 * Event Handler for jScrollPaneTableFieldList in case mouse clicked
 	 * @param e :Mouse Event
