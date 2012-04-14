@@ -63,7 +63,7 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M43";
+	public static final String FULL_VERSION  = "V1.R3.M44";
 	public static final String FORMAT_VERSION  = "1.1";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -766,6 +766,12 @@ public class Modeler extends JFrame {
 	TableModelForeignTableList tableModelForeignTableList = new TableModelForeignTableList();
 	JTable jTableForeignTableList = new JTable(tableModelForeignTableList);
 	int selectedRow_jTableForeignTableList;
+	JSplitPane jSplitPaneDatamodel = new JSplitPane();
+	JPanel jPanelDatamodelTop = new JPanel();
+	JPanel jPanelDatamodelDescriptions = new JPanel();
+	JLabel jLabelDatamodelDescriptions = new JLabel();
+	JScrollPane jScrollPaneDatamodelDescriptions = new JScrollPane();
+	KanjiTextArea jTextAreaDatamodelDescriptions = new KanjiTextArea();
 	JScrollPane jScrollPaneDatamodel = new JScrollPane();
 	ArrayList<DatamodelEntityBox> datamodelEntityBoxArray = new ArrayList<DatamodelEntityBox>();
 	ArrayList<DatamodelRelationshipLine> datamodelRelationshipLineArray = new ArrayList<DatamodelRelationshipLine>();
@@ -3278,7 +3284,7 @@ public class Modeler extends JFrame {
 		jPanelTableList.add(jTabbedPaneTableList,  BorderLayout.CENTER);
 		jTabbedPaneTableList.addTab(res.getString("S464"), imageIconTable, jScrollPaneNativeTableList);
 		jTabbedPaneTableList.addTab(res.getString("S465"), imageIconForeignTable, jScrollPaneForeignTableList);
-		jTabbedPaneTableList.addTab(res.getString("S466"), imageIconModel, jScrollPaneDatamodel);
+		jTabbedPaneTableList.addTab(res.getString("S466"), imageIconModel, jSplitPaneDatamodel);
 		jTabbedPaneTableList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTabbedPaneTableList.addChangeListener(new TabbedPaneChangeListener());
 		jViewportNativeTableList.add(jTableNativeTableList, null);
@@ -3291,7 +3297,6 @@ public class Modeler extends JFrame {
 		jScrollPaneForeignTableList.addMouseListener(new Modeler_jScrollPaneForeignTableList_mouseAdapter(this));
 		jTableForeignTableList.addMouseListener(new Modeler_jTableForeignTableList_mouseAdapter(this));
 		jTableForeignTableList.addFocusListener(new Modeler_FocusListener());
-		jScrollPaneDatamodel.getViewport().add(jPanelDatamodel, null);
 		//(jTableNativeTableList)//
 		jTableNativeTableList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTableNativeTableList.setBackground(SystemColor.control);
@@ -3412,6 +3417,27 @@ public class Modeler extends JFrame {
 		jTableForeignTableList.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 12));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableForeignTableList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		//(jSplitPaneDatamodel)//
+		jSplitPaneDatamodel.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		jSplitPaneDatamodel.setBorder(null);
+		jSplitPaneDatamodel.setDividerLocation(70);
+		jSplitPaneDatamodel.add(jPanelDatamodelTop, JSplitPane.TOP);
+		jSplitPaneDatamodel.add(jScrollPaneDatamodel, JSplitPane.BOTTOM);
+		jPanelDatamodelTop.setBorder(BorderFactory.createEtchedBorder());
+		jPanelDatamodelTop.setMinimumSize(new Dimension(500, 0));
+		jPanelDatamodelTop.setLayout(new BorderLayout());
+		jPanelDatamodelTop.add(jPanelDatamodelDescriptions,  BorderLayout.NORTH);
+		jPanelDatamodelTop.add(jScrollPaneDatamodelDescriptions, BorderLayout.CENTER);
+		jPanelDatamodelDescriptions.setLayout(null);
+		jPanelDatamodelDescriptions.setPreferredSize(new Dimension(500, 20));
+		jPanelDatamodelDescriptions.add(jLabelDatamodelDescriptions, null);
+		jLabelDatamodelDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jLabelDatamodelDescriptions.setText(res.getString("S467"));
+		jLabelDatamodelDescriptions.setBounds(new Rectangle(5, 0, 300, 20));
+		jTextAreaDatamodelDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTextAreaDatamodelDescriptions.setLineWrap(true);
+		jScrollPaneDatamodelDescriptions.getViewport().add(jTextAreaDatamodelDescriptions, null);
+		jScrollPaneDatamodel.getViewport().add(jPanelDatamodel, null);
 	}
 	/**
 	 * Initialize component for node of Table
@@ -8425,13 +8451,13 @@ public class Modeler extends JFrame {
 				if (urlString.substring(0, 20).equals("file:///currentpath/")) {
 					File file = new File(currentFileName);
 					urlString = "file:///" + file.getParent() + File.separator + urlString.substring(20, urlString.length());
-					try {
-						setCursor(new Cursor(Cursor.WAIT_CURSOR));
-						desktop.browse(new URI(urlString));
-					} catch (Exception ex) {
-					} finally {
-						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					}
+				}
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					desktop.browse(new URI(urlString));
+				} catch (Exception ex) {
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 			catch (Exception ex) {
@@ -17344,6 +17370,8 @@ public class Modeler extends JFrame {
 				//
 				jProgressBar.setMaximum(subsystemTableList.getLength() + 1);
 				//
+				jTextAreaDatamodelDescriptions.setText(substringLinesWithTokenOfEOL(parentNode.getElement().getAttribute("DatamodelDescriptions"), "\n"));
+				//
 				//Setup EntityBoxes and jPanelDatamodel//
 				int boxRightEdgeLocation = 0;
 				int boxBottomEdgeLocation = 0;
@@ -21078,7 +21106,13 @@ public class Modeler extends JFrame {
 			//
 			//Update DataModel//
 			if (previousSelectedIndex_jTabbedPaneTableList == 2) {
+				XeadTreeNode parentNode = (XeadTreeNode)this.getParent(); //parent subsystem node//
+				org.w3c.dom.Element parentElement = parentNode.getElement();
+				if (!parentElement.getAttribute("DatamodelDescriptions").equals(concatLinesWithTokenOfEOL(jTextAreaDatamodelDescriptions.getText()))) {
+					informationOnThisPageChanged = true;
+				}
 				if (informationOnThisPageChanged) {
+					parentElement.setAttribute("DatamodelDescriptions", concatLinesWithTokenOfEOL(jTextAreaDatamodelDescriptions.getText()));
 					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 						datamodelEntityBoxArray.get(i).updateElement();
 					}
@@ -29272,17 +29306,18 @@ public class Modeler extends JFrame {
 				//
 				if (startPosOfLine < endPosOfLine) {
 					//
-					//Caliculate startPosOfURL//
+					//Calculate startPosOfURL//
 					for (int i = caretPosition; i >= startPosOfLine; i--) {
 						if (i+5 < endPosOfLine) {
-							if (lastFocusedTextArea.getText().substring(i, i+5).equals("http:") || lastFocusedTextArea.getText().substring(i, i+5).equals("file:")) {
+							if (lastFocusedTextArea.getText().substring(i, i+5).equals("http:")
+									|| lastFocusedTextArea.getText().substring(i, i+5).equals("file:")) {
 								startPosOfURL = i;
 								break;
 							}
 						}
 					}
 					//
-					//Caliculate EndPosOfURL//
+					//Calculate EndPosOfURL//
 					for (int i = caretPosition; i <= endPosOfLine; i++) {
 						endPosOfURL = i;
 						if (i+1 < endPosOfLine) {

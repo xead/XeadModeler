@@ -712,6 +712,7 @@ public class DialogScan extends JDialog {
 						//
 						scanAttribute(element, "Subsystem", "Name");
 						scanAttribute(element, "Subsystem", "Descriptions");
+						scanAttribute(element, "Subsystem", "DatamodelDescriptions");
 						//
 						if (jCheckBoxTable.isSelected()) {
 							workList1 = element.getElementsByTagName("SubsystemTable");
@@ -878,7 +879,10 @@ public class DialogScan extends JDialog {
 		int countOfScanned = 0;
 		boolean processingEOLRequired = false;
 		//
-		if (attributeType.equals("Descriptions") || attributeType.equals("Operations") || attributeType.equals("ImageText")) {
+		if (attributeType.equals("Descriptions")
+				|| attributeType.equals("Operations")
+				|| attributeType.equals("ImageText")
+				|| attributeType.equals("DatamodelDescriptions")) {
 			processingEOLRequired = true;
 			targetString = substringLinesWithTokenOfEOL(element.getAttribute(attributeType), "\n");
 		} else {
@@ -1033,6 +1037,9 @@ public class DialogScan extends JDialog {
 		}
 		if (attributeType.equals("Descriptions")) {
 			result = res.getString("DialogScan69");
+		}
+		if (attributeType.equals("DatamodelDescriptions")) {
+			result = res.getString("DialogScan83");
 		}
 		if (attributeType.equals("Event")) {
 			result = res.getString("DialogScan70");
