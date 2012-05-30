@@ -63,8 +63,8 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M44";
-	public static final String FORMAT_VERSION  = "1.1";
+	public static final String FULL_VERSION  = "V1.R3.M45";
+	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
 	/**
@@ -1206,12 +1206,17 @@ public class Modeler extends JFrame {
 	TextPaneRedoAction redoAction = new TextPaneRedoAction();
 	Action[] defaultActions = {undoAction, redoAction};
 	/**
+	 * Application instance
+	 */
+	private Application application;
+	/**
 	 * Constructor
 	 * @param args :[0]=name of file to be processed
 	 */
-	public Modeler(String[] args) {
+	public Modeler(String[] args, Application app) {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		try {
+			application = app;
 			jbInit();  //Initialize components//
 			if (args.length > 0) {
 				processContentsFile(args[0]);
@@ -4935,6 +4940,8 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = null;
 			previousMainTreeNode = null;
 			//
+			application.setTextOnSplash(res.getString("SplashMessage1"));
+			//
 			//Check File attributes//
 			File file = new File(currentFileName);
 			if (!file.canWrite()) {
@@ -5139,6 +5146,13 @@ public class Modeler extends JFrame {
 				id = Integer.parseInt(element1.getAttribute("ID"));
 				if (id > lastIDOfRelationship) lastIDOfRelationship = id;
 			}
+		    //
+		    // Hide Splash Screen //
+			EventQueue.invokeLater(new Runnable() {
+				@Override public void run() {
+					application.hideSplash();
+				}
+			});
 			//
 			//Select top node(systemNode) and setup contents pane//
 			jTreeMain.setModel(treeModel);
@@ -5148,7 +5162,13 @@ public class Modeler extends JFrame {
 			setupContentsPaneForTreeNodeSelected((XeadTreeNode)tp.getLastPathComponent(), false);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			EventQueue.invokeLater(new Runnable() {
+				@Override public void run() {
+					application.hideSplash();
+				}
+			});
+    		JOptionPane.showMessageDialog(this, "Failed to parse xml format of the file '" + currentFileName + "'.\n\n" + e.getMessage());
+			System.exit(0);
 		}
 	}
 	/**
@@ -5313,6 +5333,10 @@ public class Modeler extends JFrame {
 
 	org.w3c.dom.Document getDomDocument() {
 		return domDocument;
+	}
+
+	String getFormatVersion() {
+		return FORMAT_VERSION;
 	}
 
 	int incrementLastIDOfRelationship() {
@@ -13659,7 +13683,6 @@ public class Modeler extends JFrame {
 					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
 				}
 			}
-			sizeOfTableOnModelChanged = true;
 		}
 		//
 		private void jPanel1_mouseEntered(MouseEvent e) {
@@ -15485,6 +15508,7 @@ public class Modeler extends JFrame {
 						newElementChild2 = domDocument.createElement("TaskFunctionIO");
 						newElementChild2.setAttribute("FunctionID", element2.getAttribute("FunctionID"));
 						newElementChild2.setAttribute("IOID", element2.getAttribute("IOID"));
+						newElementChild2.setAttribute("IOIDSeq", element2.getAttribute("IOIDSeq"));
 						newElementChild2.setAttribute("Operations", element2.getAttribute("Operations"));
 						newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
 						newElementChild1.appendChild(newElementChild2);
@@ -19458,6 +19482,8 @@ public class Modeler extends JFrame {
 					jTextPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					jEditorPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					//
+					boolean ioIdDuplicated = false;
+					int wrkInt, ioIdSeq = 0;
 					TreePath tp = jTreeTaskActions.getSelectionPath();
 					XeadTreeNode currentTaskActionNode = (XeadTreeNode)tp.getLastPathComponent();
 					XeadTreeNode functionNode = (XeadTreeNode)this.getParent();
@@ -19466,8 +19492,15 @@ public class Modeler extends JFrame {
 						element = (org.w3c.dom.Element)nodeList.item(i);
 						if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
 							if (element.getAttribute("IOID").equals(domNode_.getAttribute("ID"))) {
-								alreadyExist = true;
-								break;
+								//alreadyExist = true;
+								//break;
+								ioIdDuplicated = true;
+								if (!element.getAttribute("IOIDSeq").equals("")) {
+									wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
+									if (wrkInt > ioIdSeq) {
+										ioIdSeq = wrkInt;
+									}
+								}
 							}
 						}
 						sortKey = Integer.parseInt(element.getAttribute("SortKey"));
@@ -19475,10 +19508,10 @@ public class Modeler extends JFrame {
 							lastSortKey = sortKey;
 						}
 					}
-					if (alreadyExist) {
-						JOptionPane.showMessageDialog(dropTarget, res.getString("S5713"));
-						refreshRequired = false;
-					} else {
+					//if (alreadyExist) {
+					//	JOptionPane.showMessageDialog(dropTarget, res.getString("S5713"));
+					//	refreshRequired = false;
+					//} else {
 						//
 						informationOnThisPageChanged = true;
 						//
@@ -19486,6 +19519,11 @@ public class Modeler extends JFrame {
 						newElement = domDocument.createElement("TaskFunctionIO");
 						newElement.setAttribute("FunctionID", functionNode.getElement().getAttribute("ID"));
 						newElement.setAttribute("IOID", domNode_.getAttribute("ID"));
+						if (ioIdDuplicated) {
+							newElement.setAttribute("IOIDSeq", Integer.toString(ioIdSeq + 1));
+						} else {
+							newElement.setAttribute("IOIDSeq", "");
+						}
 						newElement.setAttribute("SortKey", getFormatted4ByteString(lastSortKey + 10));
 						newElement.setAttribute("Operations", "");
 						currentTaskActionNode.getElement().appendChild(newElement);
@@ -19497,7 +19535,7 @@ public class Modeler extends JFrame {
 						jTreeTaskActions.updateUI();
 						//
 						refreshRequired = false;
-					}
+					//}
 				}
 			}
 			//
@@ -20529,6 +20567,11 @@ public class Modeler extends JFrame {
 			//
 			//Refresh TreeView if any of fields value was changed//
 			if (updateStatusFlag[0] == true) {
+				float fileFormat = Float.parseFloat(systemNode.getElement().getAttribute("FormatVersion"));
+				float appliFormat = Float.parseFloat(FORMAT_VERSION);
+				if (fileFormat < appliFormat) {
+					systemNode.getElement().setAttribute("FormatVersion", FORMAT_VERSION);
+				}
 				if (updateStatusFlag[1] == true) {
 					parentNode = (XeadTreeNode)this.getParent();
 					parentNode.sortChildNodes();
@@ -26549,6 +26592,7 @@ public class Modeler extends JFrame {
 				newElementChild1 = domDocument.createElement("TaskFunctionIO");
 				newElementChild1.setAttribute("FunctionID", element.getAttribute("FunctionID"));
 				newElementChild1.setAttribute("IOID", element.getAttribute("IOID"));
+				newElementChild1.setAttribute("IOIDSeq", element.getAttribute("IOIDSeq"));
 				newElementChild1.setAttribute("Operations", element.getAttribute("Operations"));
 				newElementChild1.setAttribute("SortKey", element.getAttribute("SortKey"));
 				newElement.appendChild(newElementChild1);
@@ -27433,6 +27477,7 @@ public class Modeler extends JFrame {
 			org.w3c.dom.Element taskFunctionIOElement = getElementOfCurrentTabTaskFunctionIO();
 			String functionID = taskFunctionIOElement.getAttribute("FunctionID");
 			String ioID = taskFunctionIOElement.getAttribute("IOID");
+			String ioIDSeq = taskFunctionIOElement.getAttribute("IOIDSeq");
 			org.w3c.dom.Element elementMoved = null;
 			//
 			informationOnThisPageChanged = true;
@@ -27449,7 +27494,9 @@ public class Modeler extends JFrame {
 			int lastSortKey = 0;
 			for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
 				element1 = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
-				if (element1.getAttribute("FunctionID").equals(functionID) && element1.getAttribute("IOID").equals(ioID)) {
+				if (element1.getAttribute("FunctionID").equals(functionID)
+						&& element1.getAttribute("IOID").equals(ioID)
+						&& element1.getAttribute("IOIDSeq").equals(ioIDSeq)) {
 					if (lastSortKey >= 10) {
 						element1.setAttribute("SortKey", getFormatted4ByteString(lastSortKey - 1));
 					}
@@ -27522,6 +27569,7 @@ public class Modeler extends JFrame {
 			org.w3c.dom.Element taskFunctionIOElement = getElementOfCurrentTabTaskFunctionIO();
 			String functionID = taskFunctionIOElement.getAttribute("FunctionID");
 			String ioID = taskFunctionIOElement.getAttribute("IOID");
+			String ioIDSeq = taskFunctionIOElement.getAttribute("IOIDSeq");
 			org.w3c.dom.Element elementMoved = null;
 			//
 			informationOnThisPageChanged = true;
@@ -27537,7 +27585,9 @@ public class Modeler extends JFrame {
 			sortableDomElementListModel.sortElements();
 			for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
 				element1 = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
-				if (element1.getAttribute("FunctionID").equals(functionID) && element1.getAttribute("IOID").equals(ioID)) {
+				if (element1.getAttribute("FunctionID").equals(functionID)
+						&& element1.getAttribute("IOID").equals(ioID)
+						&& element1.getAttribute("IOIDSeq").equals(ioIDSeq)) {
 					int intSortKey = Integer.parseInt(element1.getAttribute("SortKey"));
 					element1.setAttribute("SortKey", getFormatted4ByteString(intSortKey + 11));
 					elementMoved = element1;

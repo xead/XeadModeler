@@ -33,15 +33,40 @@ package xeadModeler;
 
 import javax.swing.UIManager;
 import java.awt.*;
+
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class Application {
+	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	boolean packFrame = false;
+	private JWindow splashScreen;
+	private JLabel  splashIcon;
+	private JLabel  splashLabel;
 
 	public Application(String[] args) {
-
-		Modeler frame = new Modeler(args);
-
+		ImageIcon image = new ImageIcon(xeadModeler.Application.class.getResource("xeadmdl.png"));
+		splashIcon = new JLabel(image);
+		splashIcon.setLayout(null);
+		splashLabel = new JLabel();
+		splashLabel.setFont(new java.awt.Font("Dialog", 0, 12));
+		splashLabel.setForeground(Color.cyan);
+		splashLabel.setOpaque(false);
+		splashLabel.setBounds(0, 92, 500, 15);
+		splashLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		splashLabel.setText(res.getString("SplashMessage0"));
+		splashIcon.add(splashLabel);
+		splashScreen = new JWindow();
+		splashScreen.getContentPane().add(splashIcon);
+		splashScreen.pack();
+		splashScreen.setLocationRelativeTo(null);
+		EventQueue.invokeLater(new Runnable() {
+			@Override public void run() {
+				showSplash();
+			}
+		});
+		//
+		Modeler frame = new Modeler(args, this);
 		if (packFrame) {
 			frame.pack();
 		} else {
@@ -69,5 +94,18 @@ public class Application {
 		}
 		new Application(args);
 	}
+	
+	public void showSplash() {
+		splashScreen.setVisible(true);
+	}
+	
+	public void setTextOnSplash(String text) {
+		splashLabel.setText(text);
+	}
 
+	public void hideSplash() {
+		splashScreen.setVisible(false);
+		splashScreen = null;
+		splashLabel  = null;
+	}
 }

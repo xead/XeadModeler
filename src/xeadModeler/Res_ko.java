@@ -958,7 +958,7 @@ public class Res_ko extends java.util.ListResourceBundle {
 		{"S5628","지정된 키의 조합에 기반한 관련정의가 이미 존재합니다. "},
 		{"S5631","외부키(FK)의 조합에 대해서 테이블관련은 성립하지 않습니다. "},
 		{"S5703","지정된 키의 조합에 대한 테이블관련은 성립하지 않습니다. 키에 포함된 데이터항목 수나 데이터종류를 조정해 주세요"},
-		{"S5713","이 입출력정의는 이미 관련되어 있기 때문에  추가할 수 없습니다. "},
+		//{"S5713","이 입출력정의는 이미 관련되어 있기 때문에  추가할 수 없습니다. "},
 		{"S5728","이 업무는 이미 배치되어 있기 때문에 추가할 수 없습니다. "},
 		{"S5748","이 테이블은 이미 데이터모델상에 존재하기 때문에 추가할 수 없습니다. "},
 		{"S5750","이 테이블은 이미 서브시스템에 관련되어 있기 때문에 추가할 수 없습니다. "},
@@ -966,6 +966,8 @@ public class Res_ko extends java.util.ListResourceBundle {
 		{"S5761","하는 테이블에 대한 C,U,D조작은 가능한 피해 주시기 바랍니다. 서브시스템"},
 		{"S5762","구성을 변경하던가, 갱신용 관수를 사용하는 등의 방법을 고려하시기 바랍니다. "},
 		{"S6450","변경있음"},
+		{"SplashMessage0", "Launching XEAD Modeler..." },
+		{"SplashMessage1", "Parsing System Definitions..." },
 		{"XLSFontDTL", "Times New Roman" },
 		{"XLSFontHDR", "Arial" }};
 	public Object[][] getContents() {

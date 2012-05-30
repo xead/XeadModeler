@@ -108,8 +108,7 @@ public class DialogImportXEAD extends JDialog {
 		jLabel4.setText(res.getString("DialogImportXEAD02"));
 		jLabel4.setBounds(new Rectangle(10, 9, 144, 15));
 		jTextFieldImportFileName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldImportFileName.setHorizontalAlignment(SwingConstants.RIGHT);
-		jTextFieldImportFileName.setBounds(new Rectangle(164, 9, 197, 21));
+		jTextFieldImportFileName.setBounds(new Rectangle(164, 9, 300, 21));
 		jTextFieldImportFileName.setEditable(false);
 		//
 		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -117,12 +116,12 @@ public class DialogImportXEAD extends JDialog {
 		jLabel5.setText(res.getString("DialogImportXEAD03"));
 		jLabel5.setBounds(new Rectangle(10, 33, 144, 15));
 		jTextFieldImportSystemName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldImportSystemName.setBounds(new Rectangle(164, 33, 197, 21));
+		jTextFieldImportSystemName.setBounds(new Rectangle(164, 33, 300, 21));
 		jTextFieldImportSystemName.setEditable(false);
 		//
 		jPanel1.setBorder(BorderFactory.createEtchedBorder());
 		//jPanel1.setBounds(new Rectangle(164, 83, 197, 60));
-		jPanel1.setBounds(new Rectangle(164, 57, 197, 87));
+		jPanel1.setBounds(new Rectangle(164, 57, 300, 87));
 		jPanel1.setLayout(gridLayout1);
 		gridLayout1.setColumns(1);
 		gridLayout1.setRows(4);
@@ -154,40 +153,40 @@ public class DialogImportXEAD extends JDialog {
 		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setBounds(new Rectangle(10, 148, 144, 15));
-		jComboBoxBlockFrom.setBounds(new Rectangle(164, 148, 197, 21));
+		jComboBoxBlockFrom.setBounds(new Rectangle(164, 148, 300, 21));
 		jComboBoxBlockFrom.setFont(new java.awt.Font("Dialog", 0, 12));
 		jComboBoxBlockFrom.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setBounds(new Rectangle(10, 172, 144, 15));
-		jComboBoxBlockInto.setBounds(new Rectangle(164, 172, 197, 21));
+		jComboBoxBlockInto.setBounds(new Rectangle(164, 172, 300, 21));
 		jComboBoxBlockInto.setFont(new java.awt.Font("Dialog", 0, 12));
 		jComboBoxBlockInto.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
 		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextArea1.setForeground(Color.BLUE);
 		jTextArea1.setEditable(false);
-		jTextArea1.setBounds(new Rectangle(9, 199, 351, 159));
+		jTextArea1.setBounds(new Rectangle(9, 199, 454, 159));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBackground(SystemColor.control);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 		//
 		jProgressBar.setBounds(new Rectangle(9, 367, 104, 25));
 		//
-		jButtonStart.setBounds(new Rectangle(132, 367, 104, 25));
+		jButtonStart.setBounds(new Rectangle(180, 367, 104, 25));
 		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonStart.setText(res.getString("DialogImportXEAD07"));
 		jButtonStart.addActionListener(new DialogImportXEAD_jButtonStart_actionAdapter(this));
 		jButtonStart.setEnabled(false);
 		//
-		jButtonCancel.setBounds(new Rectangle(255, 367, 104, 25));
+		jButtonCancel.setBounds(new Rectangle(355, 367, 104, 25));
 		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonCancel.setText(res.getString("DialogImportXEAD08"));
 		jButtonCancel.addActionListener(new DialogImportXEAD_jButtonCancel_actionAdapter(this));
 		//
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(370, 404));
+		panelMain.setPreferredSize(new Dimension(473, 404));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel2, null);
@@ -230,14 +229,19 @@ public class DialogImportXEAD extends JDialog {
 		catch (SAXException ex) {
 		}
 		//
-		jTextFieldImportFileName.setText(fileName);
 		elementList = domDocumentFrom.getElementsByTagName("System");
 		element = (org.w3c.dom.Element)elementList.item(0);
-		jTextFieldImportSystemName.setText(element.getAttribute("Name"));
-		jRadioButton_stateChanged();
-		jProgressBar.setValue(0);
-		//
-		super.setVisible(true);
+		float importFileFormat = Float.parseFloat(element.getAttribute("FormatVersion"));
+		float appliFormat = Float.parseFloat(frame_.getFormatVersion());
+		if (importFileFormat > appliFormat) {
+			JOptionPane.showMessageDialog(this, res.getString("S1") + element.getAttribute("FormatVersion") + res.getString("S2") + frame_.getFormatVersion() + res.getString("S3"));
+		} else {
+			jTextFieldImportFileName.setText(fileName);
+			jTextFieldImportSystemName.setText(element.getAttribute("Name"));
+			jRadioButton_stateChanged();
+			jProgressBar.setValue(0);
+			super.setVisible(true);
+		}
 		//
 		return importResult;
 	}
@@ -2312,6 +2316,7 @@ public class DialogImportXEAD extends JDialog {
 					org.w3c.dom.Element grandChildElement = frame_.domDocument.createElement("TaskFunctionIO");
 					grandChildElement.setAttribute("FunctionID", targetFunctionID);
 					grandChildElement.setAttribute("IOID", targetFunctionIOID);
+					grandChildElement.setAttribute("IOIDSeq", workElement2.getAttribute("IOIDSeq"));
 					grandChildElement.setAttribute("Operations", workElement2.getAttribute("Operations"));
 					grandChildElement.setAttribute("SortKey", workElement2.getAttribute("SortKey"));
 					childElement.appendChild(grandChildElement);

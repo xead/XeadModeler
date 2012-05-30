@@ -996,7 +996,7 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S5631", "Combination of foreign keys is invalid." },
 		{ "S5703", "Combination of keys specified is invalid. Check number and data type " +
 		"of fields of keys." },
-		{ "S5713", "You can not add this IO as it is already related to the task action." },
+		//{ "S5713", "You can not add this IO as it is already related to the task action." },
 		{ "S5728", "You can not add this task process as it is already placed on the " +
 		"job flow." },
 		{ "S5748", "You can not add this table as it is already placed on the datamodel." },
@@ -1005,6 +1005,8 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S5761", "those records in 'external table' in order to control" },
 		{ "S5762", "'coupling' between subsystems." },
 		{ "S6450", "Changed" },
+		{ "SplashMessage0", "Launching XEAD Modeler..." },
+		{ "SplashMessage1", "Parsing System Definitions..." },
 		{ "XLSFontDTL", "Times New Roman" },
 		{ "XLSFontHDR", "Arial" }};
 	public Object[][] getContents() {
