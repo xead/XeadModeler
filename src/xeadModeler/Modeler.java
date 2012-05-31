@@ -63,7 +63,7 @@ public class Modeler extends JFrame {
 	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M45";
+	public static final String FULL_VERSION  = "V1.R3.M46";
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -13681,6 +13681,7 @@ public class Modeler extends JFrame {
 				if (e.getX() >= 189) {
 					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX()-1, BOX_HEIGHT));
 					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
+					sizeOfTableOnModelChanged = true;
 				}
 			}
 		}
