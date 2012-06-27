@@ -66,52 +66,54 @@ public class DialogAbout extends JDialog implements ActionListener {
 	}
 
 	private void jbInit(Modeler parent) throws Exception  {
-		imageXead = new ImageIcon(xeadModeler.Modeler.class.getResource("ixead.png"));
-		imageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		imageXead = new ImageIcon(xeadModeler.Modeler.class.getResource("title.png"));
 		imageLabel.setIcon(imageXead);
-		this.setTitle("About XEAD Modeler");
 		panel1.setLayout(new BorderLayout());
 		panel1.setBorder(BorderFactory.createEtchedBorder());
 		panel2.setLayout(new BorderLayout());
 		insetsPanel2.setLayout(new BorderLayout());
 		insetsPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		insetsPanel2.setPreferredSize(new Dimension(52, 52));
+		insetsPanel2.setPreferredSize(new Dimension(75, 52));
+		insetsPanel2.add(imageLabel, BorderLayout.EAST);
+		//
 		labelName.setFont(new java.awt.Font("Serif", 1, 16));
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
 		labelName.setText(Modeler.PRODUCT_NAME);
-		labelName.setBounds(new Rectangle(-4, 9, 258, 18));
+		labelName.setBounds(new Rectangle(-5, 9, 190, 18));
 		labelVersion.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		labelVersion.setText(Modeler.FULL_VERSION);
-		labelVersion.setBounds(new Rectangle(-4, 32, 258, 15));
+		labelVersion.setBounds(new Rectangle(-5, 32, 190, 15));
 		labelCopyright.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelCopyright.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCopyright.setText(Modeler.COPYRIGHT);
-		labelCopyright.setBounds(new Rectangle(-4, 53, 258, 15));
+		labelCopyright.setBounds(new Rectangle(-5, 53, 190, 15));
 		labelURL.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelURL.setHorizontalAlignment(SwingConstants.CENTER);
 		labelURL.setText("<html><u><font color='blue'>" + Modeler.URL_DBC);
-		labelURL.setBounds(new Rectangle(-4, 73, 258, 15));
+		labelURL.setBounds(new Rectangle(-5, 73, 190, 15));
 		labelURL.addMouseListener(new DialogAbout_labelURL_mouseAdapter(this));
 		insetsPanel3.setLayout(null);
 		insetsPanel3.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 10));
-		insetsPanel3.setMinimumSize(new Dimension(257, 80));
-		insetsPanel3.setPreferredSize(new Dimension(257, 80));
-		button1.setText("OK");
-		button1.addActionListener(this);
-		panel2.setPreferredSize(new Dimension(339, 90));
-		panel2.add(insetsPanel2, BorderLayout.WEST);
-		insetsPanel2.add(imageLabel, BorderLayout.CENTER);
-		this.getContentPane().add(panel1, null);
+		insetsPanel3.setPreferredSize(new Dimension(190, 80));
 		insetsPanel3.add(labelName, null);
 		insetsPanel3.add(labelVersion, null);
 		insetsPanel3.add(labelCopyright, null);
 		insetsPanel3.add(labelURL, null);
-		panel2.add(insetsPanel3, BorderLayout.CENTER);
+		//
+		button1.setText("OK");
+		button1.addActionListener(this);
 		insetsPanel1.add(button1, null);
+		//
 		panel1.add(insetsPanel1, BorderLayout.SOUTH);
 		panel1.add(panel2, BorderLayout.NORTH);
-		setResizable(true);
+		panel2.setPreferredSize(new Dimension(270, 90));
+		panel2.add(insetsPanel2, BorderLayout.CENTER);
+		panel2.add(insetsPanel3, BorderLayout.EAST);
+		//
+		this.setTitle("About XEAD Modeler");
+		this.getContentPane().add(panel1, null);
+		this.setResizable(false);
 	}
 
 	protected void processWindowEvent(WindowEvent e) {

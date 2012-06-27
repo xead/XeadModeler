@@ -32,6 +32,7 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -89,6 +90,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		jTextAreaDescriptions.setLineWrap(true);
 		jTextAreaDescriptions.setText(res.getString("DialogAddRelationshipOnDatamodel2"));
 		jTextAreaDescriptions.setEditable(false);
+		jTextAreaDescriptions.setBackground(SystemColor.control);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
 		jScrollPaneDescriptions.setBounds(new Rectangle(10, 10, 365, 72));
 		panelRadioButtons.setLayout(null);

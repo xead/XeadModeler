@@ -60,103 +60,105 @@ public class Modeler extends JFrame {
 	 * Fixed-value variant
 	 */
 	private static final long serialVersionUID = 1L;
-	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
+	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M46";
+	public static final String FULL_VERSION  = "V1.R3.M47";
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
 	/**
 	 * Main panels and labels
 	 */
-	JPanel jPanelMain;
-	JPanel jPanelJumpButtons = new JPanel();
-	GridLayout gridLayoutJumpButtons = new GridLayout();
-	NodeJumpButton[] nodeJumpButton = new NodeJumpButton[8];
-	JSplitPane jSplitPaneMain = new JSplitPane();
-	JPanel jPanelTopMargin1 = new JPanel();
-	JPanel jPanelTopMargin2 = new JPanel();
-	JLabel jLabelSubtitle = new JLabel();
-	JLabel jLabelChangeState = new JLabel();
-	JProgressBar jProgressBar = new JProgressBar();
-	Border borderOriginal1;
-	JPanel jPanelContentsPane = new JPanel();
-	CardLayout cardLayoutContentsPane = new CardLayout();
-	String currentFileName, systemName;
-	String applicationFolder;
-	String importFileName, importSystemName;
-	String urlString = "";
+	private JPanel jPanelMain;
+	private JPanel jPanelJumpButtons = new JPanel();
+	private GridLayout gridLayoutJumpButtons = new GridLayout();
+	private NodeJumpButton[] nodeJumpButton = new NodeJumpButton[8];
+	private JSplitPane jSplitPaneMain = new JSplitPane();
+	private JPanel jPanelTopMargin1 = new JPanel();
+	private JPanel jPanelTopMargin2 = new JPanel();
+	private JLabel jLabelSubtitle = new JLabel();
+	private JLabel jLabelChangeState = new JLabel();
+	private JProgressBar jProgressBar = new JProgressBar();
+	private Border borderOriginal1;
+	private JPanel jPanelContentsPane = new JPanel();
+	private CardLayout cardLayoutContentsPane = new CardLayout();
+	public String currentFileName, systemName;
+	private String applicationFolder;
+	//private String importFileName, importSystemName;
+	private String urlString = "";
+	private int screenWidth = 800;
+	private int screenHeight = 600;
 	/**
 	 * Main Menu
 	 */
-	JMenuBar jMenuBar = new JMenuBar();
-	JMenu jMenuFile = new JMenu();
-	JMenuItem jMenuItemFileNew = new JMenuItem();
-	JMenuItem jMenuItemFileOpen = new JMenuItem();
-	JMenuItem jMenuItemFileExit = new JMenuItem();
-	JMenuItem jMenuItemFileSave = new JMenuItem();
-	JMenuItem jMenuItemFileSaveAs = new JMenuItem();
-	JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
-	JMenu jMenuImport = new JMenu();
-	JMenuItem jMenuItemImportXEAD = new JMenuItem();
-	JMenuItem jMenuItemImportSQL = new JMenuItem();
-	JMenu jMenuEdit = new JMenu();
-	JMenuItem jMenuItemEditUndo = new JMenuItem();
-	JMenuItem jMenuItemEditRedo = new JMenuItem();
-	JMenu jMenuScan = new JMenu();
-	JMenuItem jMenuItemScanString = new JMenuItem();
-	JMenu jMenuScanSetBookmark = new JMenu();
-	JMenuItem jMenuItemScanSetBookmark1 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark2 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark3 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark4 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark5 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark6 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark7 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark8 = new JMenuItem();
-	JMenuItem jMenuItemScanSetBookmark9 = new JMenuItem();
-	JMenu jMenuScanJumpBookmark = new JMenu();
-	JMenuItem jMenuItemScanJumpBookmark1 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark2 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark3 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark4 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark5 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark6 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark7 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark8 = new JMenuItem();
-	JMenuItem jMenuItemScanJumpBookmark9 = new JMenuItem();
-	JMenu jMenuTool = new JMenu();
-	JMenuItem jMenuItemToolTaskList = new JMenuItem();
-	JMenuItem jMenuItemToolTableList = new JMenuItem();
-	JMenuItem jMenuItemToolFieldList = new JMenuItem();
-	JMenuItem jMenuItemToolFunctionList = new JMenuItem();
-	JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
-	JMenuItem jMenuItemToolTaskProtocolList = new JMenuItem();
-	JMenuItem jMenuItemToolDocuments = new JMenuItem();
-	JMenuItem jMenuItemToolJumpToURLPage = new JMenuItem();
-	JMenu jMenuHelp = new JMenu();
-	JMenuItem jMenuItemHelpHelp = new JMenuItem();
-	JMenuItem jMenuItemHelpAbout = new JMenuItem();
+	private JMenuBar jMenuBar = new JMenuBar();
+	private JMenu jMenuFile = new JMenu();
+	private JMenuItem jMenuItemFileNew = new JMenuItem();
+	private JMenuItem jMenuItemFileOpen = new JMenuItem();
+	private JMenuItem jMenuItemFileExit = new JMenuItem();
+	private JMenuItem jMenuItemFileSave = new JMenuItem();
+	private JMenuItem jMenuItemFileSaveAs = new JMenuItem();
+	private JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
+	private JMenu jMenuImport = new JMenu();
+	private JMenuItem jMenuItemImportXEAD = new JMenuItem();
+	private JMenuItem jMenuItemImportSQL = new JMenuItem();
+	private JMenu jMenuEdit = new JMenu();
+	private JMenuItem jMenuItemEditUndo = new JMenuItem();
+	private JMenuItem jMenuItemEditRedo = new JMenuItem();
+	private JMenu jMenuScan = new JMenu();
+	private JMenuItem jMenuItemScanString = new JMenuItem();
+	private JMenu jMenuScanSetBookmark = new JMenu();
+	private JMenuItem jMenuItemScanSetBookmark1 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark2 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark3 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark4 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark5 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark6 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark7 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark8 = new JMenuItem();
+	private JMenuItem jMenuItemScanSetBookmark9 = new JMenuItem();
+	private JMenu jMenuScanJumpBookmark = new JMenu();
+	private JMenuItem jMenuItemScanJumpBookmark1 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark2 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark3 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark4 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark5 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark6 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark7 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark8 = new JMenuItem();
+	private JMenuItem jMenuItemScanJumpBookmark9 = new JMenuItem();
+	private JMenu jMenuTool = new JMenu();
+	private JMenuItem jMenuItemToolTaskList = new JMenuItem();
+	private JMenuItem jMenuItemToolTableList = new JMenuItem();
+	private JMenuItem jMenuItemToolFieldList = new JMenuItem();
+	private JMenuItem jMenuItemToolFunctionList = new JMenuItem();
+	private JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
+	//private JMenuItem jMenuItemToolTaskProtocolList = new JMenuItem();
+	private JMenuItem jMenuItemToolDocuments = new JMenuItem();
+	private JMenuItem jMenuItemToolJumpToURLPage = new JMenuItem();
+	private JMenu jMenuHelp = new JMenu();
+	private JMenuItem jMenuItemHelpHelp = new JMenuItem();
+	private JMenuItem jMenuItemHelpAbout = new JMenuItem();
 	/**
 	 * parsed XML Document for this application
 	 */
-	org.w3c.dom.Document domDocument;
-	org.w3c.dom.Document importDomDocument;
+	public org.w3c.dom.Document domDocument;
+	//private org.w3c.dom.Document importDomDocument;
 	/**
 	 * Main undo manager
 	 */
-	XeadUndoManager xeadUndoManager = new XeadUndoManager();
+	private XeadUndoManager xeadUndoManager = new XeadUndoManager();
 	/**
 	 * sorter for general use
 	 */
-	SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new SortableXeadTreeNodeListModel();
-	SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
+	private SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new SortableXeadTreeNodeListModel();
+	private SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
 	/**
 	 * fields for style processing for JTextpane
 	 */
-	ArrayList<String> styledDocumentCopiedTextList = new ArrayList<String>(); 
-	ArrayList<DefaultStyledDocument> styledDocumentCopiedSegmentList = new ArrayList<DefaultStyledDocument>(); 
+	private ArrayList<String> styledDocumentCopiedTextList = new ArrayList<String>(); 
+	private ArrayList<DefaultStyledDocument> styledDocumentCopiedSegmentList = new ArrayList<DefaultStyledDocument>(); 
 	/**
 	 * status controller related to deleted table definitions
 	 */
@@ -173,92 +175,92 @@ public class Modeler extends JFrame {
 	 * change status controller for general use
 	 */
 	boolean informationOnThisPageChanged;
-	ChangeState changeState = new ChangeState();
+	private ChangeState changeState = new ChangeState();
 	/**
 	 * Dialog box and fileChooser for general use
 	 */
-	JFileChooser jFileChooser = new JFileChooser();
+	private JFileChooser jFileChooser = new JFileChooser();
 	/**
 	 * common used storage for copy/paste operation
 	 */
-	boolean inBlockSelectMode = false;
-	Point blockSelectPointFrom = new Point();
-	Point blockSelectPointThru = new Point();
-	Rectangle blockSelectRec = new Rectangle(0,0,0,0);
-	Graphics savedImage = null;
-	org.w3c.dom.Element pastingDomElement = null;
+	private boolean inBlockSelectMode = false;
+	private Point blockSelectPointFrom = new Point();
+	private Point blockSelectPointThru = new Point();
+	private Rectangle blockSelectRec = new Rectangle(0,0,0,0);
+	private Graphics savedImage = null;
+	private org.w3c.dom.Element pastingDomElement = null;
 	/**
 	 * Dialogs for data-flow
 	 */
-	DialogDataflowNode dialogDataflowNode = new DialogDataflowNode(this);
-	DialogDataflowLine dialogDataflowLine = new DialogDataflowLine(this);
+	private DialogDataflowNode dialogDataflowNode = new DialogDataflowNode(this);
+	private DialogDataflowLine dialogDataflowLine = new DialogDataflowLine(this);
 	/**
 	 * Print Controller
 	 */
-	XeadPagePainter painter = new XeadPagePainter();
-	PrinterJob printerJob;
-	PageFormat pageFormat;
-	boolean printFormatSpecified = false;
+	private XeadPagePainter painter = new XeadPagePainter();
+	private PrinterJob printerJob;
+	private PageFormat pageFormat;
+	private boolean printFormatSpecified = false;
 	/**
 	 * Last focused KanjiTextArea
 	 */
-	KanjiTextArea lastFocusedTextArea = null;
+	private KanjiTextArea lastFocusedTextArea = null;
 	/**
 	 * fields for Scanning
 	 */
-	DialogScan dialogScan = new DialogScan(this);
+	private DialogScan dialogScan = new DialogScan(this);
 	/**
 	 * fields for Create Table Statement
 	 */
-	DialogCreateTableStatement dialogCreateTableStatement = new DialogCreateTableStatement(this);
-	boolean useTableNameAsTableNameInCreateTableStatement = false;
-	String createTableStatementCommentMark = "--";
-	String createTableStatementSectionMark = ";";
-	boolean setCommentToFieldsWithAlias = true;
+	private DialogCreateTableStatement dialogCreateTableStatement = new DialogCreateTableStatement(this);
+	public boolean useTableNameAsTableNameInCreateTableStatement = false;
+	public String createTableStatementCommentMark = "--";
+	public String createTableStatementSectionMark = ";";
+	public boolean setCommentToFieldsWithAlias = true;
 	/**
 	 * fields for Generating Documents
 	 */
-	DialogDocuments dialogDocuments = new DialogDocuments(this);
+	private DialogDocuments dialogDocuments = new DialogDocuments(this);
 	/**
 	 * fields for Importing
 	 */
-	DialogImportXEAD dialogImportXEAD = new DialogImportXEAD(this);
-	DialogImportSQL dialogImportSQL = new DialogImportSQL(this);
+	private DialogImportXEAD dialogImportXEAD = new DialogImportXEAD(this);
+	private DialogImportSQL dialogImportSQL = new DialogImportSQL(this);
 	/**
 	 * Icons
 	 */
-	Image imageTitle;
-	ImageIcon imageIconSystem;
-	ImageIcon imageIconSubjectAreaList;
-	ImageIcon imageIconSubjectArea;
-	ImageIcon imageIconRoleList;
-	ImageIcon imageIconRole;
-	ImageIcon imageIconTask;
-	ImageIcon imageIconSubsystemList;
-	ImageIcon imageIconSubsystem;
-	ImageIcon imageIconTableList;
-	ImageIcon imageIconTable;
-	ImageIcon imageIconFieldList;
-	ImageIcon imageIconField;
-	ImageIcon imageIconKey;
-	ImageIcon imageIconKeyList;
-	ImageIcon imageIconFunctionList;
-	ImageIcon imageIconFunction;
-	ImageIcon imageIconIOPanel;
-	ImageIcon imageIconIOTable;
-	ImageIcon imageIconIOSpool;
-	ImageIcon imageIconIOWebPage;
-	ImageIcon imageIconAction;
-	ImageIcon imageIconActionFirst;
-	ImageIcon imageIconActionOptional;
-	ImageIcon imageIconForeignFunction;
-	ImageIcon imageIconForeignTable;
-	ImageIcon imageIconTree;
-	ImageIcon imageIconModel;
+	private Image imageTitle;
+	private ImageIcon imageIconSystem;
+	private ImageIcon imageIconSubjectAreaList;
+	private ImageIcon imageIconSubjectArea;
+	private ImageIcon imageIconRoleList;
+	private ImageIcon imageIconRole;
+	private ImageIcon imageIconTask;
+	private ImageIcon imageIconSubsystemList;
+	private ImageIcon imageIconSubsystem;
+	private ImageIcon imageIconTableList;
+	private ImageIcon imageIconTable;
+	private ImageIcon imageIconFieldList;
+	private ImageIcon imageIconField;
+	private ImageIcon imageIconKey;
+	private ImageIcon imageIconKeyList;
+	private ImageIcon imageIconFunctionList;
+	private ImageIcon imageIconFunction;
+	private ImageIcon imageIconIOPanel;
+	private ImageIcon imageIconIOTable;
+	private ImageIcon imageIconIOSpool;
+	private ImageIcon imageIconIOWebPage;
+	private ImageIcon imageIconAction;
+	private ImageIcon imageIconActionFirst;
+	private ImageIcon imageIconActionOptional;
+	private ImageIcon imageIconForeignFunction;
+	private ImageIcon imageIconForeignTable;
+	private ImageIcon imageIconTree;
+	private ImageIcon imageIconModel;
 	/**
 	 * Desktop Color
 	 */
-	Color desktopColor = new Color(58,110,165);
+	private Color desktopColor = new Color(58,110,165);
 	/**
 	 * Desktop Launcher
 	 */
@@ -1272,8 +1274,6 @@ public class Modeler extends JFrame {
 		rendererAlignmentRightControlColor.setBackground(SystemColor.control);
 		rendererAlignmentLeftControlColor.setHorizontalAlignment(2); //LEFT//
 		rendererAlignmentLeftControlColor.setBackground(SystemColor.control);
-		//DefaultTableCellRenderer rendererTableHeader = null;
-		//TableColumn column0, column1, column2, column3, column4, column5, column6, column7, column8, column9, columnA;
 		/**
 		 * set image resource to icons
 		 */
@@ -1307,9 +1307,12 @@ public class Modeler extends JFrame {
 		/**
 		 * Title Name and Title Icon
 		 */
-		imageTitle = Toolkit.getDefaultToolkit().createImage(xeadModeler.Modeler.class.getResource("isys.png"));
+		imageTitle = Toolkit.getDefaultToolkit().createImage(xeadModeler.Modeler.class.getResource("title.png"));
 		this.setIconImage(imageTitle);
-		this.setSize(new Dimension(950, 740));
+        Rectangle screenRect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		screenWidth = (int)screenRect.getWidth();
+		screenHeight = (int)screenRect.getHeight();
+		this.setSize(new Dimension(screenWidth - 120, screenHeight - 80));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		/**
 		 * main panels
@@ -1456,8 +1459,8 @@ public class Modeler extends JFrame {
 		jMenuItemToolFunctionList.addActionListener(new Modeler_jMenuItemToolFunctionList_ActionAdapter(this));
 		jMenuItemToolCreateTableStatement.setText(res.getString("S87"));
 		jMenuItemToolCreateTableStatement.addActionListener(new Modeler_jMenuItemToolCreateTableStatement_ActionAdapter(this));
-		jMenuItemToolTaskProtocolList.setText(res.getString("S88"));
-		jMenuItemToolTaskProtocolList.addActionListener(new Modeler_jMenuItemToolTaskProtocolList_ActionAdapter(this));
+		//jMenuItemToolTaskProtocolList.setText(res.getString("S88"));
+		//jMenuItemToolTaskProtocolList.addActionListener(new Modeler_jMenuItemToolTaskProtocolList_ActionAdapter(this));
 		jMenuItemToolDocuments.setText(res.getString("S82"));
 		jMenuItemToolDocuments.addActionListener(new Modeler_jMenuItemToolDocuments_ActionAdapter(this));
 		jMenuItemToolJumpToURLPage.setText(res.getString("S89"));
@@ -1513,7 +1516,7 @@ public class Modeler extends JFrame {
 		jMenuTool.add(jMenuItemToolFunctionList);
 		jMenuTool.addSeparator();
 		jMenuTool.add(jMenuItemToolCreateTableStatement);
-		jMenuTool.add(jMenuItemToolTaskProtocolList);
+		//jMenuTool.add(jMenuItemToolTaskProtocolList);
 		jMenuTool.add(jMenuItemToolDocuments);
 		jMenuTool.addSeparator();
 		jMenuTool.add(jMenuItemToolJumpToURLPage);
@@ -8358,105 +8361,105 @@ public class Modeler extends JFrame {
 		createStatement = new CreateStatement(statement,warningHasOccured);
 		return createStatement;
 	}
-	/**
-	 * [Tool|Task Protocol List] Output Task protocol
-	 * @param e :Action Event
-	 */
-	void jMenuItemToolTaskProtocolList_actionPerformed(ActionEvent e) {
-		org.w3c.dom.Element actionElement;
-		int actionLevel = 0;
-		XeadTreeNode node1, node2;
-		String csvFileName = "";
-		String workStr = "";
-		FileWriter fileWriter = null;
-		BufferedWriter bufferedWriter = null;
-		NodeList taskList, actionList;
-		boolean noDataFoundToWrite = true;
-		//
-		try {
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			//
-			currentMainTreeNode.updateFields();
-			//
-			File tempCsvFile = File.createTempFile("xeadTemp" + getStringValueOfDateTime("withTime"), ".csv");
-			csvFileName = tempCsvFile.getPath();
-			fileWriter = new FileWriter(csvFileName);
-			bufferedWriter = new BufferedWriter(fileWriter);
-			//
-			taskList = domDocument.getElementsByTagName("Task");
-			jProgressBar.setMaximum(taskList.getLength());
-			//
-			for (int i = 0; i < roleListNode.getChildCount(); i++) {
-				node1 = (XeadTreeNode)roleListNode.getChildAt(i);
-				//
-				for (int j = 0; j < node1.getChildCount(); j++) {
-					node2 = (XeadTreeNode)node1.getChildAt(j);
-					//
-					bufferedWriter.write(res.getString("S1587") + node1.getElement().getAttribute("Name") +
-							"(" + node1.getElement().getAttribute("SortKey") + ")" + "\n");
-					bufferedWriter.write(res.getString("S1593") + node2.getElement().getAttribute("Name") +
-							"(" + node2.getElement().getAttribute("SortKey") + ")" + "\n");
-					bufferedWriter.write(res.getString("S1599") + node2.getElement().getAttribute("Event") + "\n");
-					//
-					actionList = node2.getElement().getElementsByTagName("TaskAction");
-					sortableDomElementListModel.removeAllElements();
-					for (int k = 0; k < actionList.getLength(); k++) {
-						sortableDomElementListModel.addElement((Object)actionList.item(k));
-					}
-					sortableDomElementListModel.sortElements();
-					for (int k = 0; k < sortableDomElementListModel.getSize(); k++) {
-						actionElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(k);
-						actionLevel = Integer.parseInt(actionElement.getAttribute("IndentLevel"));
-						workStr = Integer.toString(k+1) + ",";
-						for (int m = 0; m < actionLevel; m++) {
-							workStr = workStr + ",";
-						}
-						if (!actionElement.getAttribute("ExecuteIf").equals("")) {
-							workStr = workStr + actionElement.getAttribute("ExecuteIf") + res.getString("S1600");
-						}
-						workStr = workStr + actionElement.getAttribute("Label");
-						bufferedWriter.write(workStr + "\n");
-					}
-					bufferedWriter.write("\n");
-					//
-					jProgressBar.setValue(jProgressBar.getValue()+1);
-					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				}
-				//
-				noDataFoundToWrite = false;
-			}
-		}
-		catch (Exception ex1) {
-			try {
-				bufferedWriter.close();
-			} catch (Exception ex2) {}
-		} finally {
-			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			jProgressBar.setValue(0);
-		}
-		//
-		try {
-			if (noDataFoundToWrite) {
-				JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S1613"));
-			} else {
-				bufferedWriter.flush();
-				bufferedWriter.close();
-				//
-				File workCsvFile = new File(csvFileName);
-				try {
-					setCursor(new Cursor(Cursor.WAIT_CURSOR));
-					desktop.open(workCsvFile);
-				} catch (Exception ex) {
-				} finally {
-					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				}
-			}
-		} catch (Exception ex3) {
-			try {
-				bufferedWriter.close();
-			} catch (Exception ex4) {}
-		}
-	}
+//	/**
+//	 * [Tool|Task Protocol List] Output Task protocol
+//	 * @param e :Action Event
+//	 */
+//	void jMenuItemToolTaskProtocolList_actionPerformed(ActionEvent e) {
+//		org.w3c.dom.Element actionElement;
+//		int actionLevel = 0;
+//		XeadTreeNode node1, node2;
+//		String csvFileName = "";
+//		String workStr = "";
+//		FileWriter fileWriter = null;
+//		BufferedWriter bufferedWriter = null;
+//		NodeList taskList, actionList;
+//		boolean noDataFoundToWrite = true;
+//		//
+//		try {
+//			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+//			//
+//			currentMainTreeNode.updateFields();
+//			//
+//			File tempCsvFile = File.createTempFile("xeadTemp" + getStringValueOfDateTime("withTime"), ".csv");
+//			csvFileName = tempCsvFile.getPath();
+//			fileWriter = new FileWriter(csvFileName);
+//			bufferedWriter = new BufferedWriter(fileWriter);
+//			//
+//			taskList = domDocument.getElementsByTagName("Task");
+//			jProgressBar.setMaximum(taskList.getLength());
+//			//
+//			for (int i = 0; i < roleListNode.getChildCount(); i++) {
+//				node1 = (XeadTreeNode)roleListNode.getChildAt(i);
+//				//
+//				for (int j = 0; j < node1.getChildCount(); j++) {
+//					node2 = (XeadTreeNode)node1.getChildAt(j);
+//					//
+//					bufferedWriter.write(res.getString("S1587") + node1.getElement().getAttribute("Name") +
+//							"(" + node1.getElement().getAttribute("SortKey") + ")" + "\n");
+//					bufferedWriter.write(res.getString("S1593") + node2.getElement().getAttribute("Name") +
+//							"(" + node2.getElement().getAttribute("SortKey") + ")" + "\n");
+//					bufferedWriter.write(res.getString("S1599") + node2.getElement().getAttribute("Event") + "\n");
+//					//
+//					actionList = node2.getElement().getElementsByTagName("TaskAction");
+//					sortableDomElementListModel.removeAllElements();
+//					for (int k = 0; k < actionList.getLength(); k++) {
+//						sortableDomElementListModel.addElement((Object)actionList.item(k));
+//					}
+//					sortableDomElementListModel.sortElements();
+//					for (int k = 0; k < sortableDomElementListModel.getSize(); k++) {
+//						actionElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(k);
+//						actionLevel = Integer.parseInt(actionElement.getAttribute("IndentLevel"));
+//						workStr = Integer.toString(k+1) + ",";
+//						for (int m = 0; m < actionLevel; m++) {
+//							workStr = workStr + ",";
+//						}
+//						if (!actionElement.getAttribute("ExecuteIf").equals("")) {
+//							workStr = workStr + actionElement.getAttribute("ExecuteIf") + res.getString("S1600");
+//						}
+//						workStr = workStr + actionElement.getAttribute("Label");
+//						bufferedWriter.write(workStr + "\n");
+//					}
+//					bufferedWriter.write("\n");
+//					//
+//					jProgressBar.setValue(jProgressBar.getValue()+1);
+//					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+//				}
+//				//
+//				noDataFoundToWrite = false;
+//			}
+//		}
+//		catch (Exception ex1) {
+//			try {
+//				bufferedWriter.close();
+//			} catch (Exception ex2) {}
+//		} finally {
+//			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//			jProgressBar.setValue(0);
+//		}
+//		//
+//		try {
+//			if (noDataFoundToWrite) {
+//				JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S1613"));
+//			} else {
+//				bufferedWriter.flush();
+//				bufferedWriter.close();
+//				//
+//				File workCsvFile = new File(csvFileName);
+//				try {
+//					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+//					desktop.open(workCsvFile);
+//				} catch (Exception ex) {
+//				} finally {
+//					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//				}
+//			}
+//		} catch (Exception ex3) {
+//			try {
+//				bufferedWriter.close();
+//			} catch (Exception ex4) {}
+//		}
+//	}
 	/**
 	 * [Tool|Documents] Write Documents for tables and functions
 	 * @param e :Action Event
@@ -13110,6 +13113,7 @@ public class Modeler extends JFrame {
 			jTextAreaShowInstance.setCaretColor(Color.white);
 			jTextAreaShowInstance.setSelectionColor(Color.darkGray);
 			jTextAreaShowInstance.setText(substringLinesWithTokenOfEOL(subsystemTableNodeElement_.getAttribute("Instance"), "\n"));
+			jTextAreaShowInstance.setCaretPosition(0);
 			int rowCount = jTextAreaShowInstance.getLineCount();
 			jTextAreaShowInstanceHeight = rowCount * 17;
 			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, jTextAreaShowInstanceHeight));
@@ -13678,7 +13682,8 @@ public class Modeler extends JFrame {
 		//
 		private void jPanel1_mouseDragged(MouseEvent e) {
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-				if (e.getX() >= 189) {
+				int rangeY = jPanel1.getHeight() - 2;
+				if (e.getX() >= 189 && e.getY() > 2 && e.getY() < rangeY) {
 					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX()-1, BOX_HEIGHT));
 					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
 					sizeOfTableOnModelChanged = true;
@@ -13688,7 +13693,8 @@ public class Modeler extends JFrame {
 		//
 		private void jPanel1_mouseEntered(MouseEvent e) {
 			int rangeX = jPanel1.getWidth() - 4;
-			if (e.getX() > rangeX) {
+			int rangeY = jPanel1.getHeight() - 2;
+			if (e.getX() > rangeX && e.getY() > 2 && e.getY() < rangeY) {
 				setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
 			}
 		}
@@ -16281,6 +16287,7 @@ public class Modeler extends JFrame {
 			if (jTabbedPaneSystem.getSelectedIndex() == 0) {
 				previousSelectedIndex_jTabbedPaneSystem = 0;
 				jTextAreaSystemDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+				jTextAreaSystemDescriptions.setCaretPosition(0);
 			}
 			//
 			//Setup Department List//
@@ -16577,6 +16584,7 @@ public class Modeler extends JFrame {
 			jTextFieldSubjectAreaName.setText(domNode_.getAttribute("Name"));
 			jTextFieldSubjectAreaSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaSubjectAreaDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaSubjectAreaDescriptions.setCaretPosition(0);
 			//
 			//Setup DataFlow-Diagram(DFD) panel//
 			dataflowNodeList = domNode_.getElementsByTagName("DataflowNode");
@@ -16708,6 +16716,7 @@ public class Modeler extends JFrame {
 			jTextFieldRoleSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextFieldRoleName.setText(domNode_.getAttribute("Name"));
 			jTextAreaRoleDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaRoleDescriptions.setCaretPosition(0);
 			//
 			//Setup TaskList//
 			if (tableModelTaskList.getRowCount() > 0) {
@@ -16753,6 +16762,7 @@ public class Modeler extends JFrame {
 			jTextFieldTaskSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextFieldTaskEvent.setText(domNode_.getAttribute("Event"));
 			jTextAreaTaskDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaTaskDescriptions.setCaretPosition(0);
 			//
 			NodeList dataflowNodeList = domDocument.getElementsByTagName("DataflowNode");
 			NodeList actionList = this.getElement().getElementsByTagName("TaskAction");
@@ -16891,6 +16901,7 @@ public class Modeler extends JFrame {
 			jTextFieldTaskActionExecuteIf.setText(taskActionNode.getElement().getAttribute("ExecuteIf"));
 			jTextFieldTaskActionLabel.setText(taskActionNode.getElement().getAttribute("Label"));
 			jTextAreaTaskActionDescriptions.setText(substringLinesWithTokenOfEOL(taskActionNode.getElement().getAttribute("Descriptions"), "\n"));
+			jTextAreaTaskActionDescriptions.setCaretPosition(0);
 			//
 			jPanelTaskFunctionIOImage.setBackground(SystemColor.control);
 			jPanelTask21.setBackground(SystemColor.control);
@@ -17044,6 +17055,7 @@ public class Modeler extends JFrame {
 					jTextAreaTaskFunctionIOOperations.setBackground(SystemColor.window);
 					jTextAreaTaskFunctionIOOperations.setEditable(true);
 					jTextAreaTaskFunctionIOOperations.setText(substringLinesWithTokenOfEOL(taskFunctionIOElement.getAttribute("Operations"), "\n"));
+					jTextAreaTaskFunctionIOOperations.setCaretPosition(0);
 				}
 			}
 		}
@@ -17213,6 +17225,7 @@ public class Modeler extends JFrame {
 			jTextFieldSubsystemName.setText(domNode_.getAttribute("Name"));
 			jTextFieldSubsystemSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaSubsystemDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaSubsystemDescriptions.setCaretPosition(0);
 			//
 			//Return name of the page to be shown//
 			String panelName = "jPanelSubsystem";
@@ -17396,6 +17409,7 @@ public class Modeler extends JFrame {
 				jProgressBar.setMaximum(subsystemTableList.getLength() + 1);
 				//
 				jTextAreaDatamodelDescriptions.setText(substringLinesWithTokenOfEOL(parentNode.getElement().getAttribute("DatamodelDescriptions"), "\n"));
+				jTextAreaDatamodelDescriptions.setCaretPosition(0);
 				//
 				//Setup EntityBoxes and jPanelDatamodel//
 				int boxRightEdgeLocation = 0;
@@ -17518,6 +17532,7 @@ public class Modeler extends JFrame {
 			XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
 			jTextFieldTablePK.setText(primaryKeyNode.getNameOfTableKey());
 			jTextAreaTableDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaTableDescriptions.setCaretPosition(0);
 			//
 			//Setup ComboBox of "TableType"//
 			sortableComboBoxModelTableType.removeAllElements();
@@ -17704,6 +17719,7 @@ public class Modeler extends JFrame {
 			}
 			jTextFieldTableFieldDefault.setText(domNode_.getAttribute("Default"));
 			jTextAreaTableFieldDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaTableFieldDescriptions.setCaretPosition(0);
 			//
 			//Setup jTextFieldTableFieldDataType//
 			String wrkStr = "";
@@ -18143,6 +18159,7 @@ public class Modeler extends JFrame {
 			jTextFieldFunctionParameters.setText(domNode_.getAttribute("Parameters"));
 			jTextFieldFunctionReturn.setText(domNode_.getAttribute("Return"));
 			jTextAreaFunctionDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaFunctionDescriptions.setCaretPosition(0);
 			//
 			//Setup ComboBox of "FunctionType"//
 			sortableComboBoxModelFunctionType.removeAllElements();
@@ -18325,6 +18342,7 @@ public class Modeler extends JFrame {
 			jTextFieldIOPanelName.setText(domNode_.getAttribute("Name"));
 			jTextFieldIOPanelSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaIOPanelDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaIOPanelDescriptions.setCaretPosition(0);
 			//
 			jPanelIOPanelImage.updateUI();
 			if (this.isSearchImageFileValid()) {
@@ -18478,6 +18496,7 @@ public class Modeler extends JFrame {
 			jTextFieldIOSpoolName.setText(domNode_.getAttribute("Name"));
 			jTextFieldIOSpoolSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaIOSpoolDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaIOSpoolDescriptions.setCaretPosition(0);
 			//
 			if (this.isSearchImageFileValid()) {
 				setupImageFunctionIO(((XeadTreeNode)this.getParent()).getElement().getAttribute("SortKey"), domNode_.getAttribute("SortKey"));
@@ -18633,6 +18652,7 @@ public class Modeler extends JFrame {
 				jCheckBoxIOTableD.setSelected(false);
 			}
 			jTextAreaIOTableDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaIOTableDescriptions.setCaretPosition(0);
 			//
 			//Setup IOTableFieldList//
 			tableModelIOTableFieldList = new TableModelIOTableFieldList();
@@ -18727,6 +18747,7 @@ public class Modeler extends JFrame {
 			jTextFieldIOWebPageSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextFieldIOWebPageFileName.setText(domNode_.getAttribute("FileName"));
 			jTextAreaIOWebPageDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
+			jTextAreaIOWebPageDescriptions.setCaretPosition(0);
 			//
 			//Setup IOWebPageImage//
 			if (!domNode_.getAttribute("FileName").equals(htmlFileName)) {
@@ -29739,15 +29760,15 @@ class Modeler_jMenuItemToolCreateTableStatement_ActionAdapter implements ActionL
 		adaptee.jMenuItemToolCreateTableStatement_actionPerformed(e);
 	}
 }
-class Modeler_jMenuItemToolTaskProtocolList_ActionAdapter implements ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemToolTaskProtocolList_ActionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemToolTaskProtocolList_actionPerformed(e);
-	}
-}
+//class Modeler_jMenuItemToolTaskProtocolList_ActionAdapter implements ActionListener {
+//	Modeler adaptee;
+//	Modeler_jMenuItemToolTaskProtocolList_ActionAdapter(Modeler adaptee) {
+//		this.adaptee = adaptee;
+//	}
+//	public void actionPerformed(ActionEvent e) {
+//		adaptee.jMenuItemToolTaskProtocolList_actionPerformed(e);
+//	}
+//}
 class Modeler_jMenuItemToolDocuments_ActionAdapter implements ActionListener {
 	Modeler adaptee;
 	Modeler_jMenuItemToolDocuments_ActionAdapter(Modeler adaptee) {

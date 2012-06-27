@@ -45,7 +45,7 @@ public class Application {
 	private JLabel  splashLabel;
 
 	public Application(String[] args) {
-		ImageIcon image = new ImageIcon(xeadModeler.Application.class.getResource("xeadmdl.png"));
+		ImageIcon image = new ImageIcon(xeadModeler.Application.class.getResource("splash.png"));
 		splashIcon = new JLabel(image);
 		splashIcon.setLayout(null);
 		splashLabel = new JLabel();
