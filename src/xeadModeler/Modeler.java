@@ -63,7 +63,7 @@ public class Modeler extends JFrame {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M47";
+	public static final String FULL_VERSION  = "V1.R3.M48";
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
@@ -2254,6 +2254,7 @@ public class Modeler extends JFrame {
 		jTableSystemDepartmentList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemDepartmentList_listSelectionAdapter(this));
 		jTableSystemDepartmentList.addMouseListener(new Modeler_jTableSystemDepartmentList_mouseAdapter(this));
 		jTableSystemDepartmentList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemDepartmentList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelSystemDepartmentList.addColumn("NO.");
 		tableModelSystemDepartmentList.addColumn(res.getString("S201"));
 		tableModelSystemDepartmentList.addColumn(res.getString("S265"));
@@ -2308,6 +2309,7 @@ public class Modeler extends JFrame {
 		jTableSystemTableTypeList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemTableTypeList_listSelectionAdapter(this));
 		jTableSystemTableTypeList.addMouseListener(new Modeler_jTableSystemTableTypeList_mouseAdapter(this));
 		jTableSystemTableTypeList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemTableTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelSystemTableTypeList.addColumn("NO.");
 		tableModelSystemTableTypeList.addColumn(res.getString("S201"));
 		tableModelSystemTableTypeList.addColumn(res.getString("S277"));
@@ -2362,6 +2364,7 @@ public class Modeler extends JFrame {
 		jTableSystemDataTypeList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemDataTypeList_listSelectionAdapter(this));
 		jTableSystemDataTypeList.addMouseListener(new Modeler_jTableSystemDataTypeList_mouseAdapter(this));
 		jTableSystemDataTypeList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemDataTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelSystemDataTypeList.addColumn("NO.");
 		tableModelSystemDataTypeList.addColumn(res.getString("S201"));
 		tableModelSystemDataTypeList.addColumn(res.getString("S289"));
@@ -2432,6 +2435,7 @@ public class Modeler extends JFrame {
 		jTableSystemFunctionTypeList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemFunctionTypeList_listSelectionAdapter(this));
 		jTableSystemFunctionTypeList.addMouseListener(new Modeler_jTableSystemFunctionTypeList_mouseAdapter(this));
 		jTableSystemFunctionTypeList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemFunctionTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelSystemFunctionTypeList.addColumn("NO.");
 		tableModelSystemFunctionTypeList.addColumn(res.getString("S201"));
 		tableModelSystemFunctionTypeList.addColumn(res.getString("S305"));
@@ -2490,6 +2494,7 @@ public class Modeler extends JFrame {
 		jTableSystemMaintenanceLog.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemMaintenanceLog_listSelectionAdapter(this));
 		jTableSystemMaintenanceLog.addMouseListener(new Modeler_jTableSystemMaintenanceLog_mouseAdapter(this));
 		jTableSystemMaintenanceLog.addFocusListener(new Modeler_FocusListener());
+		jTableSystemMaintenanceLog.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelSystemMaintenanceLog.addColumn("NO.");
 		tableModelSystemMaintenanceLog.addColumn(res.getString("S317"));
 		tableModelSystemMaintenanceLog.addColumn(res.getString("S318"));
@@ -2522,6 +2527,7 @@ public class Modeler extends JFrame {
 		jScrollPaneSubjectAreaList.addMouseListener(new Modeler_jScrollPaneSubjectAreaList_mouseAdapter(this));
 		jTableSubjectAreaList.addMouseListener(new Modeler_jTableSubjectAreaList_mouseAdapter(this));
 		jTableSubjectAreaList.addFocusListener(new Modeler_FocusListener());
+		jTableSubjectAreaList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		//(jTableSubjectAreaList)//
 		jTableSubjectAreaList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTableSubjectAreaList.setBackground(SystemColor.control);
@@ -2647,6 +2653,7 @@ public class Modeler extends JFrame {
 		jScrollPaneRoleList.addMouseListener(new Modeler_jScrollPaneRoleList_mouseAdapter(this));
 		jTableRoleList.addMouseListener(new Modeler_jTableRoleList_mouseAdapter(this));
 		jTableRoleList.addFocusListener(new Modeler_FocusListener());
+		jTableRoleList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		//(jTableRoleList)//
 		jTableRoleList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTableRoleList.setBackground(SystemColor.control);
@@ -2746,6 +2753,7 @@ public class Modeler extends JFrame {
 		jTableTaskList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableTaskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableTaskList.addFocusListener(new Modeler_FocusListener());
+		jTableTaskList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelTaskList.addColumn("NO.");
 		tableModelTaskList.addColumn(res.getString("S201"));
 		tableModelTaskList.addColumn(res.getString("S360"));
@@ -2991,6 +2999,7 @@ public class Modeler extends JFrame {
 		jScrollPaneSubsystemList.addMouseListener(new Modeler_jScrollPaneSubsystemList_mouseAdapter(this));
 		jTableSubsystemList.addMouseListener(new Modeler_jTableSubsystemList_mouseAdapter(this));
 		jTableSubsystemList.addFocusListener(new Modeler_FocusListener());
+		jTableSubsystemList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableFunctionsStructureTableIOList.addMouseListener(new Modeler_jTableFunctionsStructureTableIOList_mouseAdapter(this));
 		jTableFunctionsStructureTableIOList.addFocusListener(new Modeler_FocusListener());
 		jTabbedPaneSubsystemList.addTab(res.getString("S407"), imageIconSubsystem, jScrollPaneSubsystemList);
@@ -3300,6 +3309,7 @@ public class Modeler extends JFrame {
 		jScrollPaneNativeTableList.addMouseListener(new Modeler_jScrollPaneNativeTableList_mouseAdapter(this));
 		jTableNativeTableList.addMouseListener(new Modeler_jTableNativeTableList_mouseAdapter(this));
 		jTableNativeTableList.addFocusListener(new Modeler_FocusListener());
+		jTableNativeTableList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jViewportForeignTableList.add(jTableForeignTableList, null);
 		jScrollPaneForeignTableList.setViewport(jViewportForeignTableList);
 		jScrollPaneForeignTableList.addMouseListener(new Modeler_jScrollPaneForeignTableList_mouseAdapter(this));
@@ -3625,6 +3635,7 @@ public class Modeler extends JFrame {
 		jTableTableFieldList.addMouseListener(new Modeler_jTableTableFieldList_mouseAdapter(this));
 		jTableTableFieldList.addMouseMotionListener(new Modeler_jTableTableFieldList_mouseMotionAdapter(this));
 		jTableTableFieldList.addFocusListener(new Modeler_FocusListener());
+		jTableTableFieldList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		//(jTableTableFieldList)//
 		jTableTableFieldList.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTableTableFieldList.setBackground(SystemColor.control);
@@ -3898,6 +3909,7 @@ public class Modeler extends JFrame {
 		jTableTableKeyList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableTableKeyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableTableKeyList.addFocusListener(new Modeler_FocusListener());
+		jTableTableKeyList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		tableModelTableKeyList.addColumn("NO.");
 		tableModelTableKeyList.addColumn(res.getString("S540"));
 		tableModelTableKeyList.addColumn(res.getString("S612"));
@@ -3987,6 +3999,7 @@ public class Modeler extends JFrame {
 		jTableTableKeyFieldList.addMouseListener(new Modeler_jTableTableKeyFieldList_mouseAdapter(this));
 		jTableTableKeyFieldList.addMouseMotionListener(new Modeler_jTableTableKeyFieldList_mouseMotionAdapter(this));
 		jTableTableKeyFieldList.addFocusListener(new Modeler_FocusListener());
+		jTableTableKeyFieldList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jScrollPaneRelationshipList.addMouseListener(new Modeler_jScrollPaneRelationshipList_mouseAdapter(this));
 		jTableRelationshipList.addMouseListener(new Modeler_jTableRelationshipList_mouseAdapter(this));
 		jTableRelationshipList.addFocusListener(new Modeler_FocusListener());
@@ -4036,6 +4049,7 @@ public class Modeler extends JFrame {
 		jScrollPaneFunctionList.addMouseListener(new Modeler_jScrollPaneFunctionList_mouseAdapter(this));
 		jTableFunctionList.addMouseListener(new Modeler_jTableFunctionList_mouseAdapter(this));
 		jTableFunctionList.addFocusListener(new Modeler_FocusListener());
+		jTableFunctionList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jViewportForeignFunctionList.add(jTableForeignFunctionList, null);
 		jScrollPaneForeignFunctionList.setViewport(jViewportForeignFunctionList);
 		jScrollPaneForeignFunctionList.addMouseListener(new Modeler_jScrollPaneForeignFunctionList_mouseAdapter(this));
@@ -4216,6 +4230,7 @@ public class Modeler extends JFrame {
 		jScrollPaneFunctionIOList.addMouseListener(new Modeler_jScrollPaneFunctionIOList_mouseAdapter(this));
 		jTableFunctionIOList.addMouseListener(new Modeler_jTableFunctionIOList_mouseAdapter(this));
 		jTableFunctionIOList.addFocusListener(new Modeler_FocusListener());
+		jTableFunctionIOList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		//(jTableFunctionIOList)//
 		jTableFunctionIOList.setBackground(SystemColor.control);
 		jTableFunctionIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -8829,8 +8844,12 @@ public class Modeler extends JFrame {
 	 * @param e :Key Event
 	 **/
 	void jTreeMain_keyReleased(KeyEvent e) {
-		TreePath tp = jTreeMain.getSelectionPath();
-		setupContentsPaneForTreeNodeSelected((XeadTreeNode)tp.getLastPathComponent(), false);
+		if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+			jMenuItemXeadTreeNodeDelete_actionPerformed(null);
+		} else {
+			TreePath tp = jTreeMain.getSelectionPath();
+			setupContentsPaneForTreeNodeSelected((XeadTreeNode)tp.getLastPathComponent(), false);
+		}
 	}
 	/**
 	 * Event Handler for jTreeMain in case mouse Pressed
@@ -8900,6 +8919,60 @@ public class Modeler extends JFrame {
 			}
 		} else {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+	/**
+	 * Event Handler for tables in case key released
+	 * @param e :Key Event
+	 */
+	void jTableKeyReleased(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+			if (e.getComponent().equals(jTableSystemDepartmentList)) {
+				componentType_jPopupMenuComponent = "SystemDepartmentList";
+			}
+			if (e.getComponent().equals(jTableSystemTableTypeList)) {
+				componentType_jPopupMenuComponent = "SystemTableTypeList";
+			}
+			if (e.getComponent().equals(jTableSystemDataTypeList)) {
+				componentType_jPopupMenuComponent = "SystemDataTypeList";
+			}
+			if (e.getComponent().equals(jTableSystemFunctionTypeList)) {
+				componentType_jPopupMenuComponent = "SystemFunctionTypeList";
+			}
+			if (e.getComponent().equals(jTableSystemMaintenanceLog)) {
+				componentType_jPopupMenuComponent = "SystemMaintenanceLog";
+			}
+			if (e.getComponent().equals(jTableSubjectAreaList)) {
+				componentType_jPopupMenuComponent = "SubjectAreaList";
+			}
+			if (e.getComponent().equals(jTableRoleList)) {
+				componentType_jPopupMenuComponent = "RoleList";
+			}
+			if (e.getComponent().equals(jTableTaskList)) {
+				componentType_jPopupMenuComponent = "TaskList";
+			}
+			if (e.getComponent().equals(jTableSubsystemList)) {
+				componentType_jPopupMenuComponent = "SubsystemList";
+			}
+			if (e.getComponent().equals(jTableNativeTableList)) {
+				componentType_jPopupMenuComponent = "NativeTableList";
+			}
+			if (e.getComponent().equals(jTableTableFieldList)) {
+				componentType_jPopupMenuComponent = "TableFieldList";
+			}
+			if (e.getComponent().equals(jTableTableKeyList)) {
+				componentType_jPopupMenuComponent = "TableKeyList";
+			}
+			if (e.getComponent().equals(jTableTableKeyFieldList)) {
+				componentType_jPopupMenuComponent = "TableKeyFieldList";
+			}
+			if (e.getComponent().equals(jTableFunctionList)) {
+				componentType_jPopupMenuComponent = "FunctionList";
+			}
+			if (e.getComponent().equals(jTableFunctionIOList)) {
+				componentType_jPopupMenuComponent = "FunctionIOList";
+			}
+			jMenuItemComponentToDelete_actionPerformed(null);
 		}
 	}
 	/**
@@ -12857,6 +12930,7 @@ public class Modeler extends JFrame {
 			jPanelScrollPaneElementsTopMargin.setBorder(null);
 			jPanelScrollPaneElementsTopMargin.setBackground(Color.WHITE);
 			jPanelScrollPaneElementsTopMargin.setPreferredSize(new Dimension(8, 9));
+			jPanelScrollPaneElementsTopMargin.addMouseListener(new jPanelScrollPaneElementsTopMargin_mouseAdapter(this));
 			jPanelElements.setBorder(null);
 			jPanelElements.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			jPanelElements.setBackground(Color.WHITE);
@@ -13438,7 +13512,7 @@ public class Modeler extends JFrame {
 				adaptee.entityBox_mouseClicked(e);
 			}
 		}
-		//
+		//ScrollPaneElementsTopMargin
 		class jPanel1_mouseAdapter extends java.awt.event.MouseAdapter {
 			DatamodelEntityBox adaptee;
 			jPanel1_mouseAdapter(DatamodelEntityBox adaptee) {
@@ -13455,6 +13529,22 @@ public class Modeler extends JFrame {
 			}
 			public void mouseExited(MouseEvent e) {
 				adaptee.jPanel1_mouseExited(e);
+			}
+		}
+		//
+		class jPanelScrollPaneElementsTopMargin_mouseAdapter extends java.awt.event.MouseAdapter {
+			DatamodelEntityBox adaptee;
+			jPanelScrollPaneElementsTopMargin_mouseAdapter(DatamodelEntityBox adaptee) {
+				this.adaptee = adaptee;
+			}
+			public void mousePressed(MouseEvent e) {
+			}
+			public void mouseReleased(MouseEvent e) {
+			}
+			public void mouseEntered(MouseEvent e) {
+				adaptee.jPanelScrollPaneElementsTopMargin_mouseEntered(e);
+			}
+			public void mouseExited(MouseEvent e) {
 			}
 		}
 		//
@@ -13681,7 +13771,8 @@ public class Modeler extends JFrame {
 		}
 		//
 		private void jPanel1_mouseDragged(MouseEvent e) {
-			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK
+					&& jPanelMoveGuide.getParent() != null) {
 				int rangeY = jPanel1.getHeight() - 2;
 				if (e.getX() >= 189 && e.getY() > 2 && e.getY() < rangeY) {
 					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX()-1, BOX_HEIGHT));
@@ -13700,6 +13791,10 @@ public class Modeler extends JFrame {
 		}
 		//
 		private void jPanel1_mouseExited(MouseEvent e) {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		//
+		private void jPanelScrollPaneElementsTopMargin_mouseEntered(MouseEvent e) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		//
@@ -24373,18 +24468,28 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemXeadTreeNodeDelete_actionPerformed(ActionEvent e) {
-		XeadTreeNode parentNode = (XeadTreeNode)currentMainTreeNode.getParent();
-		XeadTreeNode nextFocussingNode = (XeadTreeNode)parentNode.getChildAfter(currentMainTreeNode);
-		if (nextFocussingNode == null) {nextFocussingNode = (XeadTreeNode)parentNode.getChildBefore(currentMainTreeNode);}
-		if (nextFocussingNode == null) {nextFocussingNode = parentNode;}
-		String errorMessage = currentMainTreeNode.deleteNode();
-		if (errorMessage == "") {
-			currentMainTreeNode = null;
-			TreePath tp = new TreePath(nextFocussingNode.getPath());
-			jTreeMain.setSelectionPath(tp);
-			setupContentsPaneForTreeNodeSelected(nextFocussingNode, false);
-		} else {
-			JOptionPane.showMessageDialog(this.getContentPane(), errorMessage);
+		String nodeType = currentMainTreeNode.getType();
+		if (!nodeType.equals("System")
+				&& !nodeType.equals("SubjectAreaList")
+				&& !nodeType.equals("RoleList")
+				&& !nodeType.equals("SubsystemList")
+				&& !nodeType.equals("TableList")
+				&& !nodeType.equals("TableFieldList")
+				&& !nodeType.equals("TableKeyList")
+				&& !nodeType.equals("FunctionList")) {
+			XeadTreeNode parentNode = (XeadTreeNode)currentMainTreeNode.getParent();
+			XeadTreeNode nextFocussingNode = (XeadTreeNode)parentNode.getChildAfter(currentMainTreeNode);
+			if (nextFocussingNode == null) {nextFocussingNode = (XeadTreeNode)parentNode.getChildBefore(currentMainTreeNode);}
+			if (nextFocussingNode == null) {nextFocussingNode = parentNode;}
+			String errorMessage = currentMainTreeNode.deleteNode();
+			if (errorMessage == "") {
+				currentMainTreeNode = null;
+				TreePath tp = new TreePath(nextFocussingNode.getPath());
+				jTreeMain.setSelectionPath(tp);
+				setupContentsPaneForTreeNodeSelected(nextFocussingNode, false);
+			} else {
+				JOptionPane.showMessageDialog(this.getContentPane(), errorMessage);
+			}
 		}
 	}
 	/**
@@ -26860,103 +26965,104 @@ public class Modeler extends JFrame {
 		org.w3c.dom.Element element;
 		XeadTreeNode targetNode = null;
 		TableRowNumber tableRowNumber = null;
+		JTable table = null;
+		int rowNumberDeleted = 0;
 		//
 		//Delete System variant//
 		if (currentMainTreeNode.equals(systemNode)) {
+			boolean isDeleted = false;
 			if (componentType_jPopupMenuComponent.equals("SystemDepartmentList")) {
+				table = jTableSystemDepartmentList;
+				rowNumberDeleted = jTableSystemDepartmentList.getSelectedRow();
 				if (tableModelSystemDepartmentWhereUsedList.getRowCount() > 0) {
 					JOptionPane.showMessageDialog(jScrollPaneSystemDepartmentList, res.getString("S2539"));
 				} else {
 					if (tableModelSystemDepartmentList.getRowCount() <= 1) {
 						JOptionPane.showMessageDialog(jScrollPaneSystemDepartmentList, res.getString("S2540"));
 					} else {
-						//
-						//Update DOM element//
+						isDeleted = true;
 						tableRowNumber = (TableRowNumber)tableModelSystemDepartmentList.getValueAt(selectedRow_jTableSystemDepartmentList,0);
 						systemNode.getElement().removeChild(tableRowNumber.getElement());
-						//
-						//Log node after modified//
 						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
-						//
-						//Refresh page//
 						currentMainTreeNode.activateContentsPane();
 					}
 				}
 			}
 			if (componentType_jPopupMenuComponent.equals("SystemTableTypeList")) {
+				table = jTableSystemTableTypeList;
+				rowNumberDeleted = jTableSystemTableTypeList.getSelectedRow();
 				if (tableModelSystemTableTypeWhereUsedList.getRowCount() > 0) {
 					JOptionPane.showMessageDialog(jScrollPaneSystemTableTypeList, res.getString("S2542"));
 				} else {
 					if (tableModelSystemTableTypeList.getRowCount() <= 1) {
 						JOptionPane.showMessageDialog(jScrollPaneSystemTableTypeList, res.getString("S2543"));
 					} else {
-						//
-						//Update DOM element//
+						isDeleted = true;
 						tableRowNumber = (TableRowNumber)tableModelSystemTableTypeList.getValueAt(selectedRow_jTableSystemTableTypeList,0);
 						systemNode.getElement().removeChild(tableRowNumber.getElement());
-						//
-						//Log node after modified//
 						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
-						//
-						//Refresh page//
 						currentMainTreeNode.activateContentsPane();
 					}
 				}
 			}
 			if (componentType_jPopupMenuComponent.equals("SystemDataTypeList")) {
+				table = jTableSystemDataTypeList;
+				rowNumberDeleted = jTableSystemDataTypeList.getSelectedRow();
 				if (tableModelSystemDataTypeWhereUsedList.getRowCount() > 0) {
 					JOptionPane.showMessageDialog(jScrollPaneSystemDataTypeList, res.getString("S2545"));
 				} else {
 					if (tableModelSystemDataTypeList.getRowCount() <= 1) {
 						JOptionPane.showMessageDialog(jScrollPaneSystemDataTypeList, res.getString("S2543"));
 					} else {
-						//
-						//Update DOM element//
+						isDeleted = true;
 						tableRowNumber = (TableRowNumber)tableModelSystemDataTypeList.getValueAt(selectedRow_jTableSystemDataTypeList,0);
 						systemNode.getElement().removeChild(tableRowNumber.getElement());
-						//
-						//Log node after modified//
 						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
-						//
-						//Refresh page//
 						currentMainTreeNode.activateContentsPane();
 					}
 				}
 			}
 			if (componentType_jPopupMenuComponent.equals("SystemFunctionTypeList")) {
+				table = jTableSystemFunctionTypeList;
+				rowNumberDeleted = jTableSystemFunctionTypeList.getSelectedRow();
 				if (tableModelSystemFunctionTypeWhereUsedList.getRowCount() > 0) {
 					JOptionPane.showMessageDialog(jScrollPaneSystemFunctionTypeList, res.getString("S2548"));
 				} else {
 					if (tableModelSystemFunctionTypeList.getRowCount() <= 1) {
 						JOptionPane.showMessageDialog(jScrollPaneSystemFunctionTypeList, res.getString("S2543"));
 					} else {
-						//
-						//Update DOM element//
+						isDeleted = true;
 						tableRowNumber = (TableRowNumber)tableModelSystemFunctionTypeList.getValueAt(selectedRow_jTableSystemFunctionTypeList,0);
 						systemNode.getElement().removeChild(tableRowNumber.getElement());
-						//
-						//Log node after modified//
 						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
-						//
-						//Refresh page//
 						currentMainTreeNode.activateContentsPane();
 					}
 				}
 			}
 			if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
+				table = jTableSystemMaintenanceLog;
+				rowNumberDeleted = jTableSystemMaintenanceLog.getSelectedRow();
 				if (tableModelSystemMaintenanceLog.getRowCount() <= 1) {
 					JOptionPane.showMessageDialog(jScrollPaneSystemMaintenanceLog, res.getString("S2551"));
 				} else {
-					//
-					//Update DOM element//
+					isDeleted = true;
 					tableRowNumber = (TableRowNumber)tableModelSystemMaintenanceLog.getValueAt(selectedRow_jTableSystemMaintenanceLog,0);
 					systemNode.getElement().removeChild(tableRowNumber.getElement());
-					//
-					//Log node after modified//
 					xeadUndoManager.addLogAfterModified(currentMainTreeNode);
-					//
-					//Refresh page//
 					currentMainTreeNode.activateContentsPane();
+				}
+			}
+			if (table != null && isDeleted) {
+				if (rowNumberDeleted == 0) {
+					if (table.getRowCount() > 1) {
+						table.setRowSelectionInterval(0, 0);
+					}
+				} else {
+					if (table.getRowCount() == rowNumberDeleted) {
+						table.setRowSelectionInterval(rowNumberDeleted-1, rowNumberDeleted-1);
+					} else {
+						table.setRowSelectionInterval(rowNumberDeleted, rowNumberDeleted);
+					}
 				}
 			}
 		}
@@ -26974,43 +27080,60 @@ public class Modeler extends JFrame {
 			//
 			//Specify node to be deleted//
 			if (componentType_jPopupMenuComponent.equals("SubjectAreaList")) {
+				table = jTableSubjectAreaList;
+				rowNumberDeleted = jTableSubjectAreaList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelSubjectAreaList.getValueAt(selectedRow_jTableSubjectAreaList,0);
 				targetNode = getSpecificXeadTreeNode("SubjectArea", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("RoleList")) {
+				table = jTableRoleList;
+				rowNumberDeleted = jTableRoleList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelRoleList.getValueAt(selectedRow_jTableRoleList,0);
 				targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("TaskList")) {
+				table = jTableTaskList;
+				rowNumberDeleted = jTableTaskList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelTaskList.getValueAt(selectedRow_jTableTaskList,0);
 				targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("SubsystemList")) {
+				table = jTableSubsystemList;
+				rowNumberDeleted = jTableSubsystemList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelSubsystemList.getValueAt(selectedRow_jTableSubsystemList,0);
 				targetNode = getSpecificXeadTreeNode("Subsystem", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("NativeTableList")) {
+				table = jTableNativeTableList;
+				rowNumberDeleted = jTableNativeTableList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelNativeTableList.getValueAt(selectedRow_jTableNativeTableList,0);
 				targetNode = getSpecificXeadTreeNode("Table", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("TableFieldList")) {
+				table = jTableTableFieldList;
+				rowNumberDeleted = jTableTableFieldList.getSelectedRow();
 				XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
 				String tableID = node.getElement().getAttribute("ID");
-				//tableRowNumber = (TableRowNumber)tableModelTableFieldList.getValueAt(selectedRow_jTableTableFieldList,0);
 				tableRowNumber = (TableRowNumber)tableModelTableFieldList.getValueAt(jTableTableFieldList.getSelectedRow(),0);
 				targetNode = getSpecificXeadTreeNode("TableField", tableID, tableRowNumber.getElement().getAttribute("ID"));
 			}
 			if (componentType_jPopupMenuComponent.equals("TableKeyList")) {
+				table = jTableTableKeyList;
+				rowNumberDeleted = jTableTableKeyList.getSelectedRow();
 				XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
 				String tableID = node.getElement().getAttribute("ID");
 				tableRowNumber = (TableRowNumber)tableModelTableKeyList.getValueAt(selectedRow_jTableTableKeyList,0);
 				targetNode = getSpecificXeadTreeNode("TableKey", tableID, tableRowNumber.getElement().getAttribute("ID"));
 			}
 			if (componentType_jPopupMenuComponent.equals("FunctionList")) {
+				table = jTableFunctionList;
+				rowNumberDeleted = jTableFunctionList.getSelectedRow();
 				tableRowNumber = (TableRowNumber)tableModelFunctionList.getValueAt(selectedRow_jTableFunctionList,0);
 				targetNode = getSpecificXeadTreeNode("Function", tableRowNumber.getElement().getAttribute("ID"), null);
 			}
 			if (componentType_jPopupMenuComponent.equals("FunctionIOList")) {
+				table = jTableFunctionIOList;
+				rowNumberDeleted = jTableFunctionIOList.getSelectedRow();
 				element = currentMainTreeNode.getElement();
 				String functionID = element.getAttribute("ID");
 				tableRowNumber = (TableRowNumber)tableModelFunctionIOList.getValueAt(selectedRow_jTableFunctionIOList,0);
@@ -27024,6 +27147,19 @@ public class Modeler extends JFrame {
 					TreePath tp = new TreePath(currentMainTreeNode.getPath());
 					jTreeMain.setSelectionPath(tp);
 					setupContentsPaneForTreeNodeSelected(currentMainTreeNode, true);
+					if (table != null) {
+						if (rowNumberDeleted == 0) {
+							if (table.getRowCount() > 1) {
+								table.setRowSelectionInterval(0, 0);
+							}
+						} else {
+							if (table.getRowCount() == rowNumberDeleted) {
+								table.setRowSelectionInterval(rowNumberDeleted-1, rowNumberDeleted-1);
+							} else {
+								table.setRowSelectionInterval(rowNumberDeleted, rowNumberDeleted);
+							}
+						}
+					}
 				} else {
 					JOptionPane.showMessageDialog(this.getContentPane(), errorMessage);
 				}
@@ -31883,5 +32019,14 @@ class Modeler_jMenuTool_menuAdapter implements javax.swing.event.MenuListener {
 	public void menuDeselected(MenuEvent e) {
 	}
 	public void menuCanceled(MenuEvent e) {
+	}
+}
+class Modeler_TableKeyAdapter extends java.awt.event.KeyAdapter {
+	Modeler adaptee;
+	Modeler_TableKeyAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void keyReleased(KeyEvent e) {
+		adaptee.jTableKeyReleased(e);
 	}
 }
