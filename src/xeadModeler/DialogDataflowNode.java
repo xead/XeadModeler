@@ -39,27 +39,25 @@ import java.util.ResourceBundle;
 
 public class DialogDataflowNode extends JDialog {
 	private static final long serialVersionUID = 1L;
-	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	JPanel panelMain = new JPanel();
-	JLabel jLabel1 = new JLabel();
-	KanjiTextField jTextFieldLabel = new KanjiTextField();
-	JLabel jLabel2 = new JLabel();
-	JComboBox jComboBoxType = new JComboBox();
-	JTextField jTextFieldType = new JTextField();
-	JComboBox jComboBoxEventPos = new JComboBox();
-	JLabel jLabel3 = new JLabel();
-	JLabel jLabel4 = new JLabel();
-	JLabel jLabel5 = new JLabel();
-	JLabel jLabel6 = new JLabel();
-	JButton jButtonOK = new JButton();
-	JButton jButtonCancel = new JButton();
-	JSpinner jSpinnerSlideNumber = new JSpinner();
-	JScrollPane jScrollPaneDescriptions = new JScrollPane();
-	KanjiTextArea jTextAreaDescriptions = new KanjiTextArea();
-	boolean buttonOKIsPressed;
-	Modeler frame_;
-	org.w3c.dom.Element element_;
-	String action_;
+	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
+	private JPanel panelMain = new JPanel();
+	private JLabel jLabel1 = new JLabel();
+	private KanjiTextField jTextFieldLabel = new KanjiTextField();
+	private JLabel jLabel2 = new JLabel();
+	private JComboBox jComboBoxType = new JComboBox();
+	private JTextField jTextFieldType = new JTextField();
+	private JComboBox jComboBoxEventPos = new JComboBox();
+	private JLabel jLabel3 = new JLabel();
+	private JLabel jLabel4 = new JLabel();
+	private JLabel jLabel5 = new JLabel();
+	private JLabel jLabel6 = new JLabel();
+	private JButton jButtonOK = new JButton();
+	private JButton jButtonCancel = new JButton();
+	private JSpinner jSpinnerSlideNumber = new JSpinner();
+	private JScrollPane jScrollPaneDescriptions = new JScrollPane();
+	private KanjiTextArea jTextAreaDescriptions = new KanjiTextArea();
+	private boolean buttonOKIsPressed;
+	private Modeler frame_;
 
 	public DialogDataflowNode(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
@@ -145,8 +143,6 @@ public class DialogDataflowNode extends JDialog {
 
 	public boolean request(String action, org.w3c.dom.Element element) {
 		buttonOKIsPressed = false;
-		element_ = element;
-		action_ = action;
 		//
 		jLabel6.setEnabled(false);
 		jComboBoxEventPos.setEnabled(false);

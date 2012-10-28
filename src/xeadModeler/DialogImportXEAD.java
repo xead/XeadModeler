@@ -43,45 +43,45 @@ import org.xml.sax.*;
 
 public class DialogImportXEAD extends JDialog {
 	private static final long serialVersionUID = 1L;
-	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
+	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	//
-	JPanel panelMain = new JPanel();
-	JLabel jLabel1 = new JLabel();
-	JLabel jLabel2 = new JLabel();
-	JPanel jPanel1 = new JPanel();
-	GridLayout gridLayout1 = new GridLayout();
-	JRadioButton jRadioButtonTablesAndFunctions = new JRadioButton();
-	JRadioButton jRadioButtonTables = new JRadioButton();
-	JRadioButton jRadioButtonFunctions = new JRadioButton();
-	JRadioButton jRadioButtonTasks = new JRadioButton();
-	ButtonGroup buttonGroup1 = new ButtonGroup();
-	JLabel jLabel3 = new JLabel();
-	JProgressBar jProgressBar = new JProgressBar();
-	JButton jButtonStart = new JButton();
-	JButton jButtonCancel = new JButton();
-	SortableXeadNodeComboBoxModel comboBoxModelBlockFrom = new SortableXeadNodeComboBoxModel();
-	SortableXeadNodeComboBoxModel comboBoxModelBlockInto = new SortableXeadNodeComboBoxModel();
-	JComboBox jComboBoxBlockFrom = new JComboBox(comboBoxModelBlockFrom);
-	JComboBox jComboBoxBlockInto = new JComboBox(comboBoxModelBlockInto);
-	JTextArea jTextArea1 = new JTextArea();
-	JLabel jLabel4 = new JLabel();
-	JTextField jTextFieldImportFileName = new JTextField();
-	JLabel jLabel5 = new JLabel();
-	JTextField jTextFieldImportSystemName = new JTextField();
+	private JPanel panelMain = new JPanel();
+	private JLabel jLabel1 = new JLabel();
+	private JLabel jLabel2 = new JLabel();
+	private JPanel jPanel1 = new JPanel();
+	private GridLayout gridLayout1 = new GridLayout();
+	private JRadioButton jRadioButtonTablesAndFunctions = new JRadioButton();
+	private JRadioButton jRadioButtonTables = new JRadioButton();
+	private JRadioButton jRadioButtonFunctions = new JRadioButton();
+	private JRadioButton jRadioButtonTasks = new JRadioButton();
+	private ButtonGroup buttonGroup1 = new ButtonGroup();
+	private JLabel jLabel3 = new JLabel();
+	private JProgressBar jProgressBar = new JProgressBar();
+	private JButton jButtonStart = new JButton();
+	private JButton jButtonCancel = new JButton();
+	private SortableXeadNodeComboBoxModel comboBoxModelBlockFrom = new SortableXeadNodeComboBoxModel();
+	private SortableXeadNodeComboBoxModel comboBoxModelBlockInto = new SortableXeadNodeComboBoxModel();
+	private JComboBox jComboBoxBlockFrom = new JComboBox(comboBoxModelBlockFrom);
+	private JComboBox jComboBoxBlockInto = new JComboBox(comboBoxModelBlockInto);
+	private JTextArea jTextArea1 = new JTextArea();
+	private JLabel jLabel4 = new JLabel();
+	private JTextField jTextFieldImportFileName = new JTextField();
+	private JLabel jLabel5 = new JLabel();
+	private JTextField jTextFieldImportSystemName = new JTextField();
 	//
-	String importResult = "";
-	Modeler frame_;
-	org.w3c.dom.Document domDocumentFrom;
-	org.w3c.dom.Element systemElement;
-	org.w3c.dom.Element blockElementFrom, blockElementInto;
-	String blockIDFrom, blockIDInto;
-	FileWriter fileWriter = null;
-	BufferedWriter bufferedWriter = null;
+	private String importResult = "";
+	private Modeler frame_;
+	private org.w3c.dom.Document domDocumentFrom;
+	private org.w3c.dom.Element systemElement;
+	private org.w3c.dom.Element blockElementFrom, blockElementInto;
+	private String blockIDFrom, blockIDInto;
+	private FileWriter fileWriter = null;
+	private BufferedWriter bufferedWriter = null;
 	//
-	int updateTableCounter, createTableCounter, cancelTableCounter;
-	int updateFunctionCounter, createFunctionCounter, cancelFunctionCounter;
-	int updateTaskCounter, createTaskCounter, cancelTaskCounter;
-	int missingTableCounter, missingTableKeyCounter, missingFunctionCounter, missingFunctionIOCounter;
+	private int updateTableCounter, createTableCounter, cancelTableCounter;
+	private int updateFunctionCounter, createFunctionCounter, cancelFunctionCounter;
+	private int updateTaskCounter, createTaskCounter, cancelTaskCounter;
+	private int missingTableCounter, missingTableKeyCounter, missingFunctionCounter, missingFunctionIOCounter;
 
 	public DialogImportXEAD(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
@@ -232,9 +232,9 @@ public class DialogImportXEAD extends JDialog {
 		elementList = domDocumentFrom.getElementsByTagName("System");
 		element = (org.w3c.dom.Element)elementList.item(0);
 		float importFileFormat = Float.parseFloat(element.getAttribute("FormatVersion"));
-		float appliFormat = Float.parseFloat(frame_.getFormatVersion());
+		float appliFormat = Float.parseFloat(DialogAbout.FORMAT_VERSION);
 		if (importFileFormat > appliFormat) {
-			JOptionPane.showMessageDialog(this, res.getString("S1") + element.getAttribute("FormatVersion") + res.getString("S2") + frame_.getFormatVersion() + res.getString("S3"));
+			JOptionPane.showMessageDialog(this, res.getString("S1") + element.getAttribute("FormatVersion") + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
 		} else {
 			jTextFieldImportFileName.setText(fileName);
 			jTextFieldImportSystemName.setText(element.getAttribute("Name"));

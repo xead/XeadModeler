@@ -39,7 +39,7 @@ import java.util.ResourceBundle;
 
 public class Application {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	boolean packFrame = false;
+	private boolean packFrame = false;
 	private JWindow splashScreen;
 	private JLabel  splashIcon;
 	private JLabel  splashLabel;
@@ -100,12 +100,16 @@ public class Application {
 	}
 	
 	public void setTextOnSplash(String text) {
-		splashLabel.setText(text);
+		if (splashLabel != null) {
+			splashLabel.setText(text);
+		}
 	}
 
 	public void hideSplash() {
-		splashScreen.setVisible(false);
-		splashScreen = null;
-		splashLabel  = null;
+		if (splashScreen != null) {
+			splashScreen.setVisible(false);
+			splashScreen = null;
+			splashLabel  = null;
+		}
 	}
 }

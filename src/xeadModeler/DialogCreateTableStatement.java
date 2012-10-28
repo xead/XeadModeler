@@ -38,25 +38,24 @@ import java.util.ResourceBundle;
 
 public class DialogCreateTableStatement extends JDialog {
 	private static final long serialVersionUID = 1L;
-	static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	JPanel panelMain = new JPanel();
-	JLabel jLabelTableNameOption = new JLabel();
-	JPanel jPanel1 = new JPanel();
-	GridLayout gridLayout1 = new GridLayout();
-	JRadioButton jRadioButtonTableName = new JRadioButton();
-	JRadioButton jRadioButtonTableID = new JRadioButton();
-	ButtonGroup buttonGroup = new ButtonGroup();
-	JLabel jLabelCommentMark = new JLabel();
-	JTextField jTextFieldCommentMark = new JTextField();
-	JLabel jLabelSectionMark = new JLabel();
-	JTextField jTextFieldSectionMark = new JTextField();
-	JCheckBox jCheckBoxWithComment = new JCheckBox();
-	JButton jButtonStart = new JButton();
-	JButton jButtonCancel = new JButton();
-	JTextArea jTextArea1 = new JTextArea();
-	Modeler frame_;
-	boolean startRequested = false;
-	BorderLayout borderLayout1 = new BorderLayout();
+	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
+	private JPanel panelMain = new JPanel();
+	private JLabel jLabelTableNameOption = new JLabel();
+	private JPanel jPanel1 = new JPanel();
+	private GridLayout gridLayout1 = new GridLayout();
+	private JRadioButton jRadioButtonTableName = new JRadioButton();
+	private JRadioButton jRadioButtonTableID = new JRadioButton();
+	private ButtonGroup buttonGroup = new ButtonGroup();
+	private JLabel jLabelCommentMark = new JLabel();
+	private JTextField jTextFieldCommentMark = new JTextField();
+	private JLabel jLabelSectionMark = new JLabel();
+	private JTextField jTextFieldSectionMark = new JTextField();
+	private JCheckBox jCheckBoxWithComment = new JCheckBox();
+	private JButton jButtonStart = new JButton();
+	private JButton jButtonCancel = new JButton();
+	private JTextArea jTextArea1 = new JTextArea();
+	private Modeler frame_;
+	private boolean startRequested = false;
 
 	public DialogCreateTableStatement(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);

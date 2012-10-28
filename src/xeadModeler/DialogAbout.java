@@ -39,18 +39,30 @@ import javax.swing.text.html.HTMLEditorKit;
 
 public class DialogAbout extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	JPanel panel1 = new JPanel();
-	JPanel panel2 = new JPanel();
-	JPanel insetsPanel1 = new JPanel();
-	JPanel insetsPanel2 = new JPanel();
-	JPanel insetsPanel3 = new JPanel();
-	JButton button1 = new JButton();
-	JLabel imageLabel = new JLabel();
-	JLabel labelName = new JLabel();
-	JLabel labelVersion = new JLabel();
-	JLabel labelCopyright = new JLabel();
-	JLabel labelURL = new JLabel();
-	ImageIcon imageXead = new ImageIcon();
+	/**
+	 * Application Information
+	 */
+	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
+	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
+	public static final String FULL_VERSION  = "V1.R3.M49";
+	public static final String FORMAT_VERSION  = "1.2";
+	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
+	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
+	/**
+	 * Components on the panel
+	 */
+	private JPanel panel1 = new JPanel();
+	private JPanel panel2 = new JPanel();
+	private JPanel insetsPanel1 = new JPanel();
+	private JPanel insetsPanel2 = new JPanel();
+	private JPanel insetsPanel3 = new JPanel();
+	private JButton button1 = new JButton();
+	private JLabel imageLabel = new JLabel();
+	private JLabel labelName = new JLabel();
+	private JLabel labelVersion = new JLabel();
+	private JLabel labelCopyright = new JLabel();
+	private JLabel labelURL = new JLabel();
+	private ImageIcon imageXead = new ImageIcon();
 	private HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 	private Desktop desktop = Desktop.getDesktop();
 
@@ -75,22 +87,22 @@ public class DialogAbout extends JDialog implements ActionListener {
 		insetsPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		insetsPanel2.setPreferredSize(new Dimension(75, 52));
 		insetsPanel2.add(imageLabel, BorderLayout.EAST);
-		//
+
 		labelName.setFont(new java.awt.Font("Serif", 1, 16));
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelName.setText(Modeler.PRODUCT_NAME);
+		labelName.setText(PRODUCT_NAME);
 		labelName.setBounds(new Rectangle(-5, 9, 190, 18));
 		labelVersion.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelVersion.setHorizontalAlignment(SwingConstants.CENTER);
-		labelVersion.setText(Modeler.FULL_VERSION);
+		labelVersion.setText(FULL_VERSION);
 		labelVersion.setBounds(new Rectangle(-5, 32, 190, 15));
 		labelCopyright.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelCopyright.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCopyright.setText(Modeler.COPYRIGHT);
+		labelCopyright.setText(COPYRIGHT);
 		labelCopyright.setBounds(new Rectangle(-5, 53, 190, 15));
 		labelURL.setFont(new java.awt.Font("Dialog", 0, 12));
 		labelURL.setHorizontalAlignment(SwingConstants.CENTER);
-		labelURL.setText("<html><u><font color='blue'>" + Modeler.URL_DBC);
+		labelURL.setText("<html><u><font color='blue'>" + URL_DBC);
 		labelURL.setBounds(new Rectangle(-5, 73, 190, 15));
 		labelURL.addMouseListener(new DialogAbout_labelURL_mouseAdapter(this));
 		insetsPanel3.setLayout(null);
@@ -100,17 +112,17 @@ public class DialogAbout extends JDialog implements ActionListener {
 		insetsPanel3.add(labelVersion, null);
 		insetsPanel3.add(labelCopyright, null);
 		insetsPanel3.add(labelURL, null);
-		//
+
 		button1.setText("OK");
 		button1.addActionListener(this);
 		insetsPanel1.add(button1, null);
-		//
+
 		panel1.add(insetsPanel1, BorderLayout.SOUTH);
 		panel1.add(panel2, BorderLayout.NORTH);
 		panel2.setPreferredSize(new Dimension(270, 90));
 		panel2.add(insetsPanel2, BorderLayout.CENTER);
 		panel2.add(insetsPanel3, BorderLayout.EAST);
-		//
+
 		this.setTitle("About XEAD Modeler");
 		this.getContentPane().add(panel1, null);
 		this.setResizable(false);
@@ -136,7 +148,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 	void labelURL_mouseClicked(MouseEvent e) {
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			desktop.browse(new URI(Modeler.URL_DBC));
+			desktop.browse(new URI(URL_DBC));
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "The Site is inaccessible.");
 		} finally {
