@@ -209,6 +209,7 @@ public class DialogDataflowNode extends JDialog {
 			jTextFieldLabel.setText(element.getAttribute("Name"));
 			jTextFieldLabel.setBackground(Color.white);
 			jTextFieldLabel.setEditable(true);
+			jTextAreaDescriptions.setText("");
 			jComboBoxType.setSelectedIndex(0);
 			panelMain.add(jComboBoxType, null);
 		} else {

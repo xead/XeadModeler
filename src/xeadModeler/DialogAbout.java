@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2013 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -44,9 +44,17 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M49";
+	public static final String FULL_VERSION  = "V1.R3.M50";
+	// 50での変更点
+	//・部門、テーブルタイプ、データタイプ、機能タイプ別の定義要素の一覧がID順になるように修正
+	//・フィールドIDの入力域の幅を拡張
+	//・フィールド一覧上のキーフィールドを太字表示にするとともに、CSV出力で太字を*付に変換するステップを追加
+	//・一部のドラッグドロップ対象のコンポーネントで、マウスオーバーするだけでカーソルが変化していた問題を修正
+	//・業務フローにノードを追加した場合に前回にノードに対して入力した摘要がクリアされない問題を修正
+	//・ツリービュー上で Ctrl+C,Ctrl+V,Ctrl+X を使えるようにするとともに、複数ノードを同時選択できないようにした
+	//・右ペインで値を変更直後にCtrl+Sを押しても上書きされなかった問題を修正
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2004-2012 DBC,Ltd.";
+	public static final String COPYRIGHT = "Copyright 2004-2013 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
 	/**
 	 * Components on the panel
