@@ -43,6 +43,8 @@ public class DialogDataflowNode extends JDialog {
 	private JPanel panelMain = new JPanel();
 	private JLabel jLabel1 = new JLabel();
 	private KanjiTextField jTextFieldLabel = new KanjiTextField();
+	private JLabel jLabel1Ext = new JLabel();
+	private KanjiTextField jTextFieldLabelExt = new KanjiTextField();
 	private JLabel jLabel2 = new JLabel();
 	private JComboBox jComboBoxType = new JComboBox();
 	private JTextField jTextFieldType = new JTextField();
@@ -86,13 +88,19 @@ public class DialogDataflowNode extends JDialog {
 		jLabel1.setText(res.getString("DialogDataflowNode01"));
 		jLabel1.setBounds(new Rectangle(20, 16, 70, 15));
 		jTextFieldLabel.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldLabel.setBounds(new Rectangle(97, 15, 115, 22));
+		jTextFieldLabel.setBounds(new Rectangle(97, 13, 115, 22));
+		jLabel1Ext.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1Ext.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel1Ext.setText(res.getString("DialogDataflowNode24"));
+		jLabel1Ext.setBounds(new Rectangle(20, 40, 70, 15));
+		jTextFieldLabelExt.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextFieldLabelExt.setBounds(new Rectangle(97, 37, 115, 22));
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowNode02"));
-		jLabel2.setBounds(new Rectangle(22, 49, 68, 15));
+		jLabel2.setBounds(new Rectangle(22, 68, 68, 15));
 		jComboBoxType.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxType.setBounds(new Rectangle(97, 47, 115, 21));
+		jComboBoxType.setBounds(new Rectangle(97, 65, 115, 21));
 		jComboBoxType.addItem(res.getString("DialogDataflowNode03")); //:0
 		jComboBoxType.addItem(res.getString("DialogDataflowNode19")); //:1
 		jComboBoxType.addItem(res.getString("DialogDataflowNode04")); //:2
@@ -106,30 +114,30 @@ public class DialogDataflowNode extends JDialog {
 		jComboBoxType.addItem(res.getString("DialogDataflowNode18")); //:10
 		jComboBoxType.setMaximumRowCount(20);
 		jTextFieldType.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldType.setBounds(new Rectangle(97, 47, 115, 22));
+		jTextFieldType.setBounds(new Rectangle(97, 65, 115, 22));
 		jTextFieldType.setEditable(false);
 		jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel3.setText("");
-		jLabel3.setBounds(new Rectangle(8, 86, 81, 15));
+		jLabel3.setBounds(new Rectangle(8, 96, 81, 15));
 		jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel4.setText(res.getString("DialogDataflowNode12"));
-		jLabel4.setBounds(new Rectangle(11, 82, 79, 15));
+		jLabel4.setBounds(new Rectangle(11, 96, 79, 15));
 		jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel6.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel6.setText(res.getString("DialogDataflowNode21"));
-		jLabel6.setBounds(new Rectangle(5, 113, 85, 15));
+		jLabel6.setBounds(new Rectangle(5, 124, 85, 15));
 		jComboBoxEventPos.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxEventPos.setBounds(new Rectangle(97, 110, 60, 21));
+		jComboBoxEventPos.setBounds(new Rectangle(97, 121, 60, 21));
 		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowNode20"));
-		jLabel5.setBounds(new Rectangle(11, 143, 79, 15));
+		jLabel5.setBounds(new Rectangle(11, 152, 79, 15));
 		jTextAreaDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTextAreaDescriptions.setLineWrap(true);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
-		jScrollPaneDescriptions.setBounds(new Rectangle(97, 140, 155, 90));
+		jScrollPaneDescriptions.setBounds(new Rectangle(97, 149, 155, 90));
 		jButtonOK.setBounds(new Rectangle(40, 248, 73, 25));
 		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonOK.setText("OK");
@@ -144,7 +152,6 @@ public class DialogDataflowNode extends JDialog {
 	public boolean request(String action, org.w3c.dom.Element element) {
 		buttonOKIsPressed = false;
 		//
-		jLabel6.setEnabled(false);
 		jComboBoxEventPos.setEnabled(false);
 		jComboBoxEventPos.removeAllItems();
 		//
@@ -154,6 +161,8 @@ public class DialogDataflowNode extends JDialog {
 			jComboBoxEventPos.setEnabled(true);
 			jComboBoxEventPos.addItem(res.getString("DialogDataflowNode22")); //:0
 			jComboBoxEventPos.addItem(res.getString("DialogDataflowNode23")); //:0
+		} else {
+			jLabel6.setEnabled(false);
 		}
 		if (element.getAttribute("Type").equals("Ledger")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode03"));
@@ -194,6 +203,8 @@ public class DialogDataflowNode extends JDialog {
 		panelMain.add(jLabel3, null);
 		panelMain.add(jTextFieldLabel, null);
 		panelMain.add(jLabel1, null);
+		panelMain.add(jTextFieldLabelExt, null);
+		panelMain.add(jLabel1Ext, null);
 		panelMain.add(jLabel4, null);
 		panelMain.add(jLabel6, null);
 		panelMain.add(jComboBoxEventPos, null);
@@ -209,7 +220,12 @@ public class DialogDataflowNode extends JDialog {
 			jTextFieldLabel.setText(element.getAttribute("Name"));
 			jTextFieldLabel.setBackground(Color.white);
 			jTextFieldLabel.setEditable(true);
+			jLabel1Ext.setEnabled(true);
+			jTextFieldLabelExt.setEditable(true);
+			jTextFieldLabelExt.setText("");
 			jTextAreaDescriptions.setText("");
+			jTextAreaDescriptions.setBackground(Color.white);
+			jTextAreaDescriptions.setEditable(true);
 			jComboBoxType.setSelectedIndex(0);
 			panelMain.add(jComboBoxType, null);
 		} else {
@@ -221,10 +237,14 @@ public class DialogDataflowNode extends JDialog {
 				jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
 				jTextFieldLabel.setBackground(SystemColor.control);
 				jTextFieldLabel.setEditable(false);
+				jLabel1Ext.setEnabled(false);
+				jTextFieldLabelExt.setText("");
+				jTextFieldLabelExt.setBackground(SystemColor.control);
+				jTextFieldLabelExt.setEditable(false);
 				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(node.getElement().getAttribute("Descriptions"), "\n"));
 				jTextAreaDescriptions.setBackground(SystemColor.control);
 				jTextAreaDescriptions.setEditable(false);
-				if (node.getElement().getAttribute("EventPos").equals("") || node.getElement().getAttribute("EventPos").equals("L")) {
+				if (element.getAttribute("EventPos").equals("") || node.getElement().getAttribute("EventPos").equals("L")) {
 					jComboBoxEventPos.setSelectedIndex(0);
 				} else {
 					jComboBoxEventPos.setSelectedIndex(1);
@@ -233,6 +253,10 @@ public class DialogDataflowNode extends JDialog {
 				jTextFieldLabel.setText(element.getAttribute("Name"));
 				jTextFieldLabel.setBackground(Color.white);
 				jTextFieldLabel.setEditable(true);
+				jLabel1Ext.setEnabled(true);
+				jTextFieldLabelExt.setText(element.getAttribute("NameExt"));
+				jTextFieldLabelExt.setBackground(Color.white);
+				jTextFieldLabelExt.setEditable(true);
 				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n"));
 				jTextAreaDescriptions.setBackground(Color.white);
 				jTextAreaDescriptions.setEditable(true);
@@ -245,7 +269,7 @@ public class DialogDataflowNode extends JDialog {
 		jSpinnerSlideNumber.setModel(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
 		jSpinnerSlideNumber.setEditor(spinnerEditor);
-		jSpinnerSlideNumber.setBounds(new Rectangle(97, 78, 42, 24));
+		jSpinnerSlideNumber.setBounds(new Rectangle(97, 93, 42, 22));
 		panelMain.add(jSpinnerSlideNumber, null);
 		//
 		//Setup dialog and show//
@@ -269,6 +293,7 @@ public class DialogDataflowNode extends JDialog {
 				//
 				//Update DOM element//
 				element.setAttribute("Name", jTextFieldLabel.getText());
+				element.setAttribute("NameExt", jTextFieldLabelExt.getText());
 				element.setAttribute("Descriptions", Modeler.concatLinesWithTokenOfEOL(jTextAreaDescriptions.getText()));
 				//
 				if (action.equals("Add")) {

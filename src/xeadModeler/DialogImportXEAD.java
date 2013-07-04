@@ -54,6 +54,7 @@ public class DialogImportXEAD extends JDialog {
 	private JRadioButton jRadioButtonTables = new JRadioButton();
 	private JRadioButton jRadioButtonFunctions = new JRadioButton();
 	private JRadioButton jRadioButtonTasks = new JRadioButton();
+	private JRadioButton jRadioButtonDataflows = new JRadioButton();
 	private ButtonGroup buttonGroup1 = new ButtonGroup();
 	private JLabel jLabel3 = new JLabel();
 	private JProgressBar jProgressBar = new JProgressBar();
@@ -120,11 +121,10 @@ public class DialogImportXEAD extends JDialog {
 		jTextFieldImportSystemName.setEditable(false);
 		//
 		jPanel1.setBorder(BorderFactory.createEtchedBorder());
-		//jPanel1.setBounds(new Rectangle(164, 83, 197, 60));
-		jPanel1.setBounds(new Rectangle(164, 57, 300, 87));
+		jPanel1.setBounds(new Rectangle(164, 57, 300, 107));
 		jPanel1.setLayout(gridLayout1);
 		gridLayout1.setColumns(1);
-		gridLayout1.setRows(4);
+		gridLayout1.setRows(5);
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel3.setText(res.getString("DialogImportXEAD04"));
 		jLabel3.setBounds(new Rectangle(12, 57, 141, 15));
@@ -141,52 +141,57 @@ public class DialogImportXEAD extends JDialog {
 		jRadioButtonTasks.setFont(new java.awt.Font("Dialog", 0, 12));
 		jRadioButtonTasks.setText(res.getString("DialogImportXEAD06"));
 		jRadioButtonTasks.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
+		jRadioButtonDataflows.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonDataflows.setText(res.getString("S3385"));
+		jRadioButtonDataflows.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
 		jPanel1.add(jRadioButtonFunctions, null);
 		jPanel1.add(jRadioButtonTables, null);
 		jPanel1.add(jRadioButtonTablesAndFunctions, null);
 		jPanel1.add(jRadioButtonTasks, null);
+		jPanel1.add(jRadioButtonDataflows, null);
 		buttonGroup1.add(jRadioButtonFunctions);
 		buttonGroup1.add(jRadioButtonTables);
 		buttonGroup1.add(jRadioButtonTablesAndFunctions);
 		buttonGroup1.add(jRadioButtonTasks);
+		buttonGroup1.add(jRadioButtonDataflows);
 		//
 		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel1.setBounds(new Rectangle(10, 148, 144, 15));
-		jComboBoxBlockFrom.setBounds(new Rectangle(164, 148, 300, 21));
+		jLabel1.setBounds(new Rectangle(10, 168, 144, 15));
+		jComboBoxBlockFrom.setBounds(new Rectangle(164, 168, 300, 21));
 		jComboBoxBlockFrom.setFont(new java.awt.Font("Dialog", 0, 12));
 		jComboBoxBlockFrom.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel2.setBounds(new Rectangle(10, 172, 144, 15));
-		jComboBoxBlockInto.setBounds(new Rectangle(164, 172, 300, 21));
+		jLabel2.setBounds(new Rectangle(10, 192, 144, 15));
+		jComboBoxBlockInto.setBounds(new Rectangle(164, 192, 300, 21));
 		jComboBoxBlockInto.setFont(new java.awt.Font("Dialog", 0, 12));
 		jComboBoxBlockInto.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
 		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextArea1.setForeground(Color.BLUE);
 		jTextArea1.setEditable(false);
-		jTextArea1.setBounds(new Rectangle(9, 199, 454, 159));
+		jTextArea1.setBounds(new Rectangle(9, 219, 454, 159));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBackground(SystemColor.control);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 		//
-		jProgressBar.setBounds(new Rectangle(9, 367, 104, 25));
+		jProgressBar.setBounds(new Rectangle(9, 387, 104, 25));
 		//
-		jButtonStart.setBounds(new Rectangle(180, 367, 104, 25));
+		jButtonStart.setBounds(new Rectangle(180, 387, 104, 25));
 		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonStart.setText(res.getString("DialogImportXEAD07"));
 		jButtonStart.addActionListener(new DialogImportXEAD_jButtonStart_actionAdapter(this));
 		jButtonStart.setEnabled(false);
 		//
-		jButtonCancel.setBounds(new Rectangle(355, 367, 104, 25));
+		jButtonCancel.setBounds(new Rectangle(355, 387, 104, 25));
 		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonCancel.setText(res.getString("DialogImportXEAD08"));
 		jButtonCancel.addActionListener(new DialogImportXEAD_jButtonCancel_actionAdapter(this));
 		//
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(473, 404));
+		panelMain.setPreferredSize(new Dimension(473, 424));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel2, null);
@@ -321,6 +326,37 @@ public class DialogImportXEAD extends JDialog {
 				comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
 				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
 			}
+			//
+			if (jRadioButtonDataflows.isSelected()) {
+				//
+				jLabel1.setText(res.getString("DialogImportXEAD52"));
+				jLabel2.setText(res.getString("DialogImportXEAD53"));
+				jTextArea1.setText(res.getString("DialogImportXEAD51"));
+				///////////////////
+				//Setup ComboBox1//
+				///////////////////
+				comboBoxModelBlockFrom.removeAllElements();
+				elementList = domDocumentFrom.getElementsByTagName("SubjectArea");
+				for (int i = 0; i < elementList.getLength(); i++) {
+					node = new XeadNode("SubjectArea",(org.w3c.dom.Element)elementList.item(i));
+					comboBoxModelBlockFrom.addElement((Object)node);
+				}
+				comboBoxModelBlockFrom.sortElements();
+				comboBoxModelBlockFrom.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+				comboBoxModelBlockFrom.setSelectedItem(comboBoxModelBlockFrom.getElementAt(0));
+				///////////////////
+				//Setup ComboBox2//
+				///////////////////
+				comboBoxModelBlockInto.removeAllElements();
+				elementList = frame_.domDocument.getElementsByTagName("SubjectArea");
+				for (int i = 0; i < elementList.getLength(); i++) {
+					node = new XeadNode("SubjectArea",(org.w3c.dom.Element)elementList.item(i));
+					comboBoxModelBlockInto.addElement((Object)node);
+				}
+				comboBoxModelBlockInto.sortElements();
+				comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
+			}
 		}
 	}
 	
@@ -360,6 +396,9 @@ public class DialogImportXEAD extends JDialog {
 			}
 			if (jRadioButtonTasks.isSelected()) {
 				bufferedWriter.write(res.getString("DialogImportXEAD04") + ":" + res.getString("DialogImportXEAD06") + "\n");
+			}
+			if (jRadioButtonDataflows.isSelected()) {
+				bufferedWriter.write(res.getString("DialogImportXEAD04") + ":" + res.getString("S3385") + "\n");
 			}
 			bufferedWriter.write(res.getString("DialogImportXEAD03") + ":" + jTextFieldImportSystemName.getText() + "\n");
 			bufferedWriter.write(res.getString("DialogImportXEAD32") + ":" + frame_.systemName + "\n");
@@ -461,6 +500,18 @@ public class DialogImportXEAD extends JDialog {
 				res.getString("DialogImportXEAD25") +
 				missingFunctionIOCounter + res.getString("DialogImportXEAD26") + "\n" +
 				res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
+			}
+			//
+			if (jRadioButtonDataflows.isSelected()) {
+				//
+				importDataflow();
+				//
+				if (cancelTaskCounter == 0) {
+					importResult = res.getString("DialogImportXEAD55");
+				} else {
+					JOptionPane.showMessageDialog(null, res.getString("DialogImportXEAD56") + "\n" +
+					res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30"));
+				}
 			}
 			//
 		}
@@ -838,6 +889,160 @@ public class DialogImportXEAD extends JDialog {
 				}
 				createTaskDefinition(elementListFrom[i], blockIDInto);
 				createTaskCounter++;
+			}
+		}
+	}
+	
+	String checkTaskDefinition(org.w3c.dom.Element taskElementFrom) {
+		String targetTaskID = "";
+		String taskSortKey = "";
+		org.w3c.dom.Element workElement;
+
+		NodeList taskListFrom = domDocumentFrom.getElementsByTagName("Task");
+		for (int i = 0; i < taskListFrom.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)taskListFrom.item(i);
+			if (workElement.getAttribute("ID").equals(taskElementFrom.getAttribute("TaskID"))) {
+				taskSortKey = workElement.getAttribute("SortKey");
+			}
+		}
+		
+		NodeList targetElementList = frame_.domDocument.getElementsByTagName("Task");
+		for (int i = 0; i < targetElementList.getLength(); i++) {
+				workElement = (org.w3c.dom.Element)targetElementList.item(i);
+				if (workElement.getAttribute("SortKey").equals(taskSortKey)) {
+					targetTaskID = workElement.getAttribute("ID");
+					break;
+				}
+		}
+
+		return targetTaskID;
+	}
+
+	void importDataflow() {
+		org.w3c.dom.Element workElement1, workElement2, newElement, lastElement;
+		NodeList workElementList;
+		int lastID;
+		String taskIDInto;
+		ArrayList<String> nodeIDListFrom = new ArrayList<String>();
+		ArrayList<String> nodeIDListInto = new ArrayList<String>();
+		
+		workElementList = blockElementFrom.getElementsByTagName("DataflowNode");
+		int countOfElements = workElementList.getLength() * 2;
+		workElementList = blockElementFrom.getElementsByTagName("DataflowLine");
+		countOfElements = countOfElements + workElementList.getLength();
+		jProgressBar.setValue(0);
+		jProgressBar.setMaximum(countOfElements);
+		
+		///////////////////////////////////////////////////////////////
+		// Check if task(process) definitions exist in target system //
+		///////////////////////////////////////////////////////////////
+		workElementList = blockElementFrom.getElementsByTagName("DataflowNode");
+		for (int i = 0; i < workElementList.getLength(); i++) {
+			jProgressBar.setValue(jProgressBar.getValue() + 1);
+			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+			workElement1 = (org.w3c.dom.Element)workElementList.item(i);
+			if (workElement1.getAttribute("Type").equals("Process")) {
+				taskIDInto = checkTaskDefinition(workElement1);
+				if (taskIDInto.equals("")) {
+					cancelTaskCounter++;
+					try {
+						NodeList taskListFrom = domDocumentFrom.getElementsByTagName("Task");
+						for (int j = 0; j < taskListFrom.getLength(); j++) {
+							workElement2 = (org.w3c.dom.Element)taskListFrom.item(j);
+							if (workElement2.getAttribute("ID").equals(workElement1.getAttribute("TaskID"))) {
+								bufferedWriter.write(workElement2.getAttribute("Name") + "(" +
+										workElement2.getAttribute("SortKey") + 
+										"):" + res.getString("DialogImportXEAD54") + "\n");
+							}
+						}
+					}
+					catch (IOException ex1) {
+					}
+					break;
+				}
+			}
+		}
+		
+		if (cancelTaskCounter == 0) {
+			////////////////////////////////////////
+			//Update attributes of target DataFlow//
+			////////////////////////////////////////
+			blockElementInto.setAttribute("Name", blockElementFrom.getAttribute("Name"));
+			blockElementInto.setAttribute("Descriptions", blockElementFrom.getAttribute("Descriptions"));
+			blockElementInto.setAttribute("BoundaryPosition", blockElementFrom.getAttribute("BoundaryPosition"));
+			blockElementInto.setAttribute("BoundarySize", blockElementFrom.getAttribute("BoundarySize"));
+			//
+			workElementList = blockElementInto.getChildNodes();
+			int countOfChild = workElementList.getLength();
+			for (int i = 0; i < countOfChild; i++) {
+				blockElementInto.removeChild(blockElementInto.getFirstChild());
+			}
+			//
+			workElementList = blockElementFrom.getElementsByTagName("DataflowNode");
+			for (int i = 0; i < workElementList.getLength(); i++) {
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+				workElement1 = (org.w3c.dom.Element)workElementList.item(i);
+
+				newElement = frame_.domDocument.createElement("DataflowNode");
+				lastElement = getLastDomElementOfTheType("DataflowNode");
+				if (lastElement == null) {
+					lastID = 0;
+				} else {
+					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				}
+				newElement.setAttribute("ID", Integer.toString(lastID + 1));
+				newElement.setAttribute("Name", workElement1.getAttribute("Name"));
+				newElement.setAttribute("Position", workElement1.getAttribute("Position"));
+				newElement.setAttribute("SlideNumber", workElement1.getAttribute("SlideNumber"));
+				if (workElement1.getAttribute("Type").equals("Process")) {
+					taskIDInto = checkTaskDefinition(workElement1);
+					newElement.setAttribute("TaskID", taskIDInto);
+					newElement.setAttribute("EventPos", workElement1.getAttribute("EventPos"));
+				} else {
+					newElement.setAttribute("NameExt", workElement1.getAttribute("NameExt"));
+				}
+				newElement.setAttribute("Type", workElement1.getAttribute("Type"));
+				newElement.setAttribute("Descriptions", workElement1.getAttribute("Descriptions"));
+				blockElementInto.appendChild(newElement);
+
+				nodeIDListFrom.add(workElement1.getAttribute("ID"));
+				nodeIDListInto.add(newElement.getAttribute("ID"));
+			}
+
+			workElementList = blockElementFrom.getElementsByTagName("DataflowLine");
+			for (int i = 0; i < workElementList.getLength(); i++) {
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+				workElement1 = (org.w3c.dom.Element)workElementList.item(i);
+
+				newElement = frame_.domDocument.createElement("DataflowLine");
+				lastElement = getLastDomElementOfTheType("DataflowLine");
+				if (lastElement == null) {
+					lastID = 0;
+				} else {
+					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				}
+				newElement.setAttribute("ID", Integer.toString(lastID + 1));
+				newElement.setAttribute("Name", workElement1.getAttribute("Name"));
+				newElement.setAttribute("NameExt", workElement1.getAttribute("NameExt"));
+				newElement.setAttribute("NodeID1", nodeIDListInto.get(nodeIDListFrom.indexOf(workElement1.getAttribute("NodeID1"))));
+				newElement.setAttribute("NodeID2", nodeIDListInto.get(nodeIDListFrom.indexOf(workElement1.getAttribute("NodeID2"))));
+				newElement.setAttribute("ShowArrow1", workElement1.getAttribute("ShowArrow1"));
+				newElement.setAttribute("ShowArrow2", workElement1.getAttribute("ShowArrow2"));
+				newElement.setAttribute("TerminalPosIndex1", workElement1.getAttribute("TerminalPosIndex1"));
+				newElement.setAttribute("TerminalPosIndex2", workElement1.getAttribute("TerminalPosIndex2"));
+				newElement.setAttribute("SlideNumber", workElement1.getAttribute("SlideNumber"));
+				blockElementInto.appendChild(newElement);
+			}
+			try {
+				bufferedWriter.write(res.getString(
+				"DialogImportXEAD33") + "\n");
+			}
+			catch (IOException ex3) {
 			}
 		}
 	}
@@ -2159,8 +2364,9 @@ public class DialogImportXEAD extends JDialog {
 		systemElement.appendChild(newElement);
 	}
 
-	void createTaskDefinition(org.w3c.dom.Element elementFrom, String roleID) {
+	String createTaskDefinition(org.w3c.dom.Element elementFrom, String roleID) {
 		int lastID = 0;
+		String newID = "";
 		//////////////////////////
 		//Create Task Definition//
 		//////////////////////////
@@ -2172,7 +2378,8 @@ public class DialogImportXEAD extends JDialog {
 		} else {
 			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
 		}
-		newElement.setAttribute("ID", Integer.toString(lastID + 1));
+		newID = Integer.toString(lastID + 1);
+		newElement.setAttribute("ID", newID);
 		newElement.setAttribute("Name", elementFrom.getAttribute("Name"));
 		newElement.setAttribute("Event", elementFrom.getAttribute("Event"));
 		newElement.setAttribute("SortKey", elementFrom.getAttribute("SortKey"));
@@ -2184,6 +2391,8 @@ public class DialogImportXEAD extends JDialog {
 		createTaskActions(elementFrom, newElement);
 		//
 		systemElement.appendChild(newElement);
+		//
+		return newID;
 	}
 
 	void createTaskActions(org.w3c.dom.Element elementFrom, org.w3c.dom.Element elementInto) {
@@ -2806,6 +3015,9 @@ public class DialogImportXEAD extends JDialog {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
 			if (nodeType_.equals("Subsystem")) {
+				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+			}
+			if (nodeType_.equals("SubjectArea")) {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
 			//

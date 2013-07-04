@@ -9190,6 +9190,7 @@ public class Modeler extends JFrame {
 		private org.w3c.dom.Element dataflowNodeElement_;
 		private JLabel jLabelID = new JLabel();
 		private JTextField jTextFieldNodeName = new JTextField();
+		private JTextField jTextFieldNodeNameExt = new JTextField();
 		private JTextArea jTextAreaEvent = new JTextArea();
 		private JLabel jLabelRole = new JLabel();
 		private JLabel jLabelNumber = new JLabel();
@@ -9249,6 +9250,15 @@ public class Modeler extends JFrame {
 			jTextFieldNodeName.setOpaque(false);
 			jTextFieldNodeName.setSelectionColor(Color.blue);
 			jTextFieldNodeName.setName("jTextFieldNodeName");
+			jTextFieldNodeNameExt.setFont(new java.awt.Font("SansSerif", 0, 12));
+			jTextFieldNodeNameExt.setHorizontalAlignment(SwingConstants.CENTER);
+			jTextFieldNodeNameExt.setForeground(Color.WHITE);
+			jTextFieldNodeNameExt.setText(dataflowNodeElement_.getAttribute("NameExt"));
+			jTextFieldNodeNameExt.setEditable(false);
+			jTextFieldNodeNameExt.setBorder(null);
+			jTextFieldNodeNameExt.setOpaque(false);
+			jTextFieldNodeNameExt.setSelectionColor(Color.blue);
+			jTextFieldNodeNameExt.setName("jTextFieldNodeNameExt");
 			Integer num = new Integer(dataflowNodeElement_.getAttribute("SlideNumber"));
 			slideNumber = num.intValue();
 			jSpinnerSlideNumber.setFont(new java.awt.Font("SansSerif", 0, 11));
@@ -9381,8 +9391,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 171;
 				NODE_HEIGHT = 41;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(1, 5, 170, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(1, 19, 170, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(64, 0, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(9, 15, 150, 25));
 			}
@@ -9391,8 +9408,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 95;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 45, 90, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 32, 90, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 46, 90, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(18, 15, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(3, 31, 71, 33));
 			}
@@ -9404,8 +9428,15 @@ public class Modeler extends JFrame {
 				if (jTextFieldNodeName.getText().getBytes().length >= 16) {
 					jTextFieldNodeName.setFont(new java.awt.Font("SansSerif", 0, 11));
 				}
-				jTextFieldNodeName.setBounds(new Rectangle( 0, 27, 100, 15));
-				this.add(jTextFieldNodeName,null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle( 0, 27, 100, 15));
+					this.add(jTextFieldNodeName,null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 20, 100, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(25, 20, 50, 30));
 			}
@@ -9417,8 +9448,15 @@ public class Modeler extends JFrame {
 				if (jTextFieldNodeName.getText().getBytes().length >= 16) {
 					jTextFieldNodeName.setFont(new java.awt.Font("SansSerif", 0, 11));
 				}
-				jTextFieldNodeName.setBounds(new Rectangle( 0, 32, 100, 15));
-				this.add(jTextFieldNodeName,null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle( 0, 32, 100, 15));
+					this.add(jTextFieldNodeName,null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 25, 100, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 39, 100, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(15, 21, 70, 40));
 			}
@@ -9427,8 +9465,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 102;
 				NODE_HEIGHT = 145;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle( 10, 70, 100, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle( 10, 70, 100, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(10, 63, 100, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(31, 17, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(2, 33, 98, 70));
 			}
@@ -9437,8 +9482,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 140;
 				NODE_HEIGHT = 115;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(40, 52, 100, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(35, 50, 100, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 63, 100, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(50, 4, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 100, 60));
 			}
@@ -9447,8 +9499,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 34, 90, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(19, 35, 37, 35));
 			}
@@ -9457,8 +9516,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 100;
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(5, 37, 90, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(30, 14, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(25, 30, 50, 40));
 			}
@@ -9467,8 +9533,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 80;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 70, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 70, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 37, 70, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 51, 70, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(12, 11, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(10, 27, 45, 35));
 			}
@@ -9477,8 +9550,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 85;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(0, 28, 90, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 42, 90, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(28, 14, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(15, 30, 65, 30));
 			}
@@ -9487,8 +9567,15 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 15));
-				this.add(jTextFieldNodeName, null);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 15));
+					this.add(jTextFieldNodeName, null);
+				} else {
+					jTextFieldNodeName.setBounds(new Rectangle(10, 27, 77, 14));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 41, 77, 14));
+					this.add(jTextFieldNodeName, null);
+					this.add(jTextFieldNodeNameExt, null);
+				}
 				jSpinnerSlideNumber.setBounds(new Rectangle(30, 10, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(17, 27, 58, 45));
 			}
@@ -9586,11 +9673,13 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Process")) {
 				if (inPrintMode) {
 					jTextFieldNodeName.setForeground(Color.BLACK);
+					jTextFieldNodeNameExt.setForeground(Color.BLACK);
 					jLabelID.setForeground(Color.BLACK);
 					jLabelRole.setForeground(Color.BLACK);
 					jLabelNumber.setForeground(Color.BLACK);
 				} else {
 					jTextFieldNodeName.setForeground(Color.WHITE);
+					jTextFieldNodeNameExt.setForeground(Color.WHITE);
 					jLabelID.setForeground(Color.lightGray);
 					jLabelRole.setForeground(Color.lightGray);
 					jLabelNumber.setForeground(Color.lightGray);
@@ -9605,8 +9694,6 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Process")) {
 				painted = true;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				//int[] xs={ 5,15,15,25,28,35,42,45,55,55,65,60,70,60,65,55,55,45,42,35,28,25,15,15, 5,10, 0,10};
-				//int[] ys={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
 				int[] xs0={ 5,15,15,25,28,35,42,45,55,55,65,60,65,60,65,55,55,45,42,35,28,25,15,15, 5,10, 5,10};
 				int[] ys0={15,15, 5,10, 0, 7, 0,10, 5,15,15,25,30,35,45,45,55,50,60,53,60,50,55,45,45,35,30,25};
 				int[] xs1={ 80,90,90,100,103,110,117,120,130,130,140,135,140,135,140,130,130,120,117,110,103,100,90,90,80,85,80,85};
@@ -9618,15 +9705,17 @@ public class Modeler extends JFrame {
 					g2.setColor(Color.black);
 					g2.drawOval( 8, 35, 130, 86);
 					g2.setColor(Color.WHITE);
-					if (eventPos.equals("L")) {
-						g2.fillPolygon(xs0,ys0,28);
-						g2.setColor(Color.BLACK);
-						g2.drawPolygon(xs0,ys0,28);
-					}
-					if (eventPos.equals("R")) {
-						g2.fillPolygon(xs1,ys1,28);
-						g2.setColor(Color.BLACK);
-						g2.drawPolygon(xs1,ys1,28);
+					if (!jTextAreaEvent.getText().equals("")) {
+						if (eventPos.equals("L")) {
+							g2.fillPolygon(xs0,ys0,28);
+							g2.setColor(Color.BLACK);
+							g2.drawPolygon(xs0,ys0,28);
+						}
+						if (eventPos.equals("R")) {
+							g2.fillPolygon(xs1,ys1,28);
+							g2.setColor(Color.BLACK);
+							g2.drawPolygon(xs1,ys1,28);
+						}
 					}
 				} else {
 					g2.setColor(Color.BLUE);
@@ -9635,15 +9724,17 @@ public class Modeler extends JFrame {
 					g2.drawOval( 8, 35, 130, 86);
 					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 					g2.setColor(Color.YELLOW);
-					if (eventPos.equals("L")) {
-						g2.fillPolygon(xs0,ys0,28);
-						g2.setColor(Color.WHITE);
-						g2.drawPolygon(xs0,ys0,28);
-					}
-					if (eventPos.equals("R")) {
-						g2.fillPolygon(xs1,ys1,28);
-						g2.setColor(Color.WHITE);
-						g2.drawPolygon(xs1,ys1,28);
+					if (!jTextAreaEvent.getText().equals("")) {
+						if (eventPos.equals("L")) {
+							g2.fillPolygon(xs0,ys0,28);
+							g2.setColor(Color.WHITE);
+							g2.drawPolygon(xs0,ys0,28);
+						}
+						if (eventPos.equals("R")) {
+							g2.fillPolygon(xs1,ys1,28);
+							g2.setColor(Color.WHITE);
+							g2.drawPolygon(xs1,ys1,28);
+						}
 					}
 				}
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
@@ -10528,6 +10619,7 @@ public class Modeler extends JFrame {
 		public void updateName() {
 			if (!nodeType.equals("Process")) {
 				dataflowNodeElement_.setAttribute("Name", jTextFieldNodeName.getText());
+				dataflowNodeElement_.setAttribute("NameExt", jTextFieldNodeNameExt.getText());
 			}
 		}
 		//
@@ -10803,11 +10895,13 @@ public class Modeler extends JFrame {
 		private void node_mouseEntered(MouseEvent e) {
 			setCursor(new Cursor(Cursor.MOVE_CURSOR));
 			jTextFieldNodeName.setForeground(Color.MAGENTA);
+			jTextFieldNodeNameExt.setForeground(Color.MAGENTA);
 		}
 		//
 		private void node_mouseExited(MouseEvent e) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			jTextFieldNodeName.setForeground(Color.WHITE);
+			jTextFieldNodeNameExt.setForeground(Color.WHITE);
 		}
 		//
 		class jPanel_mouseMotionAdapter extends java.awt.event.MouseMotionAdapter {
@@ -14074,21 +14168,26 @@ public class Modeler extends JFrame {
 			if (pageindex == 0) {
 				//
 				if (currentMainTreeNode.getType().equals("SubjectArea")) {
-					printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
+					//printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
+					printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, currentMainTreeNode.getName(), "");
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("TableList")) {
 					if (jTabbedPaneTableList.getSelectedIndex() == 2) {
-						printPanel(g2, fmt, jPanelDatamodel, res.getString("S466"));
+						//printPanel(g2, fmt, jPanelDatamodel, res.getString("S466"));
+						XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+						printPanel(g2, fmt, jPanelDatamodel, node.getName(), res.getString("S466"));
 					}
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOPanel")) {
+					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
 					if (imageFunctionIO != null) {
 						//
-						printPanel(g2, fmt, jLabelIOImageIcon, res.getString("S3305"));
+						//printPanel(g2, fmt, jLabelIOImageIcon, res.getString("S3305"));
+						printPanel(g2, fmt, jLabelIOImageIcon, node.getName(), currentMainTreeNode.getName());
 						//
 					} else {
 						if (jTextPaneIOPanelImage.getBackground().equals(Color.BLACK)) {
@@ -14100,23 +14199,29 @@ public class Modeler extends JFrame {
 							Style style = styledDocument.addStyle("style1", null);
 							StyleConstants.setForeground(style, Color.BLACK);
 							styledDocument.setCharacterAttributes(0, 9999, style, false);
-							printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							//printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
 							jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 							currentMainTreeNode.activateContentsPane();
 						} else {
-							printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							//printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
 						}
 					}
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOSpool")) {
-					printPanel(g2, fmt, jTextPaneIOSpoolImage, res.getString("S3305"));
+					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+					//printPanel(g2, fmt, jTextPaneIOSpoolImage, res.getString("S3305"));
+					printPanel(g2, fmt, jTextPaneIOSpoolImage, node.getName(), currentMainTreeNode.getName());
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOWebPage")) {
-					printPanel(g2, fmt, jEditorPaneIOWebPageImage, res.getString("S3305"));
+					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+					//printPanel(g2, fmt, jEditorPaneIOWebPageImage, res.getString("S3305"));
+					printPanel(g2, fmt, jEditorPaneIOWebPageImage, node.getName(), currentMainTreeNode.getName());
 					returnValue = Printable.PAGE_EXISTS;
 				}
 			}
@@ -14124,23 +14229,37 @@ public class Modeler extends JFrame {
 			return returnValue;
 		}
 		//
-		private void printPanel(Graphics2D g2, PageFormat fmt, JComponent jPanel, String name) {
+		private void printPanel(Graphics2D g2, PageFormat fmt, JComponent jPanel, String name1, String name2) {
 			double panelWidth;
 			double panelHeight;
 			double scaleRateWidth;
 			double scaleRateHeight;
 			Border borderSaved;
 			Color  colorSaved;
+			Rectangle rectText;
+			String wrkStr;
+			FontMetrics fm = g2.getFontMetrics();
 			//
 			g2.translate(fmt.getImageableX(),fmt.getImageableY());
 			g2.setFont(new java.awt.Font("SansSerif", 0, 12));
-			if (name.equals("")) {
-				g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
-			} else {
-				g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
+			//if (name.equals("")) {
+			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
+			//} else {
+			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
+			//}
+			g2.drawString(name1, 0, fm.getMaxAscent());
+			if (!name2.equals("")) {
+				rectText = fm.getStringBounds(name2, g2).getBounds();
+				g2.drawString(name2, (int)fmt.getImageableWidth() - rectText.width - 30, fm.getMaxAscent());
 			}
+			
+			//
 			g2.setFont(new java.awt.Font("SansSerif", 0, 9));
-			g2.drawString(res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime"), 0, (int)fmt.getImageableHeight());
+			//g2.drawString(res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime"), 0, (int)fmt.getImageableHeight());
+			g2.drawString(systemName, 0, (int)fmt.getImageableHeight());
+			wrkStr = getStringValueOfDateTime("withoutTime");
+			rectText = fm.getStringBounds(wrkStr, g2).getBounds();
+			g2.drawString(wrkStr, (int)fmt.getImageableWidth() - rectText.width - 30, (int)fmt.getImageableHeight());
 			g2.translate(0, jLabelSubtitle.getHeight() + 3);
 			//
 			panelWidth = jPanel.getWidth();
@@ -15547,6 +15666,11 @@ public class Modeler extends JFrame {
 					newElementChild1.setAttribute("ID", element.getAttribute("ID"));
 					newElementChild1.setAttribute("Name", element.getAttribute("Name"));
 					newElementChild1.setAttribute("Type", element.getAttribute("Type"));
+					if (element.getAttribute("Type").equals("Process")) {
+						newElementChild1.setAttribute("EventPos", element.getAttribute("EventPos"));
+					} else {
+						newElementChild1.setAttribute("NameExt", element.getAttribute("NameExt"));
+					}
 					newElementChild1.setAttribute("SlideNumber", element.getAttribute("SlideNumber"));
 					newElementChild1.setAttribute("TaskID", element.getAttribute("TaskID"));
 					newElementChild1.setAttribute("Position", element.getAttribute("Position"));
@@ -17600,6 +17724,7 @@ public class Modeler extends JFrame {
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 				//
+				ArrayList<org.w3c.dom.Element> invalidSubsystemRelationshipList = new ArrayList<org.w3c.dom.Element>();
 				DatamodelRelationshipLine relationshipLine = null;
 				datamodelRelationshipLineArray.clear();
 				for (int i = 0; i < subsystemRelationshipList.getLength(); i++) {
@@ -17614,10 +17739,19 @@ public class Modeler extends JFrame {
 						}
 					}
 					if (relationshipElement != null) {
-						relationshipLine = new DatamodelRelationshipLine(subsystemRelationshipElement, parentElement.getAttribute("ID"), jPanelDatamodel, relationshipElement);
-						relationshipLine.drawTerminals();
-						datamodelRelationshipLineArray.add(relationshipLine);
+						try {
+							relationshipLine = new DatamodelRelationshipLine(subsystemRelationshipElement, parentElement.getAttribute("ID"), jPanelDatamodel, relationshipElement);
+							relationshipLine.drawTerminals();
+							datamodelRelationshipLineArray.add(relationshipLine);
+						} catch (Exception e) {
+							invalidSubsystemRelationshipList.add(subsystemRelationshipElement);
+						}
 					}
+				}
+				for (int i = 0; i < invalidSubsystemRelationshipList.size(); i++) {
+					subsystemRelationshipElement = (org.w3c.dom.Element)invalidSubsystemRelationshipList.get(i);
+					org.w3c.dom.Node parentDomNode = subsystemRelationshipElement.getParentNode();
+					parentDomNode.removeChild(subsystemRelationshipElement);
 				}
 				//
 				jProgressBar.setValue(0);
@@ -21246,6 +21380,7 @@ public class Modeler extends JFrame {
 								if (element.getAttribute("ShowOnModel").equals("true")) {
 									valueOfFieldsChanged = true;
 									element.setAttribute("ShowOnModel", "false");
+									element.setAttribute("ShowInstance", "false");
 								}
 							}
 						}

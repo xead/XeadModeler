@@ -646,6 +646,7 @@ public class DialogScan extends JDialog {
 						org.w3c.dom.Element dataflowNodeElement = (org.w3c.dom.Element)workList1.item(j);
 						if (!dataflowNodeElement.getAttribute("Type").equals("Process")) {
 							scanAttribute(dataflowNodeElement, "DataflowNode", "Name");
+							scanAttribute(dataflowNodeElement, "DataflowNode", "NameExt");
 						}
 						scanAttribute(dataflowNodeElement, "DataflowNode", "Descriptions");
 					}
@@ -1087,7 +1088,11 @@ public class DialogScan extends JDialog {
 		//
 		if (elementType.equals("DataflowNode")) {
 			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+			if (element.getAttribute("NameExt").equals("")) {
+				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+			} else {
+				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name") + "&" + element.getAttribute("NameExt");
+			}
 		}
 		//
 		if (elementType.equals("DataflowLine")) {

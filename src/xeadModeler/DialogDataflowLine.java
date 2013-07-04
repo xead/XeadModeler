@@ -421,7 +421,7 @@ public class DialogDataflowLine extends JDialog {
 		JSpinner jSpinnerSlideNumber = new JSpinner(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
 		jSpinnerSlideNumber.setEditor(spinnerEditor);
-		jSpinnerSlideNumber.setBounds(new Rectangle(102, 63, 43, 24));
+		jSpinnerSlideNumber.setBounds(new Rectangle(103, 63, 43, 24));
 		panelMain.add(jSpinnerSlideNumber, null);
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
 		//

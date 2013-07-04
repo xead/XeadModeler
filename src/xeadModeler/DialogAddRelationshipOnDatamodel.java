@@ -350,7 +350,9 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		// Add new fields //
 		for (int k = 0; k < keyFieldNameListChanged.size(); k++) {
 			newElement = frame_.getDomDocument().createElement("TableField");
-			newElement.setAttribute("ID", Integer.toString(lastID + 1));
+			//newElement.setAttribute("ID", Integer.toString(lastID + 1));
+			lastID++;
+			newElement.setAttribute("ID", Integer.toString(lastID));
 			newElement.setAttribute("Name", keyFieldNameListChanged.get(k));
 			newElement.setAttribute("DataTypeID", keyFieldDataTypeIDList.get(k));
 			newElement.setAttribute("Alias", keyFieldAliasListChanged.get(k));
