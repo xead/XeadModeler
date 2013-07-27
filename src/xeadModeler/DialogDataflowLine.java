@@ -128,12 +128,12 @@ public class DialogDataflowLine extends JDialog {
 		jTextFieldNode1Name.setFont(new java.awt.Font("Dialog", 0, 12));
 		jTextFieldNode1Name.setDoubleBuffered(false);
 		jTextFieldNode1Name.setEditable(false);
-		jTextFieldNode1Name.setBounds(new Rectangle(103, 93, 149, 22));
+		jTextFieldNode1Name.setBounds(new Rectangle(103, 93, 189, 22));
 		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowLine02"));
 		jLabel2.setBounds(new Rectangle(17, 140, 82, 15));
-		jPanel1.setBounds(new Rectangle(99, 118, 177, 66));
+		jPanel1.setBounds(new Rectangle(99, 118, 210, 66));
 		jPanel1.setLayout(gridLayout2);
 		jRadioButtonArrowStyle1.setFont(new java.awt.Font("Monospaced", 0, 12));
 		jRadioButtonArrowStyle1.setIcon(iconFlow10);
@@ -240,7 +240,7 @@ public class DialogDataflowLine extends JDialog {
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowLine29"));
 		jLabel5.setBounds(new Rectangle(37, 190, 60, 15));
-		jComboBoxNode2.setBounds(new Rectangle(103, 190, 149, 21));
+		jComboBoxNode2.setBounds(new Rectangle(103, 190, 189, 21));
 		jComboBoxNode2.setFont(new java.awt.Font("Dialog", 0, 12));
 		jComboBoxNode2.setMaximumRowCount(20);
 		jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -376,7 +376,7 @@ public class DialogDataflowLine extends JDialog {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeElement.getAttribute("TaskID"), null);
 					jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
 				} else {
-					jTextFieldNode1Name.setText(nodeElement.getAttribute("Name"));
+					jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
 				}
 			}
 		}
@@ -403,7 +403,7 @@ public class DialogDataflowLine extends JDialog {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeArray.get(i).getElement().getAttribute("TaskID"), null);
 					jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
 				} else {
-					jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name"));
+					jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
 				}
 				numberOfStorageArray = numberOfStorageArray + 1;
 				storageArray[numberOfStorageArray] = nodeArray.get(i);

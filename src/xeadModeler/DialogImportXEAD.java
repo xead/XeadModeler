@@ -804,7 +804,7 @@ public class DialogImportXEAD extends JDialog {
 		////////////////////////////////////
 		blockElementInto.setAttribute("Name", blockElementFrom.getAttribute("Name"));
 		blockElementInto.setAttribute("Descriptions", blockElementFrom.getAttribute("Descriptions"));
-		blockElementInto.setAttribute("Department", convertInternalIDOfTheTypeTag(blockElementFrom.getAttribute("DepartmentID"), "Department"));
+		blockElementInto.setAttribute("DepartmentID", convertInternalIDOfTheTypeTag(blockElementFrom.getAttribute("DepartmentID"), "Department"));
 		//
 	}
 
@@ -815,6 +815,11 @@ public class DialogImportXEAD extends JDialog {
 		int itemsOfElementListFrom = 0;
 		int checkCounter = 0;
 		String sortKeyOfDefinition;
+		//
+		///////////////////
+		//Import TaskType//
+		///////////////////
+		importTypeDefinitionWithTagName("TaskType");
 		//
 		//////////////////////////////////////
 		//Setup List of Tasks to be imported//
@@ -1608,6 +1613,7 @@ public class DialogImportXEAD extends JDialog {
 		//////////////////////////
 		elementInto.setAttribute("Name", elementFrom.getAttribute("Name"));
 		elementInto.setAttribute("Event", elementFrom.getAttribute("Event"));
+		elementInto.setAttribute("TaskTypeID", convertInternalIDOfTheTypeTag(elementFrom.getAttribute("TaskTypeID"), "TaskType"));
 		elementInto.setAttribute("Descriptions", elementFrom.getAttribute("Descriptions"));
 		//
 		/////////////////////////////////
@@ -2384,6 +2390,7 @@ public class DialogImportXEAD extends JDialog {
 		newElement.setAttribute("Event", elementFrom.getAttribute("Event"));
 		newElement.setAttribute("SortKey", elementFrom.getAttribute("SortKey"));
 		newElement.setAttribute("RoleID", roleID);
+		newElement.setAttribute("TaskTypeID", convertInternalIDOfTheTypeTag(elementFrom.getAttribute("TaskTypeID"), "TaskType"));
 		newElement.setAttribute("Descriptions", elementFrom.getAttribute("Descriptions"));
 		//////////////////////
 		//Create TaskActions//
@@ -2632,7 +2639,7 @@ public class DialogImportXEAD extends JDialog {
 				elementInto = (org.w3c.dom.Element)typeListInto.item(j);
 				if (elementInto.getAttribute("SortKey").equals(elementFrom.getAttribute("SortKey"))) {
 					checkCount++;
-					if (tagName.equals("Department") || tagName.equals("TableType") || tagName.equals("FunctionType")) {
+					if (tagName.equals("Department") || tagName.equals("TaskType") || tagName.equals("TableType") || tagName.equals("FunctionType")) {
 						elementInto.setAttribute("Name", elementFrom.getAttribute("Name"));
 						elementInto.setAttribute("Descriptions", elementFrom.getAttribute("Descriptions"));
 					}
@@ -2658,7 +2665,7 @@ public class DialogImportXEAD extends JDialog {
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("SortKey", elementFrom.getAttribute("SortKey"));
 				//
-				if (tagName.equals("Department") || tagName.equals("TableType") || tagName.equals("FunctionType")) {
+				if (tagName.equals("Department") || tagName.equals("TaskType") || tagName.equals("TableType") || tagName.equals("FunctionType")) {
 					newElement.setAttribute("Name", elementFrom.getAttribute("Name"));
 					newElement.setAttribute("Descriptions", elementFrom.getAttribute("Descriptions"));
 				}

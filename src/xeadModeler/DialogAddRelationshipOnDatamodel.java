@@ -425,7 +425,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		for (int k = 0; k < keyFieldIDList.size(); k++) {
 			newElementChild = frame_.getDomDocument().createElement("TableKeyField");
 			newElementChild.setAttribute("FieldID", keyFieldIDList.get(k));
-			newElementChild.setAttribute("SortKey", frame_.getFormatted4ByteString(lastSortKey + 10));
+			newElementChild.setAttribute("SortKey", Modeler.getFormatted4ByteString(lastSortKey + 10));
 			newElement.appendChild(newElementChild);
 		}
 		targetTableNode_.getElement().appendChild(newElement);
@@ -600,7 +600,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				for (int k = 0; k < keyFieldIDList.size(); k++) {
 					newElementChild = frame_.getDomDocument().createElement("TableKeyField");
 					newElementChild.setAttribute("FieldID", keyFieldIDList.get(k));
-					newElementChild.setAttribute("SortKey", frame_.getFormatted4ByteString(lastSortKey + 10));
+					newElementChild.setAttribute("SortKey", Modeler.getFormatted4ByteString(lastSortKey + 10));
 					newElement.appendChild(newElementChild);
 				}
 				targetTableNode_.getElement().appendChild(newElement);

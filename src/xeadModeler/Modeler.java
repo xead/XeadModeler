@@ -48,6 +48,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.text.*;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
 import org.apache.xerces.parsers.*;
@@ -383,6 +384,25 @@ public class Modeler extends JFrame {
 	private KanjiTextArea jTextAreaSystemDepartmentDescriptions = new KanjiTextArea();
 	private TableModelReadOnlyList tableModelSystemDepartmentWhereUsedList = new TableModelReadOnlyList();
 	private JTable jTableSystemDepartmentWhereUsedList = new JTable(tableModelSystemDepartmentWhereUsedList);
+	//(SystemTaskTypeList)//
+	private boolean tableSystemTaskTypeListSelectChangeActivated = false;
+	private int selectedRow_jTableSystemTaskTypeList;
+	private JSplitPane jSplitPaneSystemTaskType = new JSplitPane();
+	private JScrollPane jScrollPaneSystemTaskTypeList = new JScrollPane();
+	private TableModelReadOnlyList tableModelSystemTaskTypeList = new TableModelReadOnlyList();
+	private JTable jTableSystemTaskTypeList = new JTable(tableModelSystemTaskTypeList);
+	private JPanel jPanelSystemTaskType = new JPanel();
+	private JPanel jPanelSystemTaskType1 = new JPanel();
+	private JScrollPane jScrollPaneSystemTaskTypeWhereUsedList = new JScrollPane();
+	private JLabel jLabelSystemTaskTypeName = new JLabel();
+	private KanjiTextField jTextFieldSystemTaskTypeName = new KanjiTextField();
+	private JLabel jLabelSystemTaskTypeSortKey = new JLabel();
+	private JTextField jTextFieldSystemTaskTypeSortKey = new JTextField();
+	private JLabel jLabelSystemTaskTypeDescriptions = new JLabel();
+	private JScrollPane jScrollPaneSystemTaskTypeDescriptions = new JScrollPane();
+	private KanjiTextArea jTextAreaSystemTaskTypeDescriptions = new KanjiTextArea();
+	private TableModelReadOnlyList tableModelSystemTaskTypeWhereUsedList = new TableModelReadOnlyList();
+	private JTable jTableSystemTaskTypeWhereUsedList = new JTable(tableModelSystemTaskTypeWhereUsedList);
 	//(SystemTableTypeList)//
 	private boolean tableSystemTableTypeListSelectChangeActivated = false;
 	private int selectedRow_jTableSystemTableTypeList;
@@ -427,6 +447,7 @@ public class Modeler extends JFrame {
 	private JTextField jTextFieldSystemSQLExpression = new JTextField();
 	private TableModelReadOnlyList tableModelSystemDataTypeWhereUsedList = new TableModelReadOnlyList();
 	private JTable jTableSystemDataTypeWhereUsedList = new JTable(tableModelSystemDataTypeWhereUsedList);
+	private HashMap<String, org.w3c.dom.Element> dataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
 	//(SystemFunctionTypeList)//
 	private boolean tableSystemFunctionTypeListSelectChangeActivated = false;
 	private int selectedRow_jTableSystemFunctionTypeList;
@@ -583,18 +604,25 @@ public class Modeler extends JFrame {
 	private JPanel jPanelTask6 = new JPanel();
 	private JLabel jLabelTaskEvent = new JLabel();
 	private KanjiTextField jTextFieldTaskEvent = new KanjiTextField();
+	private JLabel jLabelTaskType = new JLabel();
+	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTaskType = new SortableXeadTreeNodeComboBoxModel();
+	private JComboBox jComboBoxTaskType = new JComboBox(sortableComboBoxModelTaskType);
 	private JLabel jLabelTaskDescriptions = new JLabel();
 	private JLabel jLabelTaskName = new JLabel();
 	private KanjiTextField jTextFieldTaskName = new KanjiTextField();
 	private JTextField jTextFieldTaskSortKey = new JTextField();
 	private JLabel jLabelSubjectAreaWithThisTask = new JLabel();
-	private JTextField jTextFieldSubjectAreaWithThisTask = new JTextField();
+	private DefaultListModel listModelSubjectAreaWithThisTask = new DefaultListModel();
+	private JList jListSubjectAreaWithThisTask = new JList(listModelSubjectAreaWithThisTask);
+	private JScrollPane jScrollPaneSubjectAreaWithThisTask = new JScrollPane();
+	private ArrayList<String> subjectAreaIDList = new ArrayList<String>();
 	private JScrollPane jScrollPaneTaskDescriptions = new JScrollPane();
 	private KanjiTextArea jTextAreaTaskDescriptions = new KanjiTextArea();
 	private JSplitPane jSplitPaneTask2 = new JSplitPane();
 	private JSplitPane jSplitPaneTask3 = new JSplitPane();
 	private JSplitPane jSplitPaneTask4 = new JSplitPane();
 	private JSplitPane jSplitPaneTask5 = new JSplitPane();
+	private boolean isToCopySingleTaskAction = true;
 	private JScrollPane jScrollPaneTaskActions = new JScrollPane();
 	private JTree jTreeTaskActions = new JTree();
 	private DefaultTreeModel treeModelTaskActions;
@@ -1192,6 +1220,10 @@ public class Modeler extends JFrame {
 	private UndoManager textPaneUndoManager = new UndoManager();
 	private TextPaneUndoAction undoAction = new TextPaneUndoAction();
 	private TextPaneRedoAction redoAction = new TextPaneRedoAction();
+	/**
+	 * HTML Editor Kit
+	 */
+	private HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 	/**
 	 * Application instance
 	 */
@@ -1901,7 +1933,6 @@ public class Modeler extends JFrame {
 	 * Initialize component for node of System
 	 */
 	void jbInitComponentsForSystem() {
-		selectedRow_jTableSystemDepartmentList = -1;
 		jTabbedPaneSystem.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTabbedPaneSystem.addChangeListener(new TabbedPaneChangeListener());
 		jPanelSystem.setLayout(new BorderLayout());
@@ -1936,6 +1967,7 @@ public class Modeler extends JFrame {
 		jTabbedPaneSystem.add(jScrollPaneSystemDescriptions, res.getString("S195"));
 		jScrollPaneSystemDescriptions.getViewport().add(jTextAreaSystemDescriptions, null);
 		//(SystemDepartmentList)//
+		selectedRow_jTableSystemDepartmentList = -1;
 		jTabbedPaneSystem.add(jSplitPaneSystemDepartment, res.getString("S196"));
 		jSplitPaneSystemDepartment.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneSystemDepartment.setDividerLocation(200);
@@ -1986,6 +2018,58 @@ public class Modeler extends JFrame {
 		jScrollPaneSystemDepartmentList.setBorder(null);
 		jScrollPaneSystemDepartmentWhereUsedList.getViewport().add(jTableSystemDepartmentWhereUsedList, null);
 		jScrollPaneSystemDepartmentWhereUsedList.setBorder(null);
+		//(SystemTaskTypeList)//
+		selectedRow_jTableSystemTaskTypeList = -1;
+		jTabbedPaneSystem.add(jSplitPaneSystemTaskType, res.getString("S209"));
+		jSplitPaneSystemTaskType.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		jSplitPaneSystemTaskType.setDividerLocation(200);
+		jSplitPaneSystemTaskType.setBorder(BorderFactory.createLoweredBevelBorder());
+		jSplitPaneSystemTaskType.setFocusable(false);
+		jScrollPaneSystemTaskTypeList.setBorder(null);
+		jScrollPaneSystemTaskTypeList.addMouseListener(new Modeler_jScrollPaneSystemTaskTypeList_mouseAdapter(this));
+		jPanelSystemTaskType.setLayout(new BorderLayout());
+		jPanelSystemTaskType.setBorder(null);
+		jPanelSystemTaskType1.setLayout(null);
+		jPanelSystemTaskType1.setPreferredSize(new Dimension(10, 88));
+		jPanelSystemTaskType1.setBorder(BorderFactory.createEtchedBorder());
+		jLabelSystemTaskTypeName.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jLabelSystemTaskTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTaskTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTaskTypeName.setText(res.getString("S210"));
+		jLabelSystemTaskTypeName.setBounds(new Rectangle(11, 12, 86, 15));
+		jTextFieldSystemTaskTypeName.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTextFieldSystemTaskTypeName.setBounds(new Rectangle(105, 9, 258, 22));
+		jLabelSystemTaskTypeSortKey.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jLabelSystemTaskTypeSortKey.setRequestFocusEnabled(true);
+		jLabelSystemTaskTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTaskTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTaskTypeSortKey.setText(res.getString("S201"));
+		jLabelSystemTaskTypeSortKey.setBounds(new Rectangle(374, 12, 81, 15));
+		jTextFieldSystemTaskTypeSortKey.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTextFieldSystemTaskTypeSortKey.setBounds(new Rectangle(462, 9, 105, 22));
+		jLabelSystemTaskTypeDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jLabelSystemTaskTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTaskTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTaskTypeDescriptions.setText(res.getString("S204"));
+		jLabelSystemTaskTypeDescriptions.setBounds(new Rectangle(13, 38, 86, 15));
+		jTextAreaSystemTaskTypeDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTextAreaSystemTaskTypeDescriptions.setLineWrap(true);
+		jScrollPaneSystemTaskTypeDescriptions.setBounds(new Rectangle(105, 37, 700, 42));
+		jScrollPaneSystemTaskTypeDescriptions.getViewport().add(jTextAreaSystemTaskTypeDescriptions, null);
+		jPanelSystemTaskType1.add(jLabelSystemTaskTypeName, null);
+		jPanelSystemTaskType1.add(jTextFieldSystemTaskTypeName, null);
+		jPanelSystemTaskType1.add(jLabelSystemTaskTypeSortKey, null);
+		jPanelSystemTaskType1.add(jTextFieldSystemTaskTypeSortKey, null);
+		jPanelSystemTaskType1.add(jLabelSystemTaskTypeDescriptions, null);
+		jPanelSystemTaskType1.add(jScrollPaneSystemTaskTypeDescriptions, null);
+		jSplitPaneSystemTaskType.add(jScrollPaneSystemTaskTypeList, JSplitPane.TOP);
+		jSplitPaneSystemTaskType.add(jPanelSystemTaskType, JSplitPane.BOTTOM);
+		jPanelSystemTaskType.add(jPanelSystemTaskType1, BorderLayout.NORTH);
+		jPanelSystemTaskType.add(jScrollPaneSystemTaskTypeWhereUsedList, BorderLayout.CENTER);
+		jScrollPaneSystemTaskTypeList.getViewport().add(jTableSystemTaskTypeList, null);
+		jScrollPaneSystemTaskTypeList.setBorder(null);
+		jScrollPaneSystemTaskTypeWhereUsedList.getViewport().add(jTableSystemTaskTypeWhereUsedList, null);
+		jScrollPaneSystemTaskTypeWhereUsedList.setBorder(null);
 		//(SystemTableTypeList)//
 		jTabbedPaneSystem.add(jSplitPaneSystemTableType, res.getString("S206"));
 		jSplitPaneSystemTableType.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -2282,6 +2366,65 @@ public class Modeler extends JFrame {
 		column3.setCellRenderer(rendererAlignmentLeft);
 		jTableSystemDepartmentWhereUsedList.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 12));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemDepartmentWhereUsedList.getTableHeader().getDefaultRenderer();
+		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		//(jTableSystemTaskTypeList)//
+		jTableSystemTaskTypeList.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTableSystemTaskTypeList.setBackground(SystemColor.control);
+		jTableSystemTaskTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jTableSystemTaskTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jTableSystemTaskTypeList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemTaskTypeList_listSelectionAdapter(this));
+		jTableSystemTaskTypeList.addMouseListener(new Modeler_jTableSystemTaskTypeList_mouseAdapter(this));
+		jTableSystemTaskTypeList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemTaskTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
+		tableModelSystemTaskTypeList.addColumn("NO.");
+		tableModelSystemTaskTypeList.addColumn(res.getString("S201"));
+		tableModelSystemTaskTypeList.addColumn(res.getString("S362"));
+		tableModelSystemTaskTypeList.addColumn(res.getString("S204"));
+		column0 = jTableSystemTaskTypeList.getColumnModel().getColumn(0);
+		column1 = jTableSystemTaskTypeList.getColumnModel().getColumn(1);
+		column2 = jTableSystemTaskTypeList.getColumnModel().getColumn(2);
+		column3 = jTableSystemTaskTypeList.getColumnModel().getColumn(3);
+		column0.setPreferredWidth(37);
+		column1.setPreferredWidth(77);
+		column2.setPreferredWidth(200);
+		column3.setPreferredWidth(550);
+		column0.setCellRenderer(rendererAlignmentCenter);
+		column1.setCellRenderer(rendererAlignmentLeft);
+		column2.setCellRenderer(rendererAlignmentLeft);
+		column3.setCellRenderer(rendererAlignmentLeft);
+		jTableSystemTaskTypeList.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 12));
+		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemTaskTypeList.getTableHeader().getDefaultRenderer();
+		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		//(jTableSystemTaskTypeWhereUsedList)//
+		jTableSystemTaskTypeWhereUsedList.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTableSystemTaskTypeWhereUsedList.setBackground(SystemColor.control);
+		jTableSystemTaskTypeWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jTableSystemTaskTypeWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jTableSystemTaskTypeWhereUsedList.addMouseListener(new Modeler_jTableSystemTaskTypeWhereUsedList_mouseAdapter(this));
+		jTableSystemTaskTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
+		jScrollPaneSystemTaskTypeWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemTaskTypeWhereUsedList_mouseAdapter(this));
+		tableModelSystemTaskTypeWhereUsedList.addColumn("NO.");
+		tableModelSystemTaskTypeWhereUsedList.addColumn("ID");
+		tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S363"));
+		tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S340"));
+		tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S204"));
+		column0 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(0);
+		column1 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(1);
+		column2 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(2);
+		column3 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(3);
+		column4 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(4);
+		column0.setPreferredWidth(37);
+		column1.setPreferredWidth(60);
+		column2.setPreferredWidth(150);
+		column3.setPreferredWidth(150);
+		column4.setPreferredWidth(500);
+		column0.setCellRenderer(rendererAlignmentCenter);
+		column1.setCellRenderer(rendererAlignmentLeft);
+		column2.setCellRenderer(rendererAlignmentLeft);
+		column3.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentLeft);
+		jTableSystemTaskTypeWhereUsedList.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 12));
+		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemTaskTypeWhereUsedList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		//(jTableSystemTableTypeList)//
 		jTableSystemTableTypeList.setFont(new java.awt.Font("SansSerif", 0, 12));
@@ -2740,22 +2883,26 @@ public class Modeler extends JFrame {
 		tableModelTaskList.addColumn(res.getString("S201"));
 		tableModelTaskList.addColumn(res.getString("S360"));
 		tableModelTaskList.addColumn(res.getString("S361"));
+		tableModelTaskList.addColumn(res.getString("S362"));
 		tableModelTaskList.addColumn(res.getString("S204"));
 		column0 = jTableTaskList.getColumnModel().getColumn(0);
 		column1 = jTableTaskList.getColumnModel().getColumn(1);
 		column2 = jTableTaskList.getColumnModel().getColumn(2);
 		column3 = jTableTaskList.getColumnModel().getColumn(3);
 		column4 = jTableTaskList.getColumnModel().getColumn(4);
+		column5 = jTableTaskList.getColumnModel().getColumn(5);
 		column0.setPreferredWidth(37);
 		column1.setPreferredWidth(77);
 		column2.setPreferredWidth(200);
 		column3.setPreferredWidth(150);
-		column4.setPreferredWidth(600);
+		column4.setPreferredWidth(150);
+		column5.setPreferredWidth(600);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
 		column3.setCellRenderer(rendererAlignmentLeft);
 		column4.setCellRenderer(rendererAlignmentLeft);
+		column5.setCellRenderer(rendererAlignmentLeft);
 		jTableTaskList.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 12));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTaskList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -2786,9 +2933,9 @@ public class Modeler extends JFrame {
 		jLabelTaskSortKey.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelTaskSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskSortKey.setText(res.getString("S201"));
-		jLabelTaskSortKey.setBounds(new Rectangle(319, 9, 72, 15));
+		jLabelTaskSortKey.setBounds(new Rectangle(259, 9, 72, 15));
 		jTextFieldTaskSortKey.setFont(new java.awt.Font("SansSerif", 0, 12));
-		jTextFieldTaskSortKey.setBounds(new Rectangle(395, 6, 67, 22));
+		jTextFieldTaskSortKey.setBounds(new Rectangle(335, 6, 67, 22));
 		jLabelTaskEvent.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelTaskEvent.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskEvent.setText(res.getString("S361"));
@@ -2797,15 +2944,25 @@ public class Modeler extends JFrame {
 		jTextFieldTaskEvent.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTextFieldTaskEvent.setBounds(new Rectangle(0, 34, 231, 22));
 		jTextFieldTaskEvent.setToolTipText(res.getString("S368"));
+		jLabelTaskType.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jLabelTaskType.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelTaskType.setText(res.getString("S362"));
+		jLabelTaskType.setBounds(new Rectangle(259, 34, 72, 15));
+		jComboBoxTaskType.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jComboBoxTaskType.setActionCommand("comboBoxChanged");
+		jComboBoxTaskType.setBounds(new Rectangle(335, 31, 160, 22));
 		jLabelSubjectAreaWithThisTask.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelSubjectAreaWithThisTask.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaWithThisTask.setText(res.getString("S380"));
-		jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(240, 37, 152, 15));
-		jTextFieldSubjectAreaWithThisTask.setFont(new java.awt.Font("SansSerif", 0, 12));
-		jTextFieldSubjectAreaWithThisTask.setFont(new java.awt.Font("SansSerif", 0, 12));
-		jTextFieldSubjectAreaWithThisTask.setBounds(new Rectangle(395, 34, 300, 22));
-		jTextFieldSubjectAreaWithThisTask.setBackground(SystemColor.control);
-		jTextFieldSubjectAreaWithThisTask.setEditable(false);
+		jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(420, 9, 152, 15));
+		jListSubjectAreaWithThisTask.setBorder(null);
+		jListSubjectAreaWithThisTask.setSelectionBackground(jPanelTask.getBackground());
+		jListSubjectAreaWithThisTask.setBackground(jPanelTask.getBackground());
+		jListSubjectAreaWithThisTask.addMouseListener(new Modeler_jListSubjectAreaWithThisTask_mouseAdapter(this));
+		jListSubjectAreaWithThisTask.addMouseMotionListener(new Modeler_jListSubjectAreaWithThisTask_mouseMotionAdapter(this));
+		jScrollPaneSubjectAreaWithThisTask.setBorder(BorderFactory.createEtchedBorder());
+		jScrollPaneSubjectAreaWithThisTask.setBounds(new Rectangle(575, 6, 300, 50));
+		jScrollPaneSubjectAreaWithThisTask.getViewport().add(jListSubjectAreaWithThisTask, null);
 		jLabelTaskDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelTaskDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskDescriptions.setText(res.getString("S204"));
@@ -2922,17 +3079,19 @@ public class Modeler extends JFrame {
 		jPanelTask3.add(jLabelTaskSortKey);
 		jPanelTask3.add(jTextFieldTaskSortKey);
 		jPanelTask3.add(jLabelSubjectAreaWithThisTask);
-		jPanelTask3.add(jTextFieldSubjectAreaWithThisTask);
+		jPanelTask3.add(jScrollPaneSubjectAreaWithThisTask);
 		jPanelTask1.add(jPanelTask4, BorderLayout.WEST);
 		jPanelTask1.add(jPanelTask2, BorderLayout.CENTER);
 		jPanelTask4.add(jLabelTaskName);
 		jPanelTask4.add(jLabelTaskDescriptions);
 		jPanelTask4.add(jLabelTaskEvent);
+		jPanelTask3.add(jLabelTaskType);
 		jPanelTask2.add(jPanelTask3, BorderLayout.NORTH);
 		jPanelTask2.add(jScrollPaneTaskDescriptions,  BorderLayout.CENTER);
 		jScrollPaneTaskDescriptions.getViewport().add(jTextAreaTaskDescriptions);
 		jScrollPaneTaskActions.getViewport().add(jTreeTaskActions);
 		jPanelTask3.add(jTextFieldTaskEvent);
+		jPanelTask3.add(jComboBoxTaskType);
 		jSplitPaneTask2.add(jSplitPaneTask3, JSplitPane.TOP);
 		jSplitPaneTask2.add(jTabbedPaneTaskFunctionIO, JSplitPane.BOTTOM);
 		jSplitPaneTask3.add(jPanelTask5, JSplitPane.LEFT);
@@ -5450,6 +5609,45 @@ public class Modeler extends JFrame {
 			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
 		}
 		//
+		if (e.getComponent().equals(jScrollPaneSystemTaskTypeList)) {
+			componentType_jPopupMenuComponent = "SystemTaskTypeList";
+			jPopupMenuComponent.add(jMenuItemComponentToAdd);
+			jPopupMenuComponent.add(jMenuItemComponentToPaste);
+			if (pastingDomElement != null) {
+				if (pastingDomElement.getTagName().equals("TaskType")) {jMenuItemComponentToPaste.setEnabled(true);}
+			}
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+		}
+		if (e.getComponent().equals(jTableSystemTaskTypeList)) {
+			componentType_jPopupMenuComponent = "SystemTaskTypeList";
+			jPopupMenuComponent.add(jMenuItemComponentToAdd);
+			jPopupMenuComponent.add(jMenuItemComponentToPaste);
+			if (pastingDomElement != null) {
+				if (pastingDomElement.getTagName().equals("TaskType")) {jMenuItemComponentToPaste.setEnabled(true);}
+			}
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToCopy);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToDelete);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+		}
+		if (e.getComponent().equals(jScrollPaneSystemTaskTypeWhereUsedList)) {
+			componentType_jPopupMenuComponent = "SystemTaskTypeWhereUsedList";
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
+		}
+		if (e.getComponent().equals(jTableSystemTaskTypeWhereUsedList)) {
+			componentType_jPopupMenuComponent = "SystemTaskTypeWhereUsedList";
+			jPopupMenuComponent.add(jMenuItemComponentToJump);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
+		}
+		//
 		if (e.getComponent().equals(jScrollPaneSystemTableTypeList)) {
 			componentType_jPopupMenuComponent = "SystemTableTypeList";
 			jPopupMenuComponent.add(jMenuItemComponentToAdd);
@@ -6374,6 +6572,16 @@ public class Modeler extends JFrame {
 				element = (org.w3c.dom.Element)departmentList.item(i);
 				if (element.getAttribute("ID").equals(id1)) {
 					returnNode = new XeadTreeNode("Department", element);
+					break;
+				}
+			}
+		}
+		if (type.equals("TaskType")) {
+			NodeList taskTypeList = domDocument.getElementsByTagName("TaskType");
+			for (int i = 0; i < taskTypeList.getLength(); i++) {
+				element = (org.w3c.dom.Element)taskTypeList.item(i);
+				if (element.getAttribute("ID").equals(id1)) {
+					returnNode = new XeadTreeNode("TaskType", element);
 					break;
 				}
 			}
@@ -7400,6 +7608,8 @@ public class Modeler extends JFrame {
 		FileWriter fileWriter = null;
 		BufferedWriter bufferedWriter = null;
 		String csvFileName = "";
+		XeadTreeNode departmentNode;
+		XeadTreeNode taskTypeNode;
 		//
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -7416,16 +7626,21 @@ public class Modeler extends JFrame {
 				dataLine = Integer.toString(seqNumber);
 				dataLine = dataLine + "," + element1.getAttribute("SortKey");
 				dataLine = dataLine + "," + element1.getAttribute("Name");
-				XeadTreeNode departmentNode = getSpecificXeadTreeNode("Department", node1.getElement().getAttribute("DepartmentID"), null);
-				org.w3c.dom.Element departmentElement = departmentNode.getElement();
-				dataLine = dataLine + "," + departmentElement.getAttribute("Name");
+				departmentNode = getSpecificXeadTreeNode("Department", node1.getElement().getAttribute("DepartmentID"), null);
+				dataLine = dataLine + "," + departmentNode.getElement().getAttribute("Name");
 				//
 				for (int j = 0; j < node1.getChildCount(); j++) {
 					node2 = (XeadTreeNode)node1.getChildAt(j);
 					element2 = (org.w3c.dom.Element)node2.getElement();
 					dataLine = dataLine + "," + element2.getAttribute("SortKey");
 					dataLine = dataLine + "," + element2.getAttribute("Name");
-					dataLine = dataLine + "," + element2.getAttribute("Event") + "\n";
+					dataLine = dataLine + "," + element2.getAttribute("Event");
+					taskTypeNode = getSpecificXeadTreeNode("TaskType", element2.getAttribute("TaskTypeID"), null);
+					if (taskTypeNode == null) {
+						dataLine = dataLine + ",,\n";
+					} else {
+						dataLine = dataLine + "," + taskTypeNode.getElement().getAttribute("SortKey") + "," + taskTypeNode.getElement().getAttribute("Name") + "\n";
+					}
 					//
 					if (noDataFoundToWrite) {
 						noDataFoundToWrite = false;
@@ -7439,7 +7654,8 @@ public class Modeler extends JFrame {
 					bufferedWriter.write(dataLine);
 					//
 					seqNumber = seqNumber + 1;
-					dataLine = Integer.toString(seqNumber) + ",,,";
+					//dataLine = Integer.toString(seqNumber) + ",,,";
+					dataLine = Integer.toString(seqNumber) + "," + element1.getAttribute("SortKey") + "," + element1.getAttribute("Name") + "," + departmentNode.getElement().getAttribute("Name");
 				}
 			}
 		} catch (Exception ex1) {
@@ -7622,7 +7838,7 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemToolFieldList_actionPerformed(ActionEvent e) {
-		org.w3c.dom.Element element1, element2, element3;
+		org.w3c.dom.Element element1, element2, element3, dataTypeElement;
 		XeadTreeNode node1, node2, node3;
 		String headingLine, dataLine;
 		int seqNumber = 1;
@@ -7640,6 +7856,14 @@ public class Modeler extends JFrame {
 			currentMainTreeNode.updateFields();
 			//
 			tableList = domDocument.getElementsByTagName("Table");
+			//
+			NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+			dataTypeElementMap.clear();
+			for (int i = 0; i < dataTypeList.getLength(); i++) {
+				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+				dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+			}
+			//
 			jProgressBar.setMaximum(tableList.getLength());
 			//
 			//Set headingLine and output//
@@ -7675,15 +7899,18 @@ public class Modeler extends JFrame {
 						if (element3.getAttribute("AttributeType").equals("DERIVABLE")) {
 							dataLine = dataLine + "," +  res.getString("S4917");
 						}
-						XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", element3.getAttribute("DataTypeID"), null);
-						org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
-						if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-							dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
-							+ dataTypeElement.getAttribute("Length") + ")";
-						} else {
-							dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
-							+ dataTypeElement.getAttribute("Length") + "."
-							+ dataTypeElement.getAttribute("Decimal") + ")";
+						//XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", element3.getAttribute("DataTypeID"), null);
+						//org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
+						dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
+						if (dataTypeElement != null) {
+							if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
+								+ dataTypeElement.getAttribute("Length") + ")";
+							} else {
+								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
+								+ dataTypeElement.getAttribute("Length") + "."
+								+ dataTypeElement.getAttribute("Decimal") + ")";
+							}
 						}
 						if (element3.getAttribute("NotNull").equals("true")) {
 							dataLine = dataLine + "," +  res.getString("S4936");
@@ -7979,7 +8206,7 @@ public class Modeler extends JFrame {
 	 * @return CreateStatement :CreateStatement object
 	 */
 	CreateStatement getCreateStatementByTable(XeadTreeNode node1, XeadTreeNode node2, NodeList relationshipList) {
-		org.w3c.dom.Element keyFieldElement, keyFieldElement2, relationshipElement;
+		org.w3c.dom.Element keyFieldElement, keyFieldElement2, relationshipElement, dataTypeElement;
 		XeadTreeNode node3, node4, node5;
 		XeadTreeNode tableKeyNode, objectTableNode, objectTableKeyNode;
 		org.w3c.dom.Element tableKeyElement, objectTableElement, objectTableKeyElement;
@@ -7994,6 +8221,13 @@ public class Modeler extends JFrame {
 		String refferencingTableName = "";
 		String statement;
 		CreateStatement createStatement;
+		//
+		NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+		dataTypeElementMap.clear();
+		for (int i = 0; i < dataTypeList.getLength(); i++) {
+			dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+			dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+		}
 		//
 		//Header Comments//
 		statement = createTableStatementCommentMark + node1.getElement().getAttribute("Name") + " - " + node2.getElement().getAttribute("Name") + "\n";
@@ -8025,11 +8259,21 @@ public class Modeler extends JFrame {
 			} else {
 				statement = statement + "     " + node3.getElement().getAttribute("Alias");
 			}
-			XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node3.getElement().getAttribute("DataTypeID"), null);
-			if (dataTypeNode.getElement().getAttribute("SQLExpression").equals("")) {
+//			XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node3.getElement().getAttribute("DataTypeID"), null);
+//			if (dataTypeNode.getElement().getAttribute("SQLExpression").equals("")) {
+//				statement = statement + " Invalid data type";
+//			} else {
+//				statement = statement + " " + dataTypeNode.getElement().getAttribute("SQLExpression");
+//			}
+			dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
+			if (dataTypeElement == null) {
 				statement = statement + " Invalid data type";
 			} else {
-				statement = statement + " " + dataTypeNode.getElement().getAttribute("SQLExpression");
+				if (dataTypeElement.getAttribute("SQLExpression").equals("")) {
+					statement = statement + " Invalid data type";
+				} else {
+					statement = statement + " " + dataTypeElement.getAttribute("SQLExpression");
+				}
 			}
 			if (!node3.getElement().getAttribute("Default").equals("")) {
 				statement = statement + " DEFAULT " + node3.getElement().getAttribute("Default");
@@ -8923,6 +9167,9 @@ public class Modeler extends JFrame {
 		if (e.getKeyCode() == KeyEvent.VK_DELETE) {
 			if (e.getComponent().equals(jTableSystemDepartmentList)) {
 				componentType_jPopupMenuComponent = "SystemDepartmentList";
+			}
+			if (e.getComponent().equals(jTableSystemTaskTypeList)) {
+				componentType_jPopupMenuComponent = "SystemTaskTypeList";
 			}
 			if (e.getComponent().equals(jTableSystemTableTypeList)) {
 				componentType_jPopupMenuComponent = "SystemTableTypeList";
@@ -13267,7 +13514,7 @@ public class Modeler extends JFrame {
 			}
 			jLabelCRUD.setFont(new java.awt.Font("SansSerif", 0, 11));
 			jLabelCRUD.setText(bf.toString());
-			jLabelCRUD.setBounds(new Rectangle(3, 25, 30, 11));
+			jLabelCRUD.setBounds(new Rectangle(3, 25, 35, 11));
 			jLabelCRUD.setHorizontalAlignment(SwingConstants.LEFT);
 			jPanel1.add(jPanel2, BorderLayout.WEST);
 			jPanel1.add(jPanel4, BorderLayout.CENTER);
@@ -13458,7 +13705,7 @@ public class Modeler extends JFrame {
 				String strwork = elementNode_.getElement().getAttribute("Alias");
 				if (!strwork.equals("")) {
 					strbf.append(strwork);
-					strbf.append("<br>");
+					//strbf.append("<br>");
 				}
 				//				 //XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", elementNode_.getElement().getAttribute("DataTypeID"), null);
 				//				 org.w3c.dom.Element dataTypeElement = getSpecificXeadElement("DataType", elementNode_.getElement().getAttribute("DataTypeID"));
@@ -13471,8 +13718,18 @@ public class Modeler extends JFrame {
 				//					 + dataTypeElement.getAttribute("Decimal") + ")");
 				//				 }
 				//				 strbf.append("<br>");
+				org.w3c.dom.Element dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
+				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+					strbf.append(" " + dataTypeElement.getAttribute("Name") + "("
+							+ dataTypeElement.getAttribute("Length") + ")");
+				} else {
+					strbf.append(" " + dataTypeElement.getAttribute("Name") + "("
+							+ dataTypeElement.getAttribute("Length") + "."
+							+ dataTypeElement.getAttribute("Decimal") + ")");
+				}
 				strwork = elementNode_.getElement().getAttribute("Descriptions");
 				if (!strwork.equals("")) {
+					strbf.append("<br>");
 					strbf.append(substringLinesWithTokenOfEOL(strwork, "<br>"));
 				}
 				if (strbf.toString().equals("<html>")) {
@@ -14168,26 +14425,26 @@ public class Modeler extends JFrame {
 			if (pageindex == 0) {
 				//
 				if (currentMainTreeNode.getType().equals("SubjectArea")) {
-					//printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
-					printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, currentMainTreeNode.getName(), "");
+					printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
+					//printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, currentMainTreeNode.getName(), "");
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("TableList")) {
 					if (jTabbedPaneTableList.getSelectedIndex() == 2) {
-						//printPanel(g2, fmt, jPanelDatamodel, res.getString("S466"));
-						XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
-						printPanel(g2, fmt, jPanelDatamodel, node.getName(), res.getString("S466"));
+						printPanel(g2, fmt, jPanelDatamodel, res.getString("S466"));
+						//XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+						//printPanel(g2, fmt, jPanelDatamodel, node.getName(), res.getString("S466"));
 					}
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOPanel")) {
-					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+					//XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
 					if (imageFunctionIO != null) {
 						//
-						//printPanel(g2, fmt, jLabelIOImageIcon, res.getString("S3305"));
-						printPanel(g2, fmt, jLabelIOImageIcon, node.getName(), currentMainTreeNode.getName());
+						printPanel(g2, fmt, jLabelIOImageIcon, res.getString("S3305"));
+						//printPanel(g2, fmt, jLabelIOImageIcon, node.getName(), currentMainTreeNode.getName());
 						//
 					} else {
 						if (jTextPaneIOPanelImage.getBackground().equals(Color.BLACK)) {
@@ -14199,29 +14456,29 @@ public class Modeler extends JFrame {
 							Style style = styledDocument.addStyle("style1", null);
 							StyleConstants.setForeground(style, Color.BLACK);
 							styledDocument.setCharacterAttributes(0, 9999, style, false);
-							//printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
-							printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
+							printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							//printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
 							jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 							currentMainTreeNode.activateContentsPane();
 						} else {
-							//printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
-							printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
+							printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
+							//printPanel(g2, fmt, jTextPaneIOPanelImage, node.getName(), currentMainTreeNode.getName());
 						}
 					}
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOSpool")) {
-					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
-					//printPanel(g2, fmt, jTextPaneIOSpoolImage, res.getString("S3305"));
-					printPanel(g2, fmt, jTextPaneIOSpoolImage, node.getName(), currentMainTreeNode.getName());
+					//XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+					printPanel(g2, fmt, jTextPaneIOSpoolImage, res.getString("S3305"));
+					//printPanel(g2, fmt, jTextPaneIOSpoolImage, node.getName(), currentMainTreeNode.getName());
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
 				if (currentMainTreeNode.getType().equals("IOWebPage")) {
-					XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
-					//printPanel(g2, fmt, jEditorPaneIOWebPageImage, res.getString("S3305"));
-					printPanel(g2, fmt, jEditorPaneIOWebPageImage, node.getName(), currentMainTreeNode.getName());
+					//XeadTreeNode node = (XeadTreeNode)currentMainTreeNode.getParent();
+					printPanel(g2, fmt, jEditorPaneIOWebPageImage, res.getString("S3305"));
+					//printPanel(g2, fmt, jEditorPaneIOWebPageImage, node.getName(), currentMainTreeNode.getName());
 					returnValue = Printable.PAGE_EXISTS;
 				}
 			}
@@ -14229,37 +14486,49 @@ public class Modeler extends JFrame {
 			return returnValue;
 		}
 		//
-		private void printPanel(Graphics2D g2, PageFormat fmt, JComponent jPanel, String name1, String name2) {
+		private void printPanel(Graphics2D g2, PageFormat fmt, JComponent jPanel, String name) {
 			double panelWidth;
 			double panelHeight;
 			double scaleRateWidth;
 			double scaleRateHeight;
 			Border borderSaved;
 			Color  colorSaved;
-			Rectangle rectText;
-			String wrkStr;
+			//Rectangle rectText;
+			String wrkStr = "";
 			FontMetrics fm = g2.getFontMetrics();
+			String lang = Locale.getDefault().getLanguage();
 			//
 			g2.translate(fmt.getImageableX(),fmt.getImageableY());
 			g2.setFont(new java.awt.Font("SansSerif", 0, 12));
-			//if (name.equals("")) {
+			if (name.equals("")) {
+				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321");
 			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
-			//} else {
+			} else {
+				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321");
 			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
-			//}
-			g2.drawString(name1, 0, fm.getMaxAscent());
-			if (!name2.equals("")) {
-				rectText = fm.getStringBounds(name2, g2).getBounds();
-				g2.drawString(name2, (int)fmt.getImageableWidth() - rectText.width - 30, fm.getMaxAscent());
 			}
-			
+			if (lang.equals("ja")) {
+				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
+			}
+			g2.drawString(wrkStr, 0, fm.getMaxAscent());
+//			if (!name2.equals("")) {
+//				if (lang.equals("ja")) {
+//					name2 = convertSingleByteCharsToDoubleByteChars(name2);
+//				}
+//				rectText = fm.getStringBounds(name2, g2).getBounds();
+//				g2.drawString(name2, (int)fmt.getImageableWidth() - rectText.width - 30, fm.getMaxAscent());
+//			}
 			//
 			g2.setFont(new java.awt.Font("SansSerif", 0, 9));
+			wrkStr = res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime");
 			//g2.drawString(res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime"), 0, (int)fmt.getImageableHeight());
-			g2.drawString(systemName, 0, (int)fmt.getImageableHeight());
-			wrkStr = getStringValueOfDateTime("withoutTime");
-			rectText = fm.getStringBounds(wrkStr, g2).getBounds();
-			g2.drawString(wrkStr, (int)fmt.getImageableWidth() - rectText.width - 30, (int)fmt.getImageableHeight());
+			if (lang.equals("ja")) {
+				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
+			}
+			g2.drawString(wrkStr, 0, (int)fmt.getImageableHeight());
+//			wrkStr = getStringValueOfDateTime("withoutTime");
+//			rectText = fm.getStringBounds(wrkStr, g2).getBounds();
+//			g2.drawString(wrkStr, (int)fmt.getImageableWidth() - rectText.width - 30, (int)fmt.getImageableHeight());
 			g2.translate(0, jLabelSubtitle.getHeight() + 3);
 			//
 			panelWidth = jPanel.getWidth();
@@ -14425,10 +14694,11 @@ public class Modeler extends JFrame {
 		//
 		public String getName() {
 			String str = "";
-			//String work = "";
-			//XeadTreeNode node;
 			//
 			if (nodeType_.equals("Department")) {
+				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+			}
+			if (nodeType_.equals("TaskType")) {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
 			if (nodeType_.equals("TableType")) {
@@ -14818,10 +15088,32 @@ public class Modeler extends JFrame {
 					newElement.setAttribute("SortKey", sortKey);
 					newElement.setAttribute("Event", res.getString("S3568"));
 					newElement.setAttribute("RoleID", domNode_.getAttribute("ID"));
+					sortableComboBoxModelTaskType.removeAllElements();
+					nodeList = domDocument.getElementsByTagName("TaskType");
+					for (int i = 0; i < nodeList.getLength(); i++) {
+						node = new XeadTreeNode("TaskType",(org.w3c.dom.Element)nodeList.item(i));
+						sortableComboBoxModelTaskType.addElement((Object)node);
+					}
+					sortableComboBoxModelTaskType.sortElements();
+					if (sortableComboBoxModelTaskType.getSize() > 0) {
+						node = (XeadTreeNode)sortableComboBoxModelTaskType.getElementAt(0);
+						newElement.setAttribute("TaskTypeID", node.getElement().getAttribute("ID"));
+					}
 					newElementChild1 = domDocument.createElement("TaskAction");
 					newElementChild1.setAttribute("Label", res.getString("S2288"));
 					newElementChild1.setAttribute("IndentLevel", "0");
 					newElementChild1.setAttribute("SortKey", "0100");
+					sortableComboBoxModelTaskType.removeAllElements();
+					nodeList = domDocument.getElementsByTagName("TaskType");
+					for (int i = 0; i < nodeList.getLength(); i++) {
+						node = new XeadTreeNode("TaskType",(org.w3c.dom.Element)nodeList.item(i));
+						sortableComboBoxModelTaskType.addElement((Object)node);
+					}
+					sortableComboBoxModelTaskType.sortElements();
+					if (sortableComboBoxModelTaskType.getSize() > 0) {
+						node = (XeadTreeNode)sortableComboBoxModelTaskType.getElementAt(0);
+						newElement.setAttribute("TaskTypeID", node.getElement().getAttribute("ID"));
+					}
 					newElementChild1.setAttribute("ExecuteIf", "");
 					newElementChild1.setAttribute("Descriptions", "");
 					newElement.appendChild(newElementChild1);
@@ -15732,6 +16024,7 @@ public class Modeler extends JFrame {
 				newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
 				newElement.setAttribute("RoleID", domNode_.getAttribute("ID"));
 				newElement.setAttribute("Event", pastingElement.getAttribute("Event"));
+				newElement.setAttribute("TaskTypeID", pastingElement.getAttribute("TaskTypeID"));
 				NodeList nodeList1 = pastingElement.getElementsByTagName("TaskAction");
 				for (int i = 0; i < nodeList1.getLength(); i++) {
 					org.w3c.dom.Element element1 = (org.w3c.dom.Element)nodeList1.item(i);
@@ -16575,9 +16868,59 @@ public class Modeler extends JFrame {
 				tableSystemDepartmentListSelectChangeActivated = true;
 			}
 			//
-			//Setup TableType List//
+			//Setup TaskType List//
 			if (jTabbedPaneSystem.getSelectedIndex() == 2) {
 				previousSelectedIndex_jTabbedPaneSystem = 2;
+				tableSystemTaskTypeListSelectChangeActivated = false;
+				selectedRow_jTableSystemTaskTypeList = -1;
+				//
+				//Clear list rows//
+				if (tableModelSystemTaskTypeList.getRowCount() > 0) {
+					int rowCount = tableModelSystemTaskTypeList.getRowCount();
+					for (int i = 0; i < rowCount; i++) {tableModelSystemTaskTypeList.removeRow(0);}
+				}
+				//
+				//Add rows to list//
+				nodeList1 = domDocument.getElementsByTagName("TaskType");
+				sortableDomElementListModel.removeAllElements();
+				for (int i = 0; i < nodeList1.getLength(); i++) {
+					sortableDomElementListModel.addElement((Object)nodeList1.item(i));
+				}
+				sortableDomElementListModel.sortElements();
+				for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
+					org.w3c.dom.Element element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
+					Object[] Cell = new Object[4];
+					Cell[0] =  new TableRowNumber(i+1, element);
+					Cell[1] = element.getAttribute("SortKey");
+					Cell[2] = element.getAttribute("Name");
+					Cell[3] = substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "//");
+					tableModelSystemTaskTypeList.addRow(Cell);
+				}
+				//
+				//Clear and lock edit-panel//
+				jTextFieldSystemTaskTypeName.setText("");
+				jTextFieldSystemTaskTypeName.setBackground(SystemColor.control);
+				jTextFieldSystemTaskTypeName.setEditable(false);
+				jTextFieldSystemTaskTypeSortKey.setText("");
+				jTextFieldSystemTaskTypeSortKey.setBackground(SystemColor.control);
+				jTextFieldSystemTaskTypeSortKey.setEditable(false);
+				jTextAreaSystemTaskTypeDescriptions.setText("");
+				jTextAreaSystemTaskTypeDescriptions.setBackground(SystemColor.control);
+				jTextAreaSystemTaskTypeDescriptions.setEditable(false);
+				//
+				//Clear WhereUsedList//
+				if (tableModelSystemTaskTypeWhereUsedList.getRowCount() > 0) {
+					int rowCount = tableModelSystemTaskTypeWhereUsedList.getRowCount();
+					for (int j = 0; j < rowCount; j++) {tableModelSystemTaskTypeWhereUsedList.removeRow(0);}
+				}
+				//
+				//Activate routine for ListSelectionChangeEvent//
+				tableSystemTaskTypeListSelectChangeActivated = true;
+			}
+			//
+			//Setup TableType List//
+			if (jTabbedPaneSystem.getSelectedIndex() == 3) {
+				previousSelectedIndex_jTabbedPaneSystem = 3;
 				tableSystemTableTypeListSelectChangeActivated = false;
 				selectedRow_jTableSystemTableTypeList = -1;
 				//
@@ -16626,8 +16969,8 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Setup DataType List//
-			if (jTabbedPaneSystem.getSelectedIndex() == 3) {
-				previousSelectedIndex_jTabbedPaneSystem = 3;
+			if (jTabbedPaneSystem.getSelectedIndex() == 4) {
+				previousSelectedIndex_jTabbedPaneSystem = 4;
 				tableSystemDataTypeListSelectChangeActivated = false;
 				selectedRow_jTableSystemDataTypeList = -1;
 				//
@@ -16689,8 +17032,8 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Setup FunctionType List//
-			if (jTabbedPaneSystem.getSelectedIndex() == 4) {
-				previousSelectedIndex_jTabbedPaneSystem = 4;
+			if (jTabbedPaneSystem.getSelectedIndex() == 5) {
+				previousSelectedIndex_jTabbedPaneSystem = 5;
 				tableSystemFunctionTypeListSelectChangeActivated = false;
 				selectedRow_jTableSystemFunctionTypeList = -1;
 				//
@@ -16739,8 +17082,8 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Setup MaintenanceLog List//
-			if (jTabbedPaneSystem.getSelectedIndex() == 5) {
-				previousSelectedIndex_jTabbedPaneSystem = 5;
+			if (jTabbedPaneSystem.getSelectedIndex() == 6) {
+				previousSelectedIndex_jTabbedPaneSystem = 6;
 				tableSystemMaintenanceLogSelectChangeActivated = false;
 				selectedRow_jTableSystemMaintenanceLog = -1;
 				//
@@ -16919,7 +17262,7 @@ public class Modeler extends JFrame {
 		//
 		private String activateContentsPaneForRoleList() {
 			org.w3c.dom.Element element;
-			XeadTreeNode node;
+			XeadTreeNode node, departmentNode;
 			jLabelSubtitle.setText(res.getString("S4623"));
 			if (tableModelRoleList.getRowCount() > 0) {
 				int rowCount = tableModelRoleList.getRowCount();
@@ -16932,9 +17275,8 @@ public class Modeler extends JFrame {
 				Cell[0] =  new TableRowNumber(i+1, element);
 				Cell[1] = node.getElement().getAttribute("SortKey");
 				Cell[2] = node.getElement().getAttribute("Name");
-				XeadTreeNode departmentNode = getSpecificXeadTreeNode("Department", node.getElement().getAttribute("DepartmentID"), null);
-				org.w3c.dom.Element departmentElement = departmentNode.getElement();
-				Cell[3] = departmentElement.getAttribute("Name");
+				departmentNode = getSpecificXeadTreeNode("Department", node.getElement().getAttribute("DepartmentID"), null);
+				Cell[3] = departmentNode.getElement().getAttribute("Name");
 				Cell[4] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
 				tableModelRoleList.addRow(Cell);
 			}
@@ -16946,7 +17288,7 @@ public class Modeler extends JFrame {
 		//
 		private String activateContentsPaneForRole() {
 			org.w3c.dom.Element element;
-			XeadTreeNode node;
+			XeadTreeNode node, taskTypeNode;
 			jLabelSubtitle.setText(((XeadTreeNode)this.getParent()).getName() + " - " + this.getName() + res.getString("S4632"));
 			jTextFieldRoleSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextFieldRoleName.setText(domNode_.getAttribute("Name"));
@@ -16961,12 +17303,18 @@ public class Modeler extends JFrame {
 			for (int i = 0; i < this.getChildCount(); i++) {
 				node = (XeadTreeNode)this.getChildAt(i);
 				element = (org.w3c.dom.Element)node.getElement();
-				Object[] Cell = new Object[5];
+				Object[] Cell = new Object[6];
 				Cell[0] =  new TableRowNumber(i+1, element);
 				Cell[1] = node.getElement().getAttribute("SortKey");
 				Cell[2] = node.getElement().getAttribute("Name");
 				Cell[3] = node.getElement().getAttribute("Event");
-				Cell[4] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
+				taskTypeNode = getSpecificXeadTreeNode("TaskType", node.getElement().getAttribute("TaskTypeID"), null);
+				if (taskTypeNode == null) {
+					Cell[4] = "";
+				} else {
+					Cell[4] = taskTypeNode.getElement().getAttribute("Name");
+				}
+				Cell[5] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
 				tableModelTaskList.addRow(Cell);
 			}
 			//
@@ -16998,6 +17346,7 @@ public class Modeler extends JFrame {
 			jTextFieldTaskEvent.setText(domNode_.getAttribute("Event"));
 			jTextAreaTaskDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaTaskDescriptions.setCaretPosition(0);
+			XeadTreeNode node;
 			//
 			NodeList dataflowNodeList = domDocument.getElementsByTagName("DataflowNode");
 			NodeList actionList = this.getElement().getElementsByTagName("TaskAction");
@@ -17005,18 +17354,18 @@ public class Modeler extends JFrame {
 			jProgressBar.setMaximum(dataflowNodeList.getLength() + actionList.getLength());
 			//
 			//Setup SubjectArea name using this task//
+			listModelSubjectAreaWithThisTask.removeAllElements();
+			subjectAreaIDList.clear();
 			org.w3c.dom.Element element1, element2;
 			int numberOfSubjectAreaUsingThisTask = 0;
-			String nameOfSubjectArea = "";
 			String taskID = domNode_.getAttribute("ID");
 			for (int i = 0; i < dataflowNodeList.getLength(); i++) {
 				element1 = (org.w3c.dom.Element)dataflowNodeList.item(i);
 				if (element1.getAttribute("TaskID").equals(taskID)) {
 					numberOfSubjectAreaUsingThisTask++;
-					if (numberOfSubjectAreaUsingThisTask == 1) {
-						element2 = (org.w3c.dom.Element)element1.getParentNode();
-						nameOfSubjectArea = element2.getAttribute("Name");
-					}
+					element2 = (org.w3c.dom.Element)element1.getParentNode();
+					subjectAreaIDList.add(element2.getAttribute("ID"));
+					listModelSubjectAreaWithThisTask.addElement("<html><u><font color='blue'>" + element2.getAttribute("SortKey") + " " + element2.getAttribute("Name"));
 					if (numberOfSubjectAreaUsingThisTask == 2) {
 						jProgressBar.setValue(jProgressBar.getValue() + dataflowNodeList.getLength() - i - 1);
 						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
@@ -17027,14 +17376,24 @@ public class Modeler extends JFrame {
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 			}
-			if (numberOfSubjectAreaUsingThisTask == 0) {
-				jTextFieldSubjectAreaWithThisTask.setText(res.getString("S4659"));
+			//
+			// Setup ComboBox of "TaskType"//
+			sortableComboBoxModelTaskType.removeAllElements();
+			NodeList departmentList = domDocument.getElementsByTagName("TaskType");
+			for (int i = 0; i < departmentList.getLength(); i++) {
+				node = new XeadTreeNode("TaskType",(org.w3c.dom.Element)departmentList.item(i));
+				sortableComboBoxModelTaskType.addElement((Object)node);
 			}
-			if (numberOfSubjectAreaUsingThisTask == 1) {
-				jTextFieldSubjectAreaWithThisTask.setText(res.getString("S4660") + nameOfSubjectArea + res.getString("S4661"));
+			sortableComboBoxModelTaskType.sortElements();
+			for (int i = 0; i < sortableComboBoxModelTaskType.getSize(); i++) {
+				node = (XeadTreeNode)sortableComboBoxModelTaskType.getElementAt(i);
+				if (node.getElement().getAttribute("ID").equals(domNode_.getAttribute("TaskTypeID"))) {
+					sortableComboBoxModelTaskType.setSelectedItem(sortableComboBoxModelTaskType.getElementAt(i));}
 			}
-			if (numberOfSubjectAreaUsingThisTask > 1) {
-				jTextFieldSubjectAreaWithThisTask.setText(res.getString("S4662") + nameOfSubjectArea + res.getString("S4663") + numberOfSubjectAreaUsingThisTask + res.getString("S4664"));
+			if (sortableComboBoxModelTaskType.getSize() > 0) {
+				jComboBoxTaskType.setEnabled(true);
+			} else {
+				jComboBoxTaskType.setEnabled(false);
 			}
 			//
 			//Setup jTreeTaskActions//
@@ -17042,7 +17401,6 @@ public class Modeler extends JFrame {
 			XeadTreeNode currentNode = null;
 			XeadTreeNode actionNodeToBeFocused = null;
 			String sortKeyOfFunctionIO = "";
-			XeadTreeNode node = null;
 			XeadTreeNode[] nodeArray = new XeadTreeNode[20];
 			int previousLevel = 0;
 			int currentLevel = 0;
@@ -17262,8 +17620,10 @@ public class Modeler extends JFrame {
 							jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jLabelTaskFunctionIOImage.getWidth()+30, jLabelIOImageIcon.getHeight()+40));
 							//
 							Rectangle rec = jLabelTaskFunctionIOImage.getBounds();
-							jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 200, 15);
+							//jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+							XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
+							jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 250, 15);
 							//
 						} else {
 							//
@@ -17274,8 +17634,10 @@ public class Modeler extends JFrame {
 							setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
 							//
 							Rectangle rec = jTextPaneTaskFunctionIOImage.getBounds();
-							jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 200, 15);
+							//jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+							XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
+							jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 250, 15);
 						}
 					}
 					//
@@ -17286,6 +17648,7 @@ public class Modeler extends JFrame {
 					} else {
 						jTextAreaTaskFunctionIODescriptions.setText(strWrk.substring(0, position));
 					}
+					jTextAreaTaskFunctionIODescriptions.setCaretPosition(0);
 					//
 					jTextAreaTaskFunctionIOOperations.setBackground(SystemColor.window);
 					jTextAreaTaskFunctionIOOperations.setEditable(true);
@@ -17468,7 +17831,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		private String activateContentsPaneForTableList() {
-			org.w3c.dom.Element element;
+			org.w3c.dom.Element element, dataTypeElement;
 			XeadTreeNode node;
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent()).getName() + " - "
@@ -17641,7 +18004,16 @@ public class Modeler extends JFrame {
 				org.w3c.dom.Element subsystemTableElement, relationshipElement, subsystemRelationshipElement;
 				XeadTreeNode tableNode;
 				//
-				jProgressBar.setMaximum(subsystemTableList.getLength() + 1);
+				jProgressBar.setMaximum(subsystemTableList.getLength() + 2);
+				//
+				NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+				dataTypeElementMap.clear();
+				for (int i = 0; i < dataTypeList.getLength(); i++) {
+					dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+					dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 				//
 				jTextAreaDatamodelDescriptions.setText(substringLinesWithTokenOfEOL(parentNode.getElement().getAttribute("DatamodelDescriptions"), "\n"));
 				jTextAreaDatamodelDescriptions.setCaretPosition(0);
@@ -17862,7 +18234,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		private String activateContentsPaneForTableFieldList() {
-			org.w3c.dom.Element element;
+			org.w3c.dom.Element element, dataTypeElement;
 			XeadTreeNode node;
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent().getParent().getParent()).getName() + " - "
@@ -17877,6 +18249,13 @@ public class Modeler extends JFrame {
 			jProgressBar.setMaximum(this.getChildCount());
 			this.sortChildNodes();
 			jTreeMain.updateUI();
+			//
+			NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+			dataTypeElementMap.clear();
+			for (int i = 0; i < dataTypeList.getLength(); i++) {
+				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+				dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+			}
 			//
 			for (int i = 0; i < this.getChildCount(); i++) {
 				node = (XeadTreeNode)this.getChildAt(i);
@@ -17900,15 +18279,26 @@ public class Modeler extends JFrame {
 				if (node.getElement().getAttribute("AttributeType").equals("DERIVABLE")) {
 					Cell[3] = res.getString("S4917");
 				}
-				XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node.getElement().getAttribute("DataTypeID"), null);
-				org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
-				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-					Cell[4] = dataTypeElement.getAttribute("Name") + "("
-					+ dataTypeElement.getAttribute("Length") + ")";
-				} else {
-					Cell[4] = dataTypeElement.getAttribute("Name") + "("
-					+ dataTypeElement.getAttribute("Length") + "."
-					+ dataTypeElement.getAttribute("Decimal") + ")";
+//				XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node.getElement().getAttribute("DataTypeID"), null);
+//				org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
+//				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//					Cell[4] = dataTypeElement.getAttribute("Name") + "("
+//					+ dataTypeElement.getAttribute("Length") + ")";
+//				} else {
+//					Cell[4] = dataTypeElement.getAttribute("Name") + "("
+//					+ dataTypeElement.getAttribute("Length") + "."
+//					+ dataTypeElement.getAttribute("Decimal") + ")";
+//				}
+				dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
+				if (dataTypeElement != null) {
+					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+						Cell[4] = dataTypeElement.getAttribute("Name") + "("
+						+ dataTypeElement.getAttribute("Length") + ")";
+					} else {
+						Cell[4] = dataTypeElement.getAttribute("Name") + "("
+						+ dataTypeElement.getAttribute("Length") + "."
+						+ dataTypeElement.getAttribute("Decimal") + ")";
+					}
 				}
 				if (node.getElement().getAttribute("NotNull").equals("true")) {
 					Cell[5] = res.getString("S4936");
@@ -18098,7 +18488,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		private String activateContentsPaneForTableKey() {
-			XeadTreeNode tableNode, tableFieldNode, dataTypeNode, objectTableNode, objectTableKeyNode;
+			XeadTreeNode tableNode, tableFieldNode, objectTableNode, objectTableKeyNode;
 			org.w3c.dom.Element keyFieldElement, dataTypeElement, objectTableElement, relationshipElement;
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent().getParent().getParent().getParent()).getName() + " - "
@@ -18106,6 +18496,13 @@ public class Modeler extends JFrame {
 					+ ((XeadTreeNode)this.getParent().getParent()).getName() + " - " + this.getName());
 			//
 			NodeList relationshipList = domDocument.getElementsByTagName("Relationship");
+			//
+			NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+			dataTypeElementMap.clear();
+			for (int i = 0; i < dataTypeList.getLength(); i++) {
+				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+				dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+			}
 			//
 			jProgressBar.setMaximum(relationshipList.getLength() + 1);
 			//
@@ -18147,9 +18544,12 @@ public class Modeler extends JFrame {
 				} else {
 					Cell[2] = "( " + tableFieldNode.getElement().getAttribute("Name") + " )";
 				}
-				dataTypeNode = getSpecificXeadTreeNode("DataType", tableFieldNode.getElement().getAttribute("DataTypeID"), null);
-				dataTypeElement = dataTypeNode.getElement();
-				Cell[3] = dataTypeElement.getAttribute("Name");
+				//dataTypeNode = getSpecificXeadTreeNode("DataType", tableFieldNode.getElement().getAttribute("DataTypeID"), null);
+				//dataTypeElement = dataTypeNode.getElement();
+				dataTypeElement = dataTypeElementMap.get(tableFieldNode.getElement().getAttribute("DataTypeID"));
+				if (dataTypeElement != null) {
+					Cell[3] = dataTypeElement.getAttribute("Name");
+				}
 				tableModelTableKeyFieldList.addRow(Cell);
 			}
 			//
@@ -18857,6 +19257,8 @@ public class Modeler extends JFrame {
 		}
 		//
 		private String activateContentsPaneForIOTable() {
+			org.w3c.dom.Element dataTypeElement;
+			//
 			//Setup cell editor//
 			JTextField editField = new JTextField();
 			editField.setFont(new java.awt.Font("SansSerif", 0, 11));
@@ -18898,6 +19300,13 @@ public class Modeler extends JFrame {
 			}
 			jTextAreaIOTableDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaIOTableDescriptions.setCaretPosition(0);
+			//
+			NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+			dataTypeElementMap.clear();
+			for (int i = 0; i < dataTypeList.getLength(); i++) {
+				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
+				dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+			}
 			//
 			//Setup IOTableFieldList//
 			tableModelIOTableFieldList = new TableModelIOTableFieldList();
@@ -18944,15 +19353,20 @@ public class Modeler extends JFrame {
 				} else {
 					Cell[2] = "( " + fieldElement.getAttribute("Name") + " )";
 				}
-				XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", fieldElement.getAttribute("DataTypeID"), null);
-				org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
-				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-					Cell[3] = dataTypeElement.getAttribute("Name") + "("
-					+ dataTypeElement.getAttribute("Length") + ")";
+				//XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", fieldElement.getAttribute("DataTypeID"), null);
+				//org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
+				dataTypeElement = dataTypeElementMap.get(fieldElement.getAttribute("DataTypeID"));
+				if (dataTypeElement == null) {
+					Cell[3] = "";
 				} else {
-					Cell[3] = dataTypeElement.getAttribute("Name") + "("
-					+ dataTypeElement.getAttribute("Length") + "."
-					+ dataTypeElement.getAttribute("Decimal") + ")";
+					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+						Cell[3] = dataTypeElement.getAttribute("Name") + "("
+						+ dataTypeElement.getAttribute("Length") + ")";
+					} else {
+						Cell[3] = dataTypeElement.getAttribute("Name") + "("
+						+ dataTypeElement.getAttribute("Length") + "."
+						+ dataTypeElement.getAttribute("Decimal") + ")";
+					}
 				}
 				Cell[4] = "";
 				org.w3c.dom.Element iOFieldElement;
@@ -20911,8 +21325,41 @@ public class Modeler extends JFrame {
 				}
 			}
 			//
-			//Check change and update table type//
+			//Check change and update task type//
 			if (previousSelectedIndex_jTabbedPaneSystem == 2) {
+				if (selectedRow_jTableSystemTaskTypeList >= 0) {
+					TableRowNumber tableRowNumber = (TableRowNumber)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList,0);
+					org.w3c.dom.Element element = tableRowNumber.getElement();
+					if (!element.getAttribute("SortKey").equals(jTextFieldSystemTaskTypeSortKey.getText())) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (!element.getAttribute("Name").equals(jTextFieldSystemTaskTypeName.getText())) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (!element.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaSystemTaskTypeDescriptions.getText()))) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (valueOfFieldsChangedByTabbedPane) {
+						//
+						valueOfFieldsChanged = true;
+						//
+						//Update DOM element//
+						element.setAttribute("SortKey", jTextFieldSystemTaskTypeSortKey.getText());
+						tableModelSystemTaskTypeList.
+						setValueAt(jTextFieldSystemTaskTypeSortKey.getText(),selectedRow_jTableSystemTaskTypeList,1);
+						element.setAttribute("Name", jTextFieldSystemTaskTypeName.getText());
+						tableModelSystemTaskTypeList.
+						setValueAt(jTextFieldSystemTaskTypeName.getText(),selectedRow_jTableSystemTaskTypeList,2);
+						element.setAttribute("Descriptions",
+								concatLinesWithTokenOfEOL(jTextAreaSystemTaskTypeDescriptions.getText()));
+						tableModelSystemTaskTypeList.
+						setValueAt(jTextAreaSystemTaskTypeDescriptions.getText(),selectedRow_jTableSystemTaskTypeList,3);
+					}
+				}
+			}
+			//
+			//Check change and update table type//
+			if (previousSelectedIndex_jTabbedPaneSystem == 3) {
 				if (selectedRow_jTableSystemTableTypeList >= 0) {
 					TableRowNumber tableRowNumber =
 						(TableRowNumber)tableModelSystemTableTypeList.getValueAt(selectedRow_jTableSystemTableTypeList,0);
@@ -20946,7 +21393,7 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Check change and update data type//
-			if (previousSelectedIndex_jTabbedPaneSystem == 3) {
+			if (previousSelectedIndex_jTabbedPaneSystem == 4) {
 				if (selectedRow_jTableSystemDataTypeList >= 0) {
 					TableRowNumber tableRowNumber =
 						(TableRowNumber)tableModelSystemDataTypeList.getValueAt(selectedRow_jTableSystemDataTypeList,0);
@@ -21012,7 +21459,7 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Check change and update function type//
-			if (previousSelectedIndex_jTabbedPaneSystem == 4) {
+			if (previousSelectedIndex_jTabbedPaneSystem == 5) {
 				if (selectedRow_jTableSystemFunctionTypeList >= 0) {
 					TableRowNumber tableRowNumber =
 						(TableRowNumber)tableModelSystemFunctionTypeList.getValueAt(selectedRow_jTableSystemFunctionTypeList,0);
@@ -21046,7 +21493,7 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Check change and update maintenance log//
-			if (previousSelectedIndex_jTabbedPaneSystem == 5) {
+			if (previousSelectedIndex_jTabbedPaneSystem == 6) {
 				if (selectedRow_jTableSystemMaintenanceLog >= 0) {
 					TableRowNumber tableRowNumber =
 						(TableRowNumber)tableModelSystemMaintenanceLog.getValueAt(selectedRow_jTableSystemMaintenanceLog,0);
@@ -21249,6 +21696,10 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaTaskDescriptions.getText()))) {
 				valueOfFieldsChanged = true;
 			}
+			XeadTreeNode taskTypeNode = (XeadTreeNode)sortableComboBoxModelTaskType.getSelectedItem();
+			if (taskTypeNode != null && !taskTypeNode.getElement().getAttribute("ID").equals(domNode_.getAttribute("TaskTypeID"))) {
+				valueOfFieldsChanged = true;
+			}
 			if (valueOfFieldsChanged) {
 				//
 				//Update DOM element//
@@ -21256,6 +21707,9 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("Event", jTextFieldTaskEvent.getText());
 				domNode_.setAttribute("SortKey", jTextFieldTaskSortKey.getText());
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaTaskDescriptions.getText()));
+				if (taskTypeNode != null) {
+					domNode_.setAttribute("TaskTypeID", taskTypeNode.getElement().getAttribute("ID"));
+				}
 				//
 				//Log node after modified//
 				xeadUndoManager.addLogAfterModified(this);
@@ -22757,7 +23211,7 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
-	 * Method to concat lines into a single string value with EOL mark
+	 * Method to concatenate lines into a single string value with EOL mark
 	 * @param originalString :original string value to be processed
 	 * @return String :string value of processed string
 	 */
@@ -22840,11 +23294,36 @@ public class Modeler extends JFrame {
 		return sentence;
 	}
 	/**
+	 * Method to convert single byte chars to double byte chars
+	 * @param originalString :original string value to be processed
+	 * @return String :string value of processed string
+	 */
+	static String convertSingleByteCharsToDoubleByteChars(String originalString) {
+		int diff = '‚`' - 'A';
+		String signs = "!#$%&()*+,-./:;<=>?@[]^_{|}";;
+		char[] cc = originalString.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		for (char c : cc) {
+			char newChar = c;
+			String wrkStr = String.valueOf(c);
+			if ((('A' <= c) && (c <= 'Z')) || (('a' <= c) && (c <= 'z'))
+					|| (('1' <= c) && (c <= '9')) || signs.contains(wrkStr)) {
+				newChar = (char) (c + diff);
+			//} else {
+			//	if (c == ' ') {
+			//		newChar = '@';
+			//	}
+			}
+			sb.append(newChar);
+		}
+		return sb.toString();
+	}
+	/**
 	 * Method to get String number
 	 * @param number :number to be formatted
 	 * @return String :formatted value
 	 */
-	String getFormatted4ByteString(int number) {
+	static String getFormatted4ByteString(int number) {
 		String formattedNumberString = "0000";
 		if (0 <= number && number < 10) {formattedNumberString = "000" + number;}
 		if (10 <= number && number < 100) {formattedNumberString = "00" + number;}
@@ -22857,7 +23336,7 @@ public class Modeler extends JFrame {
 	 * @param textpane :JTextpane where the caret is placed
 	 * @return Point :calculated position of caret
 	 */
-	Point getCaretPositionInText(JTextPane textpane) {
+	static Point getCaretPositionInText(JTextPane textpane) {
 		int rowNumber = 1;
 		Point caretPosition = new Point();
 		String text = textpane.getText().substring(0, textpane.getSelectionEnd());
@@ -22881,7 +23360,7 @@ public class Modeler extends JFrame {
 	 * @param point :caret position
 	 * @return int :logical position of caret
 	 */
-	int getPointPositionInText(JTextPane textpane, Point point) {
+	static int getPointPositionInText(JTextPane textpane, Point point) {
 		int position = 0;
 		int rowNumber = 1;
 		String wrkStr1 = "";
@@ -25380,6 +25859,91 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jTableSystemTaskTypeList in case Row Selection Changed
+	 * @param e :List Selection Event
+	 */
+	void jTableSystemTaskTypeList_valueChanged(ListSelectionEvent e) {
+		if (tableSystemTaskTypeListSelectChangeActivated) {
+			if (selectedRow_jTableSystemTaskTypeList != jTableSystemTaskTypeList.getSelectedRow()) {
+				//
+				//Update fields of the row previously selected and refresh list//
+				if (selectedRow_jTableSystemTaskTypeList > -1) {
+					currentMainTreeNode.updateFieldsForSystem();
+				}
+				selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.getSelectedRow();
+			}
+			//
+			//Setup fields of the row currently selected//
+			if (selectedRow_jTableSystemTaskTypeList >= 0) {
+				jTextFieldSystemTaskTypeSortKey.
+				setText((String)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList, 1));
+				jTextFieldSystemTaskTypeSortKey.setBackground(SystemColor.window);
+				jTextFieldSystemTaskTypeSortKey.setEditable(true);
+				jTextFieldSystemTaskTypeName.
+				setText((String)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList, 2));
+				jTextFieldSystemTaskTypeName.setBackground(SystemColor.window);
+				jTextFieldSystemTaskTypeName.setEditable(true);
+				jTextAreaSystemTaskTypeDescriptions.
+				setText((String)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList, 3));
+				jTextAreaSystemTaskTypeDescriptions.setBackground(SystemColor.window);
+				jTextAreaSystemTaskTypeDescriptions.setEditable(true);
+				TableRowNumber tableRowNumber = (TableRowNumber)tableModelSystemTaskTypeList.
+				getValueAt(selectedRow_jTableSystemTaskTypeList, 0);
+				//
+				//Clear SystemTaskTypeWhereUsedList//
+				if (tableModelSystemTaskTypeWhereUsedList.getRowCount() > 0) {
+					int rowCount = tableModelSystemTaskTypeWhereUsedList.getRowCount();
+					for (int j = 0; j < rowCount; j++) {tableModelSystemTaskTypeWhereUsedList.removeRow(0);}
+				}
+				//
+				//Add rows to SystemTaskTypeWhereUsedList//
+				int m = 0;
+				org.w3c.dom.Element element;
+				XeadTreeNode roleNode;
+				sortableDomElementListModel.removeAllElements();
+				NodeList nodeList = domDocument.getElementsByTagName("Task");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element = (org.w3c.dom.Element)nodeList.item(j);
+					if (element.getAttribute("TaskTypeID").equals(tableRowNumber.getElement().getAttribute("ID"))) {
+						sortableDomElementListModel.addElement((Object)element);
+					}
+				}
+				sortableDomElementListModel.sortElements();
+				for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
+					element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(j);
+					Object[] Cell = new Object[5];
+					m = m + 1;
+					Cell[0] =  new TableRowNumber(m, element);
+					Cell[1] = element.getAttribute("SortKey");
+					Cell[2] = element.getAttribute("Name");
+					roleNode = getSpecificXeadTreeNode("Role", element.getAttribute("RoleID"), null);
+					Cell[3] = roleNode.getElement().getAttribute("Name");
+					Cell[4] = element.getAttribute("Descriptions");
+					tableModelSystemTaskTypeWhereUsedList.addRow(Cell);
+				}
+			}
+		}
+		if (jTableSystemTaskTypeList.getSelectedRow() == -1) {
+			//
+			//Clear and lock edit-panel//
+			jTextFieldSystemTaskTypeName.setText("");
+			jTextFieldSystemTaskTypeName.setBackground(SystemColor.control);
+			jTextFieldSystemTaskTypeName.setEditable(false);
+			jTextFieldSystemTaskTypeSortKey.setText("");
+			jTextFieldSystemTaskTypeSortKey.setBackground(SystemColor.control);
+			jTextFieldSystemTaskTypeSortKey.setEditable(false);
+			jTextAreaSystemTaskTypeDescriptions.setText("");
+			jTextAreaSystemTaskTypeDescriptions.setBackground(SystemColor.control);
+			jTextAreaSystemTaskTypeDescriptions.setEditable(false);
+			//
+			//Clear WhereUsedList//
+			if (tableModelSystemTaskTypeWhereUsedList.getRowCount() > 0) {
+				int rowCount = tableModelSystemTaskTypeWhereUsedList.getRowCount();
+				for (int j = 0; j < rowCount; j++) {tableModelSystemTaskTypeWhereUsedList.removeRow(0);}
+			}
+		}
+	}
+	/**
 	 * Event Handler for jTableSystemTableTypeList in case Row Selection Changed
 	 * @param e :List Selection Event
 	 */
@@ -25745,12 +26309,32 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jScrollPaneSystemTaskTypeList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jScrollPaneSystemTaskTypeList_mouseClicked(MouseEvent e) {
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+			jTableSystemTaskTypeList.clearSelection();
+			showPopupMenuComponent(e);
+		}
+	}
+	/**
 	 * Event Handler for jScrollPaneSystemDepartmentWhereUsedList in case mouse clicked
 	 * @param e :Mouse Event
 	 */
 	void jScrollPaneSystemDepartmentWhereUsedList_mouseClicked(MouseEvent e) {
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 			jTableSystemDepartmentWhereUsedList.clearSelection();
+			showPopupMenuComponent(e);
+		}
+	}
+	/**
+	 * Event Handler for jScrollPaneSystemTaskTypeWhereUsedList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jScrollPaneSystemTaskTypeWhereUsedList_mouseClicked(MouseEvent e) {
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+			jTableSystemTaskTypeWhereUsedList.clearSelection();
 			showPopupMenuComponent(e);
 		}
 	}
@@ -25839,6 +26423,20 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jTableSystemTaskTypeList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jTableSystemTaskTypeList_mouseClicked(MouseEvent e) {
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+			currentMainTreeNode.updateFieldsForSystem();
+			xeadUndoManager.saveNodeBeforeModified(currentMainTreeNode);
+			//
+			selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.rowAtPoint(e.getPoint());
+			jTableSystemTaskTypeList.setRowSelectionInterval(selectedRow_jTableSystemTaskTypeList, selectedRow_jTableSystemTaskTypeList);
+			showPopupMenuComponent(e);
+		}
+	}
+	/**
 	 * Event Handler for jTableSystemTableTypeList in case mouse clicked
 	 * @param e :Mouse Event
 	 */
@@ -25912,6 +26510,12 @@ public class Modeler extends JFrame {
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemDepartmentWhereUsedList")) {
 			tableModel = tableModelSystemDepartmentWhereUsedList;
+		}
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
+			tableModel = tableModelSystemTaskTypeList;
+		}
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeWhereUsedList")) {
+			tableModel = tableModelSystemTaskTypeWhereUsedList;
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemTableTypeList")) {
 			tableModel = tableModelSystemTableTypeList;
@@ -26132,6 +26736,13 @@ public class Modeler extends JFrame {
 			res.getString("S1983") + "\n" +
 			res.getString("S1985");
 			container = jScrollPaneSystemDepartmentWhereUsedList;
+		}
+		//
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeWhereUsedList")) {
+			tipsText = res.getString("S1977") + "\n" +
+			res.getString("S1978") + "\n" +
+			res.getString("S1979");
+			container = jScrollPaneSystemTaskTypeWhereUsedList;
 		}
 		//
 		if (componentType_jPopupMenuComponent.equals("SystemTableTypeWhereUsedList")) {
@@ -26451,6 +27062,39 @@ public class Modeler extends JFrame {
 			jTableSystemDepartmentList.setRowSelectionInterval(selectedRow_jTableSystemDepartmentList, selectedRow_jTableSystemDepartmentList);
 		}
 		//
+		//Add TaskType//
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
+			//
+			informationOnThisPageChanged = true;
+			//
+			//Update DOM element//
+			newElement = domDocument.createElement("TaskType");
+			lastElement = getLastDomElementOfTheType("TaskType");
+			if (lastElement == null) {
+				id = 0;
+			} else {
+				id = Integer.parseInt(lastElement.getAttribute("ID"));
+			}
+			newElement.setAttribute("ID", Integer.toString(id + 1));
+			newElement.setAttribute("Name", res.getString("S2185"));
+			newElement.setAttribute("Descriptions", "");
+			newElement.setAttribute("SortKey", "");
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
+			Object[] Cell = new Object[4];
+			Cell[0] =  new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
+			Cell[1] = newElement.getAttribute("SortKey");
+			Cell[2] = newElement.getAttribute("Name");
+			Cell[3] = newElement.getAttribute("Descriptions");
+			tableModelSystemTaskTypeList.addRow(Cell);
+			selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.getRowCount() - 1;
+			jTableSystemTaskTypeList.setRowSelectionInterval(selectedRow_jTableSystemTaskTypeList, selectedRow_jTableSystemTaskTypeList);
+		}
+		//
 		//Add TableType//
 		if (componentType_jPopupMenuComponent.equals("SystemTableTypeList")) {
 			//
@@ -26739,7 +27383,7 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToPaste_actionPerformed(ActionEvent e) {
-		XeadTreeNode node;
+		//XeadTreeNode node;
 		org.w3c.dom.Node nextSiblingNode;
 		org.w3c.dom.Element element, lastElement, newElement, newElementChild1;
 		int id = 0;
@@ -26771,6 +27415,35 @@ public class Modeler extends JFrame {
 			tableModelSystemDepartmentList.addRow(Cell);
 			selectedRow_jTableSystemDepartmentList = jTableSystemDepartmentList.getRowCount() - 1;
 			jTableSystemDepartmentList.setRowSelectionInterval(selectedRow_jTableSystemDepartmentList, selectedRow_jTableSystemDepartmentList);
+		}
+		//
+		//Paste TaskType//
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
+			//
+			informationOnThisPageChanged = true;
+			//
+			//Update DOM element//
+			newElement = domDocument.createElement("TaskType");
+			lastElement = getLastDomElementOfTheType("TaskType");
+			if (lastElement == null) {
+				id = 0;
+			} else {
+				id = Integer.parseInt(lastElement.getAttribute("ID"));
+			}
+			newElement.setAttribute("ID", Integer.toString(id + 1));
+			newElement.setAttribute("Name", pastingDomElement.getAttribute("Name"));
+			newElement.setAttribute("Descriptions", pastingDomElement.getAttribute("Descriptions"));
+			newElement.setAttribute("SortKey", pastingDomElement.getAttribute("SortKey"));
+			nextSiblingNode = lastElement.getNextSibling();
+			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			Object[] Cell = new Object[4];
+			Cell[0] =  new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
+			Cell[1] = newElement.getAttribute("SortKey");
+			Cell[2] = newElement.getAttribute("Name");
+			Cell[3] = newElement.getAttribute("Descriptions");
+			tableModelSystemTaskTypeList.addRow(Cell);
+			selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.getRowCount() - 1;
+			jTableSystemTaskTypeList.setRowSelectionInterval(selectedRow_jTableSystemTaskTypeList, selectedRow_jTableSystemTaskTypeList);
 		}
 		//
 		//Paste TableType//
@@ -26926,6 +27599,7 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("ID", Integer.toString(id + 1));
 			newElement.setAttribute("Type", pastingDomElement.getAttribute("Type"));
 			newElement.setAttribute("Name", pastingDomElement.getAttribute("Name"));
+			newElement.setAttribute("NameExt", pastingDomElement.getAttribute("NameExt"));
 			newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
 			newElement.setAttribute("SlideNumber", pastingDomElement.getAttribute("SlideNumber"));
 			currentMainTreeNode.getElement().appendChild(newElement);
@@ -26936,7 +27610,7 @@ public class Modeler extends JFrame {
 		//Paste node of jTreeTaskActions//
 		if (componentType_jPopupMenuComponent.equals("TreeTaskActions")) {
 			//
-			//Update DOM element//
+			// Paste the specific action //
 			TreePath tp = jTreeTaskActions.getSelectionPath();
 			currentTaskActionTreeNode = (XeadTreeNode)tp.getLastPathComponent();
 			newElement = domDocument.createElement("TaskAction");
@@ -26948,13 +27622,14 @@ public class Modeler extends JFrame {
 				}
 				intSortKey = Integer.parseInt(lastChildNode.getElement().getAttribute("SortKey"));
 			}
-			newElement.setAttribute("SortKey", getFormatted4ByteString(intSortKey + 1));
+			intSortKey++;
+			newElement.setAttribute("SortKey", getFormatted4ByteString(intSortKey));
 			newElement.setAttribute("ExecuteIf", pastingDomElement.getAttribute("ExecuteIf"));
 			newElement.setAttribute("Label", pastingDomElement.getAttribute("Label"));
 			int level = Integer.parseInt(currentTaskActionTreeNode.getElement().getAttribute("IndentLevel"));
 			newElement.setAttribute("IndentLevel", Integer.toString(level + 1));
 			newElement.setAttribute("Descriptions", pastingDomElement.getAttribute("Descriptions"));
-			node = new XeadTreeNode("TaskAction", newElement);
+			//XeadTreeNode newActionNode = new XeadTreeNode("TaskAction", newElement);
 			//
 			NodeList functionList = pastingDomElement.getElementsByTagName("TaskFunctionIO");
 			for (int i = 0; i < functionList.getLength(); i++) {
@@ -26968,14 +27643,76 @@ public class Modeler extends JFrame {
 				newElement.appendChild(newElementChild1);
 			}
 			currentMainTreeNode.getElement().appendChild(newElement);
-			currentTaskActionTreeNode.add(node);
-			jTreeTaskActions.expandRow(jTreeTaskActions.getRowForPath(tp));
+
+			// Paste the sub-actions //
+			if (!isToCopySingleTaskAction) {
+				org.w3c.dom.Element subActionElement, subActionIOElement;
+				XeadTreeNode workNode;
+				int indentLevel, sortKey;
+				int count = 0;
+				int newElementIndentLevel = Integer.parseInt(newElement.getAttribute("IndentLevel"));
+				int newElementSortKey = Integer.parseInt(newElement.getAttribute("SortKey"));
+				int pastingDomElementIndentLevel = Integer.parseInt(pastingDomElement.getAttribute("IndentLevel"));
+				int pastingDomElementSortKey = Integer.parseInt(pastingDomElement.getAttribute("SortKey"));
+				org.w3c.dom.Element pastingDomParentElement = (org.w3c.dom.Element)pastingDomElement.getParentNode();
+				NodeList actionList = pastingDomParentElement.getElementsByTagName("TaskAction");
+				sortableXeadTreeNodeListModel.removeAllElements();
+				for (int i = 0; i < actionList.getLength(); i++) {
+					element = (org.w3c.dom.Element)actionList.item(i);
+					workNode = new XeadTreeNode("TaskAction",(org.w3c.dom.Element)actionList.item(i));
+					sortableXeadTreeNodeListModel.addElement((Object)workNode);
+				}
+				sortableXeadTreeNodeListModel.sortElements();
+				for (int i = 0; i < sortableXeadTreeNodeListModel.getSize(); i++) {
+					workNode = (XeadTreeNode)sortableXeadTreeNodeListModel.getElementAt(i);
+					sortKey = Integer.parseInt(workNode.getElement().getAttribute("SortKey"));
+					indentLevel = Integer.parseInt(workNode.getElement().getAttribute("IndentLevel"));
+					if (sortKey > pastingDomElementSortKey) {
+						if (indentLevel > pastingDomElementIndentLevel ) {
+							if (sortKey != newElementSortKey) {
+								count++;
+								if (count == 9) {
+									break;
+								}
+								subActionElement = domDocument.createElement("TaskAction");
+								intSortKey++;
+								subActionElement.setAttribute("SortKey", getFormatted4ByteString(intSortKey));
+								subActionElement.setAttribute("ExecuteIf", workNode.getElement().getAttribute("ExecuteIf"));
+								subActionElement.setAttribute("Label", workNode.getElement().getAttribute("Label"));
+								subActionElement.setAttribute("IndentLevel", Integer.toString(newElementIndentLevel + indentLevel - pastingDomElementIndentLevel));
+								subActionElement.setAttribute("Descriptions", workNode.getElement().getAttribute("Descriptions"));
+								//
+								functionList = workNode.getElement().getElementsByTagName("TaskFunctionIO");
+								for (int j = 0; j < functionList.getLength(); j++) {
+									element = (org.w3c.dom.Element)functionList.item(j);
+									subActionIOElement = domDocument.createElement("TaskFunctionIO");
+									subActionIOElement.setAttribute("FunctionID", element.getAttribute("FunctionID"));
+									subActionIOElement.setAttribute("IOID", element.getAttribute("IOID"));
+									subActionIOElement.setAttribute("IOIDSeq", element.getAttribute("IOIDSeq"));
+									subActionIOElement.setAttribute("Operations", element.getAttribute("Operations"));
+									subActionIOElement.setAttribute("SortKey", element.getAttribute("SortKey"));
+									subActionElement.appendChild(subActionIOElement);
+								}
+								currentMainTreeNode.getElement().appendChild(subActionElement);
+								//node.add(subActionNode);
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+			//
+			//currentTaskActionTreeNode.add(newActionNode);
+			//jTreeTaskActions.expandRow(jTreeTaskActions.getRowForPath(tp));
 			currentMainTreeNode.updateSortKeyOfTaskActionsInOrder(null, 0, 10);
 			//
 			//Log node after modified//
-			xeadUndoManager.addLogAfterModified(currentMainTreeNode);
+			//xeadUndoManager.addLogAfterModified(currentMainTreeNode);
 			//
-			jTreeTaskActions.updateUI();
+			//jTreeTaskActions.updateUI();
+			currentMainTreeNode.updateFields();
+			currentMainTreeNode.activateContentsPane();
 		}
 		//
 		//Paste IOPanelField//
@@ -27038,6 +27775,10 @@ public class Modeler extends JFrame {
 			tableRowNumber = (TableRowNumber)tableModelSystemDepartmentList.getValueAt(selectedRow_jTableSystemDepartmentList,0);
 			pastingDomElement = tableRowNumber.getElement();
 		}
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
+			tableRowNumber = (TableRowNumber)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList,0);
+			pastingDomElement = tableRowNumber.getElement();
+		}
 		if (componentType_jPopupMenuComponent.equals("SystemTableTypeList")) {
 			tableRowNumber = (TableRowNumber)tableModelSystemTableTypeList.getValueAt(selectedRow_jTableSystemTableTypeList,0);
 			pastingDomElement = tableRowNumber.getElement();
@@ -27070,6 +27811,15 @@ public class Modeler extends JFrame {
 			TreePath tp = jTreeTaskActions.getSelectionPath();
 			currentTaskActionTreeNode = (XeadTreeNode)tp.getLastPathComponent();
 			pastingDomElement = currentTaskActionTreeNode.getElement();
+			if (currentTaskActionTreeNode.getChildCount() > 0) {
+				isToCopySingleTaskAction = true;
+				Object[] bts = {"Yes", "No"};
+				int rtn = JOptionPane.showOptionDialog(jTreeTaskActions, res.getString("S800"),
+						res.getString("S801"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+				if (rtn == 0) {
+					isToCopySingleTaskAction = false;
+				}
+			}
 		}
 		if (componentType_jPopupMenuComponent.equals("SubsystemList")) {
 			tableRowNumber = (TableRowNumber)tableModelSubsystemList.getValueAt(selectedRow_jTableSubsystemList,0);
@@ -27225,6 +27975,23 @@ public class Modeler extends JFrame {
 					} else {
 						isDeleted = true;
 						tableRowNumber = (TableRowNumber)tableModelSystemDepartmentList.getValueAt(selectedRow_jTableSystemDepartmentList,0);
+						systemNode.getElement().removeChild(tableRowNumber.getElement());
+						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
+						currentMainTreeNode.activateContentsPane();
+					}
+				}
+			}
+			if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
+				table = jTableSystemTaskTypeList;
+				rowNumberDeleted = jTableSystemTaskTypeList.getSelectedRow();
+				if (tableModelSystemTaskTypeWhereUsedList.getRowCount() > 0) {
+					JOptionPane.showMessageDialog(jScrollPaneSystemTaskTypeList, res.getString("S2539"));
+				} else {
+					if (tableModelSystemTaskTypeList.getRowCount() <= 1) {
+						JOptionPane.showMessageDialog(jScrollPaneSystemTaskTypeList, res.getString("S2540"));
+					} else {
+						isDeleted = true;
+						tableRowNumber = (TableRowNumber)tableModelSystemTaskTypeList.getValueAt(selectedRow_jTableSystemTaskTypeList,0);
 						systemNode.getElement().removeChild(tableRowNumber.getElement());
 						xeadUndoManager.addLogAfterModified(currentMainTreeNode);
 						currentMainTreeNode.activateContentsPane();
@@ -28189,6 +28956,11 @@ public class Modeler extends JFrame {
 			tableRowNumber = (TableRowNumber)tableModelSystemDepartmentWhereUsedList.getValueAt(selectedRowNumber, 0);
 			targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getElement().getAttribute("ID"), null);
 		}
+		if (componentType_jPopupMenuComponent.equals("SystemTaskTypeWhereUsedList")) {
+			int selectedRowNumber = jTableSystemTaskTypeWhereUsedList.getSelectedRow();
+			tableRowNumber = (TableRowNumber)tableModelSystemTaskTypeWhereUsedList.getValueAt(selectedRowNumber, 0);
+			targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"), null);
+		}
 		if (componentType_jPopupMenuComponent.equals("SystemTableTypeWhereUsedList")) {
 			int selectedRowNumber = jTableSystemTableTypeWhereUsedList.getSelectedRow();
 			tableRowNumber = (TableRowNumber)tableModelSystemTableTypeWhereUsedList.getValueAt(selectedRowNumber, 0);
@@ -28375,6 +29147,22 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jTableSystemTaskTypeWhereUsedList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jTableSystemTaskTypeWhereUsedList_mouseClicked(MouseEvent e) {
+		if (e.getClickCount() >= 2 && jTableSystemTaskTypeWhereUsedList.getModel().getRowCount() > 0) {
+	    	componentType_jPopupMenuComponent = "SystemTaskTypeWhereUsedList";
+			jMenuItemComponentToJump_actionPerformed(null);
+		} else {
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+				int selectedRow = jTableSystemTaskTypeWhereUsedList.rowAtPoint(e.getPoint());
+				jTableSystemTaskTypeWhereUsedList.setRowSelectionInterval(selectedRow, selectedRow);
+				showPopupMenuComponent(e);
+			}
+		}
+	}
+	/**
 	 * Event Handler for jTableSystemTableTypeWhereUsedList in case mouse clicked
 	 * @param e :Mouse Event
 	 */
@@ -28520,6 +29308,47 @@ public class Modeler extends JFrame {
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 			showPopupMenuComponent(e);
 		}
+	}
+	/**
+	 * Event Handler for jListSubjectAreaWithThisTask in case Mouse Clicked
+	 * @param e :Mouse Event
+	 */
+	void jListSubjectAreaWithThisTask_mouseClicked(MouseEvent e) {
+	    Point p = e.getPoint();
+	    int index = jListSubjectAreaWithThisTask.locationToIndex(p);
+	    if (index > -1) {
+	    	XeadTreeNode targetNode = getSpecificXeadTreeNode("SubjectArea", subjectAreaIDList.get(index), null);
+	    	if (targetNode != null) {
+	    		TreePath tp = new TreePath(targetNode.getPath());
+	    		jTreeMain.setSelectionPath(tp);
+	    		Rectangle nodePos = jTreeMain.getPathBounds(tp);
+	    		if (nodePos != null) {
+	    			jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+	    		}
+	    		setupContentsPaneForTreeNodeSelected(targetNode, false);
+	    	}
+	    }
+	}
+	/**
+	 * Event Handler for jListSubjectAreaWithThisTask in case Mouse Exited
+	 * @param e :Mouse Event
+	 */
+	void jListSubjectAreaWithThisTask_mouseExited(MouseEvent e) {
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	/**
+	 * Event Handler for jListSubjectAreaWithThisTask in case Mouse Moved
+	 * @param e :Mouse Event
+	 */
+	void jListSubjectAreaWithThisTask_mouseMoved(MouseEvent e) {
+	    Point p = e.getPoint();
+	    int index = jListSubjectAreaWithThisTask.locationToIndex(p);
+	    if (index > -1) {
+			setCursor(htmlEditorKit.getLinkCursor());
+	    } else {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	    }
 	}
 	/**
 	 * Event Handler for jEditorPaneTaskFunctionIOImage in case mouse clicked
@@ -30541,6 +31370,15 @@ class Modeler_jTableSystemDepartmentList_listSelectionAdapter  implements ListSe
 		adaptee.jTableSystemDepartmentList_valueChanged(e);
 	}
 }
+class Modeler_jTableSystemTaskTypeList_listSelectionAdapter  implements ListSelectionListener {
+	Modeler adaptee;
+	Modeler_jTableSystemTaskTypeList_listSelectionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void valueChanged(ListSelectionEvent e) {
+		adaptee.jTableSystemTaskTypeList_valueChanged(e);
+	}
+}
 class Modeler_jTableSystemTableTypeList_listSelectionAdapter  implements ListSelectionListener {
 	Modeler adaptee;
 	Modeler_jTableSystemTableTypeList_listSelectionAdapter(Modeler adaptee) {
@@ -31461,6 +32299,16 @@ class Modeler_jScrollPaneSystemDepartmentList_mouseAdapter extends java.awt.even
 		adaptee.jScrollPaneSystemDepartmentList_mouseClicked(e);
 	}
 }
+class Modeler_jScrollPaneSystemTaskTypeList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+
+	Modeler_jScrollPaneSystemTaskTypeList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jScrollPaneSystemTaskTypeList_mouseClicked(e);
+	}
+}
 class Modeler_jScrollPaneSystemDepartmentWhereUsedList_mouseAdapter extends java.awt.event.MouseAdapter {
 	Modeler adaptee;
 
@@ -31469,6 +32317,16 @@ class Modeler_jScrollPaneSystemDepartmentWhereUsedList_mouseAdapter extends java
 	}
 	public void mouseClicked(MouseEvent e) {
 		adaptee.jScrollPaneSystemDepartmentWhereUsedList_mouseClicked(e);
+	}
+}
+class Modeler_jScrollPaneSystemTaskTypeWhereUsedList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+
+	Modeler_jScrollPaneSystemTaskTypeWhereUsedList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jScrollPaneSystemTaskTypeWhereUsedList_mouseClicked(e);
 	}
 }
 class Modeler_jScrollPaneSystemTableTypeList_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -31543,6 +32401,15 @@ class Modeler_jTableSystemDepartmentList_mouseAdapter extends java.awt.event.Mou
 		adaptee.jTableSystemDepartmentList_mouseClicked(e);
 	}
 }
+class Modeler_jTableSystemTaskTypeList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jTableSystemTaskTypeList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jTableSystemTaskTypeList_mouseClicked(e);
+	}
+}
 class Modeler_jTableSystemDepartmentWhereUsedList_mouseAdapter extends java.awt.event.MouseAdapter {
 	Modeler adaptee;
 	Modeler_jTableSystemDepartmentWhereUsedList_mouseAdapter(Modeler adaptee) {
@@ -31550,6 +32417,15 @@ class Modeler_jTableSystemDepartmentWhereUsedList_mouseAdapter extends java.awt.
 	}
 	public void mouseClicked(MouseEvent e) {
 		adaptee.jTableSystemDepartmentWhereUsedList_mouseClicked(e);
+	}
+}
+class Modeler_jTableSystemTaskTypeWhereUsedList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jTableSystemTaskTypeWhereUsedList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jTableSystemTaskTypeWhereUsedList_mouseClicked(e);
 	}
 }
 class Modeler_jTableSystemDataTypeList_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -32273,3 +33149,25 @@ class Modeler_TableKeyAdapter extends java.awt.event.KeyAdapter {
 		adaptee.jTableKeyReleased(e);
 	}
 }
+class Modeler_jListSubjectAreaWithThisTask_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jListSubjectAreaWithThisTask_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jListSubjectAreaWithThisTask_mouseClicked(e);
+	}
+	public void mouseExited(MouseEvent e) {
+		adaptee.jListSubjectAreaWithThisTask_mouseExited(e);
+	}
+}
+class Modeler_jListSubjectAreaWithThisTask_mouseMotionAdapter extends java.awt.event.MouseMotionAdapter {
+	Modeler adaptee;
+	Modeler_jListSubjectAreaWithThisTask_mouseMotionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseMoved(MouseEvent e) {
+		adaptee.jListSubjectAreaWithThisTask_mouseMoved(e);
+	}
+}
+

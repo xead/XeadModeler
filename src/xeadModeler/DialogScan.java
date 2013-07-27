@@ -75,6 +75,7 @@ public class DialogScan extends JDialog {
 	private JLabel jLabel3 = new JLabel();
 	private JCheckBox jCheckBoxSystem = new JCheckBox();
 	private JCheckBox jCheckBoxDepartment = new JCheckBox();
+	private JCheckBox jCheckBoxTaskType = new JCheckBox();
 	private JCheckBox jCheckBoxTableType = new JCheckBox();
 	private JCheckBox jCheckBoxDataType = new JCheckBox();
 	private JCheckBox jCheckBoxFunctionType = new JCheckBox();
@@ -176,23 +177,27 @@ public class DialogScan extends JDialog {
 		jCheckBoxDepartment.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxDepartment.setText(res.getString("DialogScan07"));
 		jCheckBoxDepartment.setSelected(true);
-		jCheckBoxTableType.setBounds(new Rectangle(352, 41, 125, 22));
+		jCheckBoxTaskType.setBounds(new Rectangle(352, 41, 125, 22));
+		jCheckBoxTaskType.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxTaskType.setText(res.getString("DialogScan26"));
+		jCheckBoxTaskType.setSelected(true);
+		jCheckBoxTableType.setBounds(new Rectangle(482, 41, 125, 22));
 		jCheckBoxTableType.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxTableType.setText(res.getString("DialogScan08"));
 		jCheckBoxTableType.setSelected(true);
-		jCheckBoxDataType.setBounds(new Rectangle(482, 41, 125, 22));
+		jCheckBoxDataType.setBounds(new Rectangle(92, 64, 125, 22));
 		jCheckBoxDataType.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxDataType.setText(res.getString("DialogScan09"));
 		jCheckBoxDataType.setSelected(true);
-		jCheckBoxFunctionType.setBounds(new Rectangle(612, 41, 125, 22));
+		jCheckBoxFunctionType.setBounds(new Rectangle(222, 64, 125, 22));
 		jCheckBoxFunctionType.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxFunctionType.setText(res.getString("DialogScan10"));
 		jCheckBoxFunctionType.setSelected(true);
-		jCheckBoxMaintenanceLog.setBounds(new Rectangle(742, 41, 125, 22));
+		jCheckBoxMaintenanceLog.setBounds(new Rectangle(352, 64, 125, 22));
 		jCheckBoxMaintenanceLog.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxMaintenanceLog.setText(res.getString("DialogScan11"));
 		jCheckBoxMaintenanceLog.setSelected(true);
-		jCheckBoxSubjectArea.setBounds(new Rectangle(92, 64, 125, 22));
+		jCheckBoxSubjectArea.setBounds(new Rectangle(482, 64, 125, 22));
 		jCheckBoxSubjectArea.setFont(new java.awt.Font("Dialog", 0, 12));
 		jCheckBoxSubjectArea.setText(res.getString("DialogScan12"));
 		jCheckBoxSubjectArea.setSelected(true);
@@ -239,6 +244,7 @@ public class DialogScan extends JDialog {
 		jPanelNorth.add(jLabel2, null);
 		jPanelNorth.add(jCheckBoxCaseSensitive, null);
 		jPanelNorth.add(jCheckBoxDepartment, null);
+		jPanelNorth.add(jCheckBoxTaskType, null);
 		jPanelNorth.add(jCheckBoxTableType, null);
 		jPanelNorth.add(jCheckBoxDataType, null);
 		jPanelNorth.add(jCheckBoxFunctionType, null);
@@ -415,6 +421,7 @@ public class DialogScan extends JDialog {
 		String roleID = "";
 		NodeList systemList = null;
 		NodeList departmentList = null;
+		NodeList taskTypeList = null;
 		NodeList tableTypeList = null;
 		NodeList dataTypeList = null;
 		NodeList functionTypeList = null;
@@ -470,6 +477,10 @@ public class DialogScan extends JDialog {
 			if (jCheckBoxDepartment.isSelected()) {
 				departmentList = frame_.domDocument.getElementsByTagName("Department");
 				countOfElementsToBeScanned += departmentList.getLength();
+			}
+			if (jCheckBoxTaskType.isSelected()) {
+				taskTypeList = frame_.domDocument.getElementsByTagName("TaskType");
+				countOfElementsToBeScanned += taskTypeList.getLength();
 			}
 			if (jCheckBoxTableType.isSelected()) {
 				tableTypeList = frame_.domDocument.getElementsByTagName("TableType");
@@ -585,6 +596,17 @@ public class DialogScan extends JDialog {
 					scanAttribute(element, "Department", "SortKey");
 					scanAttribute(element, "Department", "Name");
 					scanAttribute(element, "Department", "Descriptions");
+				}
+			}
+			if (jCheckBoxTaskType.isSelected()) {
+				for (int i = 0; i < taskTypeList.getLength(); i++) {
+					jProgressBar.setValue(jProgressBar.getValue() + 1);
+					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+					//
+					org.w3c.dom.Element element = (org.w3c.dom.Element)taskTypeList.item(i);
+					scanAttribute(element, "TaskType", "SortKey");
+					scanAttribute(element, "TaskType", "Name");
+					scanAttribute(element, "TaskType", "Descriptions");
 				}
 			}
 			if (jCheckBoxTableType.isSelected()) {
@@ -929,6 +951,9 @@ public class DialogScan extends JDialog {
 		}
 		if (elementType.equals("Department")) {
 			result = res.getString("DialogScan36");
+		}
+		if (elementType.equals("TaskType")) {
+			result = res.getString("DialogScan26");
 		}
 		if (elementType.equals("TableType")) {
 			result = res.getString("DialogScan37");
