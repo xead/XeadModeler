@@ -44,9 +44,20 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M53";
+	public static final String FULL_VERSION  = "V1.R3.M54";
+	// 54での変更点
+	//・業務フロー上のプロセスをダブルクリックすれば業務定義にジャンプするようにした
+	//・データモデル上のテーブルをダブルクリックすればテーブル定義にジャンプするようにした
+	//・業務定義上の入出力イメージをダブルクリックすれば機能定義にジャンプするようにした
+	//・走査ダイアログでの検索結果の名称にＩＤを含めるようにした
+	//・CRUD図等を出力するために、ツールメニューに「マトリックスリスト出力」を追加した
+	//・業務定義の入出力イメージ下部のラベルの長さをテキスト長に合わせるようにした
+	//・Undoの回数を無制限にするとともに、Undo情報を使って保守履歴の初期値を設定するようにした
+	//・業務タイプの組み込みの影響で一部のUndo操作がうまくいかなかったバグを修正した
+	//
 	// 53での変更点
 	//・業務タイプの影響で業務定義の更新ルーチンが異状終了することのあるバグを修正した
+	//
 	// 52での変更点
 	//・業務定義のイベントをブランクにすれば、業務フロー上の「爆発マーク」が表示されないようにした
 	//（Github上では1.3.51で反映済）

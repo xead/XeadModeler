@@ -51,9 +51,11 @@ import javax.swing.text.*;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
+
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -125,6 +127,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemToolTableList = new JMenuItem();
 	private JMenuItem jMenuItemToolFieldList = new JMenuItem();
 	private JMenuItem jMenuItemToolFunctionList = new JMenuItem();
+	private JMenuItem jMenuItemToolMatrixList = new JMenuItem();
 	private JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
 	private JMenuItem jMenuItemToolDocuments = new JMenuItem();
 	private JMenuItem jMenuItemToolJumpToURLPage = new JMenuItem();
@@ -211,6 +214,7 @@ public class Modeler extends JFrame {
 	/**
 	 * fields for Generating Documents
 	 */
+	private DialogMatrixList dialogMatrixList = new DialogMatrixList(this);
 	private DialogDocuments dialogDocuments = new DialogDocuments(this);
 	/**
 	 * fields for Importing
@@ -1474,6 +1478,8 @@ public class Modeler extends JFrame {
 		jMenuItemToolFieldList.addActionListener(new Modeler_jMenuItemToolFieldList_ActionAdapter(this));
 		jMenuItemToolFunctionList.setText(res.getString("S86"));
 		jMenuItemToolFunctionList.addActionListener(new Modeler_jMenuItemToolFunctionList_ActionAdapter(this));
+		jMenuItemToolMatrixList.setText(res.getString("S74"));
+		jMenuItemToolMatrixList.addActionListener(new Modeler_jMenuItemToolMatrixList_ActionAdapter(this));
 		jMenuItemToolCreateTableStatement.setText(res.getString("S87"));
 		jMenuItemToolCreateTableStatement.addActionListener(new Modeler_jMenuItemToolCreateTableStatement_ActionAdapter(this));
 		//jMenuItemToolTaskProtocolList.setText(res.getString("S88"));
@@ -1534,6 +1540,7 @@ public class Modeler extends JFrame {
 		jMenuTool.addSeparator();
 		jMenuTool.add(jMenuItemToolCreateTableStatement);
 		//jMenuTool.add(jMenuItemToolTaskProtocolList);
+		jMenuTool.add(jMenuItemToolMatrixList);
 		jMenuTool.add(jMenuItemToolDocuments);
 		jMenuTool.addSeparator();
 		jMenuTool.add(jMenuItemToolJumpToURLPage);
@@ -2288,9 +2295,9 @@ public class Modeler extends JFrame {
 		jLabelSystemMaintenanceLogSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemMaintenanceLogSortKey.setText(res.getString("S257"));
-		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(394, 12, 81, 15));
+		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(394, 12, 101, 15));
 		jTextFieldSystemMaintenanceLogSortKey.setFont(new java.awt.Font("SansSerif", 0, 12));
-		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(482, 9, 105, 22));
+		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(502, 9, 120, 22));
 		jLabelSystemMaintenanceLogDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -2629,7 +2636,7 @@ public class Modeler extends JFrame {
 		column2 = jTableSystemMaintenanceLog.getColumnModel().getColumn(2);
 		column3 = jTableSystemMaintenanceLog.getColumnModel().getColumn(3);
 		column0.setPreferredWidth(37);
-		column1.setPreferredWidth(80);
+		column1.setPreferredWidth(120);
 		column2.setPreferredWidth(100);
 		column3.setPreferredWidth(600);
 		column0.setCellRenderer(rendererAlignmentCenter);
@@ -7547,6 +7554,7 @@ public class Modeler extends JFrame {
 	String getStringValueOfDateTime(String timeFormat) {
 		String monthStr = "";
 		String dayStr = "";
+		String dotStr = "";
 		String hourStr = "";
 		String minStr = "";
 		String secStr = "";
@@ -7568,8 +7576,11 @@ public class Modeler extends JFrame {
 		} else {
 			dayStr = Integer.toString(day);
 		}
+		if (timeFormat.equals("withTimeAndDot")) {
+			dotStr = ".";
+		}
 		//
-		if (timeFormat.equals("withTime")) {
+		if (timeFormat.equals("withTime") || timeFormat.equals("withTimeAndDot")) {
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			if (hour < 10) {
 				hourStr = "0" + Integer.toString(hour);
@@ -7592,7 +7603,7 @@ public class Modeler extends JFrame {
 			}
 		}
 		//
-		returnValue = Integer.toString(year) + monthStr + dayStr + hourStr + minStr + secStr;
+		returnValue = Integer.toString(year) + monthStr + dayStr + dotStr + hourStr + minStr + secStr;
 		return returnValue;
 	}
 	/**
@@ -8105,6 +8116,15 @@ public class Modeler extends JFrame {
 			} catch (Exception ex4) {
 			}
 		}
+	}
+
+	/**
+	 * [Tool|Matrix List] Write Matrix List
+	 * @param e :Action Event
+	 */
+	void jMenuItemToolMatrixList_actionPerformed(ActionEvent e) {
+		currentMainTreeNode.updateFields();
+		dialogMatrixList.request(currentFileName);
 	}
 	/**
 	 * [Tool|Task List] Write Create Statement of SQL
@@ -10889,6 +10909,9 @@ public class Modeler extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 				adaptee.node_mouseReleased(e);
 			}
+			public void mouseClicked(MouseEvent e) {
+				adaptee.node_mouseClicked(e);
+			}
 			public void mouseEntered(MouseEvent e) {
 				adaptee.node_mouseEntered(e);
 			}
@@ -10944,6 +10967,10 @@ public class Modeler extends JFrame {
 			XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", dataflowNodeElement_.getAttribute("TaskID"), null);
 			TreePath tp = new TreePath(taskNode.getPath());
 			jTreeMain.setSelectionPath(tp);
+			Rectangle nodePos = jTreeMain.getPathBounds(tp);
+			if (nodePos != null) {
+				jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+			}
 			setupContentsPaneForTreeNodeSelected(taskNode, false);
 		}
 		//
@@ -11059,82 +11086,103 @@ public class Modeler extends JFrame {
 				} else {
 					int nodeRightEdgeLocation = 0;
 					int nodeBottomEdgeLocation = 0;
-					//
+
 					jPanelCanvas2.remove(jPanelMoveGuide);
 					this.setBorder(null);
-					//
-					//Shift key up//
-					if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
-						//
-						//Change position of the specific node//
-						this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-						nodeRightEdgeLocation = this.getNodeRightEdgeLocation();
-						nodeBottomEdgeLocation = this.getNodeBottomEdgeLocation();
-						//
-						//Update relationship lines//
-						for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
-							if (dataflowLineEditorArray.get(i).getNode1().equals(this)
-									|| dataflowLineEditorArray.get(i).getNode2().equals(this)) {
-								dataflowLineEditorArray.get(i).addArrows();
-							}
-						}
-						//
-						//Shift key down//
-					} else {
-						//
-						//Change position of all nodes//
-						int distanceX = e.getX() - mousePosX;
-						int distanceY = e.getY() - mousePosY;
-						Point originalPosition;
-						//
-						for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
-							//
+
+					Rectangle originalBounds = this.getBounds();
+					if (originalBounds.x != nodePosX ||originalBounds.y != nodePosY) {
+
+						//Shift key up//
+						if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
+
 							//Change position of the specific node//
-							originalPosition = dataflowNodeEditorArray.get(i).getLocation();
-							dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
-									originalPosition.x + distanceX,
-									originalPosition.y + distanceY,
-									dataflowNodeEditorArray.get(i).NODE_WIDTH,
-									dataflowNodeEditorArray.get(i).NODE_HEIGHT));
-							if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
-								nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
-							}
-							if (dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation() > nodeBottomEdgeLocation) {
-								nodeBottomEdgeLocation = dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation();
-							}
-							//
-							//Update DataflowLines//
-							for (int j = 0; j < dataflowLineEditorArray.size(); j++) {
-								if (dataflowLineEditorArray.get(j).getNode1().equals(dataflowNodeEditorArray.get(i))
-										|| dataflowLineEditorArray.get(j).getNode2().equals(dataflowNodeEditorArray.get(i))) {
-									dataflowLineEditorArray.get(j).addArrows();
+							this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
+							nodeRightEdgeLocation = this.getNodeRightEdgeLocation();
+							nodeBottomEdgeLocation = this.getNodeBottomEdgeLocation();
+
+							//Update relationship lines//
+							for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+								if (dataflowLineEditorArray.get(i).getNode1().equals(this)
+										|| dataflowLineEditorArray.get(i).getNode2().equals(this)) {
+									dataflowLineEditorArray.get(i).addArrows();
 								}
 							}
+						} else {
+							//else:Shift key down//
+
+							//Change position of all nodes//
+							int distanceX = e.getX() - mousePosX;
+							int distanceY = e.getY() - mousePosY;
+							Point originalPosition;
+
+							for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+
+								//Change position of the specific node//
+								originalPosition = dataflowNodeEditorArray.get(i).getLocation();
+								dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
+										originalPosition.x + distanceX,
+										originalPosition.y + distanceY,
+										dataflowNodeEditorArray.get(i).NODE_WIDTH,
+										dataflowNodeEditorArray.get(i).NODE_HEIGHT));
+								if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
+									nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
+								}
+								if (dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation() > nodeBottomEdgeLocation) {
+									nodeBottomEdgeLocation = dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation();
+								}
+
+								//Update DataflowLines//
+								for (int j = 0; j < dataflowLineEditorArray.size(); j++) {
+									if (dataflowLineEditorArray.get(j).getNode1().equals(dataflowNodeEditorArray.get(i))
+											|| dataflowLineEditorArray.get(j).getNode2().equals(dataflowNodeEditorArray.get(i))) {
+										dataflowLineEditorArray.get(j).addArrows();
+									}
+								}
+							}
+
+							//Move System Boundary//
+							int posX = dataflowBoundaryEditor.boundaryPosX + distanceX;
+							int posY = dataflowBoundaryEditor.boundaryPosY + distanceY;
+							int width = dataflowBoundaryEditor.boundaryWidth + 1;
+							int height = dataflowBoundaryEditor.boundaryHeight + 1;
+							dataflowBoundaryEditor.setBounds(posX, posY, width, height);
+							if (posX + width > nodeRightEdgeLocation) {
+								nodeRightEdgeLocation = posX + width;
+							}
+							if (posY + height > nodeBottomEdgeLocation) {
+								nodeBottomEdgeLocation = posY + height;
+							}
 						}
-						//
-						//Move System Boundary//
-						int posX = dataflowBoundaryEditor.boundaryPosX + distanceX;
-						int posY = dataflowBoundaryEditor.boundaryPosY + distanceY;
-						int width = dataflowBoundaryEditor.boundaryWidth + 1;
-						int height = dataflowBoundaryEditor.boundaryHeight + 1;
-						dataflowBoundaryEditor.setBounds(posX, posY, width, height);
-						if (posX + width > nodeRightEdgeLocation) {
-							nodeRightEdgeLocation = posX + width;
-						}
-						if (posY + height > nodeBottomEdgeLocation) {
-							nodeBottomEdgeLocation = posY + height;
-						}
+
+						//Resize jPanelCanvas1//
+						int panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
+						int panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
+						if (nodeRightEdgeLocation > panelWidth) {panelWidth = nodeRightEdgeLocation;}
+						if (nodeBottomEdgeLocation > panelHeight) {panelHeight = nodeBottomEdgeLocation;}
+						jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth, panelHeight));
+						jPanelSubjectAreaDataflowEditor1.repaint();
+
+						informationOnThisPageChanged = true;
 					}
-					//
-					//Resize jPanelCanvas1//
-					int panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
-					int panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
-					if (nodeRightEdgeLocation > panelWidth) {panelWidth = nodeRightEdgeLocation;}
-					if (nodeBottomEdgeLocation > panelHeight) {panelHeight = nodeBottomEdgeLocation;}
-					jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth, panelHeight));
-					jPanelSubjectAreaDataflowEditor1.repaint();
-					//
-					informationOnThisPageChanged = true;
+				}
+			}
+		}
+		//
+		private void node_mouseClicked(MouseEvent e) {
+			if (e.getClickCount() >= 2 && nodeType.equals("Process")) {
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", dataflowNodeElement_.getAttribute("TaskID"), null);
+					TreePath tp = new TreePath(taskNode.getPath());
+					jTreeMain.setSelectionPath(tp);
+					Rectangle nodePos = jTreeMain.getPathBounds(tp);
+					if (nodePos != null) {
+						jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+					}
+					setupContentsPaneForTreeNodeSelected(taskNode, false);
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		}
@@ -14001,6 +14049,9 @@ public class Modeler extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 				adaptee.jPanel2_mouseReleased(e);
 			}
+			public void mouseClicked(MouseEvent e) {
+				adaptee.jPanel2_mouseClicked(e);
+			}
 			public void mouseEntered(MouseEvent e) {
 				adaptee.jPanel2_mouseEntered(e);
 			}
@@ -14043,27 +14094,48 @@ public class Modeler extends JFrame {
 				jPanel1.setBorder(normalBorder);
 				jPanelCanvas.remove(jPanelMoveGuide);
 				//
-				//Shift key up//
-				if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
-					changePositionTo(boxPosX, boxPosY);
+				Rectangle originalBounds = this.getBounds();
+				if (originalBounds.x != boxPosX ||originalBounds.y != boxPosY) {
 					//
-					//Shift key down//
-				} else {
-					int distanceX = e.getX() - mousePosX;
-					int distanceY = e.getY() - mousePosY;
-					Point originalPosition;
-					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
-						if (datamodelEntityBoxArray.get(i).isShowOnModel()) {
-							originalPosition = datamodelEntityBoxArray.get(i).getBoxPositionPoint();
-							datamodelEntityBoxArray.get(i).changePositionTo(originalPosition.x + distanceX, originalPosition.y + distanceY);
+					//Shift key up//
+					if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0){
+						changePositionTo(boxPosX, boxPosY);
+					} else {
+						//else: Shift key down//
+						//
+						int distanceX = e.getX() - mousePosX;
+						int distanceY = e.getY() - mousePosY;
+						Point originalPosition;
+						for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+							if (datamodelEntityBoxArray.get(i).isShowOnModel()) {
+								originalPosition = datamodelEntityBoxArray.get(i).getBoxPositionPoint();
+								datamodelEntityBoxArray.get(i).changePositionTo(originalPosition.x + distanceX, originalPosition.y + distanceY);
+							}
 						}
 					}
+					//
+					informationOnThisPageChanged = true;
 				}
-				//
 				jPanelCanvas.updateUI();
-				informationOnThisPageChanged = true;
 			}
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		//
+		private void jPanel2_mouseClicked(MouseEvent e) {
+			if (e.getClickCount() >= 2) {
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					TreePath tp = new TreePath(tableNode_.getPath());
+					jTreeMain.setSelectionPath(tp);
+					Rectangle nodePos = jTreeMain.getPathBounds(tp);
+					if (nodePos != null) {
+						jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+					}
+					setupContentsPaneForTreeNodeSelected(tableNode_, false);
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+			}
 		}
 		//
 		public void changePositionTo(int posX, int posY) {
@@ -14179,6 +14251,10 @@ public class Modeler extends JFrame {
 		void jMenuItemEntityBoxJump_actionPerformed(ActionEvent e) {
 			TreePath tp = new TreePath(tableNode_.getPath());
 			jTreeMain.setSelectionPath(tp);
+			Rectangle nodePos = jTreeMain.getPathBounds(tp);
+			if (nodePos != null) {
+				jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+			}
 			setupContentsPaneForTreeNodeSelected(tableNode_, false);
 		}
 		//
@@ -14691,7 +14767,11 @@ public class Modeler extends JFrame {
 			}
 			return str;
 		}
-		//
+		
+		public String getNodeType() {
+			return nodeType_;
+		}
+
 		public String getName() {
 			String str = "";
 			//
@@ -14718,6 +14798,9 @@ public class Modeler extends JFrame {
 			}
 			if (nodeType_.equals("FunctionType")) {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+			}
+			if (nodeType_.equals("MaintenanceLog")) {
+				str = res.getString("S252");
 			}
 			//
 			if (nodeType_.equals("System")) {
@@ -14829,7 +14912,53 @@ public class Modeler extends JFrame {
 			//
 			return str;
 		}
-		//
+		
+		public String getNameAsOwnerNode() {
+			StringBuffer bf = new StringBuffer();
+			if (nodeType_.equals("TableList")
+					|| nodeType_.equals("TableFieldList")
+					|| nodeType_.equals("TableKeyList")
+					|| nodeType_.equals("FunctionList")) {
+				XeadTreeNode parentNode = (XeadTreeNode)this.getParent();
+				bf.append(res.getString("S3326"));
+				bf.append(parentNode.getName()); 
+				bf.append(res.getString("S3328"));
+			} else {
+				if (nodeType_.equals("Role")) {
+					bf.append(res.getString("S359"));
+				} else {
+					if (nodeType_.equals("SubjectAreaList")) {
+						bf.append(res.getString("S3385"));
+					} else {
+						if (nodeType_.equals("RoleList")) {
+							bf.append(res.getString("S339"));
+						} else {
+							if (nodeType_.equals("SubsystemList")) {
+								bf.append(res.getString("S413"));
+							} else {
+								bf.append(res.getString("S3326"));
+								bf.append(getName());
+								bf.append(res.getString("S3328"));
+							}
+						}
+					}
+				}
+			}
+			return bf.toString();
+		}
+		
+		public String getNameAsLoggedNode() {
+			StringBuffer bf = new StringBuffer();
+			if (nodeType_.equals("TableList")) {
+				bf.append(res.getString("S466"));
+			} else {
+				bf.append(res.getString("S3326"));
+				bf.append(getName());
+				bf.append(res.getString("S3327"));
+			}
+			return bf.toString();
+		}
+
 		public void showPopupMenu(Component com , int posX, int posY, org.w3c.dom.Element pastingElement) {
 			jPopupMenuXeadTreeNode.removeAll();
 			jMenuXeadTreeNodeAdd.removeAll();
@@ -16681,27 +16810,34 @@ public class Modeler extends JFrame {
 					}
 				}
 				if (previousSelectedIndex_jTabbedPaneSystem == 2) {
+					NodeList taskTypeList = systemNode.getElement().getElementsByTagName("TaskType");
+					for (int i = 0; i < taskTypeList.getLength(); i++) {
+						org.w3c.dom.Element taskTypeElementClone = (org.w3c.dom.Element)taskTypeList.item(i).cloneNode(true);
+						element.appendChild(taskTypeElementClone);
+					}
+				}
+				if (previousSelectedIndex_jTabbedPaneSystem == 3) {
 					NodeList tableTypeList = systemNode.getElement().getElementsByTagName("TableType");
 					for (int i = 0; i < tableTypeList.getLength(); i++) {
 						org.w3c.dom.Element tableTypeElementClone = (org.w3c.dom.Element)tableTypeList.item(i).cloneNode(true);
 						element.appendChild(tableTypeElementClone);
 					}
 				}
-				if (previousSelectedIndex_jTabbedPaneSystem == 3) {
+				if (previousSelectedIndex_jTabbedPaneSystem == 4) {
 					NodeList dataTypeList = systemNode.getElement().getElementsByTagName("DataType");
 					for (int i = 0; i < dataTypeList.getLength(); i++) {
 						org.w3c.dom.Element dataTypeElementClone = (org.w3c.dom.Element)dataTypeList.item(i).cloneNode(true);
 						element.appendChild(dataTypeElementClone);
 					}
 				}
-				if (previousSelectedIndex_jTabbedPaneSystem == 4) {
+				if (previousSelectedIndex_jTabbedPaneSystem == 5) {
 					NodeList functionTypeList = systemNode.getElement().getElementsByTagName("FunctionType");
 					for (int i = 0; i < functionTypeList.getLength(); i++) {
 						org.w3c.dom.Element functionTypeElementClone = (org.w3c.dom.Element)functionTypeList.item(i).cloneNode(true);
 						element.appendChild(functionTypeElementClone);
 					}
 				}
-				if (previousSelectedIndex_jTabbedPaneSystem == 5) {
+				if (previousSelectedIndex_jTabbedPaneSystem == 6) {
 					NodeList maintenanceLogList = systemNode.getElement().getElementsByTagName("MaintenanceLog");
 					for (int i = 0; i < maintenanceLogList.getLength(); i++) {
 						org.w3c.dom.Element maintenanceLogElementClone = (org.w3c.dom.Element)maintenanceLogList.item(i).cloneNode(true);
@@ -17637,7 +17773,8 @@ public class Modeler extends JFrame {
 							//jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
 							XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
 							jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 250, 15);
+							FontMetrics metrics = jLabelTaskFunctionIOSortKey.getFontMetrics(jLabelTaskFunctionIOSortKey.getFont());
+							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, metrics.stringWidth(jLabelTaskFunctionIOSortKey.getText()), 15);
 						}
 					}
 					//
@@ -20671,8 +20808,23 @@ public class Modeler extends JFrame {
 					}
 				}
 				//
-				//Replace TableType data//
+				//Replace Task Type data//
 				if (selectedIndex == 2) {
+					NodeList currentTaskTypeList = systemNode.getElement().getElementsByTagName("TaskType");
+					int rowNumber = currentTaskTypeList.getLength();
+					for (int i = 0; i < rowNumber; i++) {
+						systemNode.getElement().removeChild(currentTaskTypeList.item(0));
+					}
+					//
+					NodeList taskTypeList = oldElement.getElementsByTagName("TaskType");
+					rowNumber = taskTypeList.getLength();
+					for (int i = 0; i < rowNumber; i++) {
+						systemNode.getElement().appendChild(taskTypeList.item(i).cloneNode(true));
+					}
+				}
+				//
+				//Replace TableType data//
+				if (selectedIndex == 3) {
 					NodeList currentTableTypeList = systemNode.getElement().getElementsByTagName("TableType");
 					int rowNumber = currentTableTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20687,7 +20839,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace DataType data//
-				if (selectedIndex == 3) {
+				if (selectedIndex == 4) {
 					NodeList currentDataTypeList = systemNode.getElement().getElementsByTagName("DataType");
 					int rowNumber = currentDataTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20702,7 +20854,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace FunctionType data//
-				if (selectedIndex == 4) {
+				if (selectedIndex == 5) {
 					NodeList currentFunctionTypeList = systemNode.getElement().getElementsByTagName("FunctionType");
 					int rowNumber = currentFunctionTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20717,7 +20869,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace MaintenanceLog data//
-				if (selectedIndex == 5) {
+				if (selectedIndex == 6) {
 					NodeList currentMaintenanceLogList = systemNode.getElement().getElementsByTagName("MaintenanceLog");
 					int rowNumber = currentMaintenanceLogList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20967,8 +21119,23 @@ public class Modeler extends JFrame {
 					}
 				}
 				//
-				//Replace TableType data//
+				//Replace TaskType data//
 				if (selectedIndex == 2) {
+					NodeList currentTaskTypeList = systemNode.getElement().getElementsByTagName("TaskType");
+					int rowNumber = currentTaskTypeList.getLength();
+					for (int i = 0; i < rowNumber; i++) {
+						systemNode.getElement().removeChild(currentTaskTypeList.item(0));
+					}
+					//
+					NodeList taskTypeList = newElement.getElementsByTagName("TaskType");
+					rowNumber = taskTypeList.getLength();
+					for (int i = 0; i < rowNumber; i++) {
+						systemNode.getElement().appendChild(taskTypeList.item(i).cloneNode(true));
+					}
+				}
+				//
+				//Replace TableType data//
+				if (selectedIndex == 3) {
 					NodeList currentTableTypeList = systemNode.getElement().getElementsByTagName("TableType");
 					int rowNumber = currentTableTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20983,7 +21150,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace DataType data//
-				if (selectedIndex == 3) {
+				if (selectedIndex == 4) {
 					NodeList currentDataTypeList = systemNode.getElement().getElementsByTagName("DataType");
 					int rowNumber = currentDataTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -20998,7 +21165,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace FunctionType data//
-				if (selectedIndex == 4) {
+				if (selectedIndex == 5) {
 					NodeList currentFunctionTypeList = systemNode.getElement().getElementsByTagName("FunctionType");
 					int rowNumber = currentFunctionTypeList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -21013,7 +21180,7 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Replace MaintenanceLog data//
-				if (selectedIndex == 5) {
+				if (selectedIndex == 6) {
 					NodeList currentMaintenanceLogList = systemNode.getElement().getElementsByTagName("MaintenanceLog");
 					int rowNumber = currentMaintenanceLogList.getLength();
 					for (int i = 0; i < rowNumber; i++) {
@@ -22908,125 +23075,315 @@ public class Modeler extends JFrame {
 			return this;
 		}
 	}
+//	/**
+//	 * Class of Xead Undo Manager
+//	 */
+//	class XeadUndoManager {
+//		String[] actionArray = new String[1000];
+//		XeadTreeNode[] nodeArray = new XeadTreeNode[1000];
+//		XeadTreeNode[] ownerNodeArray = new XeadTreeNode[1000];
+//		org.w3c.dom.Element[] oldDomElementArray = new org.w3c.dom.Element[1000];
+//		org.w3c.dom.Element[] newDomElementArray = new org.w3c.dom.Element[1000];
+//		org.w3c.dom.Element savedDomElement;
+//		XeadTreeNode savedOwnerNode;
+//		int indexOfLastElement = 0;
+//		int indexOfRedoMax = -1;
+//		int indexOfLastUndo = -1;
+//		boolean undoRedoActionBeingExecuted = false;
+//
+//		void addLogOfAdd(XeadTreeNode node) {
+//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
+//				indexOfRedoMax = indexOfLastElement;
+//				indexOfLastUndo = indexOfLastElement;
+//
+//				actionArray[indexOfLastElement] = "Add";
+//				nodeArray[indexOfLastElement] = node;
+//				oldDomElementArray[indexOfLastElement] = null;
+//				newDomElementArray[indexOfLastElement] = null;
+//				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
+//				jMenuItemEditUndo.setEnabled(true);
+//				jMenuItemEditRedo.setEnabled(false);
+//
+//				changeState.setChanged(true);
+//				countUpIndex();
+//			}
+//		}
+//
+//		void addLogOfRemove(XeadTreeNode node) {
+//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
+//				indexOfRedoMax = indexOfLastElement;
+//				indexOfLastUndo = indexOfLastElement;
+//
+//				actionArray[indexOfLastElement] = "Remove";
+//				nodeArray[indexOfLastElement] = node;
+//				oldDomElementArray[indexOfLastElement] = null;
+//				newDomElementArray[indexOfLastElement] = null;
+//				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
+//				jMenuItemEditUndo.setEnabled(true);
+//				jMenuItemEditRedo.setEnabled(false);
+//
+//				changeState.setChanged(true);
+//				countUpIndex();
+//			}
+//		}
+//
+//		void saveNodeBeforeModified(XeadTreeNode node) {
+//			if (node.isUndoable()) {
+//				savedDomElement = node.getUndoRedoElement();
+//				savedOwnerNode = (XeadTreeNode)node.getParent();
+//			}
+//		}
+//
+//		void addLogAfterModified(XeadTreeNode node) {
+//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
+//				indexOfRedoMax = indexOfLastElement;
+//				indexOfLastUndo = indexOfLastElement;
+//
+//				actionArray[indexOfLastElement] = "Modify";
+//				nodeArray[indexOfLastElement] = node;
+//				oldDomElementArray[indexOfLastElement] = savedDomElement;
+//				newDomElementArray[indexOfLastElement] = node.getUndoRedoElement();
+//				ownerNodeArray[indexOfLastElement] = savedOwnerNode;
+//				jMenuItemEditUndo.setEnabled(true);
+//				jMenuItemEditRedo.setEnabled(false);
+//
+//				changeState.setChanged(true);
+//				countUpIndex();
+//			}
+//		}
+//
+//		void countUpIndex() {
+//			if (indexOfLastElement < 999) {
+//				indexOfLastElement = indexOfLastElement + 1;
+//			} else {
+//				for (int i = 0; i < 999; i++) {
+//					nodeArray[i] = nodeArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					ownerNodeArray[i] = ownerNodeArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					actionArray[i] = actionArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					oldDomElementArray[i] = oldDomElementArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					newDomElementArray[i] = newDomElementArray[i+1];
+//				}
+//				indexOfLastElement = 999;
+//			}
+//		}
+//
+//		void undo() {
+//			//////////////////////////////////////////////////////////////////////
+//			// This step is required even if executed twice eventually by       //
+//			// showing Edit Menu. Because usually Edit Menu is not used to undo //                    //
+//			//////////////////////////////////////////////////////////////////////
+//			currentMainTreeNode.updateFields();
+//
+//			undoRedoActionBeingExecuted = true;
+//			if (indexOfLastUndo > -1) {
+//				if (actionArray[indexOfLastUndo].equals("Add")) {
+//					nodeArray[indexOfLastUndo].undoAdd(ownerNodeArray[indexOfLastUndo]);
+//				}
+//				if (actionArray[indexOfLastUndo].equals("Modify")) {
+//					nodeArray[indexOfLastUndo].undoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
+//				}
+//				if (actionArray[indexOfLastUndo].equals("Remove")) {
+//					nodeArray[indexOfLastUndo].undoRemove(ownerNodeArray[indexOfLastUndo]);
+//				}
+//
+//				indexOfLastUndo = indexOfLastUndo - 1;
+//				if (indexOfLastUndo == -1) {
+//					jMenuItemEditUndo.setEnabled(false);
+//					changeState.setChanged(false);
+//				}
+//				indexOfLastElement = indexOfLastUndo + 1;
+//				jMenuItemEditRedo.setEnabled(true);
+//			}
+//			undoRedoActionBeingExecuted = false;
+//			jTreeMain.updateUI();
+//		}
+//
+//		void redo() {
+//			undoRedoActionBeingExecuted = true;
+//			if (indexOfLastUndo < indexOfRedoMax) {
+//				indexOfLastUndo = indexOfLastUndo + 1;
+//
+//				if (actionArray[indexOfLastUndo].equals("Add")) {
+//					nodeArray[indexOfLastUndo].redoAdd(ownerNodeArray[indexOfLastUndo]);
+//				}
+//				if (actionArray[indexOfLastUndo].equals("Modify")) {
+//					nodeArray[indexOfLastUndo].redoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
+//				}
+//				if (actionArray[indexOfLastUndo].equals("Remove")) {
+//					nodeArray[indexOfLastUndo].redoRemove(ownerNodeArray[indexOfLastUndo]);
+//				}
+//
+//				if (indexOfLastUndo >= indexOfRedoMax) {
+//					jMenuItemEditRedo.setEnabled(false);
+//				}
+//				changeState.setChanged(true);
+//				indexOfLastElement = indexOfLastUndo + 1;
+//				jMenuItemEditUndo.setEnabled(true);
+//			}
+//			undoRedoActionBeingExecuted = false;
+//			jTreeMain.updateUI();
+//		}
+//
+//		void resetLog() {
+//			indexOfLastUndo = -1;
+//			indexOfLastElement = 0;
+//			jMenuItemEditUndo.setEnabled(false);
+//			jMenuItemEditRedo.setEnabled(false);
+//		}
+//
+//		String getText() {
+//			StringBuffer bf = new StringBuffer();
+//			for (int i = 0; i < indexOfLastElement; i++) {
+//				bf.append("- ");
+//				if (ownerNodeArray[i] != null) {
+//					bf.append(ownerNodeArray[i].getNameAsOwnerNode());
+//					bf.append(" : ");
+//				}
+//				bf.append(nodeArray[i].getNameAsLoggedNode());
+//				if (actionArray[i].equals("Add")) {
+//					bf.append(res.getString("S10"));
+//				}
+//				if (actionArray[i].equals("Modify")) {
+//					bf.append(res.getString("S11"));
+//				}
+//				if (actionArray[i].equals("Remove")) {
+//					bf.append(res.getString("S12"));
+//				}
+//				bf.append("\n");
+//			}
+//			return bf.toString();
+//		}
+//	}
 	/**
 	 * Class of Xead Undo Manager
 	 */
 	class XeadUndoManager {
-		String[] actionArray = new String[100];
-		XeadTreeNode[] nodeArray = new XeadTreeNode[100];
-		XeadTreeNode[] ownerNodeArray = new XeadTreeNode[100];
-		org.w3c.dom.Element[] oldDomElementArray = new org.w3c.dom.Element[100];
-		org.w3c.dom.Element[] newDomElementArray = new org.w3c.dom.Element[100];
+		ArrayList<String> actionArray = new ArrayList<String>();
+		ArrayList<XeadTreeNode> nodeArray = new ArrayList<XeadTreeNode>();
+		ArrayList<XeadTreeNode> ownerNodeArray = new ArrayList<XeadTreeNode>();
+		ArrayList<org.w3c.dom.Element> oldDomElementArray = new ArrayList<org.w3c.dom.Element>();
+		ArrayList<org.w3c.dom.Element> newDomElementArray = new ArrayList<org.w3c.dom.Element>();
 		org.w3c.dom.Element savedDomElement;
 		XeadTreeNode savedOwnerNode;
 		int indexOfLastElement = 0;
 		int indexOfRedoMax = -1;
 		int indexOfLastUndo = -1;
 		boolean undoRedoActionBeingExecuted = false;
-		//
+
 		void addLogOfAdd(XeadTreeNode node) {
 			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
 				indexOfRedoMax = indexOfLastElement;
 				indexOfLastUndo = indexOfLastElement;
-				//
-				actionArray[indexOfLastElement] = "Add";
-				nodeArray[indexOfLastElement] = node;
-				oldDomElementArray[indexOfLastElement] = null;
-				newDomElementArray[indexOfLastElement] = null;
-				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
+
+				//actionArray[indexOfLastElement] = "Add";
+				actionArray.add(indexOfLastElement, "Add");
+				nodeArray.add(indexOfLastElement, node);
+				oldDomElementArray.add(indexOfLastElement, null);
+				newDomElementArray.add(indexOfLastElement, null);
+				ownerNodeArray.add(indexOfLastElement, (XeadTreeNode)node.getParent());
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
-				//
+
 				changeState.setChanged(true);
-				countUpIndex();
+				//countUpIndex();
+				indexOfLastElement++;
 			}
 		}
-		//
+
 		void addLogOfRemove(XeadTreeNode node) {
 			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
 				indexOfRedoMax = indexOfLastElement;
 				indexOfLastUndo = indexOfLastElement;
-				//
-				actionArray[indexOfLastElement] = "Remove";
-				nodeArray[indexOfLastElement] = node;
-				oldDomElementArray[indexOfLastElement] = null;
-				newDomElementArray[indexOfLastElement] = null;
-				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
+
+				actionArray.add(indexOfLastElement, "Remove");
+				nodeArray.add(indexOfLastElement, node);
+				oldDomElementArray.add(indexOfLastElement, null);
+				newDomElementArray.add(indexOfLastElement, null);
+				ownerNodeArray.add(indexOfLastElement, (XeadTreeNode)node.getParent());
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
-				//
+
 				changeState.setChanged(true);
-				countUpIndex();
+				//countUpIndex();
+				indexOfLastElement++;
 			}
 		}
-		//
+
 		void saveNodeBeforeModified(XeadTreeNode node) {
 			if (node.isUndoable()) {
 				savedDomElement = node.getUndoRedoElement();
 				savedOwnerNode = (XeadTreeNode)node.getParent();
 			}
 		}
-		//
+
 		void addLogAfterModified(XeadTreeNode node) {
 			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
 				indexOfRedoMax = indexOfLastElement;
 				indexOfLastUndo = indexOfLastElement;
-				//
-				actionArray[indexOfLastElement] = "Modify";
-				nodeArray[indexOfLastElement] = node;
-				oldDomElementArray[indexOfLastElement] = savedDomElement;
-				newDomElementArray[indexOfLastElement] = node.getUndoRedoElement();
-				ownerNodeArray[indexOfLastElement] = savedOwnerNode;
+
+				actionArray.add(indexOfLastElement, "Modify");
+				nodeArray.add(indexOfLastElement, node);
+				oldDomElementArray.add(indexOfLastElement, savedDomElement);
+				newDomElementArray.add(indexOfLastElement, node.getUndoRedoElement());
+				ownerNodeArray.add(indexOfLastElement, savedOwnerNode);
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
-				//
+
 				changeState.setChanged(true);
-				countUpIndex();
+				//countUpIndex();
+				indexOfLastElement++;
 			}
 		}
-		//
-		void countUpIndex() {
-			if (indexOfLastElement < 99) {
-				indexOfLastElement = indexOfLastElement + 1;
-			} else {
-				for (int i = 0; i < 99; i++) {
-					nodeArray[i] = nodeArray[i+1];
-				}
-				for (int i = 0; i < 99; i++) {
-					ownerNodeArray[i] = ownerNodeArray[i+1];
-				}
-				for (int i = 0; i < 99; i++) {
-					actionArray[i] = actionArray[i+1];
-				}
-				for (int i = 0; i < 99; i++) {
-					oldDomElementArray[i] = oldDomElementArray[i+1];
-				}
-				for (int i = 0; i < 99; i++) {
-					newDomElementArray[i] = newDomElementArray[i+1];
-				}
-				indexOfLastElement = 99;
-			}
-		}
-		//
+
+//		void countUpIndex() {
+//			if (indexOfLastElement < 999) {
+//				indexOfLastElement = indexOfLastElement + 1;
+//			} else {
+//				for (int i = 0; i < 999; i++) {
+//					nodeArray[i] = nodeArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					ownerNodeArray[i] = ownerNodeArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					actionArray[i] = actionArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					oldDomElementArray[i] = oldDomElementArray[i+1];
+//				}
+//				for (int i = 0; i < 999; i++) {
+//					newDomElementArray[i] = newDomElementArray[i+1];
+//				}
+//				indexOfLastElement = 999;
+//			}
+//		}
+
 		void undo() {
 			//////////////////////////////////////////////////////////////////////
 			// This step is required even if executed twice eventually by       //
 			// showing Edit Menu. Because usually Edit Menu is not used to undo //                    //
 			//////////////////////////////////////////////////////////////////////
-			currentMainTreeNode.updateFields();
-			//
+			//currentMainTreeNode.updateFields();
+
 			undoRedoActionBeingExecuted = true;
 			if (indexOfLastUndo > -1) {
-				if (actionArray[indexOfLastUndo].equals("Add")) {
-					nodeArray[indexOfLastUndo].undoAdd(ownerNodeArray[indexOfLastUndo]);
+				if (actionArray.get(indexOfLastUndo).equals("Add")) {
+					nodeArray.get(indexOfLastUndo).undoAdd(ownerNodeArray.get(indexOfLastUndo));
 				}
-				if (actionArray[indexOfLastUndo].equals("Modify")) {
-					nodeArray[indexOfLastUndo].undoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
+				if (actionArray.get(indexOfLastUndo).equals("Modify")) {
+					nodeArray.get(indexOfLastUndo).undoModify(oldDomElementArray.get(indexOfLastUndo), newDomElementArray.get(indexOfLastUndo));
 				}
-				if (actionArray[indexOfLastUndo].equals("Remove")) {
-					nodeArray[indexOfLastUndo].undoRemove(ownerNodeArray[indexOfLastUndo]);
+				if (actionArray.get(indexOfLastUndo).equals("Remove")) {
+					nodeArray.get(indexOfLastUndo).undoRemove(ownerNodeArray.get(indexOfLastUndo));
 				}
-				//
 				indexOfLastUndo = indexOfLastUndo - 1;
 				if (indexOfLastUndo == -1) {
 					jMenuItemEditUndo.setEnabled(false);
@@ -23038,22 +23395,22 @@ public class Modeler extends JFrame {
 			undoRedoActionBeingExecuted = false;
 			jTreeMain.updateUI();
 		}
-		//
+
 		void redo() {
 			undoRedoActionBeingExecuted = true;
 			if (indexOfLastUndo < indexOfRedoMax) {
 				indexOfLastUndo = indexOfLastUndo + 1;
-				//
-				if (actionArray[indexOfLastUndo].equals("Add")) {
-					nodeArray[indexOfLastUndo].redoAdd(ownerNodeArray[indexOfLastUndo]);
+
+				if (actionArray.get(indexOfLastUndo).equals("Add")) {
+					nodeArray.get(indexOfLastUndo).redoAdd(ownerNodeArray.get(indexOfLastUndo));
 				}
-				if (actionArray[indexOfLastUndo].equals("Modify")) {
-					nodeArray[indexOfLastUndo].redoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
+				if (actionArray.get(indexOfLastUndo).equals("Modify")) {
+					nodeArray.get(indexOfLastUndo).redoModify(oldDomElementArray.get(indexOfLastUndo), newDomElementArray.get(indexOfLastUndo));
 				}
-				if (actionArray[indexOfLastUndo].equals("Remove")) {
-					nodeArray[indexOfLastUndo].redoRemove(ownerNodeArray[indexOfLastUndo]);
+				if (actionArray.get(indexOfLastUndo).equals("Remove")) {
+					nodeArray.get(indexOfLastUndo).redoRemove(ownerNodeArray.get(indexOfLastUndo));
 				}
-				//
+
 				if (indexOfLastUndo >= indexOfRedoMax) {
 					jMenuItemEditRedo.setEnabled(false);
 				}
@@ -23064,12 +23421,59 @@ public class Modeler extends JFrame {
 			undoRedoActionBeingExecuted = false;
 			jTreeMain.updateUI();
 		}
-		//
+
 		void resetLog() {
 			indexOfLastUndo = -1;
 			indexOfLastElement = 0;
 			jMenuItemEditUndo.setEnabled(false);
 			jMenuItemEditRedo.setEnabled(false);
+		}
+
+		String getText() {
+			StringBuffer bf = new StringBuffer();
+			for (int i = 0; i < indexOfLastElement; i++) {
+				bf.append(res.getString("S3319"));
+				if (nodeArray.get(i).getNodeType().equals("System")) {
+					int selectedIndex = Integer.parseInt(oldDomElementArray.get(i).getAttribute("SelectedIndex"));
+					if (selectedIndex == 0) {
+						bf.append(res.getString("S195"));
+					}
+					if (selectedIndex == 1) {
+						bf.append(res.getString("S196"));
+					}
+					if (selectedIndex == 2) {
+						bf.append(res.getString("S209"));
+					}
+					if (selectedIndex == 3) {
+						bf.append(res.getString("S216"));
+					}
+					if (selectedIndex == 4) {
+						bf.append(res.getString("S206"));
+					}
+					if (selectedIndex == 5) {
+						bf.append(res.getString("S242"));
+					}
+					if (selectedIndex == 6) {
+						bf.append(res.getString("S252"));
+					}
+				} else {
+					if (ownerNodeArray.get(i) != null) {
+						bf.append(ownerNodeArray.get(i).getNameAsOwnerNode());
+					}
+					bf.append(nodeArray.get(i).getNameAsLoggedNode());
+				}
+				if (actionArray.get(i).equals("Add")) {
+					bf.append(res.getString("S10"));
+				}
+				if (actionArray.get(i).equals("Modify")) {
+					bf.append(res.getString("S11"));
+				}
+				if (actionArray.get(i).equals("Remove")) {
+					bf.append(res.getString("S12"));
+				}
+				bf.append("\n");
+			}
+			return bf.toString();
 		}
 	}
 	/**
@@ -27205,8 +27609,8 @@ public class Modeler extends JFrame {
 			}
 			newElement.setAttribute("ID", Integer.toString(id + 1));
 			newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
-			newElement.setAttribute("Descriptions", "");
-			newElement.setAttribute("SortKey", getStringValueOfDateTime("withoutTime"));
+			newElement.setAttribute("Descriptions", xeadUndoManager.getText());
+			newElement.setAttribute("SortKey", getStringValueOfDateTime("withTimeAndDot"));
 			nextSiblingNode = lastElement.getNextSibling();
 			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
 			Object[] Cell = new Object[4];
@@ -29298,6 +29702,24 @@ public class Modeler extends JFrame {
 	void jTextPaneTaskFunctionIOImage_mouseClicked(MouseEvent e) {
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 			showPopupMenuComponent(e);
+		} else {
+			if (e.getClickCount() >= 2) {
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					org.w3c.dom.Element taskFunctionIOElement = getElementOfCurrentTabTaskFunctionIO();
+					XeadTreeNode targetNode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"),
+							taskFunctionIOElement.getAttribute("IOID"));
+					TreePath tp = new TreePath(targetNode.getPath());
+					jTreeMain.setSelectionPath(tp);
+					Rectangle nodePos = jTreeMain.getPathBounds(tp);
+					if (nodePos != null) {
+						jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+					}
+					setupContentsPaneForTreeNodeSelected(targetNode, false);
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+			}
 		}
 	}
 	/**
@@ -30957,6 +31379,15 @@ class Modeler_jMenuItemToolFunctionList_ActionAdapter implements ActionListener 
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemToolFunctionList_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemToolMatrixList_ActionAdapter implements ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemToolMatrixList_ActionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemToolMatrixList_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemToolCreateTableStatement_ActionAdapter implements ActionListener {

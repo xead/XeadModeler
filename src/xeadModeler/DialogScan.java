@@ -226,9 +226,9 @@ public class DialogScan extends JDialog {
 		jCheckBoxFunction.setText(res.getString("DialogScan17"));
 		jCheckBoxFunction.addChangeListener(new DialogScan_jCheckBoxFunction_changeAdapter(this));
 		jCheckBoxFunction.setSelected(true);
-		jComboBoxRoles.setBounds(new Rectangle(487, 85, 170, 21));
+		jComboBoxRoles.setBounds(new Rectangle(487, 87, 170, 20));
 		jComboBoxRoles.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxSubsystems.setBounds(new Rectangle(487, 110, 170, 21));
+		jComboBoxSubsystems.setBounds(new Rectangle(487, 112, 170, 20));
 		jComboBoxSubsystems.setFont(new java.awt.Font("Dialog", 0, 12));
 		jButtonStartScan.setBounds(new Rectangle(720, 93, 90, 30));
 		jButtonStartScan.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -455,6 +455,9 @@ public class DialogScan extends JDialog {
 				int rowCount = tableModelScanResult.getRowCount();
 				for (int i = 0; i < rowCount; i++) {tableModelScanResult.removeRow(0);}
 			}
+			jButtonReplaceAllSelected.setEnabled(false);
+			checkBoxHeaderRenderer.setSelected(false);
+			jTableScanResult.getTableHeader().repaint();   
 			//
 			//Get ID of Role and Subsystem if they are specified to be scanned;
 			if (jComboBoxSubsystems.getSelectedIndex() != 0) {
@@ -885,7 +888,6 @@ public class DialogScan extends JDialog {
 				jButtonGenerateListData.setEnabled(true);
 			} else {
 				jTextPaneScanDetail.setText(res.getString("DialogScan34"));
-				jButtonReplaceAllSelected.setEnabled(false);
 				jButtonGenerateListData.setEnabled(false);
 			}
 		} finally {
@@ -1105,7 +1107,7 @@ public class DialogScan extends JDialog {
 		NodeList workList = null;
 		String workString = "";
 		org.w3c.dom.Element workElement1, workElement2, workElement3;
-		String itemName =  element.getAttribute("Name");
+		String itemName =  element.getAttribute("Name") + "(" + element.getAttribute("SortKey") + ")";
 		//
 		if (elementType.equals("MaintenanceLog")) {
 			itemName = element.getAttribute("Headder");
@@ -1114,18 +1116,28 @@ public class DialogScan extends JDialog {
 		if (elementType.equals("DataflowNode")) {
 			workElement1 = (org.w3c.dom.Element)element.getParentNode();
 			if (element.getAttribute("NameExt").equals("")) {
-				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+				itemName = workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name");
 			} else {
-				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name") + "&" + element.getAttribute("NameExt");
+				itemName = workElement1.getAttribute("Name") +
+				"(" + workElement1.getAttribute("SortKey") + ")" +
+				" + " + element.getAttribute("Name") +
+				"&" + element.getAttribute("NameExt");
 			}
 		}
 		//
 		if (elementType.equals("DataflowLine")) {
 			workElement1 = (org.w3c.dom.Element)element.getParentNode();
 			if (element.getAttribute("NameExt").equals("")) {
-				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+				itemName = workElement1.getAttribute("Name") +
+				"(" + workElement1.getAttribute("SortKey") + ")" +
+				" + " + element.getAttribute("Name");
 			} else {
-				itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name") + "&" + element.getAttribute("NameExt");
+				itemName = workElement1.getAttribute("Name") +
+				"(" + workElement1.getAttribute("SortKey") + ")" +
+				" + " + element.getAttribute("Name") +
+				"&" + element.getAttribute("NameExt");
 			}
 		}
 		//
@@ -1134,7 +1146,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement1 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("RoleID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1146,7 +1161,11 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("RoleID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name") + " + " + element.getAttribute("Label");
+					itemName = workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Label");
 					break;
 				}
 			}
@@ -1160,7 +1179,11 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement2.getAttribute("RoleID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") + " + " + workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Label");
+					itemName = workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")" +
+					" + " + workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Label");
 					break;
 				}
 			}
@@ -1169,7 +1192,9 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("FunctionID").equals(workElement3.getAttribute("ID"))) {
-					itemName = itemName + " + " + workElement3.getAttribute("Name");
+					itemName = itemName + " + " +
+					workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1181,7 +1206,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("TableID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") + " + " + workElement2.getAttribute("Name");
+					itemName = workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1192,7 +1220,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement1 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1204,7 +1235,12 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("Alias") + ")";
 					break;
 				}
 			}
@@ -1217,17 +1253,17 @@ public class DialogScan extends JDialog {
 				workElement1 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("Table1ID").equals(workElement1.getAttribute("ID"))) {
 					if (workString.equals("")) {
-						workString = workElement1.getAttribute("Name");
+						workString = workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
 					} else {
-						workString = workString + " + " + workElement1.getAttribute("Name");
+						workString = workString + " + " + workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
 						break;
 					}
 				}
 				if (element.getAttribute("Table2ID").equals(workElement1.getAttribute("ID"))) {
 					if (workString.equals("")) {
-						workString = workElement1.getAttribute("Name");
+						workString = workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
 					} else {
-						workString = workString + " + " + workElement1.getAttribute("Name");
+						workString = workString + " + " + workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
 						break;
 					}
 				}
@@ -1240,7 +1276,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement1 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1253,7 +1292,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name");
+					itemName = workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1262,7 +1304,9 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("FunctionID").equals(workElement3.getAttribute("ID"))) {
-					itemName = itemName + " + " + workElement3.getAttribute("Name");
+					itemName = itemName + " + " +
+					workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1275,7 +1319,12 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1289,7 +1338,14 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement2.getAttribute("SubsystemID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") + " + " + workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name") + " + " + element.getAttribute("Name");
+					itemName = workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")" +
+					" + " + workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")" +
+					" + " + element.getAttribute("Name") +
+					"(" + element.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1302,7 +1358,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") + " + " + workElement1.getAttribute("Name");
+					itemName = workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")" +
+					" + " + workElement1.getAttribute("Name") +
+					"(" + workElement1.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1311,7 +1370,9 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("TableID").equals(workElement2.getAttribute("ID"))) {
-					itemName = itemName + " + " + workElement2.getAttribute("Name");
+					itemName = itemName + " + " +
+					workElement2.getAttribute("Name") +
+					"(" + workElement2.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1325,7 +1386,10 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement2.getAttribute("SubsystemID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") + " + " + workElement2.getAttribute("Name");
+					itemName = workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")" +
+					" + " + workElement2.getAttribute("Name") + 
+					"(" + workElement2.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1335,7 +1399,9 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (workElement1.getAttribute("TableID").equals(workElement3.getAttribute("ID"))) {
-					itemName = itemName + " + " + workElement3.getAttribute("Name");
+					itemName = itemName + " + " +
+					workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("SortKey") + ")";
 					break;
 				}
 			}
@@ -1344,7 +1410,9 @@ public class DialogScan extends JDialog {
 			for (int m = 0; m < workList.getLength(); m++) {
 				workElement3 = (org.w3c.dom.Element)workList.item(m);
 				if (element.getAttribute("FieldID").equals(workElement3.getAttribute("ID"))) {
-					itemName = itemName + " + " + workElement3.getAttribute("Name");
+					itemName = itemName + " + " +
+					workElement3.getAttribute("Name") +
+					"(" + workElement3.getAttribute("Alias") + ")";
 					break;
 				}
 			}
