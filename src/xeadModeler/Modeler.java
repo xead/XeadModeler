@@ -6902,9 +6902,8 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemImportXEAD_actionPerformed(ActionEvent e) {
-		int rtn1 = 0;
-		int rtn2 = 0;
-		//
+		int rtn1 = 0; int rtn2 = 0;
+
 		currentMainTreeNode.updateFields();
 		if (changeState.isChanged()) {
 			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
@@ -6916,6 +6915,7 @@ public class Modeler extends JFrame {
 				changeState.setChanged(false);
 			}
 		}
+
 		if (rtn1 == 0) {
 			String name = specifyNameOfExistingFile(res.getString("S1120"), "xead");
 			if (!name.equals("")) {
@@ -6924,84 +6924,21 @@ public class Modeler extends JFrame {
 					Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
 					rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
 							res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-					//
-					//Save changes//
-					//
-					if (rtn2 == 0) {
-						saveFileWithCurrentFileName();
-						xeadUndoManager.resetLog();
-						changeState.setChanged(false);
-					}
-					//
-					//Save changes as other name//
-					//
-					if (rtn2 == 1) {
-						name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
-						if (!name.equals("")) {
-							currentFileName = name;
-							this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
-							saveFileWithCurrentFileName();
-							changeState.setChanged(false);
-							xeadUndoManager.resetLog();
-						}
-					}
-					//
-					//Setup MainTreeNode//
-					//
-					if (rtn2 == 0 || rtn2 == 1) {
-						try {
-							setupMainTreeModelWithCurrentFileName();
-						}
-						catch(Exception exception) {
-							exception.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-	}
-	/**
-	 * [File|Import CreateTable Statements]
-	 * @param e :Action Event
-	 */
-	void jMenuItemImportSQL_actionPerformed(ActionEvent e) {
-		int rtn1 = 0;
-		int rtn2 = 0;
-		//
-		currentMainTreeNode.updateFields();
-		if (changeState.isChanged()) {
-			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
-			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1116"),
-					res.getString("S1118"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-			if (rtn1 == 0) {
-				saveFileWithCurrentFileName();
-				xeadUndoManager.resetLog();
-				changeState.setChanged(false);
-			}
-		}
-		if (rtn1 == 0) {
-			String name = specifyNameOfExistingFile(res.getString("S1121"), "txt,sql");
-			if (!name.equals("")) {
-				//
-				File file = new File(name);
-				if (file.exists()) {
-					//
-					String importResult = dialogImportSQL.request(name);
-					if (!importResult.equals("")) {
-						Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
-						rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
-								res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-						//
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+						////////////////
 						//Save changes//
-						//
+						////////////////
 						if (rtn2 == 0) {
 							saveFileWithCurrentFileName();
 							xeadUndoManager.resetLog();
 							changeState.setChanged(false);
 						}
-						//
+
+						//////////////////////////////
 						//Save changes as other name//
-						//
+						//////////////////////////////
 						if (rtn2 == 1) {
 							name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
 							if (!name.equals("")) {
@@ -7012,16 +6949,88 @@ public class Modeler extends JFrame {
 								xeadUndoManager.resetLog();
 							}
 						}
-						//
+
+						//////////////////////
 						//Setup MainTreeNode//
-						//
-						if (rtn2 == 0 || rtn2 == 1) {
-							try {
-								setupMainTreeModelWithCurrentFileName();
+						//////////////////////
+						setupMainTreeModelWithCurrentFileName();
+
+					} catch(Exception exception) {
+						exception.printStackTrace();
+					} finally {
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * [File|Import CreateTable Statements]
+	 * @param e :Action Event
+	 */
+	void jMenuItemImportSQL_actionPerformed(ActionEvent e) {
+		int rtn1 = 0; int rtn2 = 0;
+
+		currentMainTreeNode.updateFields();
+		if (changeState.isChanged()) {
+			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
+			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1116"),
+					res.getString("S1118"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn1 == 0) {
+				saveFileWithCurrentFileName();
+				xeadUndoManager.resetLog();
+				changeState.setChanged(false);
+			}
+		}
+
+		if (rtn1 == 0) {
+			String name = specifyNameOfExistingFile(res.getString("S1121"), "txt,sql");
+			if (!name.equals("")) {
+
+				File file = new File(name);
+				if (file.exists()) {
+
+					String importResult = dialogImportSQL.request(name);
+					if (!importResult.equals("")) {
+						Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
+						rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
+								res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+						try {
+							setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+							////////////////
+							//Save changes//
+							////////////////
+							if (rtn2 == 0) {
+								saveFileWithCurrentFileName();
+								xeadUndoManager.resetLog();
+								changeState.setChanged(false);
 							}
-							catch(Exception exception) {
-								exception.printStackTrace();
+
+							//////////////////////////////
+							//Save changes as other name//
+							//////////////////////////////
+							if (rtn2 == 1) {
+								name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
+								if (!name.equals("")) {
+									currentFileName = name;
+									this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
+									saveFileWithCurrentFileName();
+									changeState.setChanged(false);
+									xeadUndoManager.resetLog();
+								}
 							}
+
+							//////////////////////
+							//Setup MainTreeNode//
+							//////////////////////
+							setupMainTreeModelWithCurrentFileName();
+
+						} catch(Exception exception) {
+							exception.printStackTrace();
+						} finally {
+							setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						}
 					}
 				} else {
@@ -7030,6 +7039,7 @@ public class Modeler extends JFrame {
 			}
 		}
 	}
+
 	/**
 	 * [File|Save]
 	 * @param e :Action Event
@@ -7554,7 +7564,7 @@ public class Modeler extends JFrame {
 	String getStringValueOfDateTime(String timeFormat) {
 		String monthStr = "";
 		String dayStr = "";
-		String dotStr = "";
+		String underbar = "";
 		String hourStr = "";
 		String minStr = "";
 		String secStr = "";
@@ -7576,11 +7586,11 @@ public class Modeler extends JFrame {
 		} else {
 			dayStr = Integer.toString(day);
 		}
-		if (timeFormat.equals("withTimeAndDot")) {
-			dotStr = ".";
+		if (timeFormat.equals("withUnderbarAndTime")) {
+			underbar = "_";
 		}
 		//
-		if (timeFormat.equals("withTime") || timeFormat.equals("withTimeAndDot")) {
+		if (timeFormat.equals("withTime") || timeFormat.equals("withUnderbarAndTime")) {
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			if (hour < 10) {
 				hourStr = "0" + Integer.toString(hour);
@@ -7603,7 +7613,7 @@ public class Modeler extends JFrame {
 			}
 		}
 		//
-		returnValue = Integer.toString(year) + monthStr + dayStr + dotStr + hourStr + minStr + secStr;
+		returnValue = Integer.toString(year) + monthStr + dayStr + underbar + hourStr + minStr + secStr;
 		return returnValue;
 	}
 	/**
@@ -8621,6 +8631,7 @@ public class Modeler extends JFrame {
 		createStatement = new CreateStatement(statement,warningHasOccured);
 		return createStatement;
 	}
+
 //	/**
 //	 * [Tool|Task Protocol List] Output Task protocol
 //	 * @param e :Action Event
@@ -8720,6 +8731,7 @@ public class Modeler extends JFrame {
 //			} catch (Exception ex4) {}
 //		}
 //	}
+
 	/**
 	 * [Tool|Documents] Write Documents for tables and functions
 	 * @param e :Action Event
@@ -8728,6 +8740,7 @@ public class Modeler extends JFrame {
 		currentMainTreeNode.updateFields();
 		dialogDocuments.request(currentFileName);
 	}
+
 	/**
 	 * [Tool|Jump to URL] Jump to Page of URL where mouse is pointing
 	 * @param e :Action Event
@@ -8757,6 +8770,7 @@ public class Modeler extends JFrame {
 		}
 		urlString = "";
 	}
+
 	/**
 	 * [Help|Help] Launch Browser to open Index.html(Help file)
 	 * @param e :Action Event
@@ -8778,6 +8792,7 @@ public class Modeler extends JFrame {
 			JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S1628") + helpFile.getPath() + res.getString("S1629"));
 		}
 	}
+
 	/**
 	 * [Help|About]
 	 * @param e :Action Event
@@ -8792,14 +8807,14 @@ public class Modeler extends JFrame {
 		dlg.pack();
 		dlg.setVisible(true);
 	}
+
 	/**
-	 * [Scan|Scan]
+	 * [Scan|Scan string]
 	 * @param e :Action Event
 	 */
 	void jMenuItemScanString_actionPerformed(ActionEvent e) {
-		int rtn1 = 0;
-		int rtn2 = 0;
-		//
+		int rtn1 = 0; int rtn2 = 0;
+
 		currentMainTreeNode.updateFields();
 		if (changeState.isChanged()) {
 			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
@@ -8811,46 +8826,53 @@ public class Modeler extends JFrame {
 				changeState.setChanged(false);
 			}
 		}
-		//
+
 		if (rtn1 == 0) {
 			boolean scanAndUpdated = dialogScan.request();
 			if (scanAndUpdated) {
 				Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
 				rtn2 = JOptionPane.showOptionDialog(this, res.getString("S1001"),
 						res.getString("S1000"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-				//
-				//Save changes//
-				//
-				if (rtn2 == 0) {
-					saveFileWithCurrentFileName();
-					xeadUndoManager.resetLog();
-					changeState.setChanged(false);
-				}
-				//
-				//Save changes as other name//
-				//
-				if (rtn2 == 1) {
-					String name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
-					if (!name.equals("")) {
-						currentFileName = name;
-						this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
-						saveFileWithCurrentFileName();
-						changeState.setChanged(false);
-						xeadUndoManager.resetLog();
-					}
-				}
-				//
-				//Setup MainTreeNode//
-				//
 				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+					////////////////
+					//Save changes//
+					////////////////
+					if (rtn2 == 0) {
+						saveFileWithCurrentFileName();
+						xeadUndoManager.resetLog();
+						changeState.setChanged(false);
+					}
+
+					//////////////////////////////
+					//Save changes as other name//
+					//////////////////////////////
+					if (rtn2 == 1) {
+						String name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
+						if (!name.equals("")) {
+							currentFileName = name;
+							this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
+							saveFileWithCurrentFileName();
+							changeState.setChanged(false);
+							xeadUndoManager.resetLog();
+						}
+					}
+
+					//////////////////////
+					//Setup MainTreeNode//
+					//////////////////////
 					setupMainTreeModelWithCurrentFileName();
-				}
-				catch(Exception exception) {
+
+				} catch(Exception exception) {
 					exception.printStackTrace();
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		}
 	}
+
 	/**
 	 * [Scan|Set Bookmark1]
 	 * @param e :Action Event
@@ -9642,15 +9664,24 @@ public class Modeler extends JFrame {
 				if (strwork.equals("")) {
 					jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 				} else {
-					//jPanelMouseActionSensor.setToolTipText("<html>" + substringLinesWithTokenOfEOL(strwork, "<br>"));
-					jPanelMouseActionSensor.setToolTipText(getFirstSentence(strwork));
+					if ((strwork.getBytes().length) == strwork.length()) {
+						strwork = getLayoutedString(strwork, 40, "<br>");
+					} else {
+						strwork = getLayoutedString(strwork, 20, "<br>");
+					}
+					jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 				}
 			} else {
 				String strwork = dataflowNodeElement_.getAttribute("Descriptions");
 				if (strwork.equals("")) {
 					jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 				} else {
-					jPanelMouseActionSensor.setToolTipText("<html>" + substringLinesWithTokenOfEOL(strwork, "<br>"));
+					if ((strwork.getBytes().length) == strwork.length()) {
+						strwork = getLayoutedString(strwork, 40, "<br>");
+					} else {
+						strwork = getLayoutedString(strwork, 20, "<br>");
+					}
+					jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 				}
 			}
 			if (nodeType.equals("Subject")) {
@@ -13510,7 +13541,12 @@ public class Modeler extends JFrame {
 			if (strwork.equals("")) {
 				jPanel2.setToolTipText(res.getString("S586"));
 			} else {
-				jPanel2.setToolTipText(getFirstSentence(strwork));
+				if ((strwork.getBytes().length) == strwork.length()) {
+					strwork = getLayoutedString(strwork, 40, "<br>");
+				} else {
+					strwork = getLayoutedString(strwork, 20, "<br>");
+				}
+				jPanel2.setToolTipText("<html>" + strwork);
 			}
 		 	//
 			jLabelName.setFont(new java.awt.Font("SansSerif", 0, 12));
@@ -13749,36 +13785,33 @@ public class Modeler extends JFrame {
 				setForeground(Color.black);
 				//
 				// Setup ToolTipText //
+				String zenkaku, wrkStr = "";
 				StringBuffer strbf = new StringBuffer("<html>");
 				String strwork = elementNode_.getElement().getAttribute("Alias");
 				if (!strwork.equals("")) {
 					strbf.append(strwork);
-					//strbf.append("<br>");
 				}
-				//				 //XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", elementNode_.getElement().getAttribute("DataTypeID"), null);
-				//				 org.w3c.dom.Element dataTypeElement = getSpecificXeadElement("DataType", elementNode_.getElement().getAttribute("DataTypeID"));
-				//				 if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-				//					 strbf.append(dataTypeElement.getAttribute("Name") + "("
-				//					 + dataTypeElement.getAttribute("Length") + ")");
-				//				 } else {
-				//					 strbf.append(dataTypeElement.getAttribute("Name") + "("
-				//					 + dataTypeElement.getAttribute("Length") + "."
-				//					 + dataTypeElement.getAttribute("Decimal") + ")");
-				//				 }
-				//				 strbf.append("<br>");
 				org.w3c.dom.Element dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
+				strbf.append(" " + dataTypeElement.getAttribute("Name"));
 				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-					strbf.append(" " + dataTypeElement.getAttribute("Name") + "("
-							+ dataTypeElement.getAttribute("Length") + ")");
+					wrkStr = dataTypeElement.getAttribute("Length");
 				} else {
-					strbf.append(" " + dataTypeElement.getAttribute("Name") + "("
-							+ dataTypeElement.getAttribute("Length") + "."
-							+ dataTypeElement.getAttribute("Decimal") + ")");
+					wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+				}
+				zenkaku = getZenkakuOfHankaku(wrkStr);
+				if (!dataTypeElement.getAttribute("Name").contains(wrkStr)
+						&& !dataTypeElement.getAttribute("Name").contains(zenkaku)) {
+					strbf.append("(" + wrkStr + ")");
 				}
 				strwork = elementNode_.getElement().getAttribute("Descriptions");
 				if (!strwork.equals("")) {
 					strbf.append("<br>");
-					strbf.append(substringLinesWithTokenOfEOL(strwork, "<br>"));
+					if ((strwork.getBytes().length) == strwork.length()) {
+						strwork = getLayoutedString(strwork, 40, "<br>");
+					} else {
+						strwork = getLayoutedString(strwork, 20, "<br>");
+					}
+					strbf.append(strwork);
 				}
 				if (strbf.toString().equals("<html>")) {
 					setToolTipText(res.getString("S586"));
@@ -14569,42 +14602,54 @@ public class Modeler extends JFrame {
 			double scaleRateHeight;
 			Border borderSaved;
 			Color  colorSaved;
-			//Rectangle rectText;
-			String wrkStr = "";
-			FontMetrics fm = g2.getFontMetrics();
-			String lang = Locale.getDefault().getLanguage();
+			Font fontSaved;
+//			Rectangle rectText;
+//			String wrkStr = "";
+//			FontMetrics fm = g2.getFontMetrics();
+//			String lang = Locale.getDefault().getLanguage();
 			//
 			g2.translate(fmt.getImageableX(),fmt.getImageableY());
-			g2.setFont(new java.awt.Font("SansSerif", 0, 12));
-			if (name.equals("")) {
-				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321");
-			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
-			} else {
-				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321");
-			//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
-			}
-			if (lang.equals("ja")) {
-				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
-			}
-			g2.drawString(wrkStr, 0, fm.getMaxAscent());
-//			if (!name2.equals("")) {
-//				if (lang.equals("ja")) {
-//					name2 = convertSingleByteCharsToDoubleByteChars(name2);
-//				}
-//				rectText = fm.getStringBounds(name2, g2).getBounds();
-//				g2.drawString(name2, (int)fmt.getImageableWidth() - rectText.width - 30, fm.getMaxAscent());
-//			}
+			borderSaved = jLabelSubtitle.getBorder();
+			colorSaved = jLabelSubtitle.getBackground();
+			fontSaved = jLabelSubtitle.getFont();
+			jLabelSubtitle.setBorder(null);
+			jLabelSubtitle.setBackground(Color.white);
+			jLabelSubtitle.setFont(new java.awt.Font("SansSerif", 0, 12));
+			jLabelSubtitle.print(g2);
+			jLabelSubtitle.setBorder(borderSaved);
+			jLabelSubtitle.setBackground(colorSaved);
+			jLabelSubtitle.setFont(fontSaved);
 			//
-			g2.setFont(new java.awt.Font("SansSerif", 0, 9));
-			wrkStr = res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime");
-			//g2.drawString(res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime"), 0, (int)fmt.getImageableHeight());
-			if (lang.equals("ja")) {
-				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
-			}
-			g2.drawString(wrkStr, 0, (int)fmt.getImageableHeight());
-//			wrkStr = getStringValueOfDateTime("withoutTime");
-//			rectText = fm.getStringBounds(wrkStr, g2).getBounds();
-//			g2.drawString(wrkStr, (int)fmt.getImageableWidth() - rectText.width - 30, (int)fmt.getImageableHeight());
+//			g2.setFont(new java.awt.Font("SansSerif", 0, 12));
+//			if (name.equals("")) {
+//				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321");
+//				//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
+//			} else {
+//				wrkStr = res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321");
+//				//	g2.drawString(res.getString("S3320") + jLabelSubtitle.getText() + " - " + name + res.getString("S3321"), 0, jLabelSubtitle.getHeight());
+//			}
+//			if (lang.equals("ja")) {
+//				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
+//			}
+//			g2.drawString(wrkStr, 0, fm.getMaxAscent());
+////			if (!name2.equals("")) {
+////				if (lang.equals("ja")) {
+////					name2 = convertSingleByteCharsToDoubleByteChars(name2);
+////				}
+////				rectText = fm.getStringBounds(name2, g2).getBounds();
+////				g2.drawString(name2, (int)fmt.getImageableWidth() - rectText.width - 30, fm.getMaxAscent());
+////			}
+//			//
+//			g2.setFont(new java.awt.Font("SansSerif", 0, 9));
+//			wrkStr = res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime");
+//			//g2.drawString(res.getString("S3326") + systemName + res.getString("S3327") + getStringValueOfDateTime("withoutTime"), 0, (int)fmt.getImageableHeight());
+//			if (lang.equals("ja")) {
+//				wrkStr = convertSingleByteCharsToDoubleByteChars(wrkStr);
+//			}
+//			g2.drawString(wrkStr, 0, (int)fmt.getImageableHeight());
+//			//			wrkStr = getStringValueOfDateTime("withoutTime");
+//			//			rectText = fm.getStringBounds(wrkStr, g2).getBounds();
+//			//			g2.drawString(wrkStr, (int)fmt.getImageableWidth() - rectText.width - 30, (int)fmt.getImageableHeight());
 			g2.translate(0, jLabelSubtitle.getHeight() + 3);
 			//
 			panelWidth = jPanel.getWidth();
@@ -14627,7 +14672,8 @@ public class Modeler extends JFrame {
 				colorSaved = jPanel.getBackground();
 				//
 				inPrintMode = true;
-				jPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				//jPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				jPanel.setBorder(null);
 				jPanel.setBackground(Color.white);
 				dataflowBoundaryEditor.updateColors();
 				for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
@@ -14656,7 +14702,8 @@ public class Modeler extends JFrame {
 				colorSaved = jPanel.getBackground();
 				//
 				inPrintMode = true;
-				jPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				//jPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				jPanel.setBorder(null);
 				jPanel.setBackground(Color.white);
 				for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 					datamodelEntityBoxArray.get(i).updateColors();
@@ -18373,6 +18420,8 @@ public class Modeler extends JFrame {
 		private String activateContentsPaneForTableFieldList() {
 			org.w3c.dom.Element element, dataTypeElement;
 			XeadTreeNode node;
+			String wrkStr = "";
+			String zenkaku = "";
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent().getParent().getParent()).getName() + " - "
 					+ ((XeadTreeNode)this.getParent().getParent().getParent()).getName() + " - "
@@ -18399,7 +18448,6 @@ public class Modeler extends JFrame {
 				element = (org.w3c.dom.Element)node.getElement();
 				Object[] Cell = new Object[9];
 				Cell[0] =  new TableRowNumber(i+1, element);
-				//Cell[1] = node.getElement().getAttribute("Alias");
 				if (node.isPrimaryKeyField()) {
 					Cell[1] = "<html><strong>" + node.getElement().getAttribute("Alias");
 					Cell[2] = "<html><strong>" + node.getElement().getAttribute("Name"); 
@@ -18416,25 +18464,19 @@ public class Modeler extends JFrame {
 				if (node.getElement().getAttribute("AttributeType").equals("DERIVABLE")) {
 					Cell[3] = res.getString("S4917");
 				}
-//				XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node.getElement().getAttribute("DataTypeID"), null);
-//				org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
-//				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-//					Cell[4] = dataTypeElement.getAttribute("Name") + "("
-//					+ dataTypeElement.getAttribute("Length") + ")";
-//				} else {
-//					Cell[4] = dataTypeElement.getAttribute("Name") + "("
-//					+ dataTypeElement.getAttribute("Length") + "."
-//					+ dataTypeElement.getAttribute("Decimal") + ")";
-//				}
 				dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
 				if (dataTypeElement != null) {
 					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						Cell[4] = dataTypeElement.getAttribute("Name") + "("
-						+ dataTypeElement.getAttribute("Length") + ")";
+						wrkStr = dataTypeElement.getAttribute("Length");
 					} else {
-						Cell[4] = dataTypeElement.getAttribute("Name") + "("
-						+ dataTypeElement.getAttribute("Length") + "."
-						+ dataTypeElement.getAttribute("Decimal") + ")";
+						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+					}
+					zenkaku = getZenkakuOfHankaku(wrkStr);
+					if (dataTypeElement.getAttribute("Name").contains(wrkStr)
+							|| dataTypeElement.getAttribute("Name").contains(zenkaku)) {
+						Cell[4] = dataTypeElement.getAttribute("Name");
+					} else {
+						Cell[4] = dataTypeElement.getAttribute("Name") + "(" + wrkStr + ")";
 					}
 				}
 				if (node.getElement().getAttribute("NotNull").equals("true")) {
@@ -18494,7 +18536,9 @@ public class Modeler extends JFrame {
 			jTextAreaTableFieldDescriptions.setCaretPosition(0);
 			//
 			//Setup jTextFieldTableFieldDataType//
-			String wrkStr = "";
+			String wrkStr1 = "";
+			String wrkStr2 = "";
+			String zenkaku = "";
 			NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
 			org.w3c.dom.Element dataTypeElement = null;
 			tableFieldDataTypeID = domNode_.getAttribute("DataTypeID");
@@ -18503,14 +18547,22 @@ public class Modeler extends JFrame {
 				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
 				if (dataTypeElement.getAttribute("ID").equals(tableFieldDataTypeID)) {
 					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						wrkStr = dataTypeElement.getAttribute("Name") + "(" + dataTypeElement.getAttribute("Length") + ")";
+						wrkStr1 = dataTypeElement.getAttribute("Length");
 					} else {
-						wrkStr = dataTypeElement.getAttribute("Name") + "(" + dataTypeElement.getAttribute("Length") + "," + dataTypeElement.getAttribute("Decimal") + ")";
+						wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
 					}
-					if (wrkStr.startsWith(dataTypeElement.getAttribute("SortKey"))) {
-						jTextFieldTableFieldDataType.setText(wrkStr);
+					zenkaku = getZenkakuOfHankaku(wrkStr1);
+					if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
+							|| dataTypeElement.getAttribute("SortKey").contains(zenkaku)
+							|| dataTypeElement.getAttribute("SortKey").contains(wrkStr1)) {
+						wrkStr2 = dataTypeElement.getAttribute("Name");
 					} else {
-						jTextFieldTableFieldDataType.setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr);
+						wrkStr2 = dataTypeElement.getAttribute("Name") + "(" + wrkStr1 + ")";
+					}
+					if (wrkStr2.startsWith(dataTypeElement.getAttribute("SortKey"))) {
+						jTextFieldTableFieldDataType.setText(wrkStr2);
+					} else {
+						jTextFieldTableFieldDataType.setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr2);
 					}
 					break;
 				}
@@ -19478,6 +19530,8 @@ public class Modeler extends JFrame {
 			//
 			jProgressBar.setMaximum(iOFieldList.getLength());
 			//
+			String wrkStr = "";
+			String zenkaku = "";
 			org.w3c.dom.Element fieldElement;
 			XeadTreeNode fieldNode;
 			for (int i = 0; i < fieldListNode.getChildCount(); i++) {
@@ -19490,19 +19544,29 @@ public class Modeler extends JFrame {
 				} else {
 					Cell[2] = "( " + fieldElement.getAttribute("Name") + " )";
 				}
-				//XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", fieldElement.getAttribute("DataTypeID"), null);
-				//org.w3c.dom.Element dataTypeElement = dataTypeNode.getElement();
 				dataTypeElement = dataTypeElementMap.get(fieldElement.getAttribute("DataTypeID"));
 				if (dataTypeElement == null) {
 					Cell[3] = "";
 				} else {
+//					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//						Cell[3] = dataTypeElement.getAttribute("Name") + "("
+//						+ dataTypeElement.getAttribute("Length") + ")";
+//					} else {
+//						Cell[3] = dataTypeElement.getAttribute("Name") + "("
+//						+ dataTypeElement.getAttribute("Length") + "."
+//						+ dataTypeElement.getAttribute("Decimal") + ")";
+//					}
 					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						Cell[3] = dataTypeElement.getAttribute("Name") + "("
-						+ dataTypeElement.getAttribute("Length") + ")";
+						wrkStr = dataTypeElement.getAttribute("Length");
 					} else {
-						Cell[3] = dataTypeElement.getAttribute("Name") + "("
-						+ dataTypeElement.getAttribute("Length") + "."
-						+ dataTypeElement.getAttribute("Decimal") + ")";
+						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+					}
+					zenkaku = getZenkakuOfHankaku(wrkStr);
+					if (dataTypeElement.getAttribute("Name").contains(wrkStr)
+							|| dataTypeElement.getAttribute("Name").contains(zenkaku)) {
+						Cell[3] = dataTypeElement.getAttribute("Name");
+					} else {
+						Cell[3] = dataTypeElement.getAttribute("Name") + "(" + wrkStr + ")";
 					}
 				}
 				Cell[4] = "";
@@ -23430,8 +23494,10 @@ public class Modeler extends JFrame {
 		}
 
 		String getText() {
-			StringBuffer bf = new StringBuffer();
+			ArrayList<String> logList = new ArrayList<String>();
+			StringBuffer bf;
 			for (int i = 0; i < indexOfLastElement; i++) {
+				bf = new StringBuffer();
 				bf.append(res.getString("S3319"));
 				if (nodeArray.get(i).getNodeType().equals("System")) {
 					int selectedIndex = Integer.parseInt(oldDomElementArray.get(i).getAttribute("SelectedIndex"));
@@ -23472,6 +23538,13 @@ public class Modeler extends JFrame {
 					bf.append(res.getString("S12"));
 				}
 				bf.append("\n");
+				if (!logList.contains(bf.toString())) {
+					logList.add(bf.toString());
+				}
+			}
+			bf = new StringBuffer();
+			for (int i = 0; i < logList.size(); i++) {
+				bf.append(logList.get(i));
 			}
 			return bf.toString();
 		}
@@ -23660,6 +23733,45 @@ public class Modeler extends JFrame {
 		return processedString.toString();
 	}
 	/**
+	 * Method to split long string into shorter rows
+	 * @param originalString :original string value to be processed
+	 * @param length :preferred length of each row
+	 * @param stringToBeInserted :value to be replaced into "#EOL#"(usually it's "\n")
+	 * @return String :string value of processed string
+	 */
+	static String getLayoutedString(String originalString, int length, String stringToBeInserted) {
+		StringBuffer processedString = new StringBuffer();
+		int lastEnd = 0;
+		int count = 0;
+		for (int i = 0; i <= originalString.length(); i++) {
+			count++;
+			if (i+5 <= originalString.length()) {
+				if (originalString.substring(i,i+5).equals("#EOL#")) {
+					processedString.append(originalString.substring(lastEnd, i));
+					processedString.append(stringToBeInserted);
+					lastEnd = i+5;
+					count = 0;
+				} else {
+					if (count > length
+						&& !originalString.substring(i+1,i+2).equals("ÅB")
+						&& !originalString.substring(i+1,i+2).equals("ÅA")
+						&& !originalString.substring(i+1,i+3).equals(". ")
+						&& !originalString.substring(i+1,i+3).equals(", ")) {
+						processedString.append(originalString.substring(lastEnd, i+1));
+						processedString.append(stringToBeInserted);
+						lastEnd = i+1;
+						count = 0;
+					}
+				}
+			} else {
+				if (i == originalString.length()) {
+					processedString.append(originalString.substring(lastEnd, i));
+				}
+			}
+		}
+		return processedString.toString();
+	}
+	/**
 	 * Method to get first sentence from specified string
 	 * @param originalString :original value of string
 	 * @return String :string value of first sentence
@@ -23696,6 +23808,22 @@ public class Modeler extends JFrame {
 			sentence = originalString;
 		}
 		return sentence;
+	}
+	/**
+	 * Method to convert a hankaku string to zenkaku string
+	 * @param originalString :original string value to be processed
+	 * @return String :result value processed
+	 */
+	private static String getZenkakuOfHankaku(String value) {
+		StringBuilder sb = new StringBuilder(value);
+		for (int i = 0; i < sb.length(); i++) {
+			int c = (int) sb.charAt(i);
+			if ((c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x5A) || (c >= 0x61 && c <= 0x7A)) {
+				sb.setCharAt(i, (char) (c + 0xFEE0));
+			}
+		}
+		value = sb.toString();
+		return value;
 	}
 	/**
 	 * Method to convert single byte chars to double byte chars
@@ -27610,7 +27738,7 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("ID", Integer.toString(id + 1));
 			newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
 			newElement.setAttribute("Descriptions", xeadUndoManager.getText());
-			newElement.setAttribute("SortKey", getStringValueOfDateTime("withTimeAndDot"));
+			newElement.setAttribute("SortKey", getStringValueOfDateTime("withUnderbarAndTime"));
 			nextSiblingNode = lastElement.getNextSibling();
 			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
 			Object[] Cell = new Object[4];
@@ -31092,22 +31220,29 @@ public class Modeler extends JFrame {
 		String dataTypeID;
 		String dataTypeName;
 		org.w3c.dom.Element dataTypeElement;
-		String wrkStr = "";
 		public DataTypeMenuItem(org.w3c.dom.Element element){
 			super();
+			String wrkStr1 = "";
+			String wrkStr2 = "";
+			String zenkaku = "";
 			dataTypeElement = element;
 			if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-				wrkStr = dataTypeElement.getAttribute("Name") + "("
-				+ dataTypeElement.getAttribute("Length") + ")";
+				wrkStr1 = dataTypeElement.getAttribute("Length");
 			} else {
-				wrkStr = dataTypeElement.getAttribute("Name") + "("
-				+ dataTypeElement.getAttribute("Length") + "."
-				+ dataTypeElement.getAttribute("Decimal") + ")";
+				wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
 			}
-			if (wrkStr.startsWith(dataTypeElement.getAttribute("SortKey"))) {
-				setText(wrkStr);
+			zenkaku = getZenkakuOfHankaku(wrkStr1);
+			if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
+					|| dataTypeElement.getAttribute("SortKey").contains(wrkStr1)
+					|| dataTypeElement.getAttribute("Name").contains(zenkaku)) {
+				wrkStr2 = dataTypeElement.getAttribute("Name");
 			} else {
-				setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr);
+				wrkStr2 = dataTypeElement.getAttribute("Name") + "(" + wrkStr1 + ")";
+			}
+			if (wrkStr2.startsWith(dataTypeElement.getAttribute("SortKey"))) {
+				setText(wrkStr2);
+			} else {
+				setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr2);
 			}
 			addActionListener(new dataTypeMenuItemActionListener());
 		}

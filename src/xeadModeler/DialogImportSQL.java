@@ -945,7 +945,7 @@ public class DialogImportSQL extends JDialog {
 			fieldName = trimBlankFromValue(workTokenizer.nextToken());
 			for (int j = 0; j < fieldList.getLength(); j++) {
 				element = (org.w3c.dom.Element)fieldList.item(j);
-				if (element.getAttribute("Name").equals(fieldName)) {
+				if (element.getAttribute("Alias").equals(fieldName)) {
 					org.w3c.dom.Element keyFieldElement = frame_.domDocument.createElement("TableKeyField");
 					keyFieldElement.setAttribute("FieldID", element.getAttribute("ID"));
 					sortKey++;

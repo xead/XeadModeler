@@ -1,5 +1,0 @@
-Manifest-Version: 1.0 
-Sealed: true 
-Main-Class: xeadModeler.Application
-Class-Path: ./xercesImpl.jar ./poi-3.2-FINAL-20081019.jar
-

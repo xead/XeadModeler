@@ -44,7 +44,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M54";
+	public static final String FULL_VERSION  = "V1.R3.M55";
+	// 55での変更点
+	//・保守履歴の初期値に同一内容の行が含まれないようにした
+	//・保守履歴の日時の区切り文字をドットからアンダーバーに変更した
+	//・SQLインポートで『文中のフィールドコメントをフィールド定義名とみなす』をチェックするとＰＫが生成されないバグを修正
+	//・フィールド毎のデータタイプの桁数表示形式を改善した
+	//・データモデルや業務フロー上のヒント表示が横長にならないようにした
+	//
 	// 54での変更点
 	//・業務フロー上のプロセスをダブルクリックすれば業務定義にジャンプするようにした
 	//・データモデル上のテーブルをダブルクリックすればテーブル定義にジャンプするようにした
