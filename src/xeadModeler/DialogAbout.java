@@ -44,7 +44,12 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M55";
+	public static final String FULL_VERSION  = "V1.R3.M56";
+	//
+	// 56での変更点
+	//・ファイル選択ダイアログの拡張子設定を改善した
+	//・データタイプ別のフィールド一覧表示のパフォーマンスを改善した
+	//
 	// 55での変更点
 	//・保守履歴の初期値に同一内容の行が含まれないようにした
 	//・保守履歴の日時の区切り文字をドットからアンダーバーに変更した

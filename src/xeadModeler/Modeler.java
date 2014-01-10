@@ -46,6 +46,7 @@ import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import javax.swing.text.*;
 import javax.swing.text.html.HTMLEditorKit;
@@ -153,6 +154,10 @@ public class Modeler extends JFrame {
 	 */
 	private ArrayList<String> styledDocumentCopiedTextList = new ArrayList<String>(); 
 	private ArrayList<DefaultStyledDocument> styledDocumentCopiedSegmentList = new ArrayList<DefaultStyledDocument>(); 
+	/**
+	 * status controller related to setup field definition list
+	 */
+	boolean isRequiredToSetupSortableFieldList = true;
 	/**
 	 * status controller related to deleted table definitions
 	 */
@@ -4979,17 +4984,23 @@ public class Modeler extends JFrame {
 	 */
 	String specifyNameOfExistingFile(String dialogTitle, String fileExtention) {
 		jFileChooser.setDialogTitle("XEAD Modeler - " + dialogTitle);
+		jFileChooser.resetChoosableFileFilters();
+		ArrayList<String> extentionList = new ArrayList<String>();
+		if (!fileExtention.equals("")) {
+			StringTokenizer workTokenizer = new StringTokenizer(fileExtention, "," );
+			while (workTokenizer.hasMoreTokens()) {
+				String extention = workTokenizer.nextToken();
+				extentionList.add(extention);
+				jFileChooser.setFileFilter(new FileNameExtensionFilter(extention, extention));
+			}
+		}
 		String name = "";
-		//
-		StringTokenizer workTokenizer = new StringTokenizer(fileExtention, "," );
-		int numberOfItem = workTokenizer.countTokens();
-		//
 		int reply = jFileChooser.showOpenDialog(this);
 		if (reply == JFileChooser.APPROVE_OPTION) {
 			File file = new File(jFileChooser.getSelectedFile().getPath());
 			if (getExtention(file) == null) {
-				for (int j = 0; j < numberOfItem; j++) {
-					file = new File(jFileChooser.getSelectedFile().getPath() + "." + workTokenizer.nextToken());
+				for (int j = 0; j < extentionList.size(); j++) {
+					file = new File(jFileChooser.getSelectedFile().getPath() + "." + extentionList.get(j));
 					if (file.exists()) {
 						name = file.getPath();
 						break;
@@ -4999,8 +5010,8 @@ public class Modeler extends JFrame {
 					JOptionPane.showMessageDialog(this, res.getString("S798"));
 				}
 			} else {
-				for (int j = 0; j < numberOfItem; j++) {
-					if (getExtention(file).equals(workTokenizer.nextToken())) {
+				for (int j = 0; j < extentionList.size(); j++) {
+					if (getExtention(file).equals(extentionList.get(j))) {
 						name = file.getPath();
 						break;
 					}
@@ -5248,6 +5259,15 @@ public class Modeler extends JFrame {
 					xeadTreeNode4.sortChildNodes();
 				}
 			}
+			//
+			//Setup ID-Ordered Field List//
+			NodeList fieldList = domDocument.getElementsByTagName("TableField");
+			sortableDomElementFieldListModel.removeAllElements();
+			for (int j = 0; j < fieldList.getLength(); j++) {
+				sortableDomElementFieldListModel.addElement((Object)fieldList.item(j));
+			}
+			sortableDomElementFieldListModel.sortElements();
+			isRequiredToSetupSortableFieldList = false;
 			//
 			// Add Node of "Function" and its children//
 			xmlnodelist1 = domDocument.getElementsByTagName("Function");
@@ -15465,6 +15485,8 @@ public class Modeler extends JFrame {
 						element1.appendChild(newElementChild1);
 					}
 				}
+				//
+				isRequiredToSetupSortableFieldList = true;
 			}
 			//
 			//Add TableKey//
@@ -15837,6 +15859,8 @@ public class Modeler extends JFrame {
 					//}
 					//
 					isRequiredToPurgeInvalidSubsystemTable = true;
+					//
+					isRequiredToSetupSortableFieldList = true;
 				}
 			}
 			//
@@ -15888,6 +15912,8 @@ public class Modeler extends JFrame {
 						}
 					}
 					parentNode.remove(this);
+					//
+					isRequiredToSetupSortableFieldList = true;
 					//
 					//Delete IOTableField//
 					nodeList2 = domDocument.getElementsByTagName("IOTable");
@@ -16291,6 +16317,8 @@ public class Modeler extends JFrame {
 				fieldListNode.sortChildNodes();
 				addNodeToTheArrayOfFieldListNodeToBeRenumbered(fieldListNode);
 				//
+				isRequiredToSetupSortableFieldList = true;
+				//
 				//Add keys//
 				XeadTreeNode keyNode;
 				nodeList1 = pastingElement.getElementsByTagName("TableKey");
@@ -16363,6 +16391,8 @@ public class Modeler extends JFrame {
 				//Add tree-node//
 				childNode = new XeadTreeNode("TableField", newElement);
 				this.add(childNode);
+				//
+				isRequiredToSetupSortableFieldList = true;
 				//
 				//Add as a IOTable Field//
 				String tableID = tableNode.getElement().getAttribute("ID");
@@ -17203,6 +17233,22 @@ public class Modeler extends JFrame {
 				jTextFieldSystemDataTypeDecimal.setText("");
 				jTextFieldSystemDataTypeDecimal.setBackground(SystemColor.control);
 				jTextFieldSystemDataTypeDecimal.setEditable(false);
+				//
+				//Re-sort Field List//
+				if (isRequiredToSetupSortableFieldList) {
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+						NodeList fieldList = domDocument.getElementsByTagName("TableField");
+						sortableDomElementFieldListModel.removeAllElements();
+						for (int j = 0; j < fieldList.getLength(); j++) {
+							sortableDomElementFieldListModel.addElement((Object)fieldList.item(j));
+						}
+						sortableDomElementFieldListModel.sortElements();
+					} finally {
+						isRequiredToSetupSortableFieldList = false;
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					}
+				}
 				//
 				//Clear WhereUsedList//
 				if (tableModelSystemDataTypeWhereUsedList.getRowCount() > 0) {
@@ -22236,6 +22282,8 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("Default", jTextFieldTableFieldDefault.getText());
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaTableFieldDescriptions.getText()));
 				//
+				isRequiredToSetupSortableFieldList = true;
+				//
 				//Log node after modified//
 				xeadUndoManager.addLogAfterModified(this);
 			}
@@ -26618,30 +26666,32 @@ public class Modeler extends JFrame {
 					//
 					//Add rows to SystemDataTypeWhereUsedList//
 					XeadTreeNode subsystemNode;
-					NodeList fieldList;
+//					NodeList fieldList;
 					org.w3c.dom.Element tableElement, fieldElement;
 					int m = 0;
-					fieldList = domDocument.getElementsByTagName("TableField");
-					sortableDomElementFieldListModel.removeAllElements();
-					for (int j = 0; j < fieldList.getLength(); j++) {
-						fieldElement = (org.w3c.dom.Element)fieldList.item(j);
-						if (fieldElement.getAttribute("DataTypeID").equals(tableRowNumber.getElement().getAttribute("ID"))) {
-							sortableDomElementFieldListModel.addElement((Object)fieldElement);
-						}
-					}
-					sortableDomElementFieldListModel.sortElements();
+//					fieldList = domDocument.getElementsByTagName("TableField");
+//					sortableDomElementFieldListModel.removeAllElements();
+//					for (int j = 0; j < fieldList.getLength(); j++) {
+//						fieldElement = (org.w3c.dom.Element)fieldList.item(j);
+//						if (fieldElement.getAttribute("DataTypeID").equals(tableRowNumber.getElement().getAttribute("ID"))) {
+//							sortableDomElementFieldListModel.addElement((Object)fieldElement);
+//						}
+//					}
+//					sortableDomElementFieldListModel.sortElements();
 					for (int j = 0; j < sortableDomElementFieldListModel.getSize(); j++) {
 						fieldElement = (org.w3c.dom.Element)sortableDomElementFieldListModel.getElementAt(j);
-						Object[] Cell = new Object[5];
-						m = m + 1;
-						Cell[0] =  new TableRowNumber(m, fieldElement);
-						Cell[1] = fieldElement.getAttribute("Alias");
-						Cell[2] = fieldElement.getAttribute("Name");
-						tableElement = (org.w3c.dom.Element)fieldElement.getParentNode();
-						Cell[3] = tableElement.getAttribute("SortKey") + " " + tableElement.getAttribute("Name");
-						subsystemNode = getSpecificXeadTreeNode("Subsystem", tableElement.getAttribute("SubsystemID"), null);
-						Cell[4] = subsystemNode.getElement().getAttribute("Name");
-						tableModelSystemDataTypeWhereUsedList.addRow(Cell);
+						if (fieldElement.getAttribute("DataTypeID").equals(tableRowNumber.getElement().getAttribute("ID"))) {
+							Object[] Cell = new Object[5];
+							m = m + 1;
+							Cell[0] =  new TableRowNumber(m, fieldElement);
+							Cell[1] = fieldElement.getAttribute("Alias");
+							Cell[2] = fieldElement.getAttribute("Name");
+							tableElement = (org.w3c.dom.Element)fieldElement.getParentNode();
+							Cell[3] = tableElement.getAttribute("SortKey") + " " + tableElement.getAttribute("Name");
+							subsystemNode = getSpecificXeadTreeNode("Subsystem", tableElement.getAttribute("SubsystemID"), null);
+							Cell[4] = subsystemNode.getElement().getAttribute("Name");
+							tableModelSystemDataTypeWhereUsedList.addRow(Cell);
+						}
 					}
 				}
 			}
