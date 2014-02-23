@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -11221,19 +11221,23 @@ public class Modeler extends JFrame {
 		}
 		//
 		private void node_mouseClicked(MouseEvent e) {
-			if (e.getClickCount() >= 2 && nodeType.equals("Process")) {
-				try {
-					setCursor(new Cursor(Cursor.WAIT_CURSOR));
-					XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", dataflowNodeElement_.getAttribute("TaskID"), null);
-					TreePath tp = new TreePath(taskNode.getPath());
-					jTreeMain.setSelectionPath(tp);
-					Rectangle nodePos = jTreeMain.getPathBounds(tp);
-					if (nodePos != null) {
-						jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+			if (e.getClickCount() >= 2) {
+				if (nodeType.equals("Process")) {
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+						XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", dataflowNodeElement_.getAttribute("TaskID"), null);
+						TreePath tp = new TreePath(taskNode.getPath());
+						jTreeMain.setSelectionPath(tp);
+						Rectangle nodePos = jTreeMain.getPathBounds(tp);
+						if (nodePos != null) {
+							jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
+						}
+						setupContentsPaneForTreeNodeSelected(taskNode, false);
+					} finally {
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					}
-					setupContentsPaneForTreeNodeSelected(taskNode, false);
-				} finally {
-					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				} else {
+					jMenuItemDataflowNodeChange_actionPerformed(null);
 				}
 			}
 		}
@@ -12335,9 +12339,13 @@ public class Modeler extends JFrame {
 		}
 		//
 		private void jDataflowLine_mouseClicked(MouseEvent e) {
-			if (clickable_) {
-				if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-					jPopupMenuDataflowLine.show(e.getComponent(), e.getX(), e.getY());
+			if (e.getClickCount() >= 2) {
+				jMenuItemDataflowLineChange_actionPerformed(null);
+			} else {
+				if (clickable_) {
+					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+						jPopupMenuDataflowLine.show(e.getComponent(), e.getX(), e.getY());
+					}
 				}
 			}
 		}

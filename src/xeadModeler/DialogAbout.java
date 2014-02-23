@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2013 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -44,7 +44,10 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M56";
+	public static final String FULL_VERSION  = "V1.R3.M57";
+	//
+	// 57での変更点
+	//・業務フロー上のストレージとデータフローについて、ダブルクリックすれば記述変更ダイアログを示すようにした
 	//
 	// 56での変更点
 	//・ファイル選択ダイアログの拡張子設定を改善した
@@ -107,7 +110,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 	//・ツリービュー上で Ctrl+C,Ctrl+V,Ctrl+X を使えるようにするとともに、複数ノードを同時選択できないようにした
 	//・右ペインで値を変更直後にCtrl+Sを押しても上書きされなかった問題を修正
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2004-2013 DBC,Ltd.";
+	public static final String COPYRIGHT = "Copyright 2004-2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
 	/**
 	 * Components on the panel
