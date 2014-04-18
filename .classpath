@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/Xerces-J-bin.2.9.1/xerces-2_9_1/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="D:/poi-bin-3.2-FINAL-20081019/poi-3.2-FINAL/poi-3.2-FINAL-20081019.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

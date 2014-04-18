@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -104,44 +104,44 @@ public class DialogImportXEAD extends JDialog {
 		this.setResizable(false);
 		this.setTitle(res.getString("DialogImportXEAD01"));
 		//
-		jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel4.setText(res.getString("DialogImportXEAD02"));
-		jLabel4.setBounds(new Rectangle(10, 9, 144, 15));
-		jTextFieldImportFileName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldImportFileName.setBounds(new Rectangle(164, 9, 300, 21));
+		jLabel4.setBounds(new Rectangle(5, 12, 170, 20));
+		jTextFieldImportFileName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldImportFileName.setBounds(new Rectangle(180, 9, 350, 25));
 		jTextFieldImportFileName.setEditable(false);
 		//
-		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogImportXEAD03"));
-		jLabel5.setBounds(new Rectangle(10, 33, 144, 15));
-		jTextFieldImportSystemName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldImportSystemName.setBounds(new Rectangle(164, 33, 300, 21));
+		jLabel5.setBounds(new Rectangle(5, 43, 170, 20));
+		jTextFieldImportSystemName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldImportSystemName.setBounds(new Rectangle(180, 40, 350, 25));
 		jTextFieldImportSystemName.setEditable(false);
 		//
+		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel3.setText(res.getString("DialogImportXEAD04"));
+		jLabel3.setBounds(new Rectangle(5, 74, 170, 20));
+		jLabel3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jPanel1.setBorder(BorderFactory.createEtchedBorder());
-		jPanel1.setBounds(new Rectangle(164, 57, 300, 107));
+		jPanel1.setBounds(new Rectangle(180, 71, 350, 120));
 		jPanel1.setLayout(gridLayout1);
 		gridLayout1.setColumns(1);
 		gridLayout1.setRows(5);
-		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel3.setText(res.getString("DialogImportXEAD04"));
-		jLabel3.setBounds(new Rectangle(12, 57, 141, 15));
-		jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jRadioButtonTablesAndFunctions.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonTablesAndFunctions.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTablesAndFunctions.setText(res.getString("DialogImportXEAD05"));
 		jRadioButtonTablesAndFunctions.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
-		jRadioButtonTables.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonTables.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTables.setText(res.getString("DialogImportXEAD46"));
 		jRadioButtonTables.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
-		jRadioButtonFunctions.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonFunctions.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonFunctions.setText(res.getString("DialogImportXEAD44"));
 		jRadioButtonFunctions.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
-		jRadioButtonTasks.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonTasks.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTasks.setText(res.getString("DialogImportXEAD06"));
 		jRadioButtonTasks.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
-		jRadioButtonDataflows.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonDataflows.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonDataflows.setText(res.getString("S3385"));
 		jRadioButtonDataflows.addChangeListener(new DialogImportXEAD_jRadioButton_changeAdapter(this));
 		jPanel1.add(jRadioButtonFunctions, null);
@@ -155,43 +155,44 @@ public class DialogImportXEAD extends JDialog {
 		buttonGroup1.add(jRadioButtonTasks);
 		buttonGroup1.add(jRadioButtonDataflows);
 		//
-		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel1.setBounds(new Rectangle(10, 168, 144, 15));
-		jComboBoxBlockFrom.setBounds(new Rectangle(164, 168, 300, 21));
-		jComboBoxBlockFrom.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setBounds(new Rectangle(5, 194, 170, 20));
+		jComboBoxBlockFrom.setBounds(new Rectangle(180, 191, 350, 25));
+		jComboBoxBlockFrom.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxBlockFrom.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
-		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel2.setBounds(new Rectangle(10, 192, 144, 15));
-		jComboBoxBlockInto.setBounds(new Rectangle(164, 192, 300, 21));
-		jComboBoxBlockInto.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel2.setBounds(new Rectangle(5, 225, 170, 20));
+		jComboBoxBlockInto.setBounds(new Rectangle(180, 222, 350, 25));
+		jComboBoxBlockInto.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxBlockInto.addActionListener(new DialogImportXEAD_jComboBox_actionAdapter(this));
 		//
-		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setForeground(Color.BLUE);
 		jTextArea1.setEditable(false);
-		jTextArea1.setBounds(new Rectangle(9, 219, 454, 159));
+		jTextArea1.setBounds(new Rectangle(9, 257, 522, 173));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBackground(SystemColor.control);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 		//
-		jProgressBar.setBounds(new Rectangle(9, 387, 104, 25));
+		jProgressBar.setBounds(new Rectangle(50, 440, 200, 27));
+		jProgressBar.setVisible(false);
 		//
-		jButtonStart.setBounds(new Rectangle(180, 387, 104, 25));
-		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonStart.setBounds(new Rectangle(50, 440, 200, 27));
+		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogImportXEAD07"));
 		jButtonStart.addActionListener(new DialogImportXEAD_jButtonStart_actionAdapter(this));
 		jButtonStart.setEnabled(false);
 		//
-		jButtonCancel.setBounds(new Rectangle(355, 387, 104, 25));
-		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCancel.setBounds(new Rectangle(380, 440, 110, 27));
+		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCancel.setText(res.getString("DialogImportXEAD08"));
 		jButtonCancel.addActionListener(new DialogImportXEAD_jButtonCancel_actionAdapter(this));
 		//
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(473, 424));
+		panelMain.setPreferredSize(new Dimension(540, 480));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel2, null);
@@ -375,6 +376,8 @@ public class DialogImportXEAD extends JDialog {
 		//
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			jProgressBar.setVisible(true);
+			jButtonStart.setVisible(false);
 			//
 			String dateTime = getStringValueOfDateAndTime();
 			logFileName = "XeadImportLog" + dateTime + ".txt";
@@ -522,6 +525,8 @@ public class DialogImportXEAD extends JDialog {
 			catch (Exception ex2) {
 			}
 		} finally {
+			jProgressBar.setVisible(false);
+			jButtonStart.setVisible(true);
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			this.setVisible(false);
 		}

@@ -42,9 +42,20 @@ public class DialogAbout extends JDialog implements ActionListener {
 	/**
 	 * Application Information
 	 */
-	public static final String APPLICATION_NAME  = "XEAD Modeler 1.3";
+	public static final String APPLICATION_NAME  = "XEAD Modeler 1.4";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R3.M57";
+	public static final String FULL_VERSION  = "V1.R4.M0";
+	//
+	// 1.4.0での変更点
+	//・xeadmdl.propertiesでフォント名を指定できるようにした
+	//・一部の要素を除き、フォントサイズを12pから16pに変更した
+	//・IOイメージのフォントサイズの指定範囲を10～14から10～20に拡張した
+	//・業務フローとデータモデルについて、一部のテキストのフォントサイズを自動調整するようにした
+	//・業務フローのイベントについて表示設定様式を改善した
+	//・業務フロー上で複数のプロセスやストレージを矩形選択して同時に移動できるようにした
+	//・データモデル上のテーブルについて、フィールド群を常に１段で示すようにした（複数段で表示するとインスタンスが書きにくくなるため）
+	//・データモデル上の全テーブルの幅を自動設定するためのコンテキストメニューを設けた
+	//・データモデル上で複数のテーブルをを矩形選択して同時に移動できるようにした
 	//
 	// 57での変更点
 	//・業務フロー上のストレージとデータフローについて、ダブルクリックすれば記述変更ダイアログを示すようにした
@@ -152,26 +163,26 @@ public class DialogAbout extends JDialog implements ActionListener {
 		insetsPanel2.setPreferredSize(new Dimension(75, 52));
 		insetsPanel2.add(imageLabel, BorderLayout.EAST);
 
-		labelName.setFont(new java.awt.Font("Serif", 1, 16));
+		labelName.setFont(new java.awt.Font("Serif", 1, 20));
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
 		labelName.setText(PRODUCT_NAME);
-		labelName.setBounds(new Rectangle(-5, 9, 190, 18));
-		labelVersion.setFont(new java.awt.Font("Dialog", 0, 12));
+		labelName.setBounds(new Rectangle(0, 8, 240, 22));
+		labelVersion.setFont(new java.awt.Font("Dialog", 0, 16));
 		labelVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		labelVersion.setText(FULL_VERSION);
-		labelVersion.setBounds(new Rectangle(-5, 32, 190, 15));
-		labelCopyright.setFont(new java.awt.Font("Dialog", 0, 12));
+		labelVersion.setBounds(new Rectangle(0, 32, 240, 20));
+		labelCopyright.setFont(new java.awt.Font("Dialog", 0, 16));
 		labelCopyright.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCopyright.setText(COPYRIGHT);
-		labelCopyright.setBounds(new Rectangle(-5, 53, 190, 15));
-		labelURL.setFont(new java.awt.Font("Dialog", 0, 12));
+		labelCopyright.setBounds(new Rectangle(0, 53, 240, 20));
+		labelURL.setFont(new java.awt.Font("Dialog", 0, 16));
 		labelURL.setHorizontalAlignment(SwingConstants.CENTER);
 		labelURL.setText("<html><u><font color='blue'>" + URL_DBC);
-		labelURL.setBounds(new Rectangle(-5, 73, 190, 15));
+		labelURL.setBounds(new Rectangle(0, 75, 240, 20));
 		labelURL.addMouseListener(new DialogAbout_labelURL_mouseAdapter(this));
 		insetsPanel3.setLayout(null);
 		insetsPanel3.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 10));
-		insetsPanel3.setPreferredSize(new Dimension(190, 80));
+		insetsPanel3.setPreferredSize(new Dimension(250, 80));
 		insetsPanel3.add(labelName, null);
 		insetsPanel3.add(labelVersion, null);
 		insetsPanel3.add(labelCopyright, null);
@@ -183,7 +194,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 
 		panel1.add(insetsPanel1, BorderLayout.SOUTH);
 		panel1.add(panel2, BorderLayout.NORTH);
-		panel2.setPreferredSize(new Dimension(270, 90));
+		panel2.setPreferredSize(new Dimension(350, 100));
 		panel2.add(insetsPanel2, BorderLayout.CENTER);
 		panel2.add(insetsPanel3, BorderLayout.EAST);
 

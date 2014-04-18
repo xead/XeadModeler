@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -46,8 +46,8 @@ import xeadModeler.Modeler.*;
 public class DialogAddRelationshipOnDatamodel extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	private JPanel panelMain = new JPanel();
-	private JPanel panelRadioButtons = new JPanel();
+	private JPanel jPanelMain = new JPanel();
+	private JPanel jPanelRadioButtons = new JPanel();
 	private JLabel jLabelName = new JLabel();
 	private KanjiTextField jTextFieldName = new KanjiTextField();
 	private JLabel jLabelAlias = new JLabel();
@@ -83,61 +83,61 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 
 	private void jbInit() throws Exception {
 		this.setResizable(false);
-		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(385, 257));
-		panelMain.setBorder(BorderFactory.createEtchedBorder());
-		jTextAreaDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jPanelMain.setLayout(null);
+		jPanelMain.setPreferredSize(new Dimension(500, 290));
+		jPanelMain.setBorder(BorderFactory.createEtchedBorder());
+		jTextAreaDescriptions.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextAreaDescriptions.setLineWrap(true);
 		jTextAreaDescriptions.setText(res.getString("DialogAddRelationshipOnDatamodel2"));
 		jTextAreaDescriptions.setEditable(false);
 		jTextAreaDescriptions.setBackground(SystemColor.control);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
-		jScrollPaneDescriptions.setBounds(new Rectangle(10, 10, 365, 72));
-		panelRadioButtons.setLayout(null);
-		panelRadioButtons.setBorder(BorderFactory.createEtchedBorder());
-		panelRadioButtons.setBounds(new Rectangle(10, 89, 365, 125));
-		jRadioButtonPasteFields.setFont(new java.awt.Font("Dialog", 0, 12));
+		jScrollPaneDescriptions.setBounds(new Rectangle(10, 10, 480, 95));
+		jPanelRadioButtons.setLayout(null);
+		jPanelRadioButtons.setBorder(BorderFactory.createEtchedBorder());
+		jPanelRadioButtons.setBounds(new Rectangle(10, 110, 481, 140));
+		jRadioButtonPasteFields.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonPasteFields.setText(res.getString("DialogAddRelationshipOnDatamodel3"));
-		jRadioButtonPasteFields.setBounds(new Rectangle(5, 11, 355, 16));
+		jRadioButtonPasteFields.setBounds(new Rectangle(5, 9, 470, 25));
 		jRadioButtonPasteFields.addChangeListener(new DialogAddRelationshipOnDatamodel_jRadioButton_changeAdapter(this));
-		jRadioButtonReuseFields.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonReuseFields.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonReuseFields.setText(res.getString("DialogAddRelationshipOnDatamodel4"));
-		jRadioButtonReuseFields.setBounds(new Rectangle(5, 95, 355, 16));
+		jRadioButtonReuseFields.setBounds(new Rectangle(5, 101, 470, 25));
 		jRadioButtonReuseFields.addChangeListener(new DialogAddRelationshipOnDatamodel_jRadioButton_changeAdapter(this));
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(jRadioButtonPasteFields);
 		buttonGroup.add(jRadioButtonReuseFields);
-		jLabelName.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelName.setText(res.getString("DialogAddRelationshipOnDatamodel5"));
-		jLabelName.setBounds(new Rectangle(10, 39, 90, 15));
-		jTextFieldName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName.setBounds(new Rectangle(105, 36, 250, 22));
-		jLabelAlias.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelName.setBounds(new Rectangle(5, 38, 130, 22));
+		jTextFieldName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName.setBounds(new Rectangle(140, 37, 320, 25));
+		jLabelAlias.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelAlias.setText(res.getString("DialogAddRelationshipOnDatamodel6"));
-		jLabelAlias.setBounds(new Rectangle(10, 67, 90, 15));
-		jTextFieldAlias.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldAlias.setBounds(new Rectangle(105, 64, 250, 22));
-		panelRadioButtons.add(jRadioButtonPasteFields);
-		panelRadioButtons.add(jRadioButtonReuseFields);
-		panelRadioButtons.add(jLabelName);
-		panelRadioButtons.add(jTextFieldName);
-		panelRadioButtons.add(jLabelAlias);
-		panelRadioButtons.add(jTextFieldAlias);
-		jButtonOK.setBounds(new Rectangle(40, 222, 73, 25));
-		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelAlias.setBounds(new Rectangle(5, 69, 130, 22));
+		jTextFieldAlias.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldAlias.setBounds(new Rectangle(140, 68, 320, 25));
+		jPanelRadioButtons.add(jRadioButtonPasteFields);
+		jPanelRadioButtons.add(jRadioButtonReuseFields);
+		jPanelRadioButtons.add(jLabelName);
+		jPanelRadioButtons.add(jTextFieldName);
+		jPanelRadioButtons.add(jLabelAlias);
+		jPanelRadioButtons.add(jTextFieldAlias);
+		jButtonOK.setBounds(new Rectangle(40, 255, 100, 27));
+		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogAddRelationshipOnDatamodel_jButtonOK_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(270, 222, 73, 25));
-		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCancel.setBounds(new Rectangle(340, 255, 100, 27));
+		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCancel.setText(res.getString("DialogAddRelationshipOnDatamodel7"));
 		jButtonCancel.addActionListener(new DialogAddRelationshipOnDatamodel_jButtonCancel_actionAdapter(this));
-		panelMain.add(jScrollPaneDescriptions, null);
-		panelMain.add(panelRadioButtons, null);
-		panelMain.add(jButtonOK, null);
-		panelMain.add(jButtonCancel, null);
-		this.getContentPane().add(panelMain);
+		jPanelMain.add(jScrollPaneDescriptions, null);
+		jPanelMain.add(jPanelRadioButtons, null);
+		jPanelMain.add(jButtonOK, null);
+		jPanelMain.add(jButtonCancel, null);
+		this.getContentPane().add(jPanelMain);
 	}
 
 	public boolean request(XeadTreeNode sourceTableNode, org.w3c.dom.Element sourceKeyElement, XeadTreeNode targetTableNode) {
@@ -246,7 +246,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 			jRadioButtonReuseFields.setEnabled(false);
 		}
 		//
-		panelMain.getRootPane().setDefaultButton(jButtonOK);
+		jPanelMain.getRootPane().setDefaultButton(jButtonOK);
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize = frame_.getSize();
 		Point loc = frame_.getLocation();

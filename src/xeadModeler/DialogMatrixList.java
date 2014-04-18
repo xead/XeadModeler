@@ -115,28 +115,28 @@ public class DialogMatrixList extends JDialog {
 
 	private void jbInit() throws Exception {
 		jPanelMain.setLayout(borderLayout1);
-		jPanelMain.setPreferredSize(new Dimension(210, 150));
-		jPanelMain.setBorder(BorderFactory.createEtchedBorder());
+		jPanelMain.setPreferredSize(new Dimension(300, 180));
+		jPanelMain.setBorder(null);
 		jPanelSouth.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSouth.setLayout(null);
-		jPanelSouth.setPreferredSize(new Dimension(800, 40));
+		jPanelSouth.setPreferredSize(new Dimension(800, 45));
 		jPanelCenter.setLayout(gridLayout1);
 		gridLayout1.setColumns(1);
 		gridLayout1.setRows(5);
 		jPanelCenter.setLayout(gridLayout1);
-		jCheckBoxSubjectAreaAndTask.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxSubjectAreaAndTask.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxSubjectAreaAndTask.setText(res.getString("S75"));
 		jCheckBoxSubjectAreaAndTask.addChangeListener(new DialogMatrixList_jCheckBox_changeAdapter(this));
-		jCheckBoxSubjectAreaAndFunction.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxSubjectAreaAndFunction.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxSubjectAreaAndFunction.setText(res.getString("S76"));
 		jCheckBoxSubjectAreaAndFunction.addChangeListener(new DialogMatrixList_jCheckBox_changeAdapter(this));
-		jCheckBoxTaskAndFunction.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxTaskAndFunction.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxTaskAndFunction.setText(res.getString("S77"));
 		jCheckBoxTaskAndFunction.addChangeListener(new DialogMatrixList_jCheckBox_changeAdapter(this));
-		jCheckBoxTaskAndTable.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxTaskAndTable.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxTaskAndTable.setText(res.getString("S78"));
 		jCheckBoxTaskAndTable.addChangeListener(new DialogMatrixList_jCheckBox_changeAdapter(this));
-		jCheckBoxTableAndFunction.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxTableAndFunction.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxTableAndFunction.setText(res.getString("S79"));
 		jCheckBoxTableAndFunction.addChangeListener(new DialogMatrixList_jCheckBox_changeAdapter(this));
 
@@ -149,15 +149,15 @@ public class DialogMatrixList extends JDialog {
 		jPanelCenter.add(jCheckBoxTaskAndTable, null);
 		jPanelCenter.add(jCheckBoxTableAndFunction, null);
 
-		jButtonStart.setBounds(new Rectangle(120, 7, 70, 25));
-		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonStart.setBounds(new Rectangle(13, 8, 120, 27));
+		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogDocuments07"));
 		jButtonStart.addActionListener(new DialogMatrixList_jButtonStart_actionAdapter(this));
-		jProgressBar.setBounds(new Rectangle(120, 7, 70, 25));
+		jProgressBar.setBounds(new Rectangle(13, 8, 120, 27));
 		jProgressBar.setVisible(false);
 		jProgressBar.setStringPainted(true);
-		jButtonCloseDialog.setBounds(new Rectangle(20, 7, 70, 25));
-		jButtonCloseDialog.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCloseDialog.setBounds(new Rectangle(170, 8, 110, 27));
+		jButtonCloseDialog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCloseDialog.setText(res.getString("DialogDocuments08"));
 		jButtonCloseDialog.addActionListener(new DialogMatrixList_jButtonCloseDialog_actionAdapter(this));
 		jPanelSouth.add(jButtonCloseDialog, null);

@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -32,7 +32,9 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.ResourceBundle;
 
@@ -93,22 +95,12 @@ public class DialogAddList extends JDialog {
 	}
 
 	private void jbInit() throws Exception {
-		jLabelNo1.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo2.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo3.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo4.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo5.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo6.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo7.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo8.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo9.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelNo10.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		this.getContentPane().setLayout(borderLayout1);
 		jPanelButtons.setBorder(BorderFactory.createEtchedBorder());
 		jPanelButtons.setPreferredSize(new Dimension(400, 43));
 		jPanelButtons.setLayout(null);
-		//
+
 		panelMain.add(jLabelHeadID, null);
 		panelMain.add(jLabelHeadName, null);
 		panelMain.add(jTextFieldID1, null);
@@ -141,129 +133,151 @@ public class DialogAddList extends JDialog {
 		panelMain.add(jLabelNo8, null);
 		panelMain.add(jLabelNo9, null);
 		panelMain.add(jLabelNo10, null);
-		//
+
 		this.getContentPane().add(jPanelButtons,  BorderLayout.SOUTH);
 		jPanelButtons.add(jButtonOK, null);
 		jPanelButtons.add(jButtonImport, null);
 		jPanelButtons.add(jButtonCancel, null);
-		//
+
 		panelMain.setLayout(null);
 		this.setResizable(false);
 		this.setSize(new Dimension(400, 347));
-		panelMain.setPreferredSize(new Dimension(400, 310));
-		jButtonOK.setBounds(new Rectangle(44, 10, 73, 25));
-		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
+		panelMain.setPreferredSize(new Dimension(458, 302));
+
+		jButtonOK.setBounds(new Rectangle(40, 7, 90, 28));
+		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogAddList_jButtonOK_actionAdapter(this));
-		jButtonImport.setBounds(new Rectangle(154, 10, 103, 25));
-		jButtonImport.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonImport.setBounds(new Rectangle(170, 7, 120, 28));
+		jButtonImport.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonImport.setText(res.getString("DialogAddList01"));
 		jButtonImport.addActionListener(new DialogAddList_jButtonImport_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(284, 10, 73, 25));
-		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCancel.setBounds(new Rectangle(330, 7, 90, 28));
+		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCancel.setText(res.getString("DialogAddList02"));
 		jButtonCancel.addActionListener(new DialogAddList_jButtonCancel_actionAdapter(this));
-		jLabelHeadID.setFont(new java.awt.Font("Dialog", 0, 12));
+
+		jLabelHeadID.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelHeadID.setText("ID");
-		jLabelHeadID.setBounds(new Rectangle(46, 11, 70, 15));
-		jLabelHeadName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelHeadName.setBounds(new Rectangle(142, 10, 150, 15));
-		jLabelNo1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelHeadID.setBounds(new Rectangle(43, 5, 70, 22));
+		jLabelHeadName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabelHeadName.setBounds(new Rectangle(144, 5, 200, 22));
+
+		jLabelNo1.setBounds(new Rectangle(12, 27, 25, 27));
+		jLabelNo1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo1.setText("1");
-		jLabelNo1.setBounds(new Rectangle(12, 29, 19, 15));
-		jTextFieldID1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelNo1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldID1.setText("");
-		jTextFieldID1.setBounds(new Rectangle(41, 28, 86, 21));
-		jTextFieldName1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextFieldID1.setBounds(new Rectangle(41, 27, 100, 25));
+		jTextFieldName1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldName1.setText("");
-		jTextFieldName1.setBounds(new Rectangle(136, 28, 249, 22));
-		jTextFieldName2.setBounds(new Rectangle(136, 55, 249, 22));
-		jTextFieldName2.setText("");
-		jTextFieldName2.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID2.setBounds(new Rectangle(41, 55, 86, 21));
-		jTextFieldID2.setText("");
-		jTextFieldID2.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo2.setBounds(new Rectangle(12, 56, 19, 15));
+		jTextFieldName1.setBounds(new Rectangle(142, 27, 300, 25));
+
+		jLabelNo2.setBounds(new Rectangle(12, 53, 25, 25));
+		jLabelNo2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo2.setText("2");
-		jLabelNo2.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName3.setBounds(new Rectangle(136, 82, 249, 22));
-		jTextFieldName3.setText("");
-		jTextFieldName3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID3.setBounds(new Rectangle(41, 82, 86, 21));
-		jTextFieldID3.setText("");
-		jTextFieldID3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo3.setBounds(new Rectangle(12, 83, 19, 15));
+		jLabelNo2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID2.setBounds(new Rectangle(41, 53, 100, 25));
+		jTextFieldID2.setText("");
+		jTextFieldID2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName2.setBounds(new Rectangle(142, 53, 300, 25));
+		jTextFieldName2.setText("");
+		jTextFieldName2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo3.setBounds(new Rectangle(12, 79, 25, 25));
+		jLabelNo3.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo3.setText("3");
-		jLabelNo3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName4.setBounds(new Rectangle(136, 109, 249, 22));
-		jTextFieldName4.setText("");
-		jTextFieldName4.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID4.setBounds(new Rectangle(41, 109, 86, 21));
-		jTextFieldID4.setText("");
-		jTextFieldID4.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo4.setBounds(new Rectangle(12, 110, 19, 15));
+		jLabelNo3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID3.setBounds(new Rectangle(41, 79, 100, 25));
+		jTextFieldID3.setText("");
+		jTextFieldID3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName3.setBounds(new Rectangle(142, 79, 300, 25));
+		jTextFieldName3.setText("");
+		jTextFieldName3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo4.setBounds(new Rectangle(12, 105, 25, 25));
+		jLabelNo4.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo4.setText("4");
-		jLabelNo4.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName5.setBounds(new Rectangle(136, 136, 249, 22));
-		jTextFieldName5.setText("");
-		jTextFieldName5.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID5.setBounds(new Rectangle(41, 136, 86, 21));
-		jTextFieldID5.setText("");
-		jTextFieldID5.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo5.setBounds(new Rectangle(12, 137, 19, 15));
+		jLabelNo4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID4.setBounds(new Rectangle(41, 105, 100, 25));
+		jTextFieldID4.setText("");
+		jTextFieldID4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName4.setBounds(new Rectangle(142, 105, 300, 25));
+		jTextFieldName4.setText("");
+		jTextFieldName4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo5.setBounds(new Rectangle(12, 131, 25, 25));
+		jLabelNo5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo5.setText("5");
-		jLabelNo5.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName6.setBounds(new Rectangle(136, 164, 249, 22));
-		jTextFieldName6.setText("");
-		jTextFieldName6.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID6.setBounds(new Rectangle(41, 164, 86, 21));
-		jTextFieldID6.setText("");
-		jTextFieldID6.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo6.setBounds(new Rectangle(12, 165, 19, 15));
+		jLabelNo5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID5.setBounds(new Rectangle(41, 131, 100, 25));
+		jTextFieldID5.setText("");
+		jTextFieldID5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName5.setBounds(new Rectangle(142, 131, 300, 25));
+		jTextFieldName5.setText("");
+		jTextFieldName5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo6.setBounds(new Rectangle(12, 157, 25, 15));
+		jLabelNo6.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo6.setText("6");
-		jLabelNo6.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName7.setBounds(new Rectangle(136, 191, 249, 22));
-		jTextFieldName7.setText("");
-		jTextFieldName7.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID7.setBounds(new Rectangle(41, 191, 86, 21));
-		jTextFieldID7.setText("");
-		jTextFieldID7.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo7.setBounds(new Rectangle(12, 192, 19, 15));
+		jLabelNo6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID6.setBounds(new Rectangle(41, 157, 100, 25));
+		jTextFieldID6.setText("");
+		jTextFieldID6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName6.setBounds(new Rectangle(142, 157, 300, 25));
+		jTextFieldName6.setText("");
+		jTextFieldName6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo7.setBounds(new Rectangle(12, 183, 25, 25));
+		jLabelNo7.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo7.setText("7");
-		jLabelNo7.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName8.setBounds(new Rectangle(136, 218, 249, 22));
-		jTextFieldName8.setText("");
-		jTextFieldName8.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID8.setBounds(new Rectangle(41, 218, 86, 21));
-		jTextFieldID8.setText("");
-		jTextFieldID8.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo8.setBounds(new Rectangle(12, 219, 19, 15));
+		jLabelNo7.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID7.setBounds(new Rectangle(41, 183, 100, 25));
+		jTextFieldID7.setText("");
+		jTextFieldID7.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName7.setBounds(new Rectangle(142, 183, 300, 25));
+		jTextFieldName7.setText("");
+		jTextFieldName7.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo8.setBounds(new Rectangle(12, 209, 25, 25));
+		jLabelNo8.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo8.setText("8");
-		jLabelNo8.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName9.setBounds(new Rectangle(136, 245, 249, 22));
-		jTextFieldName9.setText("");
-		jTextFieldName9.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID9.setBounds(new Rectangle(41, 245, 86, 21));
-		jTextFieldID9.setText("");
-		jTextFieldID9.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo9.setBounds(new Rectangle(12, 246, 19, 15));
+		jLabelNo8.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID8.setBounds(new Rectangle(41, 209, 100, 25));
+		jTextFieldID8.setText("");
+		jTextFieldID8.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName8.setBounds(new Rectangle(142, 209, 300, 25));
+		jTextFieldName8.setText("");
+		jTextFieldName8.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo9.setBounds(new Rectangle(12, 235, 25, 25));
+		jLabelNo9.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo9.setText("9");
-		jLabelNo9.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName10.setBounds(new Rectangle(136, 272, 249, 22));
-		jTextFieldName10.setText("");
-		jTextFieldName10.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldID10.setBounds(new Rectangle(41, 272, 86, 21));
-		jTextFieldID10.setText("");
-		jTextFieldID10.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabelNo10.setBounds(new Rectangle(12, 273, 19, 15));
+		jLabelNo9.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID9.setBounds(new Rectangle(41, 235, 100, 25));
+		jTextFieldID9.setText("");
+		jTextFieldID9.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName9.setBounds(new Rectangle(142, 235, 300, 25));
+		jTextFieldName9.setText("");
+		jTextFieldName9.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
+		jLabelNo10.setBounds(new Rectangle(12, 262, 25, 25));
+		jLabelNo10.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelNo10.setText("10");
-		jLabelNo10.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelNo10.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldID10.setBounds(new Rectangle(41, 262, 100, 25));
+		jTextFieldID10.setText("");
+		jTextFieldID10.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName10.setBounds(new Rectangle(142, 262, 300, 25));
+		jTextFieldName10.setText("");
+		jTextFieldName10.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+
 		this.getContentPane().add(panelMain,  BorderLayout.CENTER);
 	}
-	//
+
 	public int request() {
 		reply = 0;
-		//
 		jTextFieldID1.setText("");
 		jTextFieldID2.setText("");
 		jTextFieldID3.setText("");
@@ -284,7 +298,7 @@ public class DialogAddList extends JDialog {
 		jTextFieldName8.setText("");
 		jTextFieldName9.setText("");
 		jTextFieldName10.setText("");
-		//
+
 		String nodeType = frame_.currentMainTreeNode.getType();
 		if (nodeType.equals("SubjectAreaList")) {
 			this.setTitle(res.getString("DialogAddList03"));
@@ -314,7 +328,7 @@ public class DialogAddList extends JDialog {
 			this.setTitle(res.getString("DialogAddList15"));
 			jLabelHeadName.setText(res.getString("DialogAddList16"));
 		}
-		//
+
 		jPanelButtons.getRootPane().setDefaultButton(jButtonOK);
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize = frame_.getSize();
@@ -322,13 +336,11 @@ public class DialogAddList extends JDialog {
 		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
 		this.pack();
 		super.setVisible(true);
-		//
 		return reply;
 	}
-	//
+
 	void jButtonOK_actionPerformed(ActionEvent e) {
 		reply = 1;
-		//
 		if (!jTextFieldName1.getText().equals("")) {
 			frame_.currentMainTreeNode.addChildNode(null, "", jTextFieldID1.getText(), jTextFieldName1.getText());
 		}
@@ -361,12 +373,12 @@ public class DialogAddList extends JDialog {
 		}
 		this.setVisible(false);
 	}
-	//
+
 	void jButtonImport_actionPerformed(ActionEvent e) {
 		reply = 2;
 		this.setVisible(false);
 	}
-	//
+
 	void jButtonCancel_actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 	}

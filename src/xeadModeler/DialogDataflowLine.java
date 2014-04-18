@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -83,7 +83,6 @@ public class DialogDataflowLine extends JDialog {
 	private KanjiTextField jTextFieldNameExt = new KanjiTextField();
 	private JLabel jLabel4 = new JLabel();
 	private JLabel jLabel5 = new JLabel();
-	private JLabel jLabel7 = new JLabel();
 	private JComboBox jComboBoxNode2 = new JComboBox();
 	private boolean buttonOKIsPressed = false;
 	private Modeler frame_;
@@ -109,88 +108,120 @@ public class DialogDataflowLine extends JDialog {
 
 	private void jbInit() throws Exception {
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(333, 440));
+		panelMain.setPreferredSize(new Dimension(482, 427));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		this.setResizable(false);
 		this.setTitle("");
+
 		iconFlow10 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow10.png"));
 		iconFlow11 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow11.png"));
 		iconFlow20 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow20.png"));
 		iconFlow21 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow21.png"));
 		iconFlow30 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow30.png"));
 		iconFlow31 = new ImageIcon(xeadModeler.DialogDataflowLine.class.getResource("flow31.png"));
-		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
+
+		jLabel3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel3.setText(res.getString("DialogDataflowLine27"));
+		jLabel3.setBounds(new Rectangle(5, 12, 130, 20));
+		jTextFieldName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldName.setBounds(new Rectangle(140, 9, 150, 25));
+		jTextFieldNameExt.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldNameExt.setBounds(new Rectangle(295, 9, 150, 25));
+
+		jLabel6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabel6.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel6.setText(res.getString("DialogDataflowLine30"));
+		jLabel6.setBounds(new Rectangle(330, 81, 130, 20));
+
+		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogDataflowLine01"));
-		jLabel1.setBounds(new Rectangle(20, 92, 77, 15));
+		jLabel1.setBounds(new Rectangle(5, 43, 130, 20));
 		jTextFieldNode1Name.setBackground(SystemColor.control);
 		jTextFieldNode1Name.setEnabled(true);
-		jTextFieldNode1Name.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextFieldNode1Name.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldNode1Name.setDoubleBuffered(false);
 		jTextFieldNode1Name.setEditable(false);
-		jTextFieldNode1Name.setBounds(new Rectangle(103, 93, 189, 22));
-		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextFieldNode1Name.setBounds(new Rectangle(140, 40, 200, 25));
+
+		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowLine02"));
-		jLabel2.setBounds(new Rectangle(17, 140, 82, 15));
-		jPanel1.setBounds(new Rectangle(99, 118, 210, 66));
+		jLabel2.setBounds(new Rectangle(5, 94, 130, 20));
+		jPanel1.setBounds(new Rectangle(140, 71, 210, 66));
 		jPanel1.setLayout(gridLayout2);
-		jRadioButtonArrowStyle1.setFont(new java.awt.Font("Monospaced", 0, 12));
+		gridLayout2.setColumns(3);
+		gridLayout2.setHgap(0);
+		gridLayout2.setRows(1);
+		jPanel1.add(jRadioButtonArrowStyle1, null);
+		jPanel1.add(jRadioButtonArrowStyle2, null);
+		jPanel1.add(jRadioButtonArrowStyle3, null);
 		jRadioButtonArrowStyle1.setIcon(iconFlow10);
 		jRadioButtonArrowStyle1.setSelectedIcon(iconFlow11);
-		jRadioButtonArrowStyle2.setFont(new java.awt.Font("Monospaced", 0, 12));
 		jRadioButtonArrowStyle2.setIcon(iconFlow20);
 		jRadioButtonArrowStyle2.setSelectedIcon(iconFlow21);
-		jRadioButtonArrowStyle3.setFont(new java.awt.Font("Monospaced", 0, 12));
 		jRadioButtonArrowStyle3.setIcon(iconFlow30);
 		jRadioButtonArrowStyle3.setSelectedIcon(iconFlow31);
 		buttonGroupArrowStyle.add(jRadioButtonArrowStyle1);
 		buttonGroupArrowStyle.add(jRadioButtonArrowStyle2);
 		buttonGroupArrowStyle.add(jRadioButtonArrowStyle3);
+
+		jLabel5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel5.setText(res.getString("DialogDataflowLine29"));
+		jLabel5.setBounds(new Rectangle(5, 146, 130, 20));
+		jComboBoxNode2.setBounds(new Rectangle(140, 143, 200, 25));
+		jComboBoxNode2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxNode2.setMaximumRowCount(20);
+
+		jLabel4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabel4.setText(res.getString("DialogDataflowLine28"));
+		jLabel4.setBounds(new Rectangle(10, 178, 130, 20));
 		jPanel2.setBorder(BorderFactory.createEtchedBorder());
-		jPanel2.setBounds(new Rectangle(6, 239, 321, 154));
+		jPanel2.setBounds(new Rectangle(6, 201, 470, 180));
 		jPanel2.setLayout(gridLayout1);
 		gridLayout1.setColumns(3);
 		gridLayout1.setRows(7);
-		jRadioButtonIcon1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon1.setText(res.getString("DialogDataflowLine06"));
-		jRadioButtonIcon2.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon2.setText(res.getString("DialogDataflowLine07"));
-		jRadioButtonIcon3.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon3.setText(res.getString("DialogDataflowLine08"));
-		jRadioButtonIcon4.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon4.setText(res.getString("DialogDataflowLine09"));
-		jRadioButtonIcon5.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon5.setText(res.getString("DialogDataflowLine10"));
-		jRadioButtonIcon6.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon6.setText(res.getString("DialogDataflowLine11"));
-		jRadioButtonIcon7.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon7.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon7.setText(res.getString("DialogDataflowLine12"));
-		jRadioButtonIcon8.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon8.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon8.setText(res.getString("DialogDataflowLine13"));
-		jRadioButtonIcon9.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon9.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon9.setText(res.getString("DialogDataflowLine14"));
-		jRadioButtonIcon10.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon10.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon10.setText(res.getString("DialogDataflowLine15"));
-		jRadioButtonIcon11.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon11.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon11.setText(res.getString("DialogDataflowLine16"));
-		jRadioButtonIcon12.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon12.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon12.setText(res.getString("DialogDataflowLine17"));
-		jRadioButtonIcon13.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon13.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon13.setText(res.getString("DialogDataflowLine18"));
-		jRadioButtonIcon14.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon14.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon14.setText(res.getString("DialogDataflowLine19"));
-		jRadioButtonIcon15.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon15.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon15.setText(res.getString("DialogDataflowLine20"));
-		jRadioButtonIcon16.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon16.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon16.setText(res.getString("DialogDataflowLine21"));
-		jRadioButtonIcon17.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon17.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon17.setText(res.getString("DialogDataflowLine22"));
-		jRadioButtonIcon18.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon18.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon18.setText(res.getString("DialogDataflowLine23"));
-		jRadioButtonIcon19.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonIcon19.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon19.setText(res.getString("DialogDataflowLine24"));
-		jRadioButtonIcon20.setFont(new java.awt.Font("Dialog", 0, 11));
+		jRadioButtonIcon20.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE-4));
 		jRadioButtonIcon20.setText(res.getString("DialogDataflowLine25"));
 		buttonGroupIcon.add(jRadioButtonIcon1);
 		buttonGroupIcon.add(jRadioButtonIcon2);
@@ -212,45 +243,6 @@ public class DialogDataflowLine extends JDialog {
 		buttonGroupIcon.add(jRadioButtonIcon18);
 		buttonGroupIcon.add(jRadioButtonIcon19);
 		buttonGroupIcon.add(jRadioButtonIcon20);
-		jButtonOK.setBounds(new Rectangle(74, 404, 73, 25));
-		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
-		jButtonOK.setText("OK");
-		jButtonOK.addActionListener(new DialogDataflowLine_jButtonOK_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(194, 404, 73, 25));
-		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
-		jButtonCancel.setText(res.getString("DialogDataflowLine26"));
-		jButtonCancel.addActionListener(new DialogDataflowLine_jButtonCancel_actionAdapter(this));
-		gridLayout2.setColumns(3);
-		gridLayout2.setHgap(0);
-		gridLayout2.setRows(1);
-		jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel3.setText(res.getString("DialogDataflowLine27"));
-		jLabel3.setBounds(new Rectangle(13, 12, 84, 15));
-		jTextFieldName.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldName.setText("jTextField1");
-		jTextFieldName.setBounds(new Rectangle(103, 11, 130, 22));
-		jTextFieldNameExt.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldNameExt.setText("jTextField2");
-		jTextFieldNameExt.setBounds(new Rectangle(103, 36, 130, 22));
-		jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel4.setText(res.getString("DialogDataflowLine28"));
-		jLabel4.setBounds(new Rectangle(11, 222, 121, 15));
-		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel5.setText(res.getString("DialogDataflowLine29"));
-		jLabel5.setBounds(new Rectangle(37, 190, 60, 15));
-		jComboBoxNode2.setBounds(new Rectangle(103, 190, 189, 21));
-		jComboBoxNode2.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxNode2.setMaximumRowCount(20);
-		jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel6.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel6.setText(res.getString("DialogDataflowLine30"));
-		jLabel6.setBounds(new Rectangle(12, 65, 85, 15));
-		jLabel7.setText(res.getString("DialogDataflowLine31"));
-		jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel7.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel7.setBounds(new Rectangle(13, 37, 84, 15));
 		jPanel2.add(jRadioButtonIcon1, null);
 		jPanel2.add(jRadioButtonIcon2, null);
 		jPanel2.add(jRadioButtonIcon3, null);
@@ -271,15 +263,22 @@ public class DialogDataflowLine extends JDialog {
 		jPanel2.add(jRadioButtonIcon18, null);
 		jPanel2.add(jRadioButtonIcon19, null);
 		jPanel2.add(jRadioButtonIcon20, null);
+
+		jButtonOK.setBounds(new Rectangle(70, 388, 110, 27));
+		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jButtonOK.setText("OK");
+		jButtonOK.addActionListener(new DialogDataflowLine_jButtonOK_actionAdapter(this));
+		jButtonCancel.setBounds(new Rectangle(300, 388, 110, 27));
+		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jButtonCancel.setText(res.getString("DialogDataflowLine26"));
+		jButtonCancel.addActionListener(new DialogDataflowLine_jButtonCancel_actionAdapter(this));
+
 		getContentPane().add(panelMain);
-		jPanel1.add(jRadioButtonArrowStyle1, null);
-		jPanel1.add(jRadioButtonArrowStyle2, null);
-		jPanel1.add(jRadioButtonArrowStyle3, null);
 	}
 
 	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray) {
 		buttonOKIsPressed = false;
-		//
+
 		panelMain.removeAll();
 		panelMain.add(jPanel1, null);
 		panelMain.add(jLabel4, null);
@@ -288,7 +287,6 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jLabel1, null);
 		panelMain.add(jTextFieldNode1Name, null);
 		panelMain.add(jLabel6, null);
-		panelMain.add(jLabel7, null);
 		panelMain.add(jTextFieldName, null);
 		panelMain.add(jLabel3, null);
 		panelMain.add(jTextFieldNameExt, null);
@@ -296,7 +294,7 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jButtonCancel, null);
 		panelMain.add(jPanel2, null);
 		panelMain.add(jComboBoxNode2, null);
-		//
+
 		//Setup Title and RadioButtons of ImageType//
 		if (action.equals("Add")) {
 			this.setTitle(res.getString("DialogDataflowLine32"));
@@ -380,7 +378,7 @@ public class DialogDataflowLine extends JDialog {
 				}
 			}
 		}
-		//
+
 		//Setup arrow style//
 		if (element.getAttribute("ShowArrow1").equals("true")) {
 			if (element.getAttribute("ShowArrow2").equals("true")) {
@@ -391,7 +389,7 @@ public class DialogDataflowLine extends JDialog {
 		} else{
 			jRadioButtonArrowStyle1.setSelected(true);
 		}
-		//
+
 		//Setup ComboBox of nodes to be linked//
 		int numberOfStorageArray = -1;
 		int selectedIndex = 0;
@@ -414,28 +412,29 @@ public class DialogDataflowLine extends JDialog {
 		}
 		jComboBoxNode2.setSelectedIndex(selectedIndex);
 		selectedItemName = jComboBoxNode2.getSelectedItem().toString();
-		//
+
 		//Create spinner with specified default//
 		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(defaultValue, 1, 30, 1);
 		JSpinner jSpinnerSlideNumber = new JSpinner(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
 		jSpinnerSlideNumber.setEditor(spinnerEditor);
-		jSpinnerSlideNumber.setBounds(new Rectangle(103, 63, 43, 24));
+		jSpinnerSlideNumber.setBounds(new Rectangle(408, 102, 50, 25));
+		jSpinnerSlideNumber.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		panelMain.add(jSpinnerSlideNumber, null);
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
-		//
-		//Setup dialog and show
+
+		//Setup dialog and show//
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize = frame_.getSize();
 		Point loc = frame_.getLocation();
 		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
 		this.pack();
 		this.setVisible(true);
-		//
+
 		//Update and return parameter value//
 		if (buttonOKIsPressed) {
-			//
+
 			//Update DOM element//
 			element.setAttribute("Name", jTextFieldName.getText());
 			element.setAttribute("NameExt", jTextFieldNameExt.getText());

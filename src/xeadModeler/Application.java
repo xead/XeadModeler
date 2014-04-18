@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -49,10 +49,10 @@ public class Application {
 		splashIcon = new JLabel(image);
 		splashIcon.setLayout(null);
 		splashLabel = new JLabel();
-		splashLabel.setFont(new java.awt.Font("Dialog", 0, 12));
+		splashLabel.setFont(new java.awt.Font("Dialog", 0, 16));
 		splashLabel.setForeground(Color.cyan);
 		splashLabel.setOpaque(false);
-		splashLabel.setBounds(0, 92, 500, 15);
+		splashLabel.setBounds(0, 89, 500, 18);
 		splashLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		splashLabel.setText(res.getString("SplashMessage0"));
 		splashIcon.add(splashLabel);

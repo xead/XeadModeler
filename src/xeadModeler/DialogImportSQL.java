@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -219,69 +219,69 @@ public class DialogImportSQL extends JDialog {
 		sqlDataTypeArray2[38] = "LONGTEXT";
 		sqlDataTypeArray2[39] = "longtext";
 		//
-		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogImportSQL02"));
-		jLabel1.setBounds(new Rectangle(10, 9, 144, 15));
-		jTextFieldImportFileName.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setBounds(new Rectangle(5, 12, 170, 20));
+		jTextFieldImportFileName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldImportFileName.setHorizontalAlignment(SwingConstants.RIGHT);
-		jTextFieldImportFileName.setBounds(new Rectangle(164, 9, 197, 21));
+		jTextFieldImportFileName.setBounds(new Rectangle(180, 9, 280, 25));
 		jTextFieldImportFileName.setEditable(false);
 		//
-		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogImportSQL03"));
-		jLabel2.setBounds(new Rectangle(10, 33, 144, 15));
-		jComboBoxSubsystem.setBounds(new Rectangle(164, 33, 197, 21));
-		jComboBoxSubsystem.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel2.setBounds(new Rectangle(5, 43, 170, 20));
+		jComboBoxSubsystem.setBounds(new Rectangle(180, 40, 280, 25));
+		jComboBoxSubsystem.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxSubsystem.addActionListener(new DialogImportSQL_jComboBoxSubsystem_actionAdapter(this));
 		//
-		jCheckBoxTableNameControl.setBounds(new Rectangle(9, 57, 351, 21));
-		jCheckBoxTableNameControl.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxTableNameControl.setBounds(new Rectangle(9, 71, 460, 25));
+		jCheckBoxTableNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxTableNameControl.setText(res.getString("DialogImportSQL12"));
 		jCheckBoxTableNameControl.setSelected(true);
 		//
-		jCheckBoxCommentControl.setBounds(new Rectangle(9, 78, 351, 21));
-		jCheckBoxCommentControl.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxCommentControl.setBounds(new Rectangle(9, 102, 460, 25));
+		jCheckBoxCommentControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxCommentControl.setText(res.getString("DialogImportSQL14"));
 		jCheckBoxCommentControl.setSelected(true);
 		//
-		jCheckBoxFieldNameControl.setBounds(new Rectangle(9, 99, 351, 21));
-		jCheckBoxFieldNameControl.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxFieldNameControl.setBounds(new Rectangle(9, 133, 460, 25));
+		jCheckBoxFieldNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxFieldNameControl.setText(res.getString("DialogImportSQL13"));
 		jCheckBoxFieldNameControl.setSelected(true);
 		//
-		jCheckBoxDataTypeControl.setBounds(new Rectangle(9, 120, 351, 21));
-		jCheckBoxDataTypeControl.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxDataTypeControl.setBounds(new Rectangle(9, 164, 460, 25));
+		jCheckBoxDataTypeControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxDataTypeControl.setText(res.getString("DialogImportSQL10"));
 		jCheckBoxDataTypeControl.setSelected(true);
 		//
-		jCheckBoxShowControl.setBounds(new Rectangle(9, 141, 351, 21));
-		jCheckBoxShowControl.setFont(new java.awt.Font("Dialog", 0, 12));
+		jCheckBoxShowControl.setBounds(new Rectangle(9, 195, 460, 25));
+		jCheckBoxShowControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxShowControl.setText(res.getString("DialogImportSQL11"));
 		jCheckBoxShowControl.setSelected(true);
 		jCheckBoxShowControl.addChangeListener(new DialogImportSQL_jCheckBoxShowControl_changeAdapter(this));
 		//
-		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setEditable(true);
-		jTextArea1.setBounds(new Rectangle(9, 166, 351, 111));
+		jTextArea1.setBounds(new Rectangle(9, 226, 455, 100));
 		jTextArea1.setText(res.getString("DialogImportSQL04"));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 		//
-		jProgressBar.setBounds(new Rectangle(20, 283, 104, 25));
-		jButtonStart.setBounds(new Rectangle(20, 283, 104, 25));
-		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
+		jProgressBar.setBounds(new Rectangle(20, 335, 200, 27));
+		jButtonStart.setBounds(new Rectangle(20, 335, 200, 27));
+		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogImportSQL05"));
 		jButtonStart.addActionListener(new DialogImportSQL_jButtonStart_actionAdapter(this));
 		jButtonStart.setEnabled(false);
-		jButtonClose.setBounds(new Rectangle(240, 283, 104, 25));
-		jButtonClose.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonClose.setBounds(new Rectangle(330, 335, 110, 27));
+		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonClose.setText(res.getString("DialogImportSQL06"));
 		jButtonClose.addActionListener(new DialogImportSQL_jButtonClose_actionAdapter(this));
 		//
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(370, 317));
+		panelMain.setPreferredSize(new Dimension(473, 373));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel2, null);

@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -139,50 +139,50 @@ public class DialogDocuments extends JDialog {
 
 	private void jbInit() throws Exception {
 		jPanelMain.setLayout(borderLayout1);
-		jPanelMain.setPreferredSize(new Dimension(465, 281));
+		jPanelMain.setPreferredSize(new Dimension(600, 321));
 		jPanelMain.setBorder(BorderFactory.createEtchedBorder());
 		jPanelCenter.setBorder(BorderFactory.createEtchedBorder());
 		jPanelCenter.setLayout(null);
 		jPanelCenter.setPreferredSize(new Dimension(800, 134));
 		jPanelSouth.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSouth.setLayout(null);
-		jPanelSouth.setPreferredSize(new Dimension(800, 40));
+		jPanelSouth.setPreferredSize(new Dimension(800, 43));
 		jPanel1.setLayout(gridLayout1);
-		jLabelSubsystem.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelSubsystem.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelSubsystem.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubsystem.setText(res.getString("DialogDocuments01"));
-		jLabelSubsystem.setBounds(new Rectangle(12, 11, 88, 15));
-		jComboBoxSubsystems.setBounds(new Rectangle(106, 11, 200, 21));
-		jComboBoxSubsystems.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelSubsystem.setBounds(new Rectangle(5, 12, 130, 20));
+		jComboBoxSubsystems.setBounds(new Rectangle(140, 9, 250, 25));
+		jComboBoxSubsystems.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxSubsystems.addActionListener(new DialogDocuments_jComboBoxSubsystems_actionAdapter(this));
-		jLabelDocumentType.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabelDocumentType.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelDocumentType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelDocumentType.setText(res.getString("DialogDocuments02"));
-		jLabelDocumentType.setBounds(new Rectangle(12, 41, 88, 15));
+		jLabelDocumentType.setBounds(new Rectangle(5, 43, 130, 20));
 		gridLayout1.setColumns(1);
 		gridLayout1.setRows(2);
 		jPanel1.setBorder(BorderFactory.createEtchedBorder());
-		jPanel1.setBounds(new Rectangle(106, 41, 150, 53));
+		jPanel1.setBounds(new Rectangle(140, 40, 180, 60));
 		jPanel1.setLayout(gridLayout1);
-		jRadioButtonTable.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonTable.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTable.setText(res.getString("DialogDocuments03"));
 		jRadioButtonTable.setSelected(true);
 		jRadioButtonTable.addChangeListener(new DialogDocuments_jRadioButtonTable_changeAdapter(this));
-		jRadioButtonFunction.setFont(new java.awt.Font("Dialog", 0, 12));
+		jRadioButtonFunction.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonFunction.setText(res.getString("DialogDocuments04"));
 		jRadioButtonFunction.addChangeListener(new DialogDocuments_jRadioButtonFunction_changeAdapter(this));
 		buttonGroup.add(jRadioButtonTable);
 		buttonGroup.add(jRadioButtonFunction);
-		jComboBoxTables.setBounds(new Rectangle(265, 43, 180, 21));
-		jComboBoxTables.setFont(new java.awt.Font("Dialog", 0, 12));
+		jComboBoxTables.setBounds(new Rectangle(325, 40, 262, 25));
+		jComboBoxTables.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxTables.setEnabled(false);
-		jComboBoxFunctions.setBounds(new Rectangle(265, 70, 180, 21));
-		jComboBoxFunctions.setFont(new java.awt.Font("Dialog", 0, 12));
+		jComboBoxFunctions.setBounds(new Rectangle(325, 74, 262, 25));
+		jComboBoxFunctions.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxFunctions.setEnabled(false);
-		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setForeground(Color.BLUE);
 		jTextArea1.setEditable(false);
-		jTextArea1.setBounds(new Rectangle(5, 101, 451, 130));
+		jTextArea1.setBounds(new Rectangle(5, 106, 584, 160));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBackground(SystemColor.control);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -201,14 +201,14 @@ public class DialogDocuments extends JDialog {
 		jPanelCenter.add(jComboBoxFunctions, null);
 		jPanelCenter.add(jTextArea1, null);
 		//
-		jButtonStart.setBounds(new Rectangle(30, 7, 100, 25));
-		jButtonStart.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonStart.setBounds(new Rectangle(30, 7, 200, 27));
+		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogDocuments07"));
 		jButtonStart.addActionListener(new DialogDocuments_jButtonStart_actionAdapter(this));
-		jProgressBar.setBounds(new Rectangle(30, 7, 100, 25));
+		jProgressBar.setBounds(new Rectangle(30, 7, 200, 27));
 		jProgressBar.setVisible(false);
-		jButtonCloseDialog.setBounds(new Rectangle(350, 7, 70, 25));
-		jButtonCloseDialog.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCloseDialog.setBounds(new Rectangle(440, 7, 110, 27));
+		jButtonCloseDialog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCloseDialog.setText(res.getString("DialogDocuments08"));
 		jButtonCloseDialog.addActionListener(new DialogDocuments_jButtonCloseDialog_actionAdapter(this));
 		jPanelSouth.add(jButtonCloseDialog, null);

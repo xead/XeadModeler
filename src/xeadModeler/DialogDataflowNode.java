@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -49,7 +49,6 @@ public class DialogDataflowNode extends JDialog {
 	private JComboBox jComboBoxType = new JComboBox();
 	private JTextField jTextFieldType = new JTextField();
 	private JComboBox jComboBoxEventPos = new JComboBox();
-	private JLabel jLabel3 = new JLabel();
 	private JLabel jLabel4 = new JLabel();
 	private JLabel jLabel5 = new JLabel();
 	private JLabel jLabel6 = new JLabel();
@@ -81,26 +80,26 @@ public class DialogDataflowNode extends JDialog {
 		this.setModal(true);
 		this.setResizable(false);
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(270, 288));
+		panelMain.setPreferredSize(new Dimension(322, 303));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
-		jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogDataflowNode01"));
-		jLabel1.setBounds(new Rectangle(20, 16, 70, 15));
-		jTextFieldLabel.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldLabel.setBounds(new Rectangle(97, 13, 115, 22));
-		jLabel1Ext.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1.setBounds(new Rectangle(5, 12, 130, 20));
+		jTextFieldLabel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldLabel.setBounds(new Rectangle(140, 9, 130, 25));
+		jLabel1Ext.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1Ext.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1Ext.setText(res.getString("DialogDataflowNode24"));
-		jLabel1Ext.setBounds(new Rectangle(20, 40, 70, 15));
-		jTextFieldLabelExt.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldLabelExt.setBounds(new Rectangle(97, 37, 115, 22));
-		jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel1Ext.setBounds(new Rectangle(5, 43, 130, 20));
+		jTextFieldLabelExt.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldLabelExt.setBounds(new Rectangle(140, 40, 130, 25));
+		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogDataflowNode02"));
-		jLabel2.setBounds(new Rectangle(22, 68, 68, 15));
-		jComboBoxType.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxType.setBounds(new Rectangle(97, 65, 115, 21));
+		jLabel2.setBounds(new Rectangle(5, 74, 130, 20));
+		jComboBoxType.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxType.setBounds(new Rectangle(140, 71, 130, 25));
 		jComboBoxType.addItem(res.getString("DialogDataflowNode03")); //:0
 		jComboBoxType.addItem(res.getString("DialogDataflowNode19")); //:1
 		jComboBoxType.addItem(res.getString("DialogDataflowNode04")); //:2
@@ -113,37 +112,33 @@ public class DialogDataflowNode extends JDialog {
 		jComboBoxType.addItem(res.getString("DialogDataflowNode11")); //:9
 		jComboBoxType.addItem(res.getString("DialogDataflowNode18")); //:10
 		jComboBoxType.setMaximumRowCount(20);
-		jTextFieldType.setFont(new java.awt.Font("Dialog", 0, 12));
-		jTextFieldType.setBounds(new Rectangle(97, 65, 115, 22));
+		jTextFieldType.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldType.setBounds(new Rectangle(140, 71, 130, 25));
 		jTextFieldType.setEditable(false);
-		jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
-		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabel3.setText("");
-		jLabel3.setBounds(new Rectangle(8, 96, 81, 15));
-		jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel4.setText(res.getString("DialogDataflowNode12"));
-		jLabel4.setBounds(new Rectangle(11, 96, 79, 15));
-		jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel4.setBounds(new Rectangle(5, 105, 130, 20));
+		jLabel6.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel6.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel6.setText(res.getString("DialogDataflowNode21"));
-		jLabel6.setBounds(new Rectangle(5, 124, 85, 15));
-		jComboBoxEventPos.setFont(new java.awt.Font("Dialog", 0, 12));
-		jComboBoxEventPos.setBounds(new Rectangle(97, 121, 60, 21));
-		jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
+		jLabel6.setBounds(new Rectangle(5, 136, 130, 20));
+		jComboBoxEventPos.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxEventPos.setBounds(new Rectangle(140, 133, 70, 25));
+		jLabel5.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowNode20"));
-		jLabel5.setBounds(new Rectangle(11, 152, 79, 15));
+		jLabel5.setBounds(new Rectangle(5, 167, 130, 20));
 		jTextAreaDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
 		jTextAreaDescriptions.setLineWrap(true);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
-		jScrollPaneDescriptions.setBounds(new Rectangle(97, 149, 155, 90));
-		jButtonOK.setBounds(new Rectangle(40, 248, 73, 25));
-		jButtonOK.setFont(new java.awt.Font("Dialog", 0, 12));
+		jScrollPaneDescriptions.setBounds(new Rectangle(140, 164, 170, 90));
+		jButtonOK.setBounds(new Rectangle(40, 265, 110, 27));
+		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogDataflowNode_jButtonOK_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(169, 248, 73, 25));
-		jButtonCancel.setFont(new java.awt.Font("Dialog", 0, 12));
+		jButtonCancel.setBounds(new Rectangle(179, 265, 110, 27));
+		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCancel.setText(res.getString("DialogDataflowNode13"));
 		jButtonCancel.addActionListener(new DialogDataflowNode_jButtonCancel_actionAdapter(this));
 		getContentPane().add(panelMain);
@@ -200,7 +195,6 @@ public class DialogDataflowNode extends JDialog {
 		//
 		panelMain.removeAll();
 		panelMain.add(jLabel2, null);
-		panelMain.add(jLabel3, null);
 		panelMain.add(jTextFieldLabel, null);
 		panelMain.add(jLabel1, null);
 		panelMain.add(jTextFieldLabelExt, null);
@@ -269,7 +263,8 @@ public class DialogDataflowNode extends JDialog {
 		jSpinnerSlideNumber.setModel(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
 		jSpinnerSlideNumber.setEditor(spinnerEditor);
-		jSpinnerSlideNumber.setBounds(new Rectangle(97, 93, 42, 22));
+		jSpinnerSlideNumber.setBounds(new Rectangle(140, 102, 50, 25));
+		jSpinnerSlideNumber.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		panelMain.add(jSpinnerSlideNumber, null);
 		//
 		//Setup dialog and show//
