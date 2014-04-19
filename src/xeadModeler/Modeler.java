@@ -41,6 +41,7 @@ import java.awt.print.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -51,9 +52,11 @@ import javax.swing.text.*;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
+
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -1294,8 +1297,16 @@ public class Modeler extends JFrame {
 		/**
 		 * Read xeadmdl.properties
 		 */
+		InputStream inputStream = null;
 		try {
-			InputStream inputStream = new FileInputStream(new File("xeadmdl.properties"));
+			File file = new File("xeadmdl.properties");
+			if (file.exists()) {
+				inputStream = new FileInputStream(file);
+			} else {
+				String classPath = System.getProperty("java.class.path");
+				String jarPath = classPath.substring(0, classPath.lastIndexOf(File.separator)+1);
+				inputStream = new FileInputStream(new File(jarPath + "xeadmdl.properties"));
+			}
 			properties.load(inputStream);
 			String wrkStr = properties.getProperty("MainFont");
 			if (!wrkStr.equals("")) {
@@ -1982,7 +1993,7 @@ public class Modeler extends JFrame {
 		jPopupMenuIOImage.add(jMenuItemIOImageCaptureImage);
 		jPopupMenuIOImage.add(jMenuItemIOImagePrintImage);
 
-		jPanelSelectionGuide.setBorder(BorderFactory.createLineBorder(SELECT_COLOR));
+		jPanelSelectionGuide.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		jPanelSelectionGuide.setOpaque(false);
 	}
 

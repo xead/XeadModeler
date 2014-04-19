@@ -44,7 +44,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.4";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R4.M0";
+	public static final String FULL_VERSION  = "V1.R4.M1";
+	//
+	// 1.4.1での変更点
+	//・業務フローとデータモデル上での矩形選択ガイドの色を水色から白に変更した
+	//・xeadmdl.propertiesの検索順序を、(1)定義ファイル(*.xead)があるフォルダ、(2)xeadmdl.jarがあるフォルダ、にした
 	//
 	// 1.4.0での変更点
 	//・xeadmdl.propertiesでフォント名を指定できるようにした
