@@ -3111,9 +3111,9 @@ public class DialogDocuments extends JDialog {
 			jButtonStart.setEnabled(false);
 		}
 		//
-		comboBoxModelTables.insertElementAt("ÅiAll TablesÅj", 0);
+		comboBoxModelTables.insertElementAt("ÔºàAll TablesÔºâ", 0);
 		comboBoxModelTables.setSelectedItem(comboBoxModelTables.getElementAt(0));
-		comboBoxModelFunctions.insertElementAt("ÅiAll FunctionsÅj", 0);
+		comboBoxModelFunctions.insertElementAt("ÔºàAll FunctionsÔºâ", 0);
 		comboBoxModelFunctions.setSelectedItem(comboBoxModelFunctions.getElementAt(0));
 	}
 

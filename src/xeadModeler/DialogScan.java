@@ -1428,7 +1428,7 @@ public class DialogScan extends JDialog {
 		if (originalString.length() >= 2) {
 			for (int i = 0; i < originalString.length(); i++) {
 				if (i+2 <= originalString.length()) {
-					if (originalString.substring(i,i+1).equals("B")) {
+					if (originalString.substring(i,i+1).equals("ã€‚")) {
 						sentence = originalString.substring(0, i) + "...";
 						break;
 					}
@@ -1441,7 +1441,7 @@ public class DialogScan extends JDialog {
 						break;
 					}
 				} else {
-					if (originalString.substring(originalString.length()-1,originalString.length()).equals("B")) {
+					if (originalString.substring(originalString.length()-1,originalString.length()).equals("ã€‚")) {
 						sentence = originalString.substring(0, originalString.length()-1);
 						break;
 					} else {

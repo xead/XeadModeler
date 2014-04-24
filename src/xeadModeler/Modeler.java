@@ -7219,19 +7219,19 @@ public class Modeler extends JFrame {
 			String lang = Locale.getDefault().getLanguage();
 			if (lang.equals("ja")) {
 				osw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
-				osw.write("<System Descriptions=\"\" Name=\"êVãKÉVÉXÉeÉÄ\" Version=\"0.0.1\" FormatVersion=\"" + DialogAbout.FORMAT_VERSION + " \">\n");
-				osw.write("<Department Descriptions=\"\" ID=\"1\" Name=\"ñ¢éwíË\" SortKey=\"000\" />\n");
-				osw.write("<Department Descriptions=\"ê‡ñæÇP\" ID=\"2\" Name=\"ïîèêÇP\" SortKey=\"001\" />\n");
-				osw.write("<TableType Descriptions=\"\" ID=\"1\" Name=\"ñ¢éwíË\" SortKey=\"000\" />\n");
-				osw.write("<TableType Descriptions=\"ê‡ñæÇP\" ID=\"2\" Name=\"ÉeÅ[ÉuÉãÉ^ÉCÉvÇP\" SortKey=\"001\" />\n");
-				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"1\" Length=\"0\" Name=\"ñ¢éwíË\" SortKey=\"000\" />\n");
-				osw.write("<DataType BasicType=\"SignedNumber\" Decimal=\"0\" ID=\"2\" Length=\"9\" Name=\"ïÑçÜïtÇXåÖêÆêî\" SortKey=\"NR09.0-\" SQLExpression=\"NUMBER(9)\" />\n");
-				osw.write("<DataType BasicType=\"UnsignedNumber\" Decimal=\"0\" ID=\"3\" Length=\"9\" Name=\"ê≥ÇÃÇXåÖêÆêî\" SortKey=\"NR09.0\" SQLExpression=\"NUMBER(9)\" />\n");
-				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"4\" Length=\"50\" Name=\"ÇTÇOåÖï∂éö\" SortKey=\"TX050\" SQLExpression=\"VARCHAR(50)\" />\n");
-				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"5\" Length=\"1\" Name=\"ãÊï™\" SortKey=\"KB1\" SQLExpression=\"CHAR(1)\" />\n");
-				osw.write("<FunctionType Descriptions=\"\" ID=\"1\" Name=\"ñ¢éwíË\" SortKey=\"000\" />\n");
-				osw.write("<FunctionType Descriptions=\"ê‡ñæÇP\" ID=\"2\" Name=\"ã@î\É^ÉCÉvÇP\" SortKey=\"001\" />\n");
-				osw.write("<MaintenanceLog Descriptions=\"êVãKí«â¡\" Headder=\"0.0.1\" ID=\"0001\" SortKey=\"" + getStringValueOfDateTime("withoutTime") + "\" />\n");
+				osw.write("<System Descriptions=\"\" Name=\"Êñ∞Ë¶è„Ç∑„Çπ„ÉÜ„É†\" Version=\"0.0.1\" FormatVersion=\"" + DialogAbout.FORMAT_VERSION + " \">\n");
+				osw.write("<Department Descriptions=\"\" ID=\"1\" Name=\"Êú™ÊåáÂÆö\" SortKey=\"000\" />\n");
+				osw.write("<Department Descriptions=\"Ë™¨ÊòéÔºë\" ID=\"2\" Name=\"ÈÉ®ÁΩ≤Ôºë\" SortKey=\"001\" />\n");
+				osw.write("<TableType Descriptions=\"\" ID=\"1\" Name=\"Êú™ÊåáÂÆö\" SortKey=\"000\" />\n");
+				osw.write("<TableType Descriptions=\"Ë™¨ÊòéÔºë\" ID=\"2\" Name=\"„ÉÜ„Éº„Éñ„É´„Çø„Ç§„ÉóÔºë\" SortKey=\"001\" />\n");
+				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"1\" Length=\"0\" Name=\"Êú™ÊåáÂÆö\" SortKey=\"000\" />\n");
+				osw.write("<DataType BasicType=\"SignedNumber\" Decimal=\"0\" ID=\"2\" Length=\"9\" Name=\"Á¨¶Âè∑‰ªòÔºôÊ°ÅÊï¥Êï∞\" SortKey=\"NR09.0-\" SQLExpression=\"NUMBER(9)\" />\n");
+				osw.write("<DataType BasicType=\"UnsignedNumber\" Decimal=\"0\" ID=\"3\" Length=\"9\" Name=\"Ê≠£„ÅÆÔºôÊ°ÅÊï¥Êï∞\" SortKey=\"NR09.0\" SQLExpression=\"NUMBER(9)\" />\n");
+				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"4\" Length=\"50\" Name=\"ÔºïÔºêÊ°ÅÊñáÂ≠ó\" SortKey=\"TX050\" SQLExpression=\"VARCHAR(50)\" />\n");
+				osw.write("<DataType BasicType=\"String\" Decimal=\"0\" ID=\"5\" Length=\"1\" Name=\"Âå∫ÂàÜ\" SortKey=\"KB1\" SQLExpression=\"CHAR(1)\" />\n");
+				osw.write("<FunctionType Descriptions=\"\" ID=\"1\" Name=\"Êú™ÊåáÂÆö\" SortKey=\"000\" />\n");
+				osw.write("<FunctionType Descriptions=\"Ë™¨ÊòéÔºë\" ID=\"2\" Name=\"Ê©üËÉΩ„Çø„Ç§„ÉóÔºë\" SortKey=\"001\" />\n");
+				osw.write("<MaintenanceLog Descriptions=\"Êñ∞Ë¶èËøΩÂä†\" Headder=\"0.0.1\" ID=\"0001\" SortKey=\"" + getStringValueOfDateTime("withoutTime") + "\" />\n");
 				osw.write("</System>\n");
 			} else {
 				osw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
@@ -15129,7 +15129,7 @@ public class Modeler extends JFrame {
 			if (nodeType_.equals("TaskActionFirst") || nodeType_.equals("TaskAction")) {
 				String workStr = "";
 				if (!domNode_.getAttribute("ExecuteIf").equals("")) {
-					workStr = domNode_.getAttribute("ExecuteIf") + "ÅA";
+					workStr = domNode_.getAttribute("ExecuteIf") + "„ÄÅ";
 				}
 				NodeList list = domNode_.getElementsByTagName("TaskFunctionIO");
 				if (list.getLength() > 0) {
@@ -23993,8 +23993,8 @@ public class Modeler extends JFrame {
 					count = 0;
 				} else {
 					if (count > length
-						&& !originalString.substring(i+1,i+2).equals("ÅB")
-						&& !originalString.substring(i+1,i+2).equals("ÅA")
+						&& !originalString.substring(i+1,i+2).equals("„ÄÇ")
+						&& !originalString.substring(i+1,i+2).equals("„ÄÅ")
 						&& !originalString.substring(i+1,i+3).equals(". ")
 						&& !originalString.substring(i+1,i+3).equals(", ")) {
 						processedString.append(originalString.substring(lastEnd, i+1));
@@ -24022,7 +24022,7 @@ public class Modeler extends JFrame {
 		if (originalString.length() >= 2) {
 			for (int i = 0; i < originalString.length(); i++) {
 				if (i+2 <= originalString.length()) {
-					if (originalString.substring(i,i+1).equals("ÅB")) {
+					if (originalString.substring(i,i+1).equals("„ÄÇ")) {
 						sentence = originalString.substring(0, i) + "...";
 						break;
 					}
@@ -24035,7 +24035,7 @@ public class Modeler extends JFrame {
 						break;
 					}
 				} else {
-					if (originalString.substring(originalString.length()-1,originalString.length()).equals("ÅB")) {
+					if (originalString.substring(originalString.length()-1,originalString.length()).equals("„ÄÇ")) {
 						sentence = originalString.substring(0, originalString.length()-1);
 						break;
 					} else {
@@ -24071,7 +24071,7 @@ public class Modeler extends JFrame {
 	 * @return String :string value of processed string
 	 */
 	static String convertSingleByteCharsToDoubleByteChars(String originalString) {
-		int diff = 'Ç`' - 'A';
+		int diff = 'Ôº°' - 'A';
 		String signs = "!#$%&()*+,-./:;<=>?@[]^_{|}";;
 		char[] cc = originalString.toCharArray();
 		StringBuilder sb = new StringBuilder();
@@ -24083,7 +24083,7 @@ public class Modeler extends JFrame {
 				newChar = (char) (c + diff);
 			//} else {
 			//	if (c == ' ') {
-			//		newChar = 'Å@';
+			//		newChar = '„ÄÄ';
 			//	}
 			}
 			sb.append(newChar);
