@@ -49,6 +49,7 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import javax.swing.text.*;
+import javax.swing.text.Element;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
@@ -156,6 +157,7 @@ public class Modeler extends JFrame {
 	private Properties properties = new Properties();
 	public String mainFontName = "SansSerif";
 	public String ioImageFontName = "Monospaced";
+	public String ioImageDefaultFontSize = "16";
 	/**
 	 * Main undo manager
 	 */
@@ -608,6 +610,7 @@ public class Modeler extends JFrame {
 	 */
 	private JPanel jPanelTask = new JPanel();
 	private JSplitPane jSplitPaneTask = new JSplitPane();
+	private JScrollPane jScrollPaneTask1 = new JScrollPane();
 	private JPanel jPanelTask1 = new JPanel();
 	private JPanel jPanelTask2 = new JPanel();
 	private JPanel jPanelTask3 = new JPanel();
@@ -885,6 +888,7 @@ public class Modeler extends JFrame {
 	private int selectedRow_jTableTableFieldForeignUsageList;
 	private JScrollPane jScrollPaneTableFieldUsageList = new JScrollPane();
 	private JLabel jLabelTableFieldDescriptions = new JLabel();
+	private JScrollPane jScrollPaneTableField1 = new JScrollPane();
 	private JPanel jPanelTableField1 = new JPanel();
 	private JPanel jPanelTableField2 = new JPanel();
 	private JPanel jPanelTableField3 = new JPanel();
@@ -1315,6 +1319,10 @@ public class Modeler extends JFrame {
 			wrkStr = properties.getProperty("IOImageFont");
 			if (!wrkStr.equals("")) {
 				ioImageFontName = wrkStr;
+			}
+			wrkStr = properties.getProperty("IOImageDefaultFontSize");
+			if (!wrkStr.equals("")) {
+				ioImageDefaultFontSize = wrkStr;
 			}
 		} catch (Exception e) {
 		}
@@ -3007,10 +3015,12 @@ public class Modeler extends JFrame {
 		jPanelTask4.setLayout(null);
 		jPanelTask4.setPreferredSize(new Dimension(140, 80));
 		jPanelTask4.setMinimumSize(new Dimension(100, 10));
+		jScrollPaneTask1.setBorder(null);
+		jScrollPaneTask1.getViewport().add(jPanelTask1);
 		jPanelTask1.setBorder(BorderFactory.createEtchedBorder());
-		jPanelTask1.setPreferredSize(new Dimension(10, 100));
+		jPanelTask1.setPreferredSize(new Dimension(1230, 120));
 		jPanelTask1.setLayout(new BorderLayout());
-		jPanelTask1.setPreferredSize(new Dimension(100, 0));
+		//jPanelTask1.setPreferredSize(new Dimension(100, 0));
 		jPanelTask3.setPreferredSize(new Dimension(10, 69));
 		jPanelTask3.setLayout(null);
 		jLabelTaskName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -3045,6 +3055,7 @@ public class Modeler extends JFrame {
 		jLabelSubjectAreaWithThisTask.setText(res.getString("S380"));
 		jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(575, 6, 200, 20));
 		jListSubjectAreaWithThisTask.setBorder(null);
+		jListSubjectAreaWithThisTask.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jListSubjectAreaWithThisTask.setSelectionBackground(jPanelTask.getBackground());
 		jListSubjectAreaWithThisTask.setBackground(jPanelTask.getBackground());
 		jListSubjectAreaWithThisTask.addMouseListener(new Modeler_jListSubjectAreaWithThisTask_mouseAdapter(this));
@@ -3163,7 +3174,7 @@ public class Modeler extends JFrame {
 		jTabbedPaneTaskFunctionIO.addMouseListener(new Modeler_jTabbedPaneTaskFunctionIO_mouseAdapter(this));
 		//
 		jPanelTask.add(jSplitPaneTask, BorderLayout.CENTER);
-		jSplitPaneTask.add(jPanelTask1, JSplitPane.TOP);
+		jSplitPaneTask.add(jScrollPaneTask1, JSplitPane.TOP);
 		jSplitPaneTask.add(jSplitPaneTask2, JSplitPane.BOTTOM);
 		jPanelTask3.add(jTextFieldTaskName);
 		jPanelTask3.add(jLabelTaskSortKey);
@@ -3929,6 +3940,8 @@ public class Modeler extends JFrame {
 		jSplitPaneTableField1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneTableField1.setBorder(null);
 		jSplitPaneTableField1.setDividerLocation(190);
+		jScrollPaneTask1.setBorder(null);
+		jScrollPaneTask1.getViewport().add(jPanelTask1);
 		jLabelTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldName.setText(res.getString("S577"));
@@ -3958,17 +3971,17 @@ public class Modeler extends JFrame {
 		jTextFieldTableFieldDataType.setBackground(SystemColor.control);
 		jTextFieldTableFieldDataType.setEditable(false);
 		jButtonTableFieldDataTypeChange.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jButtonTableFieldDataTypeChange.setText("...");
-		jButtonTableFieldDataTypeChange.setBounds(new Rectangle(395, 37, 25, 25));
+		jButtonTableFieldDataTypeChange.setText("Edit");
+		jButtonTableFieldDataTypeChange.setBounds(new Rectangle(390, 36, 70, 27));
 		jButtonTableFieldDataTypeChange.addActionListener(new Modeler_jButtonTableFieldDataTypeChange_actionAdapter(this));
 		jMenuItemAddDataType.setText(res.getString("S550"));
 		jMenuItemAddDataType.addActionListener(new Modeler_jMenuItemAddDataType_actionAdapter(this));
 		jLabelTableFieldAttributeType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAttributeType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAttributeType.setText(res.getString("S554"));
-		jLabelTableFieldAttributeType.setBounds(new Rectangle(430, 40, 130, 20));
+		jLabelTableFieldAttributeType.setBounds(new Rectangle(465, 40, 130, 20));
 		jPanelTableField3.setBorder(BorderFactory.createEtchedBorder());
-		jPanelTableField3.setBounds(new Rectangle(570, 36, 410, 27));
+		jPanelTableField3.setBounds(new Rectangle(600, 36, 410, 27));
 		jPanelTableField3.setLayout(null);
 		jRadioButtonTableFieldAttributeTypeNATIVE.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jRadioButtonTableFieldAttributeTypeNATIVE.setText(res.getString("S558"));
@@ -3988,9 +4001,9 @@ public class Modeler extends JFrame {
 		jLabelTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldDefault.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldDefault.setText(res.getString("S569"));
-		jLabelTableFieldDefault.setBounds(new Rectangle(980, 40, 100, 20));
+		jLabelTableFieldDefault.setBounds(new Rectangle(1010, 40, 100, 20));
 		jTextFieldTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableFieldDefault.setBounds(new Rectangle(1085, 37, 70, 25));
+		jTextFieldTableFieldDefault.setBounds(new Rectangle(1115, 37, 70, 25));
 		jLabelTableFieldDescriptions.setText(res.getString("S204"));
 		jLabelTableFieldDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -4023,13 +4036,15 @@ public class Modeler extends JFrame {
 		jTableTableFieldForeignUsageList.setRowHeight(TABLE_ROW_HEIGHT);
 		jPanelTableField2.setPreferredSize(new Dimension(10, 68));
 		jPanelTableField2.setLayout(null);
+		jScrollPaneTableField1.setBorder(null);
+		jScrollPaneTableField1.getViewport().add(jPanelTableField1);
 		jPanelTableField1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelTableField1.setMinimumSize(new Dimension(100, 38));
-		jPanelTableField1.setPreferredSize(new Dimension(10, 190));
+		jPanelTableField1.setPreferredSize(new Dimension(1200, 130));
 		jPanelTableField1.setLayout(new BorderLayout());
 		jTabbedPaneTableField.addTab(res.getString("S519"), imageIconFunction, jScrollPaneTableFieldUsageList);
 		jTabbedPaneTableField.addTab(res.getString("S520"), imageIconForeignFunction, jScrollPaneTableFieldForeignUsageList);
-		jSplitPaneTableField1.add(jPanelTableField1, JSplitPane.TOP);
+		jSplitPaneTableField1.add(jScrollPaneTableField1, JSplitPane.TOP);
 		jSplitPaneTableField1.add(jTabbedPaneTableField,  JSplitPane.BOTTOM);
 		jPanelTableField.add(jSplitPaneTableField1,  BorderLayout.CENTER);
 		jPanelTableField1.add(jPanelTableField2, BorderLayout.NORTH);
@@ -4595,6 +4610,7 @@ public class Modeler extends JFrame {
 		jPanelIOPanelImage.addMouseListener(new Modeler_jPanelIOPanelImage_mouseAdapter(this));
 		jPanelIOPanelImage.addMouseMotionListener(new Modeler_jPanelIOPanelImage_mouseMotionAdapter(this));
 		jScrollPaneIOPanelImage1.setBorder(null);
+		jScrollPaneIOPanelImage1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneIOPanelImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		InputMap inputMap = jScrollPaneIOPanelImage1.getInputMap(JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		inputMap.clear();
@@ -4611,9 +4627,6 @@ public class Modeler extends JFrame {
 		jTextPaneIOPanelImage.addMouseMotionListener(new Modeler_jTextPaneIOPanelImage_mouseMotionAdapter(this));
 		jTextPaneIOPanelImage.addCaretListener(new Modeler_jTextPaneIOPanelImage_caretAdapter(this));
 		jTextPaneIOPanelImage.setFont(new java.awt.Font(ioImageFontName, 0, 12));
-		//SimpleAttributeSet attr = new SimpleAttributeSet();
-		//StyleConstants.setLineSpacing(attr, 0.2f);
-		//jTextPaneIOPanelImage.setParagraphAttributes(attr, true);
 		Keymap keymapIOPanelImage = jTextPaneIOPanelImage.getKeymap();
 		JTextComponent.loadKeymap(keymapIOPanelImage, customBindings, jTextPaneIOPanelImage.getActions());
 		jPanelIOPanel5.setBorder(BorderFactory.createEtchedBorder());
@@ -4753,6 +4766,7 @@ public class Modeler extends JFrame {
 		jPanelIOSpool6.setPreferredSize(new Dimension(10, 21));
 		jPanelIOSpool6.setLayout(new BorderLayout());
 		jScrollPaneIOSpoolImage1.setBorder(null);
+		jScrollPaneIOSpoolImage1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneIOSpoolImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		InputMap inputMap = jScrollPaneIOSpoolImage1.getInputMap(JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		inputMap.clear();
@@ -9473,7 +9487,7 @@ public class Modeler extends JFrame {
 		public NodeJumpButton(XeadTreeNode nd) {
 			super();
 			node_ = nd;
-			this.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			this.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			String nodeType = ((XeadTreeNode)node_).getType();
 			this.addActionListener(new NodeJumpButton_actionAdapter(this));
 			if (nodeType == "System") {
@@ -11520,7 +11534,7 @@ public class Modeler extends JFrame {
 			boundaryPosY = y;
 			boundaryWidth = w - 1;
 			boundaryHeight = h - 1;
-			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 200, 15));
+			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
 			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
 			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
 		}
@@ -11531,7 +11545,7 @@ public class Modeler extends JFrame {
 			boundaryPosY = rect.y;
 			boundaryWidth = rect.width - 1;
 			boundaryHeight = rect.height - 1;
-			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 200, 15));
+			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
 			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
 			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
 		}
@@ -13757,7 +13771,7 @@ public class Modeler extends JFrame {
 			jPanel2 = new DropAcceptablePanel(tableNode_);
 			jLabelNo.setForeground(Color.white);
 			jLabelName.setForeground(Color.white);
-			jLabelSubsystemName.setForeground(Color.GRAY);
+			jLabelSubsystemName.setForeground(new Color(155, 155, 155));
 			if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
 				jPanel2.setBackground(Color.BLUE);
 				jLabelID.setForeground(Color.cyan);
@@ -15749,7 +15763,7 @@ public class Modeler extends JFrame {
 						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WINDOW");
-						newElement.setAttribute("FontSize", "16");
+						newElement.setAttribute("FontSize", ioImageDefaultFontSize);
 						newElement.setAttribute("ImageText", "");
 						newElement.setAttribute("Size", "100,30");
 						newElementChild1 = domDocument.createElement("IOPanelField");
@@ -15769,7 +15783,7 @@ public class Modeler extends JFrame {
 						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WHITE");
-						newElement.setAttribute("FontSize", "16");
+						newElement.setAttribute("FontSize", ioImageDefaultFontSize);
 						newElement.setAttribute("ImageText", "");
 						newElement.setAttribute("Size", "200,30");
 						newElementChild1 = domDocument.createElement("IOSpoolField");
@@ -19420,11 +19434,11 @@ public class Modeler extends JFrame {
 				jScrollPaneIOPanelImage1.setBounds(15, 15, dim.width, dim.height);
 				jPanelIOPanelImage.setPreferredSize(new Dimension(dim.width+30, dim.height+30));
 				jTextPaneIOPanelImage.setBackground(stringToColor(domNode_.getAttribute("Background")));
-				if (jTextPaneIOPanelImage.getBackground().equals(SystemColor.control)) {
-					jTextPaneIOPanelImage.setCaretColor(Color.BLACK);
-				} else {
-					jTextPaneIOPanelImage.setCaretColor(SystemColor.control);
-				}
+				//if (jTextPaneIOPanelImage.getBackground().equals(SystemColor.control)) {
+				//	jTextPaneIOPanelImage.setCaretColor(Color.BLACK);
+				//} else {
+				//	jTextPaneIOPanelImage.setCaretColor(SystemColor.control);
+				//}
 				//
 				//Reset variants for block select//
 				inBlockSelectMode = false;
@@ -19572,7 +19586,7 @@ public class Modeler extends JFrame {
 				jScrollPaneIOSpoolImage1.setBounds(15, 15, dim.width, dim.height);
 				jPanelIOSpoolImage.setPreferredSize(new Dimension(dim.width+30, dim.height+30));
 				jTextPaneIOSpoolImage.setBackground(stringToColor(domNode_.getAttribute("Background")));
-				jTextPaneIOSpoolImage.setCaretColor(Color.BLACK);
+				//jTextPaneIOSpoolImage.setCaretColor(Color.BLACK);
 				//
 				//Reset variants for block select//
 				inBlockSelectMode = false;
@@ -19950,7 +19964,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		//Get Not-Null constraints of Table-Key Specified with its ID//
 		private boolean getNotNullOfTableKey() {
 			boolean notNull = true;
@@ -23320,6 +23334,7 @@ public class Modeler extends JFrame {
 		CheckBoxRenderer() {
 			setText(res.getString("S483"));
 			setHorizontalAlignment(JLabel.LEFT);
+			setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		}
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -24281,6 +24296,14 @@ public class Modeler extends JFrame {
 	 */
 	void jTextPaneIOPanelImage_caretUpdate(CaretEvent e) {
 		drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
+		
+		Element elm = jTextPaneIOPanelImage.getStyledDocument().getCharacterElement(jTextPaneIOPanelImage.getCaretPosition());
+		Color bg = StyleConstants.getBackground(elm.getAttributes());
+		if (bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+			jTextPaneIOPanelImage.setCaretColor(Color.white);
+		} else {
+			jTextPaneIOPanelImage.setCaretColor(Color.black);
+		}
 	}
 	/**
 	 * Mouse Event Handler for jTextPaneIOPanelImage
@@ -24313,6 +24336,14 @@ public class Modeler extends JFrame {
 	 */
 	void jTextPaneIOSpoolImage_caretUpdate(CaretEvent e) {
 		drawRectangleOfBlockSelect(jTextPaneIOSpoolImage);
+		
+		Element elm = jTextPaneIOSpoolImage.getStyledDocument().getCharacterElement(jTextPaneIOSpoolImage.getCaretPosition());
+		Color bg = StyleConstants.getBackground(elm.getAttributes());
+		if (bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+			jTextPaneIOSpoolImage.setCaretColor(Color.white);
+		} else {
+			jTextPaneIOSpoolImage.setCaretColor(Color.black);
+		}
 	}
 	/**
 	 * Mouse Event Handler for jTextPaneIOSpoolImage
@@ -24427,76 +24458,9 @@ public class Modeler extends JFrame {
 		return returnRec;
 	}
 	void jPanelIOPanelImage_mouseDragged(MouseEvent e) {
-		repaintResizeGuide(e, iOPanelFontSize);
+		repaintResizeGuide(e, jTextPaneIOPanelImage);
 	}
-	/**
-	 * Repaint resize guide of IOPanel/IOSpool
-	 * @param e :MouseEvent Size
-	 * @param fontSize :Font Size
-	 */
-	void repaintResizeGuide(MouseEvent e, int fontSize) {
-		if (!boundaryResizeMode.equals("")) {
-			float floatWork = 0;
-			int fontPixel = 0;
-			int width, height, intWork;
-			Point currentPoint = e.getPoint();
-			//
-			if (boundaryResizeMode.equals("BOTTOM")) {
-				height = currentPoint.y - 15;
-				if (height >= 50) {
-					if (fontSize == 10) {
-						fontPixel = 14;
-					}
-					if (fontSize == 12) {
-						fontPixel = 17;
-					}
-					if (fontSize == 14) {
-						fontPixel = 20;
-					}
-					if (fontSize == 16) {
-						fontPixel = 23;
-					}
-					if (fontSize == 18) {
-						fontPixel = 26;
-					}
-					if (fontSize == 20) {
-						fontPixel = 29;
-					}
-					floatWork = height / fontPixel;
-					intWork = Math.round(floatWork);
-					jPanelBoundaryResizeGuide.setLocation(boundaryResizeGuideRec.x, 15 + (intWork * fontPixel) + 6);
-					jPanelBoundaryResizeGuide.repaint();
-				}
-			}
-			if (boundaryResizeMode.equals("RIGHT")) {
-				width = currentPoint.x - 15;
-				if (width >= 100) {
-					if (fontSize == 10) {
-						fontPixel = 5;
-					}
-					if (fontSize == 12) {
-						fontPixel = 6;
-					}
-					if (fontSize == 14) {
-						fontPixel = 7;
-					}
-					if (fontSize == 16) {
-						fontPixel = 8;
-					}
-					if (fontSize == 18) {
-						fontPixel = 9;
-					}
-					if (fontSize == 20) {
-						fontPixel = 10;
-					}
-					floatWork = width / fontPixel;
-					intWork = Math.round(floatWork);
-					jPanelBoundaryResizeGuide.setLocation(15 + (intWork * fontPixel) + 6, boundaryResizeGuideRec.y);
-					jPanelBoundaryResizeGuide.repaint();
-				}
-			}
-		}
-	}
+
 	/**
 	 * Mouse Event Handler for jPanelIOSpoolImage
 	 * @param e :Mouse Event
@@ -24528,24 +24492,6 @@ public class Modeler extends JFrame {
 				int height = currentPoint.y - 15;
 				if (height >= 50) {
 					floatWork = height / metrics.getHeight();
-//					if (iOSpoolFontSize == 10) {
-//						floatWork = height / 14;
-//					}
-//					if (iOSpoolFontSize == 12) {
-//						floatWork = height / 17;
-//					}
-//					if (iOSpoolFontSize == 14) {
-//						floatWork = height / 20;
-//					}
-//					if (iOSpoolFontSize == 16) {
-//						floatWork = height / 23;
-//					}
-//					if (iOSpoolFontSize == 18) {
-//						floatWork = height / 26;
-//					}
-//					if (iOSpoolFontSize == 20) {
-//						floatWork = height / 29;
-//					}
 					iOSpoolCharLengthY = Math.round(floatWork);
 				}
 			}
@@ -24553,24 +24499,6 @@ public class Modeler extends JFrame {
 				int width = currentPoint.x - 15;
 				if (width >= 100) {
 					floatWork = width / (font.getSize()/2);
-//					if (iOSpoolFontSize == 10) {
-//						floatWork = width / 5;
-//					}
-//					if (iOSpoolFontSize == 12) {
-//						floatWork = width / 6;
-//					}
-//					if (iOSpoolFontSize == 14) {
-//						floatWork = width / 7;
-//					}
-//					if (iOSpoolFontSize == 16) {
-//						floatWork = width / 8;
-//					}
-//					if (iOSpoolFontSize == 18) {
-//						floatWork = width / 9;
-//					}
-//					if (iOSpoolFontSize == 20) {
-//						floatWork = width / 10;
-//					}
 					iOSpoolCharLengthX = Math.round(floatWork);
 				}
 			}
@@ -24585,8 +24513,46 @@ public class Modeler extends JFrame {
 		setCursorForIOBoundaryResize(e, jScrollPaneIOSpoolImage1);
 	}
 	void jPanelIOSpoolImage_mouseDragged(MouseEvent e) {
-		repaintResizeGuide(e, iOSpoolFontSize);
+		repaintResizeGuide(e, jTextPaneIOSpoolImage);
 	}
+
+	/**
+	 * Repaint resize guide of IOPanel/IOSpool
+	 * @param e :MouseEvent Size
+	 * @param textpane :JTextPane(IOImage)
+	 */
+	void repaintResizeGuide(MouseEvent e, JTextPane textpane) {
+		if (!boundaryResizeMode.equals("")) {
+			float floatWork = 0;
+			int fontPixel = 0;
+			int width, height, intWork;
+			Point currentPoint = e.getPoint();
+			Font font = textpane.getFont();
+			FontMetrics metrics = textpane.getFontMetrics(font);
+
+			if (boundaryResizeMode.equals("BOTTOM")) {
+				height = currentPoint.y - 15;
+				if (height >= 50) {
+					fontPixel = metrics.getHeight();
+					floatWork = height / fontPixel;
+					intWork = Math.round(floatWork);
+					jPanelBoundaryResizeGuide.setLocation(boundaryResizeGuideRec.x, 15 + (intWork * fontPixel));
+					jPanelBoundaryResizeGuide.repaint();
+				}
+			}
+			if (boundaryResizeMode.equals("RIGHT")) {
+				width = currentPoint.x - 15;
+				if (width >= 100) {
+					fontPixel = font.getSize()/2;
+					floatWork = width / fontPixel;
+					intWork = Math.round(floatWork);
+					jPanelBoundaryResizeGuide.setLocation(15 + (intWork * fontPixel) + 6, boundaryResizeGuideRec.y);
+					jPanelBoundaryResizeGuide.repaint();
+				}
+			}
+		}
+	}
+
 	/**
 	 * Event Handler of mouse-Pressed for jPanelSubjectAreaDataflowEditor2
 	 * @param e :Mouse Event
@@ -24910,7 +24876,7 @@ public class Modeler extends JFrame {
 	void showPopupTextPaneIO(MouseEvent e) {
 		Component com = (Component)e.getSource();
 		boolean selectionInvalid = false;
-		currentMainTreeNode.updateFields();
+		//currentMainTreeNode.updateFields(); commented-out for undo manager
 
 		if (e.isPopupTrigger()) {
 
@@ -24943,7 +24909,7 @@ public class Modeler extends JFrame {
 			} else {
 
 				org.w3c.dom.Element element = currentMainTreeNode.getElement();
-				String fontSize = element.getAttribute("FontSize");
+				//String fontSize = element.getAttribute("FontSize");
 				String background = element.getAttribute("Background");
 
 				jMenuItemIOImagePaste.setEnabled(true);
@@ -24965,6 +24931,13 @@ public class Modeler extends JFrame {
 				jMenuItemIOImageChangeBackgroundColorToWhite.setState(background.equals("WHITE"));
 				jMenuItemIOImageChangeBackgroundColorToYellow.setState(background.equals("YELLOW"));
 				jMenuIOImageChangeFontSize.setEnabled(true);
+				String fontSize = "";
+				if (currentMainTreeNode.getType().equals("IOPanel")) {
+					fontSize = Integer.toString(iOPanelFontSize);
+				}
+				if (currentMainTreeNode.getType().equals("IOSpool")) {
+					fontSize = Integer.toString(iOSpoolFontSize);
+				}
 				jMenuItemIOImageChangeFontSizeTo10.setState(fontSize.equals("10"));
 				jMenuItemIOImageChangeFontSizeTo12.setState(fontSize.equals("12"));
 				jMenuItemIOImageChangeFontSizeTo14.setState(fontSize.equals("14"));

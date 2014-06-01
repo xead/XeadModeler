@@ -136,14 +136,14 @@ public class DialogScan extends JDialog {
 		//
 		//panelMain
 		panelMain.setLayout(borderLayoutMain);
-		panelMain.setPreferredSize(new Dimension(1020, 700));
+		panelMain.setPreferredSize(new Dimension(1000, 700));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jPanelNorth, BorderLayout.NORTH);
 		panelMain.add(jPanelSouth, BorderLayout.SOUTH);
 		panelMain.add(jSplitPane, BorderLayout.CENTER);
 		//
 		//jPanelNorth and objects on it
-		jPanelNorth.setBorder(BorderFactory.createEtchedBorder());
+		jPanelNorth.setBorder(null);
 		jPanelNorth.setLayout(null);
 		jPanelNorth.setPreferredSize(new Dimension(1000, 170));
 		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
@@ -152,19 +152,19 @@ public class DialogScan extends JDialog {
 		jLabel1.setBounds(new Rectangle(5, 13, 130, 20));
 		jTextFieldScan.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldScan.setText("");
-		jTextFieldScan.setBounds(new Rectangle(140, 10, 250, 25));
+		jTextFieldScan.setBounds(new Rectangle(140, 10, 240, 25));
 		jTextFieldScan.addKeyListener(new DialogScan_jTextFieldScan_keyAdapter(this));
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogScan03"));
-		jLabel2.setBounds(new Rectangle(400, 13, 130, 20));
+		jLabel2.setBounds(new Rectangle(390, 13, 130, 20));
 		jTextFieldReplace.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldReplace.setText("");
-		jTextFieldReplace.setBounds(new Rectangle(535, 10, 250, 25));
+		jTextFieldReplace.setBounds(new Rectangle(525, 10, 240, 25));
 		jTextFieldReplace.addKeyListener(new DialogScan_jTextFieldReplace_keyAdapter(this));
 		jCheckBoxCaseSensitive.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxCaseSensitive.setText(res.getString("DialogScan04"));
-		jCheckBoxCaseSensitive.setBounds(new Rectangle(790, 10, 220, 25));
+		jCheckBoxCaseSensitive.setBounds(new Rectangle(770, 10, 220, 25));
 		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel3.setText(res.getString("DialogScan05"));
@@ -230,13 +230,13 @@ public class DialogScan extends JDialog {
 		jCheckBoxFunction.setSelected(true);
 		jComboBoxSubsystems.setBounds(new Rectangle(594, 134, 220, 25));
 		jComboBoxSubsystems.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jButtonStartScan.setBounds(new Rectangle(840, 130, 150, 30));
+		jButtonStartScan.setBounds(new Rectangle(840, 130, 140, 32));
 		jButtonStartScan.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStartScan.setText(res.getString("DialogScan18"));
 		jButtonStartScan.addActionListener(new DialogScan_jButtonStartScan_actionAdapter(this));
 		jButtonStartScan.setEnabled(false);
 		jButtonStartScan.setFocusCycleRoot(true);
-		jProgressBar.setBounds(new Rectangle(840, 130, 150, 30));
+		jProgressBar.setBounds(new Rectangle(840, 130, 140, 32));
 		jProgressBar.setVisible(false);
 		jPanelNorth.add(jTextFieldScan, null);
 		jPanelNorth.add(jCheckBoxTable, null);
@@ -298,7 +298,7 @@ public class DialogScan extends JDialog {
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(30);
 		column2.setPreferredWidth(190);
-		column3.setPreferredWidth(420);
+		column3.setPreferredWidth(400);
 		column4.setPreferredWidth(125);
 		column5.setPreferredWidth(145);
 		column6.setPreferredWidth(35);
@@ -332,16 +332,16 @@ public class DialogScan extends JDialog {
 		jPanelSouth.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSouth.setBorder(null);
 		jPanelSouth.setLayout(null);
-		jPanelSouth.setPreferredSize(new Dimension(800, 40));
-		jButtonCloseDialog.setBounds(new Rectangle(30, 7, 120, 25));
+		jPanelSouth.setPreferredSize(new Dimension(800, 43));
+		jButtonCloseDialog.setBounds(new Rectangle(30, 8, 120, 27));
 		jButtonCloseDialog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCloseDialog.setText(res.getString("DialogScan25"));
 		jButtonCloseDialog.addActionListener(new DialogScan_jButtonCloseDialog_actionAdapter(this));
-		jButtonReplaceAllSelected.setBounds(new Rectangle(380, 7, 230, 25));
+		jButtonReplaceAllSelected.setBounds(new Rectangle(380, 8, 230, 27));
 		jButtonReplaceAllSelected.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonReplaceAllSelected.setText(res.getString("DialogScan28"));
 		jButtonReplaceAllSelected.addActionListener(new DialogScan_jButtonReplaceAllSelected_actionAdapter(this));
-		jButtonGenerateListData.setBounds(new Rectangle(860, 7, 120, 25));
+		jButtonGenerateListData.setBounds(new Rectangle(845, 8, 120, 27));
 		jButtonGenerateListData.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonGenerateListData.setText(res.getString("DialogScan29"));
 		jButtonGenerateListData.setEnabled(false);

@@ -44,7 +44,15 @@ public class DialogAbout extends JDialog implements ActionListener {
 	 */
 	public static final String APPLICATION_NAME  = "XEAD Modeler 1.4";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R4.M1";
+	public static final String FULL_VERSION  = "V1.R4.M2";
+	// 1.4.2での変更点
+	//・業務定義ペイン、フィールド定義ペイン、文字列検索ダイアログについてＸＧＡサイズでも閲覧可能にした
+	//・properties可変になっていなかったテーブル一覧ペイン上の一部、およびタスク定義ペイン上の一部のフォントに対応した
+	//・入出力イメージのフォントサイズの初期値をpropertiesの可変にした（無指定の場合は16）
+	//・業務フロー上で「システム境界」を移動したときにシステム名の一部が消えることのある問題を修正した
+	//・パネル／帳票イメージのサイズ変更用ガイドの位置がずれていた問題を修正
+	//・パネル／帳票イメージ上のキャレット色を背景色に合わせて変化させるようにした
+	//・パネル／帳票イメージのUNDO/REDOが効かなくなっていた問題を修正
 	//
 	// 1.4.1での変更点
 	//・業務フローとデータモデル上での矩形選択ガイドの色を水色から白に変更した
