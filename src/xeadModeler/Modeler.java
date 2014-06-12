@@ -5449,7 +5449,7 @@ public class Modeler extends JFrame {
 		    //
 		    // Hide Splash Screen //
 			EventQueue.invokeLater(new Runnable() {
-				@Override public void run() {
+				public void run() {
 					application.hideSplash();
 				}
 			});
@@ -5463,7 +5463,7 @@ public class Modeler extends JFrame {
 		}
 		catch(Exception e) {
 			EventQueue.invokeLater(new Runnable() {
-				@Override public void run() {
+				public void run() {
 					application.hideSplash();
 				}
 			});
