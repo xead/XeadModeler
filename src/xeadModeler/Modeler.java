@@ -24611,24 +24611,26 @@ public class Modeler extends JFrame {
 				currentPoint = jPanelBoundaryResizeGuide.getLocation();
 			}
 			//
-			if (boundaryResizeMode.equals("TOP")) {
-				posY = posY - (boundaryResizeStartPoint.y - currentPoint.y);
-				height = height + (boundaryResizeStartPoint.y - currentPoint.y);
-			}
-			if (boundaryResizeMode.equals("BOTTOM")) {
-				height = height - (boundaryResizeStartPoint.y - currentPoint.y);
-			}
-			if (boundaryResizeMode.equals("LEFT")) {
-				posX = posX - (boundaryResizeStartPoint.x - currentPoint.x);
-				width = width + (boundaryResizeStartPoint.x - currentPoint.x);
-			}
-			if (boundaryResizeMode.equals("RIGHT")) {
-				width = width - (boundaryResizeStartPoint.x - currentPoint.x);
-			}
-			if (boundaryResizeMode.equals("MOVE")) {
-				posX = currentPoint.x;
-				posY = currentPoint.y;
-			}
+			if (boundaryResizeStartPoint != null && currentPoint != null) {
+				if (boundaryResizeMode.equals("TOP")) {
+					posY = posY - (boundaryResizeStartPoint.y - currentPoint.y);
+					height = height + (boundaryResizeStartPoint.y - currentPoint.y);
+				}
+				if (boundaryResizeMode.equals("BOTTOM")) {
+					height = height - (boundaryResizeStartPoint.y - currentPoint.y);
+				}
+				if (boundaryResizeMode.equals("LEFT")) {
+					posX = posX - (boundaryResizeStartPoint.x - currentPoint.x);
+					width = width + (boundaryResizeStartPoint.x - currentPoint.x);
+				}
+				if (boundaryResizeMode.equals("RIGHT")) {
+					width = width - (boundaryResizeStartPoint.x - currentPoint.x);
+				}
+				if (boundaryResizeMode.equals("MOVE")) {
+					posX = currentPoint.x;
+					posY = currentPoint.y;
+				}
+            }
 			//
 			dataflowBoundaryEditor.setBounds(posX, posY, width, height);
 			nodeRightEdgeLocation = posX + width;
