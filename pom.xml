@@ -35,6 +35,11 @@
             <target>1.6</target>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -66,6 +71,25 @@
                 <include>xeadModeler/Res_ko.java</include>
               </includes>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <transformers>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>xeadModeler/Application</mainClass>
+            </transformer>
+          </transformers>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
