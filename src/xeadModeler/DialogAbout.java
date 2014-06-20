@@ -42,9 +42,18 @@ public class DialogAbout extends JDialog implements ActionListener {
 	/**
 	 * Application Information
 	 */
-	public static final String APPLICATION_NAME  = "XEAD Modeler 1.4";
+	public static final String APPLICATION_NAME = "XEAD Modeler 1.4";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
-	public static final String FULL_VERSION  = "V1.R4.M2";
+	public static final String FORMAT_VERSION  = "1.2";
+	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
+	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
+	public static final String FULL_VERSION = "V1.R4.M3";
+	// 1.4.3での変更点
+	//・パネル／帳票イメージ上の矩形選択用ガイドがずれていた問題を修正
+	//・パネル／帳票イメージの画像ファイル探索フォルダをpropertiesで指定できるようにした
+	//・業務定義でパネル／帳票イメージの画像ファイルを表示した場合、一部が隠れることのある問題を修正した
+	//propertiesの読み取りロジックを改善した
+	//
 	// 1.4.2での変更点
 	//・業務定義ペイン、フィールド定義ペイン、文字列検索ダイアログについてＸＧＡサイズでも閲覧可能にした
 	//・properties可変になっていなかったテーブル一覧ペイン上の一部、およびタスク定義ペイン上の一部のフォントに対応した
@@ -132,9 +141,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 	//・業務フローにノードを追加した場合に前回にノードに対して入力した摘要がクリアされない問題を修正
 	//・ツリービュー上で Ctrl+C,Ctrl+V,Ctrl+X を使えるようにするとともに、複数ノードを同時選択できないようにした
 	//・右ペインで値を変更直後にCtrl+Sを押しても上書きされなかった問題を修正
-	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2004-2014 DBC,Ltd.";
-	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
+
 	/**
 	 * Components on the panel
 	 */
@@ -152,9 +159,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	private ImageIcon imageXead = new ImageIcon();
 	private HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 	private Desktop desktop = Desktop.getDesktop();
+	private Modeler modeler;
 
 	public DialogAbout(Modeler parent) {
 		super(parent);
+		modeler = parent;
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		try {
 			jbInit(parent);
@@ -175,19 +184,19 @@ public class DialogAbout extends JDialog implements ActionListener {
 		insetsPanel2.setPreferredSize(new Dimension(75, 52));
 		insetsPanel2.add(imageLabel, BorderLayout.EAST);
 
-		labelName.setFont(new java.awt.Font("Serif", 1, 20));
+		labelName.setFont(new java.awt.Font(modeler.mainFontName, 1, 20));
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
 		labelName.setText(PRODUCT_NAME);
 		labelName.setBounds(new Rectangle(0, 8, 240, 22));
-		labelVersion.setFont(new java.awt.Font("Dialog", 0, 16));
+		labelVersion.setFont(new java.awt.Font(modeler.mainFontName, 0, 16));
 		labelVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		labelVersion.setText(FULL_VERSION);
 		labelVersion.setBounds(new Rectangle(0, 32, 240, 20));
-		labelCopyright.setFont(new java.awt.Font("Dialog", 0, 16));
+		labelCopyright.setFont(new java.awt.Font(modeler.mainFontName, 0, 16));
 		labelCopyright.setHorizontalAlignment(SwingConstants.CENTER);
 		labelCopyright.setText(COPYRIGHT);
 		labelCopyright.setBounds(new Rectangle(0, 53, 240, 20));
-		labelURL.setFont(new java.awt.Font("Dialog", 0, 16));
+		labelURL.setFont(new java.awt.Font(modeler.mainFontName, 0, 14));
 		labelURL.setHorizontalAlignment(SwingConstants.CENTER);
 		labelURL.setText("<html><u><font color='blue'>" + URL_DBC);
 		labelURL.setBounds(new Rectangle(0, 75, 240, 20));
@@ -200,6 +209,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 		insetsPanel3.add(labelCopyright, null);
 		insetsPanel3.add(labelURL, null);
 
+		button1.setFont(new java.awt.Font(modeler.mainFontName, 0, 16));
 		button1.setText("OK");
 		button1.addActionListener(this);
 		insetsPanel1.add(button1, null);

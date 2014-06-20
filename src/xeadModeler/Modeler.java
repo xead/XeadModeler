@@ -158,6 +158,7 @@ public class Modeler extends JFrame {
 	public String mainFontName = "SansSerif";
 	public String ioImageFontName = "Monospaced";
 	public String ioImageDefaultFontSize = "16";
+	public String ioImageFolder = "";
 	/**
 	 * Main undo manager
 	 */
@@ -1293,6 +1294,7 @@ public class Modeler extends JFrame {
 		jbInitComponentsForIOTable();
 		jbInitComponentsForIOWebPage();
 	}
+
 	/**
 	 * Initialize main components and variants
 	 */
@@ -1309,20 +1311,29 @@ public class Modeler extends JFrame {
 			} else {
 				String classPath = System.getProperty("java.class.path");
 				String jarPath = classPath.substring(0, classPath.lastIndexOf(File.separator)+1);
-				inputStream = new FileInputStream(new File(jarPath + "xeadmdl.properties"));
+				file = new File(jarPath + "xeadmdl.properties");
+				if (file.exists()) {
+					inputStream = new FileInputStream(file);
+				}
 			}
-			properties.load(inputStream);
-			String wrkStr = properties.getProperty("MainFont");
-			if (!wrkStr.equals("")) {
-				mainFontName = wrkStr;
-			}
-			wrkStr = properties.getProperty("IOImageFont");
-			if (!wrkStr.equals("")) {
-				ioImageFontName = wrkStr;
-			}
-			wrkStr = properties.getProperty("IOImageDefaultFontSize");
-			if (!wrkStr.equals("")) {
-				ioImageDefaultFontSize = wrkStr;
+			if (inputStream != null) {
+				properties.load(inputStream);
+				String wrkStr = properties.getProperty("MainFont");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					mainFontName = wrkStr;
+				}
+				wrkStr = properties.getProperty("IOImageFont");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					ioImageFontName = wrkStr;
+				}
+				wrkStr = properties.getProperty("IOImageDefaultFontSize");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					ioImageDefaultFontSize = wrkStr;
+				}
+				wrkStr = properties.getProperty("IOImageFolder");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					ioImageFolder = wrkStr;
+				}
 			}
 		} catch (Exception e) {
 		}
@@ -5471,6 +5482,7 @@ public class Modeler extends JFrame {
 			System.exit(0);
 		}
 	}
+
 	/**
 	 * Retrieve file extension
 	 * @param file :the file which name to be analyzed
@@ -5492,36 +5504,40 @@ public class Modeler extends JFrame {
 			}
 		}
 	}
-	//
+
 	/**
 	 * Setup image icon component for function IO
 	 * @param functionSortKey :String value of function SortKey
 	 * @param functionIOSortKey :String value of function IO SortKey
 	 */
-	void setupImageFunctionIO(String functionSortKey, String functionIOSortKey) {
-		imageFunctionIO = null;
+	ImageIcon getImageFunctionIO(String functionSortKey, String functionIOSortKey) {
+		ImageIcon image = null;
+		String[] imageFileExt = {".png", ".gif", ".jpg", ".jpeg", ".PNG", ".GIF", ".JPG", ".JPEG"};
+		File imageFile;
 		File file = new File(currentFileName);
-		String imageFileName = file.getParent() + File.separator + functionSortKey + "_" + functionIOSortKey;
-		File imageFile = new File(imageFileName + ".png");
-		if (imageFile.exists()) {
-			imageFunctionIO = new ImageIcon(imageFile.getPath());
+
+		String imageFileName = "";
+		if (ioImageFolder.equals("") || ioImageFolder.equals("<CURRENT>")) {
+			imageFileName = file.getParent() + File.separator + functionSortKey + "_" + functionIOSortKey;
 		} else {
-			imageFile = new File(imageFileName + ".gif");
-			if (imageFile.exists()) {
-				imageFunctionIO = new ImageIcon(imageFile.getPath());
+			if (ioImageFolder.contains("<CURRENT>")) {
+				imageFileName = ioImageFolder.replace("<CURRENT>", file.getParent());
+				imageFileName = imageFileName + File.separator + functionSortKey + "_" + functionIOSortKey;
 			} else {
-				imageFile = new File(imageFileName + ".jpg");
-				if (imageFile.exists()) {
-					imageFunctionIO = new ImageIcon(imageFile.getPath());
-				} else {
-					imageFile = new File(imageFileName + ".jpeg");
-					if (imageFile.exists()) {
-						imageFunctionIO = new ImageIcon(imageFile.getPath());
-					}
-				}
+				imageFileName = ioImageFolder + File.separator + functionSortKey + "_" + functionIOSortKey;
 			}
 		}
+
+		for (int i = 0; i < imageFileExt.length; i++) {
+			imageFile = new File(imageFileName + imageFileExt[i]);
+			if (imageFile.exists()) {
+				image = new ImageIcon(imageFile.getPath());
+				break;
+			}
+		}
+		return image;
 	}
+
 	/**
 	 * Setup contents-pane for node selected
 	 * @param node :selected node
@@ -15372,7 +15388,7 @@ public class Modeler extends JFrame {
 			//Show PopUp menu//
 			jPopupMenuXeadTreeNode.show(com, posX, posY);
 		}
-		//
+
 		public void addChildNode(XeadTreeNode childNode, String typeOfNodeBeingAdded, String sortKey, String name) {
 			XeadTreeNode node;
 			NodeList nodeList;
@@ -15830,7 +15846,7 @@ public class Modeler extends JFrame {
 			jTreeMain.updateUI();
 			activateContentsPane();
 		}
-		//
+
 		String getNextSortKeyOfTableField(XeadTreeNode tableNode) {
 			org.w3c.dom.Element element;
 			int lastSortKeyInt = 0;
@@ -15856,7 +15872,7 @@ public class Modeler extends JFrame {
 			nextSortKeyStr = getFormatted4ByteString(lastSortKeyInt + 10);
 			return nextSortKeyStr;
 		}
-		//
+
 		public String deleteNode() {
 			XeadTreeNode  parentNode = (XeadTreeNode)this.getParent();
 			String errorMessage = "";
@@ -16311,7 +16327,7 @@ public class Modeler extends JFrame {
 			//
 			return errorMessage;
 		}
-		//
+
 		public void pasteChildNode(org.w3c.dom.Element pastingElement) {
 			XeadTreeNode childNode = null;
 			org.w3c.dom.Element lastElement, newElement, newElementChild1, newElementChild2;
@@ -16867,7 +16883,7 @@ public class Modeler extends JFrame {
 				this.activateContentsPane();
 			}
 		}
-		//
+
 		public void print() {
 			if (!printFormatSpecified) {
 				pageFormat = printerJob.pageDialog(pageFormat);
@@ -16882,7 +16898,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		public void createSubsystemAttributesForRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element subsystemElement) {
 			org.w3c.dom.Element elementSubsystemTable, elementSubsystemRelationship, newElement;
 			boolean table1OK, table2OK, needToAdd;
@@ -16922,7 +16938,7 @@ public class Modeler extends JFrame {
 				subsystemElement.appendChild(newElement);
 			}
 		}
-		//
+
 		private void createSubsystemAttributesForTable(String tableID, String subsystemID) {
 			org.w3c.dom.Element element1, element2, newElement;
 			NodeList subsystemTableList, relationshipList, subsystemRelationshipList;
@@ -16990,7 +17006,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		public void sortChildNodes() {
 			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
 			int childCount = this.getChildCount();
@@ -17006,19 +17022,19 @@ public class Modeler extends JFrame {
 				this.add(node);
 			}
 		}
-		//
+
 		public String getType() {
 			return nodeType_;
 		}
-		//
+
 		public org.w3c.dom.Element getElement() {
 			return domNode_;
 		}
-		//
+
 		public void setElement(org.w3c.dom.Element newElement) {
 			domNode_ = newElement;
 		}
-		//
+
 		public void activateContentsPane() {
 			String panelName = "";
 			//
@@ -17051,7 +17067,7 @@ public class Modeler extends JFrame {
 			//Show specific card-panel//
 			((CardLayout)jPanelContentsPane.getLayout()).show(jPanelContentsPane, panelName);
 		}
-		//
+
 		public org.w3c.dom.Element getUndoRedoElement() {
 			org.w3c.dom.Element element = null;
 			//
@@ -17141,7 +17157,7 @@ public class Modeler extends JFrame {
 			//
 			return element;
 		}
-		//
+
 		public boolean isPrimaryKeyField() {
 			boolean value = false;
 			if (((XeadTreeNode)this).getType().equals("TableField")) {
@@ -17166,7 +17182,7 @@ public class Modeler extends JFrame {
 			}
 			return value;
 		}
-		//
+
 		public boolean isUndoable() {
 			boolean undoable = false;
 			//
@@ -17194,7 +17210,7 @@ public class Modeler extends JFrame {
 			//
 			return undoable;
 		}
-		//
+
 		private String activateContentsPaneForSystem() {
 			NodeList nodeList1;
 			jLabelSubtitle.setText(res.getString("S4556"));
@@ -17537,7 +17553,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelSystem";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForSubjectAreaList() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node;
@@ -17561,7 +17577,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelSubjectAreaList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForSubjectArea() {
 			NodeList dataflowNodeList, dataflowLineList;
 			int nodeRightEdgeLocation, nodeBottomEdgeLocation, panelWidth, panelHeight;
@@ -17667,7 +17683,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelSubjectArea";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForRoleList() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node, departmentNode;
@@ -17693,7 +17709,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelRoleList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForRole() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node, taskTypeNode;
@@ -17744,7 +17760,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelRole";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTask() {
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent()).getName() + " - "
@@ -17885,7 +17901,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTask";
 			return panelName;
 		}
-		//
+
 		private void activateContentsPaneForTaskAction(XeadTreeNode taskActionNode, String sortKeyOfFunctionIO) {
 			jTreeTaskActions.setSelectionPath(new TreePath(taskActionNode.getPath()));
 			currentTaskActionTreeNode = taskActionNode;
@@ -17969,7 +17985,7 @@ public class Modeler extends JFrame {
 				jTabbedPaneTaskFunctionIO.addTab(res.getString("S4695"), jPanelTaskFunctionIODummy);
 			}
 		}
-		//
+
 		private void activateContentsPaneForTaskFunctionIO(org.w3c.dom.Element taskFunctionIOElement) {
 			String strWrk = "";
 			int position = 0;
@@ -18012,7 +18028,7 @@ public class Modeler extends JFrame {
 						jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
 						//
 						if (functionIONode.isSearchImageFileValid()) {
-							setupImageFunctionIO(functionNode.getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
+							imageFunctionIO = getImageFunctionIO(functionNode.getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
 						} else {
 							imageFunctionIO = null;
 						}
@@ -18025,13 +18041,12 @@ public class Modeler extends JFrame {
 							//
 							jLabelTaskFunctionIOImage.setIcon(imageFunctionIO);
 							jLabelTaskFunctionIOImage.setBounds(10, 10, imageFunctionIO.getIconWidth(), imageFunctionIO.getIconHeight());
-							jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jLabelTaskFunctionIOImage.getWidth()+30, jLabelIOImageIcon.getHeight()+40));
+							jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jLabelTaskFunctionIOImage.getWidth()+30, jLabelTaskFunctionIOImage.getHeight()+40));
 							//
 							Rectangle rec = jLabelTaskFunctionIOImage.getBounds();
-							//jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
 							XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
 							jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 250, 15);
+							jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 500, 15);
 							//
 						} else {
 							//
@@ -18042,7 +18057,6 @@ public class Modeler extends JFrame {
 							setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
 							//
 							Rectangle rec = jTextPaneTaskFunctionIOImage.getBounds();
-							//jLabelTaskFunctionIOSortKey.setText(functionNode.getElement().getAttribute("SortKey") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
 							XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
 							jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
 							FontMetrics metrics = jLabelTaskFunctionIOSortKey.getFontMetrics(jLabelTaskFunctionIOSortKey.getFont());
@@ -18066,7 +18080,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		private String activateContentsPaneForSubsystemList() {
 			org.w3c.dom.Element subsystemElement, subsystemTableElement, tableElement, functionElement, functionTableElement;
 			org.w3c.dom.Element elementFunctionUsedByThis;
@@ -18226,7 +18240,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelSubsystemList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForSubsystem() {
 			jLabelSubtitle.setText(((XeadTreeNode)this.getParent()).getName() + " - " + this.getName());
 			jTextFieldSubsystemName.setText(domNode_.getAttribute("Name"));
@@ -18238,7 +18252,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelSubsystem";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTableList() {
 			org.w3c.dom.Element element, dataTypeElement;
 			XeadTreeNode node;
@@ -18543,7 +18557,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTableList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTable() {
 			XeadTreeNode node1, node2, node3, node4;
 			String statement;
@@ -18641,7 +18655,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTable";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTableFieldList() {
 			org.w3c.dom.Element element, dataTypeElement;
 			XeadTreeNode node;
@@ -18728,7 +18742,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTableFieldList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTableField() {
 			XeadTreeNode node1, node2, node3, node4;
 			jLabelSubtitle.setText(
@@ -18869,7 +18883,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTableField";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTableKeyList() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node;
@@ -18900,7 +18914,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTableKeyList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForTableKey() {
 			XeadTreeNode tableNode, tableFieldNode, objectTableNode, objectTableKeyNode;
 			org.w3c.dom.Element keyFieldElement, dataTypeElement, objectTableElement, relationshipElement;
@@ -19099,7 +19113,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelTableKey";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForFunctionList() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node, nodeFunctionUsedByThis, nodeSubsystem;
@@ -19184,7 +19198,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelFunctionList";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForFunction() {
 			org.w3c.dom.Element element;
 			XeadTreeNode node;
@@ -19383,7 +19397,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelFunction";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForIOPanel() {
 			//
 			//Setup cell editor//
@@ -19403,7 +19417,7 @@ public class Modeler extends JFrame {
 			//
 			jPanelIOPanelImage.updateUI();
 			if (this.isSearchImageFileValid()) {
-				setupImageFunctionIO(((XeadTreeNode)this.getParent()).getElement().getAttribute("SortKey"), domNode_.getAttribute("SortKey"));
+				imageFunctionIO = getImageFunctionIO(((XeadTreeNode)this.getParent()).getElement().getAttribute("SortKey"), domNode_.getAttribute("SortKey"));
 			} else {
 				imageFunctionIO = null;
 			}
@@ -19434,11 +19448,6 @@ public class Modeler extends JFrame {
 				jScrollPaneIOPanelImage1.setBounds(15, 15, dim.width, dim.height);
 				jPanelIOPanelImage.setPreferredSize(new Dimension(dim.width+30, dim.height+30));
 				jTextPaneIOPanelImage.setBackground(stringToColor(domNode_.getAttribute("Background")));
-				//if (jTextPaneIOPanelImage.getBackground().equals(SystemColor.control)) {
-				//	jTextPaneIOPanelImage.setCaretColor(Color.BLACK);
-				//} else {
-				//	jTextPaneIOPanelImage.setCaretColor(SystemColor.control);
-				//}
 				//
 				//Reset variants for block select//
 				inBlockSelectMode = false;
@@ -19538,7 +19547,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelIOPanel";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForIOSpool() {
 			//Setup cell editor//
 			JTextField editField = new JTextField();
@@ -19556,7 +19565,7 @@ public class Modeler extends JFrame {
 			jTextAreaIOSpoolDescriptions.setCaretPosition(0);
 			//
 			if (this.isSearchImageFileValid()) {
-				setupImageFunctionIO(((XeadTreeNode)this.getParent()).getElement().getAttribute("SortKey"), domNode_.getAttribute("SortKey"));
+				imageFunctionIO = getImageFunctionIO(((XeadTreeNode)this.getParent()).getElement().getAttribute("SortKey"), domNode_.getAttribute("SortKey"));
 			} else {
 				imageFunctionIO = null;
 			}
@@ -19586,7 +19595,6 @@ public class Modeler extends JFrame {
 				jScrollPaneIOSpoolImage1.setBounds(15, 15, dim.width, dim.height);
 				jPanelIOSpoolImage.setPreferredSize(new Dimension(dim.width+30, dim.height+30));
 				jTextPaneIOSpoolImage.setBackground(stringToColor(domNode_.getAttribute("Background")));
-				//jTextPaneIOSpoolImage.setCaretColor(Color.BLACK);
 				//
 				//Reset variants for block select//
 				inBlockSelectMode = false;
@@ -19667,7 +19675,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelIOSpool";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForIOTable() {
 			org.w3c.dom.Element dataTypeElement;
 			//
@@ -19806,7 +19814,7 @@ public class Modeler extends JFrame {
 			String panelName = "jPanelIOTable";
 			return panelName;
 		}
-		//
+
 		private String activateContentsPaneForIOWebPage() {
 			//Setup cell editor//
 			JTextField editField = new JTextField();
@@ -19989,7 +19997,7 @@ public class Modeler extends JFrame {
 			}
 			return notNull;
 		}
-		//
+
 		//Get Name of Table-Key Specified with its ID//
 		private String getNameOfTableKey() {
 			StringBuffer keyName = new StringBuffer();
@@ -20023,7 +20031,7 @@ public class Modeler extends JFrame {
 			if (keyName.toString().equals("")) {keyName.append("*none");}
 			return keyName.toString();
 		}
-		//
+
 		private Color stringToColor(String colorString) {
 			Color color = Color.WHITE;
 			if (colorString.equals("WHITE")) {color = Color.WHITE;}
@@ -20041,7 +20049,7 @@ public class Modeler extends JFrame {
 			if (colorString.equals("ORANGE")) {color = Color.ORANGE;}
 			return color;
 		}
-		//
+
 		private String colorToString(Color color) {
 			String colorString = "WHITE";
 			if (color.equals(Color.WHITE)) {colorString = "WHITE";}
@@ -20059,7 +20067,7 @@ public class Modeler extends JFrame {
 			if (color.equals(Color.ORANGE)) {colorString = "ORANGE";}
 			return colorString;
 		}
-		//
+
 		//"this" instance will be dropped into specific component on the contents pane for currentXeadTreeNode//
 		public boolean dragAndDropNodeIntoComponent(Component dropTarget, MouseEvent e) {
 			XeadTreeNode childNode;
@@ -20866,7 +20874,7 @@ public class Modeler extends JFrame {
 			//Return the flag indicates if jTreeMain needs to be refreshed or not//
 			return refreshRequired;
 		}
-		//
+
 		private boolean validateDataTypesOfKeys(XeadTreeNode keyNode1, XeadTreeNode keyNode2) {
 			org.w3c.dom.Element element1, element2;
 			boolean validated = true;
@@ -20955,7 +20963,7 @@ public class Modeler extends JFrame {
 			//
 			return validated;
 		}
-		//
+
 		public Cursor getDragAndDropCursorForComponent(Component dropTarget) {
 			Cursor cursor = DragSource.DefaultLinkNoDrop;
 			if (this.getType().equals("Function") && (dropTarget.equals(jViewportFunctionsUsedByThis) || dropTarget.equals(jTableFunctionsUsedByThis))) {
@@ -21035,7 +21043,7 @@ public class Modeler extends JFrame {
 			}
 			return cursor;
 		}
-		//
+
 		//Undo adding action to the node//
 		public void undoAdd(XeadTreeNode ownerNode) {
 			this.deleteNode();
@@ -21045,7 +21053,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = ownerNode;
 			ownerNode.activateContentsPane();
 		}
-		//
+
 		//Re-do adding action to the node//
 		public void redoAdd(XeadTreeNode ownerNode) {
 			ownerNode.addChildNode(this, "", "", "");
@@ -21055,7 +21063,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = this;
 			this.activateContentsPane();
 		}
-		//
+
 		//Undo modifying action to the node//
 		public void undoModify(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement) {
 			XeadTreeNode parentNode = null;
@@ -21336,7 +21344,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = this;
 			this.activateContentsPane();
 		}
-		//
+
 		private org.w3c.dom.Element replaceRelationshipAndCloneElement(String tableID, String keyID, org.w3c.dom.Element replaceElement) {
 			org.w3c.dom.Element cloneElement = null;
 			//
@@ -21366,7 +21374,7 @@ public class Modeler extends JFrame {
 			}
 			return cloneElement;
 		}
-		//
+
 		//Re-do modifying action to the node//
 		public void redoModify(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement) {
 			XeadTreeNode parentNode = null;
@@ -21641,7 +21649,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = this;
 			this.activateContentsPane();
 		}
-		//
+
 		//UnDo removing action to the node//
 		public void undoRemove(XeadTreeNode ownerNode) {
 			ownerNode.addChildNode(this, "", "", "");
@@ -21651,7 +21659,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = this;
 			this.activateContentsPane();
 		}
-		//
+
 		//ReDo removing action to the node//
 		public void redoRemove(XeadTreeNode ownerNode) {
 			this.deleteNode();
@@ -21661,7 +21669,7 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = ownerNode;
 			ownerNode.activateContentsPane();
 		}
-		//
+
 		public void updateFields() {
 			XeadTreeNode parentNode;
 			//
@@ -21698,7 +21706,7 @@ public class Modeler extends JFrame {
 				jTreeMain.updateUI();
 			}
 		}
-		//
+
 		private boolean[] updateFieldsForSystem() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged; //updateStatusFlag[0] to be returned//
 			boolean valueOfSortKeyChanged = false; //updateStatusFlag[1] to be returned//
@@ -21973,7 +21981,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForSubjectArea() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22009,7 +22017,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForRole() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22043,7 +22051,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		public void updateIndentLevelOfTaskActions(XeadTreeNode rootOfNodesBeingUpdated, int valueOfIndentLevelToBeAdjusted) {
 			org.w3c.dom.Element element;
 			XeadTreeNode childNode;
@@ -22072,7 +22080,7 @@ public class Modeler extends JFrame {
 				element.setAttribute("IndentLevel", Integer.toString(indentLevel));
 			}
 		}
-		//
+
 		public void updateSortKeyOfTaskActionsInOrder(XeadTreeNode rootOfNodesBeingUpdated, int valueOfSortKeyToBeStarted, int numberToBeIncreased) {
 			org.w3c.dom.Element element;
 			XeadTreeNode childNode;
@@ -22108,7 +22116,7 @@ public class Modeler extends JFrame {
 				element.setAttribute("SortKey", getFormatted4ByteString(intSortKey));
 			}
 		}
-		//
+
 		private boolean[] updateFieldsForTask() {
 			if (jTreeTaskActions.getSelectionPath() != null) {
 				TreePath tp = jTreeTaskActions.getSelectionPath();
@@ -22157,7 +22165,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTaskAction(XeadTreeNode mainTreeNode) {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22185,7 +22193,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTaskFunctionIO(XeadTreeNode mainTreeNode) {
 			boolean valueOfFieldsChanged = false;
 			boolean valueOfSortKeyChanged = false;
@@ -22218,7 +22226,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForSubsystem() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22245,7 +22253,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTableList() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22335,7 +22343,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTable() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22369,7 +22377,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTableField() {
 			boolean valueOfFieldsChanged = false;
 			boolean valueOfSortKeyChanged = false;
@@ -22453,7 +22461,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForTableKey() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22504,7 +22512,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForFunction() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -22576,7 +22584,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForIOPanel() {
 			String imageText;
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
@@ -22800,7 +22808,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean isDuplicatedStyle(org.w3c.dom.Element newElement, NodeList existingStyleList) {
 			boolean result = false;
 			org.w3c.dom.Element existingElement = null;
@@ -22841,7 +22849,7 @@ public class Modeler extends JFrame {
 			//
 			return result;
 		}
-		//
+
 		private boolean[] updateFieldsForIOSpool() {
 			String imageText;
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
@@ -23031,7 +23039,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForIOWebPage() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -23126,7 +23134,7 @@ public class Modeler extends JFrame {
 			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
 			return updateStatusFlag;
 		}
-		//
+
 		private boolean[] updateFieldsForIOTable() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
@@ -23193,6 +23201,7 @@ public class Modeler extends JFrame {
 			return updateStatusFlag;
 		}
 	} //End of Class Definition of XeadTreeNode//
+
 	/**
 	 * Class of Table Row Number
 	 */
@@ -23226,6 +23235,7 @@ public class Modeler extends JFrame {
 			return element_ext2;
 		}
 	}
+
 	/**
 	 * Class of Table Model(Read Only)
 	 */
@@ -23233,6 +23243,7 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		public boolean isCellEditable(int row, int col) {return false;}
 	}
+
 	/**
 	 * Class of Table Model(EditableModel)
 	 */
@@ -23242,6 +23253,7 @@ public class Modeler extends JFrame {
 			if (col == 0) {return false;} else {return true;}
 		}
 	}
+
 	/**
 	 * Class of Table Model for RelationshipList
 	 */
@@ -23274,6 +23286,7 @@ public class Modeler extends JFrame {
 			return editable;
 		}
 	}
+
 	/**
 	 * Class of Table Model for FunctionsUsedByThis
 	 */
@@ -23283,6 +23296,7 @@ public class Modeler extends JFrame {
 			if (col != 5) {return false;} else {return true;}
 		}
 	}
+
 	/**
 	 * Class of Table Model for IOTableFieldList
 	 */
@@ -23292,6 +23306,7 @@ public class Modeler extends JFrame {
 			if (col <= 3) {return false;} else {return true;}
 		}
 	}
+
 	/**
 	 * Class of Table Model for NativeTableList
 	 */
@@ -23301,6 +23316,7 @@ public class Modeler extends JFrame {
 			if (col != 3) {return false;} else {return true;}
 		}
 	}
+
 	/**
 	 * Class of Table Model for ForeignTableList
 	 */
@@ -23310,6 +23326,7 @@ public class Modeler extends JFrame {
 			if (col != 4) {return false;} else {return true;}
 		}
 	}
+
 	/**
 	 * Class of Listener for TabbedPane
 	 */
@@ -23326,6 +23343,7 @@ public class Modeler extends JFrame {
 			}
 		}
 	}
+
 	/**
 	 * Class of Renderer for CheckBox
 	 */
@@ -23349,193 +23367,7 @@ public class Modeler extends JFrame {
 			return this;
 		}
 	}
-//	/**
-//	 * Class of Xead Undo Manager
-//	 */
-//	class XeadUndoManager {
-//		String[] actionArray = new String[1000];
-//		XeadTreeNode[] nodeArray = new XeadTreeNode[1000];
-//		XeadTreeNode[] ownerNodeArray = new XeadTreeNode[1000];
-//		org.w3c.dom.Element[] oldDomElementArray = new org.w3c.dom.Element[1000];
-//		org.w3c.dom.Element[] newDomElementArray = new org.w3c.dom.Element[1000];
-//		org.w3c.dom.Element savedDomElement;
-//		XeadTreeNode savedOwnerNode;
-//		int indexOfLastElement = 0;
-//		int indexOfRedoMax = -1;
-//		int indexOfLastUndo = -1;
-//		boolean undoRedoActionBeingExecuted = false;
-//
-//		void addLogOfAdd(XeadTreeNode node) {
-//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
-//				indexOfRedoMax = indexOfLastElement;
-//				indexOfLastUndo = indexOfLastElement;
-//
-//				actionArray[indexOfLastElement] = "Add";
-//				nodeArray[indexOfLastElement] = node;
-//				oldDomElementArray[indexOfLastElement] = null;
-//				newDomElementArray[indexOfLastElement] = null;
-//				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
-//				jMenuItemEditUndo.setEnabled(true);
-//				jMenuItemEditRedo.setEnabled(false);
-//
-//				changeState.setChanged(true);
-//				countUpIndex();
-//			}
-//		}
-//
-//		void addLogOfRemove(XeadTreeNode node) {
-//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
-//				indexOfRedoMax = indexOfLastElement;
-//				indexOfLastUndo = indexOfLastElement;
-//
-//				actionArray[indexOfLastElement] = "Remove";
-//				nodeArray[indexOfLastElement] = node;
-//				oldDomElementArray[indexOfLastElement] = null;
-//				newDomElementArray[indexOfLastElement] = null;
-//				ownerNodeArray[indexOfLastElement] = (XeadTreeNode)node.getParent();
-//				jMenuItemEditUndo.setEnabled(true);
-//				jMenuItemEditRedo.setEnabled(false);
-//
-//				changeState.setChanged(true);
-//				countUpIndex();
-//			}
-//		}
-//
-//		void saveNodeBeforeModified(XeadTreeNode node) {
-//			if (node.isUndoable()) {
-//				savedDomElement = node.getUndoRedoElement();
-//				savedOwnerNode = (XeadTreeNode)node.getParent();
-//			}
-//		}
-//
-//		void addLogAfterModified(XeadTreeNode node) {
-//			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
-//				indexOfRedoMax = indexOfLastElement;
-//				indexOfLastUndo = indexOfLastElement;
-//
-//				actionArray[indexOfLastElement] = "Modify";
-//				nodeArray[indexOfLastElement] = node;
-//				oldDomElementArray[indexOfLastElement] = savedDomElement;
-//				newDomElementArray[indexOfLastElement] = node.getUndoRedoElement();
-//				ownerNodeArray[indexOfLastElement] = savedOwnerNode;
-//				jMenuItemEditUndo.setEnabled(true);
-//				jMenuItemEditRedo.setEnabled(false);
-//
-//				changeState.setChanged(true);
-//				countUpIndex();
-//			}
-//		}
-//
-//		void countUpIndex() {
-//			if (indexOfLastElement < 999) {
-//				indexOfLastElement = indexOfLastElement + 1;
-//			} else {
-//				for (int i = 0; i < 999; i++) {
-//					nodeArray[i] = nodeArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					ownerNodeArray[i] = ownerNodeArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					actionArray[i] = actionArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					oldDomElementArray[i] = oldDomElementArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					newDomElementArray[i] = newDomElementArray[i+1];
-//				}
-//				indexOfLastElement = 999;
-//			}
-//		}
-//
-//		void undo() {
-//			//////////////////////////////////////////////////////////////////////
-//			// This step is required even if executed twice eventually by       //
-//			// showing Edit Menu. Because usually Edit Menu is not used to undo //                    //
-//			//////////////////////////////////////////////////////////////////////
-//			currentMainTreeNode.updateFields();
-//
-//			undoRedoActionBeingExecuted = true;
-//			if (indexOfLastUndo > -1) {
-//				if (actionArray[indexOfLastUndo].equals("Add")) {
-//					nodeArray[indexOfLastUndo].undoAdd(ownerNodeArray[indexOfLastUndo]);
-//				}
-//				if (actionArray[indexOfLastUndo].equals("Modify")) {
-//					nodeArray[indexOfLastUndo].undoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
-//				}
-//				if (actionArray[indexOfLastUndo].equals("Remove")) {
-//					nodeArray[indexOfLastUndo].undoRemove(ownerNodeArray[indexOfLastUndo]);
-//				}
-//
-//				indexOfLastUndo = indexOfLastUndo - 1;
-//				if (indexOfLastUndo == -1) {
-//					jMenuItemEditUndo.setEnabled(false);
-//					changeState.setChanged(false);
-//				}
-//				indexOfLastElement = indexOfLastUndo + 1;
-//				jMenuItemEditRedo.setEnabled(true);
-//			}
-//			undoRedoActionBeingExecuted = false;
-//			jTreeMain.updateUI();
-//		}
-//
-//		void redo() {
-//			undoRedoActionBeingExecuted = true;
-//			if (indexOfLastUndo < indexOfRedoMax) {
-//				indexOfLastUndo = indexOfLastUndo + 1;
-//
-//				if (actionArray[indexOfLastUndo].equals("Add")) {
-//					nodeArray[indexOfLastUndo].redoAdd(ownerNodeArray[indexOfLastUndo]);
-//				}
-//				if (actionArray[indexOfLastUndo].equals("Modify")) {
-//					nodeArray[indexOfLastUndo].redoModify(oldDomElementArray[indexOfLastUndo], newDomElementArray[indexOfLastUndo]);
-//				}
-//				if (actionArray[indexOfLastUndo].equals("Remove")) {
-//					nodeArray[indexOfLastUndo].redoRemove(ownerNodeArray[indexOfLastUndo]);
-//				}
-//
-//				if (indexOfLastUndo >= indexOfRedoMax) {
-//					jMenuItemEditRedo.setEnabled(false);
-//				}
-//				changeState.setChanged(true);
-//				indexOfLastElement = indexOfLastUndo + 1;
-//				jMenuItemEditUndo.setEnabled(true);
-//			}
-//			undoRedoActionBeingExecuted = false;
-//			jTreeMain.updateUI();
-//		}
-//
-//		void resetLog() {
-//			indexOfLastUndo = -1;
-//			indexOfLastElement = 0;
-//			jMenuItemEditUndo.setEnabled(false);
-//			jMenuItemEditRedo.setEnabled(false);
-//		}
-//
-//		String getText() {
-//			StringBuffer bf = new StringBuffer();
-//			for (int i = 0; i < indexOfLastElement; i++) {
-//				bf.append("- ");
-//				if (ownerNodeArray[i] != null) {
-//					bf.append(ownerNodeArray[i].getNameAsOwnerNode());
-//					bf.append(" : ");
-//				}
-//				bf.append(nodeArray[i].getNameAsLoggedNode());
-//				if (actionArray[i].equals("Add")) {
-//					bf.append(res.getString("S10"));
-//				}
-//				if (actionArray[i].equals("Modify")) {
-//					bf.append(res.getString("S11"));
-//				}
-//				if (actionArray[i].equals("Remove")) {
-//					bf.append(res.getString("S12"));
-//				}
-//				bf.append("\n");
-//			}
-//			return bf.toString();
-//		}
-//	}
+
 	/**
 	 * Class of Xead Undo Manager
 	 */
@@ -23617,33 +23449,10 @@ public class Modeler extends JFrame {
 			}
 		}
 
-//		void countUpIndex() {
-//			if (indexOfLastElement < 999) {
-//				indexOfLastElement = indexOfLastElement + 1;
-//			} else {
-//				for (int i = 0; i < 999; i++) {
-//					nodeArray[i] = nodeArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					ownerNodeArray[i] = ownerNodeArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					actionArray[i] = actionArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					oldDomElementArray[i] = oldDomElementArray[i+1];
-//				}
-//				for (int i = 0; i < 999; i++) {
-//					newDomElementArray[i] = newDomElementArray[i+1];
-//				}
-//				indexOfLastElement = 999;
-//			}
-//		}
-
 		void undo() {
 			//////////////////////////////////////////////////////////////////////
 			// This step is required even if executed twice eventually by       //
-			// showing Edit Menu. Because usually Edit Menu is not used to undo //                    //
+			// showing Edit Menu. Because usually Edit Menu is not used to undo //
 			//////////////////////////////////////////////////////////////////////
 			//currentMainTreeNode.updateFields();
 
@@ -23759,6 +23568,7 @@ public class Modeler extends JFrame {
 			return bf.toString();
 		}
 	}
+
 	/**
 	 * Class of Change State
 	 */
@@ -23767,22 +23577,20 @@ public class Modeler extends JFrame {
 		ChangeState() {
 			changed = false;
 			jLabelChangeState.setText("");
-			//jMenuItemFileSave.setEnabled(false);
 		}
 		void setChanged(boolean state) {
 			changed = state;
 			if (changed) {
 				jLabelChangeState.setText(res.getString("S6450"));
-				//jMenuItemFileSave.setEnabled(true);
 			} else {
 				jLabelChangeState.setText("");
-				//jMenuItemFileSave.setEnabled(false);
 			}
 		}
 		boolean isChanged() {
 			return changed;
 		}
 	}
+
 	/**
 	 * Class of Custom Tree Renderer
 	 */
@@ -23837,6 +23645,7 @@ public class Modeler extends JFrame {
 			return renderer;
 		}
 	}
+
 	/**
 	 * Class of Node Comparator
 	 */
@@ -23857,6 +23666,7 @@ public class Modeler extends JFrame {
 			return(compareResult);
 		}
 	}
+
 	/**
 	 * Class of Element Comparator
 	 */
@@ -23877,6 +23687,7 @@ public class Modeler extends JFrame {
 			return(compareResult);
 		}
 	}
+
 	/**
 	 * Class of Field Element Comparator
 	 */
@@ -23905,6 +23716,7 @@ public class Modeler extends JFrame {
 	void adjustFontSizeOfTextField(Object textfield) {
 		adjustFontSizeOfTextField(textfield, 16);
 	}
+
 	/**
 	 * Method to adjust font size in text-field
 	 * @param textfield :text-field to be processed
@@ -23987,6 +23799,7 @@ public class Modeler extends JFrame {
 		}
 		return processedString.toString();
 	}
+
 	/**
 	 * Method to split long string into shorter rows
 	 * @param originalString :original string value to be processed
@@ -24026,6 +23839,7 @@ public class Modeler extends JFrame {
 		}
 		return processedString.toString();
 	}
+
 	/**
 	 * Method to get first sentence from specified string
 	 * @param originalString :original value of string
@@ -24064,6 +23878,7 @@ public class Modeler extends JFrame {
 		}
 		return sentence;
 	}
+
 	/**
 	 * Method to convert a hankaku string to zenkaku string
 	 * @param originalString :original string value to be processed
@@ -24080,6 +23895,7 @@ public class Modeler extends JFrame {
 		value = sb.toString();
 		return value;
 	}
+
 	/**
 	 * Method to convert single byte chars to double byte chars
 	 * @param originalString :original string value to be processed
@@ -24096,15 +23912,12 @@ public class Modeler extends JFrame {
 			if ((('A' <= c) && (c <= 'Z')) || (('a' <= c) && (c <= 'z'))
 					|| (('1' <= c) && (c <= '9')) || signs.contains(wrkStr)) {
 				newChar = (char) (c + diff);
-			//} else {
-			//	if (c == ' ') {
-			//		newChar = '@';
-			//	}
 			}
 			sb.append(newChar);
 		}
 		return sb.toString();
 	}
+
 	/**
 	 * Method to get String number
 	 * @param number :number to be formatted
@@ -24118,6 +23931,7 @@ public class Modeler extends JFrame {
 		if (1000 <= number && number < 10000) {formattedNumberString = Integer.toString(number);}
 		return formattedNumberString;
 	}
+
 	/**
 	 * Method to get caret position of text
 	 * @param textpane :JTextpane where the caret is placed
@@ -24128,19 +23942,17 @@ public class Modeler extends JFrame {
 		Point caretPosition = new Point();
 		String text = textpane.getText().substring(0, textpane.getSelectionEnd());
 		String lastLine = text;
-		//
 		for (int i = 0; i < text.length(); i++) {
 			if (text.substring(i,i+1).equals("\n")) {
 				rowNumber++;
 				lastLine = text.substring(i+1, text.length());
 			}
 		}
-		//
 		caretPosition.x = rowNumber;
 		caretPosition.y = lastLine.getBytes().length;
-		//
 		return caretPosition;
 	}
+
 	/**
 	 * Method to get caret position of text
 	 * @param textpane :JTextpane where the caret is placed
@@ -24153,7 +23965,7 @@ public class Modeler extends JFrame {
 		String wrkStr1 = "";
 		String wrkStr2 = "";
 		byte[] byteArray;
-		//
+
 		String text = textpane.getText();
 		for (int i = 0; i < text.length(); i++) {
 			if (point.x == rowNumber) {
@@ -24189,14 +24001,14 @@ public class Modeler extends JFrame {
 				rowNumber++;
 			}
 		}
-		//
+
 		//Process in case that point is on the last line only with "\n"//
 		if (!(point.x == 1 && point.y == 0)) {
 			if (point.x == rowNumber && position == 0 && text.length() > 0) {
 				position = text.length();
 			}
 		}
-		//
+
 		//Process in case additional rows required//
 		if (point.x > rowNumber) {
 			position = text.length() - 1;
@@ -24212,9 +24024,10 @@ public class Modeler extends JFrame {
 				textpane.replaceSelection(wrkStr1);
 			}
 		}
-		//
+
 		return position;
 	}
+
 	/**
 	 * Drawer of block select rectangle
 	 * @param textpane :TextPane component where drawn on
@@ -24226,7 +24039,7 @@ public class Modeler extends JFrame {
 			blockSelectPointThru = getCaretPositionInText(textpane);
 			textpane.paint(savedImage);
 			Graphics2D g2 = (Graphics2D)textpane.getGraphics();
-			//
+
 			if (blockSelectPointThru.x >= blockSelectPointFrom.x) {
 				blockSelectRec.height = blockSelectPointThru.x - blockSelectPointFrom.x + 1;
 				blockSelectRec.x = blockSelectPointFrom.x;
@@ -24248,48 +24061,20 @@ public class Modeler extends JFrame {
 					blockSelectRec.y = blockSelectPointThru.y;
 				}
 			}
+
+			Font font = textpane.getFont();
+			FontMetrics metrics = textpane.getFontMetrics(font);
 			Rectangle visualBlockSelectRec = new Rectangle(0,0,0,0);
-			int fontSize = textpane.getFont().getSize();
-			if (fontSize == 10) {
-				visualBlockSelectRec.height = blockSelectRec.height * 14 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 14 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 5;
-				visualBlockSelectRec.y = blockSelectRec.y * 5 + 2;
-			}
-			if (fontSize == 12) {
-				visualBlockSelectRec.height = blockSelectRec.height * 17 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 17 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 6;
-				visualBlockSelectRec.y = blockSelectRec.y * 6 + 2;
-			}
-			if (fontSize == 14) {
-				visualBlockSelectRec.height = blockSelectRec.height * 20 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 20 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 7;
-				visualBlockSelectRec.y = blockSelectRec.y * 7 + 2;
-			}
-			if (fontSize == 16) {
-				visualBlockSelectRec.height = blockSelectRec.height * 23 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 23 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 8;
-				visualBlockSelectRec.y = blockSelectRec.y * 8 + 2;
-			}
-			if (fontSize == 18) {
-				visualBlockSelectRec.height = blockSelectRec.height * 26 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 26 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 9;
-				visualBlockSelectRec.y = blockSelectRec.y * 9 + 2;
-			}
-			if (fontSize == 20) {
-				visualBlockSelectRec.height = blockSelectRec.height * 29 - 2;
-				visualBlockSelectRec.x = (blockSelectRec.x - 1) * 29 + 2;
-				visualBlockSelectRec.width = blockSelectRec.width * 10;
-				visualBlockSelectRec.y = blockSelectRec.y * 10 + 2;
-			}
+			visualBlockSelectRec.height = blockSelectRec.height * metrics.getHeight() - 2;
+			visualBlockSelectRec.x = (blockSelectRec.x - 1) * metrics.getHeight() + 2;
+			visualBlockSelectRec.width = blockSelectRec.width * font.getSize()/2;
+			visualBlockSelectRec.y = blockSelectRec.y * font.getSize()/2 + 2;
+
 			g2.setColor(textpane.getSelectionColor());
 			g2.drawRect(visualBlockSelectRec.y, visualBlockSelectRec.x, visualBlockSelectRec.width, visualBlockSelectRec.height);
 		}
 	}
+
 	/**
 	 * Caret Event Handler for jTextPaneIOPanelImage
 	 * @param e :Caret Event
@@ -26335,7 +26120,7 @@ public class Modeler extends JFrame {
 							jPanelFunctionsStructureIOImageArray[k].removeAll();
 							//
 							if (functionIONode.isSearchImageFileValid()) {
-								setupImageFunctionIO(((XeadTreeNode)functionIONode.getParent()).getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
+								imageFunctionIO = getImageFunctionIO(((XeadTreeNode)functionIONode.getParent()).getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
 							} else {
 								imageFunctionIO = null;
 							}
