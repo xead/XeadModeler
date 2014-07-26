@@ -157,7 +157,7 @@ public class Modeler extends JFrame {
 	private Properties properties = new Properties();
 	public String mainFontName = "SansSerif";
 	public String ioImageFontName = "Monospaced";
-	public String ioImageDefaultFontSize = "16";
+	public int ioImageFontSize = 16;
 	public String ioImageFolder = "";
 	/**
 	 * Main undo manager
@@ -167,7 +167,7 @@ public class Modeler extends JFrame {
 	 * sorter for general use
 	 */
 	private SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new SortableXeadTreeNodeListModel();
-	private SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
+	public SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
 	private SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
 	/**
 	 * fields for style processing for JTextpane
@@ -869,7 +869,7 @@ public class Modeler extends JFrame {
 	private JPanel jPanelTableFieldList = new JPanel();
 	private JScrollPane jScrollPaneTableFieldList = new JScrollPane();
 	private JViewport jViewportTableFieldList = new JViewport();
-	private TableModelReadOnlyList tableModelTableFieldList = new TableModelReadOnlyList();
+	private TableModelTableFieldList tableModelTableFieldList = new TableModelTableFieldList();
 	private JTable jTableTableFieldList = new JTable(tableModelTableFieldList);
 	private int selectedRow_jTableTableFieldList;
 	private int targetRow_jTableTableFieldList;
@@ -908,7 +908,7 @@ public class Modeler extends JFrame {
 	private JRadioButton jRadioButtonTableFieldAttributeTypeINHERITED = new JRadioButton();
 	private JRadioButton jRadioButtonTableFieldAttributeTypeNATIVE = new JRadioButton();
 	private JRadioButton jRadioButtonTableFieldAttributeTypeDERIVABLE = new JRadioButton();
-	private JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
+	//private JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
 	private JLabel jLabelTableFieldDefault = new JLabel();
 	private JTextField jTextFieldTableFieldDefault = new JTextField();
 	private JCheckBox jCheckBoxTableFieldNotNull = new JCheckBox();
@@ -1046,7 +1046,7 @@ public class Modeler extends JFrame {
 	private JPanel jPanelIOPanel6 = new JPanel();
 	private JLabel jLabelIOPanelImage = new JLabel();
 	private JLabel jLabelIOPanelCaretPosition = new JLabel();
-	private int iOPanelFontSize,iOPanelCharLengthX,iOPanelCharLengthY;
+	private int iOPanelCharLengthX, iOPanelCharLengthY;
 	private Action actionUndoIOPanelImage = new AbstractAction(){
 		private static final long serialVersionUID = 1L;
 		public void actionPerformed(ActionEvent e){
@@ -1057,6 +1057,12 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		public void actionPerformed(ActionEvent e){
 			redoAction.actionPerformed(e);
+		}
+	};
+	private Action actionUnderlineIOPanelImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			jMenuItemIOImageUnderlineSelectedChar_actionPerformed(null);
 		}
 	};
 	/**
@@ -1089,7 +1095,7 @@ public class Modeler extends JFrame {
 	private Border borderOriginal4;
 	private JLabel jLabelIOSpoolCaretPosition = new JLabel();
 	private JPanel jPanelIOSpoolImage = new JPanel();
-	private int iOSpoolFontSize,iOSpoolCharLengthX,iOSpoolCharLengthY;
+	private int iOSpoolCharLengthX, iOSpoolCharLengthY;
 	private Action actionUndoIOSpoolImage = new AbstractAction(){
 		private static final long serialVersionUID = 1L;
 		public void actionPerformed(ActionEvent e){
@@ -1151,13 +1157,6 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemIOImageCancelUnderline = new JMenuItem();
 	private JMenuItem jMenuItemIOImageBlockSelect = new JMenuItem();
 	private JMenuItem jMenuItemIOImageCancelSelectedCharStyle = new JMenuItem();
-	private JMenu jMenuIOImageChangeFontSize = new JMenu();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo10 = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo12 = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo14 = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo16 = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo18 = new JCheckBoxMenuItem();
-	private JCheckBoxMenuItem jMenuItemIOImageChangeFontSizeTo20 = new JCheckBoxMenuItem();
 	private JMenu jMenuIOImageChangeBackgroundColor = new JMenu();
 	private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToBlack = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToWhite = new JCheckBoxMenuItem();
@@ -1247,6 +1246,7 @@ public class Modeler extends JFrame {
 	 * Application instance
 	 */
 	private Application application;
+
 	/**
 	 * Constructor
 	 * @param args :[0]=name of file to be processed
@@ -1255,51 +1255,88 @@ public class Modeler extends JFrame {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 		try {
 			application = app;
-			jbInit();  //Initialize components//
+
+			////////////////////////
+			// Java Version Check //
+			////////////////////////
+			String version = System.getProperty("java.version");
+			if (!version.startsWith("1.6.") && !version.startsWith("1.7.")) {
+				JOptionPane.showMessageDialog(null, res.getString("S5") + version + res.getString("S6"));
+				System.exit(0);
+			}
+
+			///////////////////////////
+			// Initialize components //
+			///////////////////////////
+			jbInitComponentsAndVariants();
+			jbInitComponentsForSystem();
+			jbInitComponentsForSubjectAreaList();
+			jbInitComponentsForSubjectArea();
+			jbInitComponentsForRoleList();
+			jbInitComponentsForRole();
+			jbInitComponentsForTask();
+			jbInitComponentsForSubsystemList();
+			jbInitComponentsForSubsystem();
+			jbInitComponentsForTableList();
+			jbInitComponentsForTable();
+			jbInitComponentsForTableFieldList();
+			jbInitComponentsForTableField();
+			jbInitComponentsForTableKeyList();
+			jbInitComponentsForTableKey();
+			jbInitComponentsForFunctionList();
+			jbInitComponentsForFunction();
+			jbInitComponentsForIOPanel();
+			jbInitComponentsForIOSpool();
+			jbInitComponentsForIOTable();
+			jbInitComponentsForIOWebPage();
+
+			///////////////////////////////////////////
+			// Check the parameter to setup contents //
+			///////////////////////////////////////////
 			if (args.length > 0) {
 				processContentsFile(args[0]);
 			} else {
 				processContentsFile("");
 			}
-		}
-		catch(Exception e) {
+
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Initialize components properties
-	 * @throws Exception
-	 */
-	void jbInit() throws Exception {
-		jbInitComponentsAndVariants();
-		jbInitComponentsForSystem();
-		jbInitComponentsForSubjectAreaList();
-		jbInitComponentsForSubjectArea();
-		jbInitComponentsForRoleList();
-		jbInitComponentsForRole();
-		jbInitComponentsForTask();
-		jbInitComponentsForSubsystemList();
-		jbInitComponentsForSubsystem();
-		jbInitComponentsForTableList();
-		jbInitComponentsForTable();
-		jbInitComponentsForTableFieldList();
-		jbInitComponentsForTableField();
-		jbInitComponentsForTableKeyList();
-		jbInitComponentsForTableKey();
-		jbInitComponentsForFunctionList();
-		jbInitComponentsForFunction();
-		jbInitComponentsForIOPanel();
-		jbInitComponentsForIOSpool();
-		jbInitComponentsForIOTable();
-		jbInitComponentsForIOWebPage();
-	}
+//	/**
+//	 * Initialize components properties
+//	 * @throws Exception
+//	 */
+//	void jbInit() throws Exception {
+//		jbInitComponentsAndVariants();
+//		jbInitComponentsForSystem();
+//		jbInitComponentsForSubjectAreaList();
+//		jbInitComponentsForSubjectArea();
+//		jbInitComponentsForRoleList();
+//		jbInitComponentsForRole();
+//		jbInitComponentsForTask();
+//		jbInitComponentsForSubsystemList();
+//		jbInitComponentsForSubsystem();
+//		jbInitComponentsForTableList();
+//		jbInitComponentsForTable();
+//		jbInitComponentsForTableFieldList();
+//		jbInitComponentsForTableField();
+//		jbInitComponentsForTableKeyList();
+//		jbInitComponentsForTableKey();
+//		jbInitComponentsForFunctionList();
+//		jbInitComponentsForFunction();
+//		jbInitComponentsForIOPanel();
+//		jbInitComponentsForIOSpool();
+//		jbInitComponentsForIOTable();
+//		jbInitComponentsForIOWebPage();
+//	}
 
 	/**
 	 * Initialize main components and variants
 	 */
 	void jbInitComponentsAndVariants() {
-
+		
 		/**
 		 * Read xeadmdl.properties
 		 */
@@ -1326,9 +1363,9 @@ public class Modeler extends JFrame {
 				if (wrkStr != null && !wrkStr.equals("")) {
 					ioImageFontName = wrkStr;
 				}
-				wrkStr = properties.getProperty("IOImageDefaultFontSize");
+				wrkStr = properties.getProperty("IOImageFontSize");
 				if (wrkStr != null && !wrkStr.equals("")) {
-					ioImageDefaultFontSize = wrkStr;
+					ioImageFontSize = Integer.valueOf(wrkStr);
 				}
 				wrkStr = properties.getProperty("IOImageFolder");
 				if (wrkStr != null && !wrkStr.equals("")) {
@@ -1777,24 +1814,11 @@ public class Modeler extends JFrame {
 		jMenuItemIOImageCut.addActionListener(new Modeler_jMenuItemIOImageCut_actionAdapter(this));
 		jMenuItemIOImageDelete.addActionListener(new Modeler_jMenuItemIOImageDelete_actionAdapter(this));
 		jMenuItemIOImageSelectAll.addActionListener(new Modeler_jMenuItemIOImageSelectAll_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo10.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo10_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo12.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo12_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo14.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo14_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo16.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo16_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo18.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo18_actionAdapter(this));
-		jMenuItemIOImageChangeFontSizeTo20.addActionListener(new Modeler_jMenuItemIOImageChangeFontSizeTo20_actionAdapter(this));
 		jMenuItemIOImageUndo.addActionListener(new Modeler_jMenuItemIOImageUndo_actionAdapter(this));
 		jMenuItemIOImageRedo.addActionListener(new Modeler_jMenuItemIOImageRedo_actionAdapter(this));
 		jMenuItemIOImageCancelSelectedCharStyle.addActionListener(new Modeler_jMenuItemIOImageCancelSelectedCharStyle_actionAdapter(this));
 		jMenuItemIOImageChangeFormSize.addActionListener(new Modeler_jMenuItemIOImageChangeFormSize_actionAdapter(this));
-		jMenuIOImageChangeFontSize.setText(res.getString("S132"));
 		jMenuItemIOImageChangeFormSize.setText(res.getString("S133"));
-		jMenuItemIOImageChangeFontSizeTo10.setText("10p");
-		jMenuItemIOImageChangeFontSizeTo12.setText("12p");
-		jMenuItemIOImageChangeFontSizeTo14.setText("14p");
-		jMenuItemIOImageChangeFontSizeTo16.setText("16p");
-		jMenuItemIOImageChangeFontSizeTo18.setText("18p");
-		jMenuItemIOImageChangeFontSizeTo20.setText("20p");
 		jMenuIOImageChangeBackgroundColor.setText(res.getString("S137"));
 		jMenuItemIOImageChangeBackgroundColorToWhite.setBackground(Color.white);
 		jMenuItemIOImageChangeBackgroundColorToWhite.setText("WHITE");
@@ -1933,6 +1957,7 @@ public class Modeler extends JFrame {
 		jMenuItemIOImageSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageUnderlineSelectedChar.setText(res.getString("S183"));
 		jMenuItemIOImageUnderlineSelectedChar.addActionListener(new Modeler_jMenuItemIOImageUnderlineSelectedChar_actionAdapter(this));
+		jMenuItemIOImageUnderlineSelectedChar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageCancelUnderline.setText(res.getString("S186"));
 		jMenuItemIOImageCancelUnderline.addActionListener(new Modeler_jMenuItemIOImageCancelUnderline_actionAdapter(this));
 		jMenuItemIOImageCancelSelectedCharStyle.setText(res.getString("S184"));
@@ -1961,14 +1986,7 @@ public class Modeler extends JFrame {
 		jPopupMenuIOImage.add(jMenuItemIOImageBlockSelect);
 		jPopupMenuIOImage.addSeparator();
 		jPopupMenuIOImage.add(jMenuIOImageChangeBackgroundColor);
-		jPopupMenuIOImage.add(jMenuIOImageChangeFontSize);
 		jPopupMenuIOImage.add(jMenuItemIOImageChangeFormSize);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo10);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo12);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo14);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo16);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo18);
-		jMenuIOImageChangeFontSize.add(jMenuItemIOImageChangeFontSizeTo20);
 		jMenuIOImageChangeBackgroundColor.add(jMenuItemIOImageChangeBackgroundColorToWhite);
 		jMenuIOImageChangeBackgroundColor.add(jMenuItemIOImageChangeBackgroundColorToControlColor);
 		jMenuIOImageChangeBackgroundColor.add(jMenuItemIOImageChangeBackgroundColorToLightGray);
@@ -3907,11 +3925,11 @@ public class Modeler extends JFrame {
 		tableModelTableFieldList.addColumn("NO.");
 		tableModelTableFieldList.addColumn(res.getString("S297"));
 		tableModelTableFieldList.addColumn(res.getString("S542"));
+		tableModelTableFieldList.addColumn(res.getString("S547"));
 		tableModelTableFieldList.addColumn(res.getString("S543"));
 		tableModelTableFieldList.addColumn(res.getString("S544"));
 		tableModelTableFieldList.addColumn("Null");
 		tableModelTableFieldList.addColumn(res.getString("S546"));
-		tableModelTableFieldList.addColumn(res.getString("S547"));
 		tableModelTableFieldList.addColumn(res.getString("S204"));
 		column0 = jTableTableFieldList.getColumnModel().getColumn(0);
 		column1 = jTableTableFieldList.getColumnModel().getColumn(1);
@@ -3925,18 +3943,22 @@ public class Modeler extends JFrame {
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(200);
 		column2.setPreferredWidth(200);
-		column3.setPreferredWidth(80);
-		column4.setPreferredWidth(150);
-		column5.setPreferredWidth(45);
-		column6.setPreferredWidth(70);
-		column7.setPreferredWidth(60);
+		column3.setPreferredWidth(70);
+		column4.setPreferredWidth(80);
+		column5.setPreferredWidth(150);
+		column6.setPreferredWidth(45);
+		column7.setPreferredWidth(70);
 		column8.setPreferredWidth(700);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
-		column3.setCellRenderer(rendererAlignmentCenter);
-		column4.setCellRenderer(rendererAlignmentLeft);
-		column5.setCellRenderer(rendererAlignmentCenter);
+		CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+		column3.setCellRenderer(checkBoxRenderer);
+		DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(new JCheckBox(res.getString("S483")));
+		column3.setCellEditor(editorWithCheckBox);
+		//column3.setCellRenderer(rendererAlignmentCenter);
+		column4.setCellRenderer(rendererAlignmentCenter);
+		column5.setCellRenderer(rendererAlignmentLeft);
 		column6.setCellRenderer(rendererAlignmentCenter);
 		column7.setCellRenderer(rendererAlignmentCenter);
 		column8.setCellRenderer(rendererAlignmentLeft);
@@ -3959,17 +3981,17 @@ public class Modeler extends JFrame {
 		jLabelTableFieldName.setBounds(new Rectangle(5, 9, 130, 20));
 		jTextFieldTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableFieldName.setBounds(new Rectangle(140, 6, 250, 25));
-		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(400, 8, 120, 25));
-		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
-		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
+//		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(400, 8, 120, 25));
+//		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
+//		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+//		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
 		jLabelTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAlias.setText(res.getString("S297"));
-		jLabelTableFieldAlias.setBounds(new Rectangle(530, 9, 130, 15));
+		jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 15));
 		jTextFieldTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableFieldAlias.setBounds(new Rectangle(665, 6, 250, 25));
-		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(950, 8, 100, 25));
+		jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 300, 25));
+		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(930, 8, 100, 25));
 		jCheckBoxTableFieldNotNull.setText("Not Null");
 		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -4068,7 +4090,7 @@ public class Modeler extends JFrame {
 		jPanelTableField2.add(jTextFieldTableFieldAlias);
 		jPanelTableField2.add(jButtonTableFieldDataTypeChange);
 		jPanelTableField2.add(jLabelTableFieldAttributeType);
-		jPanelTableField2.add(jCheckBoxTableFieldShowOnModel);
+//		jPanelTableField2.add(jCheckBoxTableFieldShowOnModel);
 		jPanelTableField2.add(jCheckBoxTableFieldNotNull);
 		jPanelTableField2.add(jLabelTableFieldDefault);
 		jPanelTableField2.add(jTextFieldTableFieldDefault);
@@ -4631,6 +4653,8 @@ public class Modeler extends JFrame {
 		actionMap.put("UNDO", actionUndoIOPanelImage);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "REDO");
 		actionMap.put("REDO", actionRedoIOPanelImage);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK), "UNDERLINE");
+		actionMap.put("UNDERLINE", actionUnderlineIOPanelImage);
 		jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 		jTextPaneIOPanelImage.setBackground(SystemColor.control);
 		jTextPaneIOPanelImage.addKeyListener(new Modeler_jTextPaneIOPanelImage_keyAdapter(this));
@@ -5658,6 +5682,10 @@ public class Modeler extends JFrame {
 
 	org.w3c.dom.Element getSystemElement() {
 		return systemNode.getElement();
+	}
+
+	XeadTreeNode getSubsystemListNode() {
+		return subsystemListNode;
 	}
 
 	XeadTreeNode getCurrentMainTreenode() {
@@ -6954,6 +6982,22 @@ public class Modeler extends JFrame {
 		return lastTableID;
 	}
 	/**
+	 * Get Default ID of Table Type
+	 * @return String :ID of Table Type Definition
+	 */
+	String getDefaultTableTypeID() {
+		XeadTreeNode node;
+		sortableComboBoxModelTableType.removeAllElements();
+		NodeList nodeList = domDocument.getElementsByTagName("TableType");
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			node = new XeadTreeNode("TableType",(org.w3c.dom.Element)nodeList.item(i));
+			sortableComboBoxModelTableType.addElement((Object)node);
+		}
+		sortableComboBoxModelTableType.sortElements();
+		node = (XeadTreeNode)sortableComboBoxModelTableType.getElementAt(0);
+		return node.getElement().getAttribute("ID");
+	}
+	/**
 	 * [File|Close]
 	 * @param e :Action Event
 	 * @return boolean :reply whether exit selected or not
@@ -7047,6 +7091,7 @@ public class Modeler extends JFrame {
 			}
 		}
 	}
+
 	/**
 	 * [File|Import XEAD Definitions]
 	 * @param e :Action Event
@@ -13830,11 +13875,11 @@ public class Modeler extends JFrame {
 			jLabelID.setBounds(new Rectangle(40, 25, 142, 11));
 			jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
 			jLabelSubsystemName.setFont(new java.awt.Font(mainFontName, 0, 11));
-			jLabelSubsystemName.setBounds(new Rectangle(40, 0, 142, 11));
+			jLabelSubsystemName.setBounds(new Rectangle(30, 0, 152, 11));
 			jLabelSubsystemName.setHorizontalAlignment(SwingConstants.RIGHT);
 			jLabelNo.setFont(new java.awt.Font(mainFontName, 0, 11));
 			jLabelNo.setText(tableNode_.getElement().getAttribute("SortKey"));
-			jLabelNo.setBounds(new Rectangle(3, 0, 30, 11));
+			jLabelNo.setBounds(new Rectangle(3, 0, 20, 11));
 			boolean isC = false;
 			boolean isR = false;
 			boolean isU = false;
@@ -14660,7 +14705,9 @@ public class Modeler extends JFrame {
 				//
 				int bottomPositionOfThisBox = this.getBottomEdgeLocationOfBox();
 				int rowCount = jTextAreaShowInstance.getLineCount();
-				jTextAreaShowInstanceHeight = rowCount * 19;
+				FontMetrics metrics = jTextAreaShowInstance.getFontMetrics(jTextAreaShowInstance.getFont());
+				//jTextAreaShowInstanceHeight = rowCount * 19;
+				jTextAreaShowInstanceHeight = rowCount * metrics.getHeight();
 				int width = this.getWidth() - jPanel2.getWidth();
 				//
 				int differenceHeight = jTextAreaShowInstanceHeight - jTextAreaShowInstance.getHeight();
@@ -14786,7 +14833,6 @@ public class Modeler extends JFrame {
 				//
 				if (currentMainTreeNode.getType().equals("SubjectArea")) {
 					printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
-					//printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, currentMainTreeNode.getName(), "");
 					returnValue = Printable.PAGE_EXISTS;
 				}
 				//
@@ -15552,15 +15598,16 @@ public class Modeler extends JFrame {
 				if (childNode == null) {
 					//
 					//Get Default TableTypeID//
-					sortableComboBoxModelTableType.removeAllElements();
-					nodeList = domDocument.getElementsByTagName("TableType");
-					for (int i = 0; i < nodeList.getLength(); i++) {
-						node = new XeadTreeNode("TableType",(org.w3c.dom.Element)nodeList.item(i));
-						sortableComboBoxModelTableType.addElement((Object)node);
-					}
-					sortableComboBoxModelTableType.sortElements();
-					node = (XeadTreeNode)sortableComboBoxModelTableType.getElementAt(0);
-					String defaultTableTypeID = node.getElement().getAttribute("ID");
+//					sortableComboBoxModelTableType.removeAllElements();
+//					nodeList = domDocument.getElementsByTagName("TableType");
+//					for (int i = 0; i < nodeList.getLength(); i++) {
+//						node = new XeadTreeNode("TableType",(org.w3c.dom.Element)nodeList.item(i));
+//						sortableComboBoxModelTableType.addElement((Object)node);
+//					}
+//					sortableComboBoxModelTableType.sortElements();
+//					node = (XeadTreeNode)sortableComboBoxModelTableType.getElementAt(0);
+//					String defaultTableTypeID = node.getElement().getAttribute("ID");
+					String defaultTableTypeID = getDefaultTableTypeID();
 					//
 					newElement = domDocument.createElement("Table");
 					lastID = getLastIDOfTable();
@@ -15779,7 +15826,6 @@ public class Modeler extends JFrame {
 						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WINDOW");
-						newElement.setAttribute("FontSize", ioImageDefaultFontSize);
 						newElement.setAttribute("ImageText", "");
 						newElement.setAttribute("Size", "100,30");
 						newElementChild1 = domDocument.createElement("IOPanelField");
@@ -15799,7 +15845,6 @@ public class Modeler extends JFrame {
 						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WHITE");
-						newElement.setAttribute("FontSize", ioImageDefaultFontSize);
 						newElement.setAttribute("ImageText", "");
 						newElement.setAttribute("Size", "200,30");
 						newElementChild1 = domDocument.createElement("IOSpoolField");
@@ -17123,6 +17168,11 @@ public class Modeler extends JFrame {
 				element = (org.w3c.dom.Element)parentNode.getElement().cloneNode(true);
 			}
 			//
+			if (nodeType_.equals("TableFieldList")) {
+				XeadTreeNode parentNode = (XeadTreeNode)this.getParent();
+				element = (org.w3c.dom.Element)parentNode.getElement().cloneNode(true);
+			}
+			//
 			if (nodeType_.equals("TableKey")) {
 				element = (org.w3c.dom.Element)domNode_.cloneNode(true);
 				//
@@ -17197,7 +17247,7 @@ public class Modeler extends JFrame {
 			if (nodeType_.equals("Subsystem")) {undoable = true;}
 			if (nodeType_.equals("TableList")) {undoable = true;}
 			if (nodeType_.equals("Table")) {undoable = true;}
-			if (nodeType_.equals("TableFieldList")) {undoable = false;}
+			if (nodeType_.equals("TableFieldList")) {undoable = true;}
 			if (nodeType_.equals("TableField")) {undoable = true;}
 			if (nodeType_.equals("TableKeyList")) {undoable = false;}
 			if (nodeType_.equals("TableKey")) {undoable = true;}
@@ -18694,14 +18744,24 @@ public class Modeler extends JFrame {
 					Cell[1] = node.getElement().getAttribute("Alias");
 					Cell[2] = node.getElement().getAttribute("Name");
 				}
+//				if (node.getElement().getAttribute("ShowOnModel").equals("true")) {
+//					Cell[3] = res.getString("S483");
+//				} else {
+//					Cell[3] = "-";
+//				}
+				if (node.getElement().getAttribute("ShowOnModel").equals("true")) {
+					Cell[3] = Boolean.TRUE;
+				} else {
+					Cell[3] = Boolean.FALSE;
+				}
 				if (node.getElement().getAttribute("AttributeType").equals("NATIVE")) {
-					Cell[3] = res.getString("S4911");
+					Cell[4] = res.getString("S4911");
 				}
 				if (node.getElement().getAttribute("AttributeType").equals("INHERITED")) {
-					Cell[3] = res.getString("S4914");
+					Cell[4] = res.getString("S4914");
 				}
 				if (node.getElement().getAttribute("AttributeType").equals("DERIVABLE")) {
-					Cell[3] = res.getString("S4917");
+					Cell[4] = res.getString("S4917");
 				}
 				dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
 				if (dataTypeElement != null) {
@@ -18713,22 +18773,17 @@ public class Modeler extends JFrame {
 					zenkaku = getZenkakuOfHankaku(wrkStr);
 					if (dataTypeElement.getAttribute("Name").contains(wrkStr)
 							|| dataTypeElement.getAttribute("Name").contains(zenkaku)) {
-						Cell[4] = dataTypeElement.getAttribute("Name");
+						Cell[5] = dataTypeElement.getAttribute("Name");
 					} else {
-						Cell[4] = dataTypeElement.getAttribute("Name") + "(" + wrkStr + ")";
+						Cell[5] = dataTypeElement.getAttribute("Name") + "(" + wrkStr + ")";
 					}
 				}
 				if (node.getElement().getAttribute("NotNull").equals("true")) {
-					Cell[5] = res.getString("S4936");
+					Cell[6] = res.getString("S4936");
 				} else {
-					Cell[5] = res.getString("S4937");
+					Cell[6] = res.getString("S4937");
 				}
-				Cell[6] = node.getElement().getAttribute("Default");
-				if (node.getElement().getAttribute("ShowOnModel").equals("true")) {
-					Cell[7] = res.getString("S483");
-				} else {
-					Cell[7] = "-";
-				}
+				Cell[7] = node.getElement().getAttribute("Default");
 				Cell[8] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
 				tableModelTableFieldList.addRow(Cell);
 				//
@@ -18751,11 +18806,11 @@ public class Modeler extends JFrame {
 					+ ((XeadTreeNode)this.getParent().getParent()).getName() + " - " + this.getName());
 			jTextFieldTableFieldName.setText(domNode_.getAttribute("Name"));
 			jTextFieldTableFieldAlias.setText(domNode_.getAttribute("Alias"));
-			if (domNode_.getAttribute("ShowOnModel").equals("true")) {
-				jCheckBoxTableFieldShowOnModel.setSelected(true);
-			} else {
-				jCheckBoxTableFieldShowOnModel.setSelected(false);
-			}
+//			if (domNode_.getAttribute("ShowOnModel").equals("true")) {
+//				jCheckBoxTableFieldShowOnModel.setSelected(true);
+//			} else {
+//				jCheckBoxTableFieldShowOnModel.setSelected(false);
+//			}
 			if (domNode_.getAttribute("AttributeType").equals("NATIVE")) {
 				jRadioButtonTableFieldAttributeTypeNATIVE.setSelected(true);
 			}
@@ -18984,7 +19039,7 @@ public class Modeler extends JFrame {
 			//
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -19217,7 +19272,7 @@ public class Modeler extends JFrame {
 			//
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -19402,7 +19457,7 @@ public class Modeler extends JFrame {
 			//
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -19438,9 +19493,8 @@ public class Modeler extends JFrame {
 				//
 				//Setup IOPanelImage//
 				jLabelIOPanelCaretPosition.setText("0 - 0");
-				iOPanelFontSize = Integer.parseInt(domNode_.getAttribute("FontSize"));
 				jTextPaneIOPanelImage.setEditable(true);
-				jTextPaneIOPanelImage.setFont(new java.awt.Font(ioImageFontName, 0, iOPanelFontSize));
+				jTextPaneIOPanelImage.setFont(new java.awt.Font(ioImageFontName, 0, ioImageFontSize));
 				StringTokenizer workTokenizer = new StringTokenizer(domNode_.getAttribute("Size"), "," );
 				iOPanelCharLengthX = Integer.parseInt(workTokenizer.nextToken());
 				iOPanelCharLengthY = Integer.parseInt(workTokenizer.nextToken());
@@ -19448,6 +19502,12 @@ public class Modeler extends JFrame {
 				jScrollPaneIOPanelImage1.setBounds(15, 15, dim.width, dim.height);
 				jPanelIOPanelImage.setPreferredSize(new Dimension(dim.width+30, dim.height+30));
 				jTextPaneIOPanelImage.setBackground(stringToColor(domNode_.getAttribute("Background")));
+				Color bg = jTextPaneIOPanelImage.getBackground();
+				if (bg.equals(Color.black) || bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+					jTextPaneIOPanelImage.setCaretColor(Color.white);
+				} else {
+					jTextPaneIOPanelImage.setCaretColor(Color.black);
+				}
 				//
 				//Reset variants for block select//
 				inBlockSelectMode = false;
@@ -19551,7 +19611,7 @@ public class Modeler extends JFrame {
 		private String activateContentsPaneForIOSpool() {
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -19586,8 +19646,7 @@ public class Modeler extends JFrame {
 				//
 				//Setup IOSpoolImage//
 				jLabelIOSpoolCaretPosition.setText("0 - 0");
-				iOSpoolFontSize = Integer.parseInt(domNode_.getAttribute("FontSize"));
-				jTextPaneIOSpoolImage.setFont(new java.awt.Font(ioImageFontName, 0, iOSpoolFontSize));
+				jTextPaneIOSpoolImage.setFont(new java.awt.Font(ioImageFontName, 0, ioImageFontSize));
 				StringTokenizer workTokenizer = new StringTokenizer(domNode_.getAttribute("Size"), "," );
 				iOSpoolCharLengthX = Integer.parseInt(workTokenizer.nextToken());
 				iOSpoolCharLengthY = Integer.parseInt(workTokenizer.nextToken());
@@ -19681,7 +19740,7 @@ public class Modeler extends JFrame {
 			//
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -19818,7 +19877,7 @@ public class Modeler extends JFrame {
 		private String activateContentsPaneForIOWebPage() {
 			//Setup cell editor//
 			JTextField editField = new JTextField();
-			editField.setFont(new java.awt.Font(mainFontName, 0, 11));
+			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
 			//
@@ -21066,7 +21125,8 @@ public class Modeler extends JFrame {
 
 		//Undo modifying action to the node//
 		public void undoModify(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement) {
-			XeadTreeNode parentNode = null;
+			XeadTreeNode workNode, parentNode = null;
+			org.w3c.dom.Element element;
 			//
 			if (nodeType_.equals("System")) {
 				int selectedIndex = Integer.parseInt(oldElement.getAttribute("SelectedIndex"));
@@ -21193,6 +21253,11 @@ public class Modeler extends JFrame {
 				}
 			}
 			//
+			if (nodeType_.equals("TableList")) {
+				parentNode = (XeadTreeNode)this.getParent();
+				parentNode.setElement(oldElement);
+			}
+			//
 			if (nodeType_.equals("Table")) {
 				parentNode = systemNode;
 				parentNode.getElement().removeChild(domNode_);
@@ -21210,16 +21275,27 @@ public class Modeler extends JFrame {
 				}
 			}
 			//
-			if (nodeType_.equals("TableList")) {
+			if (nodeType_.equals("TableFieldList")) {
 				parentNode = (XeadTreeNode)this.getParent();
 				parentNode.setElement(oldElement);
+				NodeList nodeList = oldElement.getElementsByTagName("TableField");
+				for (int i = 0; i < this.getChildCount(); i++) {
+					workNode = (XeadTreeNode)this.getChildAt(i);
+					for (int j = 0; j < nodeList.getLength(); j++) {
+						element = (org.w3c.dom.Element)nodeList.item(j);
+						if (element.getAttribute("ID").equals(workNode.getElement().getAttribute("ID"))) {
+							workNode.setElement(element);
+							break;
+						}
+					}
+				}
 			}
 			//
 			if (nodeType_.equals("TableField")) {
 				parentNode = (XeadTreeNode)this.getParent().getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("TableField");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21255,7 +21331,7 @@ public class Modeler extends JFrame {
 				//Replace node of key definition//
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("TableKey");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21286,7 +21362,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOPanel");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21300,7 +21376,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOSpool");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21314,7 +21390,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOWebPage");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21328,7 +21404,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOTable");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21377,7 +21453,8 @@ public class Modeler extends JFrame {
 
 		//Re-do modifying action to the node//
 		public void redoModify(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement) {
-			XeadTreeNode parentNode = null;
+			XeadTreeNode workNode, parentNode = null;
+			org.w3c.dom.Element element;
 			//
 			if (nodeType_.equals("System")) {
 				int selectedIndex = Integer.parseInt(newElement.getAttribute("SelectedIndex"));
@@ -21526,6 +21603,22 @@ public class Modeler extends JFrame {
 				}
 			}
 			//
+			if (nodeType_.equals("TableFieldList")) {
+				parentNode = (XeadTreeNode)this.getParent();
+				parentNode.setElement(newElement);
+				NodeList nodeList = newElement.getElementsByTagName("TableField");
+				for (int i = 0; i < this.getChildCount(); i++) {
+					workNode = (XeadTreeNode)this.getChildAt(i);
+					for (int j = 0; j < nodeList.getLength(); j++) {
+						element = (org.w3c.dom.Element)nodeList.item(j);
+						if (element.getAttribute("ID").equals(workNode.getElement().getAttribute("ID"))) {
+							workNode.setElement(element);
+							break;
+						}
+					}
+				}
+}
+			//
 			if (nodeType_.equals("TableField")) {
 				org.w3c.dom.Element cloneElement = (org.w3c.dom.Element)newElement.cloneNode(true);
 				org.w3c.dom.Element lastElement = getLastDomElementOfTheType("DataType");
@@ -21538,7 +21631,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent().getParent();
 				nodeList = parentNode.getElement().getElementsByTagName("TableField");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21560,7 +21653,7 @@ public class Modeler extends JFrame {
 				//Replace node of key definition//
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("TableKey");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21591,7 +21684,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOPanel");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21605,7 +21698,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOSpool");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21619,7 +21712,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOWebPage");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21633,7 +21726,7 @@ public class Modeler extends JFrame {
 				parentNode = (XeadTreeNode)this.getParent();
 				NodeList nodeList = parentNode.getElement().getElementsByTagName("IOTable");
 				for (int i = 0; i < nodeList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
+					element = (org.w3c.dom.Element)nodeList.item(i);
 					if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
 						parentNode.getElement().removeChild(element);
 						break;
@@ -21684,6 +21777,7 @@ public class Modeler extends JFrame {
 			if (nodeType_.equals("Subsystem"))  {updateStatusFlag = updateFieldsForSubsystem();}
 			if (nodeType_.equals("TableList"))  {updateStatusFlag = updateFieldsForTableList();}
 			if (nodeType_.equals("Table"))      {updateStatusFlag = updateFieldsForTable();}
+			if (nodeType_.equals("TableFieldList"))  {updateStatusFlag = updateFieldsForTableFieldList();}
 			if (nodeType_.equals("TableField")) {updateStatusFlag = updateFieldsForTableField();}
 			if (nodeType_.equals("TableKey"))   {updateStatusFlag = updateFieldsForTableKey();}
 			if (nodeType_.equals("Function"))   {updateStatusFlag = updateFieldsForFunction();}
@@ -22378,6 +22472,46 @@ public class Modeler extends JFrame {
 			return updateStatusFlag;
 		}
 
+		private boolean[] updateFieldsForTableFieldList() {
+			boolean valueOfFieldsChanged = informationOnThisPageChanged;
+			boolean valueOfSortKeyChanged = false;
+			Boolean showOnModelFlag;
+			TableRowNumber number;
+			//
+			XeadTreeNode parentNode = (XeadTreeNode)this.getParent(); //parent table node//
+			org.w3c.dom.Element parentElement = parentNode.getElement();
+			NodeList tableFieldList = parentElement.getElementsByTagName("TableField");
+			for (int i = 0; i < jTableTableFieldList.getRowCount(); i++) {
+				showOnModelFlag = (Boolean)tableModelTableFieldList.getValueAt(i, 3);
+				number = (TableRowNumber)tableModelTableFieldList.getValueAt(i, 0);
+				for (int j = 0; j < tableFieldList.getLength(); j++) {
+					org.w3c.dom.Element element = (org.w3c.dom.Element)tableFieldList.item(j);
+					if (number.getElement().getAttribute("ID").equals(element.getAttribute("ID"))) {
+						if (showOnModelFlag.booleanValue()) {
+							if (element.getAttribute("ShowOnModel").equals("false")) {
+								valueOfFieldsChanged = true;
+								element.setAttribute("ShowOnModel", "true");
+							}
+						} else {
+							if (element.getAttribute("ShowOnModel").equals("true")) {
+								valueOfFieldsChanged = true;
+								element.setAttribute("ShowOnModel", "false");
+							}
+						}
+					}
+				}
+			}
+			//
+			//Log node after modify//
+			if (valueOfFieldsChanged) {
+				xeadUndoManager.addLogAfterModified(this);
+			}
+			//
+			//Return Update status//
+			boolean[] updateStatusFlag = {valueOfFieldsChanged, valueOfSortKeyChanged};
+			return updateStatusFlag;
+		}
+
 		private boolean[] updateFieldsForTableField() {
 			boolean valueOfFieldsChanged = false;
 			boolean valueOfSortKeyChanged = false;
@@ -22387,12 +22521,12 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("Alias").equals(jTextFieldTableFieldAlias.getText())) {
 				valueOfFieldsChanged = true;
 			}
-			if (!domNode_.getAttribute("ShowOnModel").equals("true") && jCheckBoxTableFieldShowOnModel.isSelected()) {
-				valueOfFieldsChanged = true;
-			}
-			if (domNode_.getAttribute("ShowOnModel").equals("true") && !jCheckBoxTableFieldShowOnModel.isSelected()) {
-				valueOfFieldsChanged = true;
-			}
+//			if (!domNode_.getAttribute("ShowOnModel").equals("true") && jCheckBoxTableFieldShowOnModel.isSelected()) {
+//				valueOfFieldsChanged = true;
+//			}
+//			if (domNode_.getAttribute("ShowOnModel").equals("true") && !jCheckBoxTableFieldShowOnModel.isSelected()) {
+//				valueOfFieldsChanged = true;
+//			}
 			if (!tableFieldDataTypeID.equals(domNode_.getAttribute("DataTypeID"))) {
 				valueOfFieldsChanged = true;
 			}
@@ -22428,11 +22562,11 @@ public class Modeler extends JFrame {
 				//Update DOM element//
 				domNode_.setAttribute("Name", jTextFieldTableFieldName.getText());
 				domNode_.setAttribute("Alias", jTextFieldTableFieldAlias.getText());
-				if (jCheckBoxTableFieldShowOnModel.isSelected()) {
-					domNode_.setAttribute("ShowOnModel", "true");
-				} else {
-					domNode_.setAttribute("ShowOnModel", "false");
-				}
+//				if (jCheckBoxTableFieldShowOnModel.isSelected()) {
+//					domNode_.setAttribute("ShowOnModel", "true");
+//				} else {
+//					domNode_.setAttribute("ShowOnModel", "false");
+//				}
 				domNode_.setAttribute("DataTypeID", tableFieldDataTypeID);
 				if (jRadioButtonTableFieldAttributeTypeNATIVE.isSelected()) {
 					domNode_.setAttribute("AttributeType", "NATIVE");
@@ -22614,7 +22748,7 @@ public class Modeler extends JFrame {
 				imageText = concatLinesWithTokenOfEOL(jTextPaneIOPanelImage.getText());
 				domNode_.setAttribute("ImageText", imageText);
 				domNode_.setAttribute("Background",colorToString(jTextPaneIOPanelImage.getBackground()));
-				domNode_.setAttribute("FontSize", Integer.toString(iOPanelFontSize));
+				//domNode_.setAttribute("FontSize", Integer.toString(iOPanelFontSize));
 				domNode_.setAttribute("Size", iOPanelCharLengthX + "," + iOPanelCharLengthY);
 				//
 				//Update ImageTextStyle//
@@ -22879,7 +23013,7 @@ public class Modeler extends JFrame {
 				imageText = concatLinesWithTokenOfEOL(jTextPaneIOSpoolImage.getText());
 				domNode_.setAttribute("ImageText", imageText);
 				domNode_.setAttribute("Background",colorToString(jTextPaneIOSpoolImage.getBackground()));
-				domNode_.setAttribute("FontSize", Integer.toString(iOSpoolFontSize));
+				//domNode_.setAttribute("FontSize", Integer.toString(iOSpoolFontSize));
 				domNode_.setAttribute("Size", iOSpoolCharLengthX + "," + iOSpoolCharLengthY);
 				//
 				//Update TextStyle//
@@ -23176,6 +23310,7 @@ public class Modeler extends JFrame {
 					isRequiredToReorganizeIOTable = true;
 					valueOfFieldsChanged = true;
 					JOptionPane.showMessageDialog(null, res.getString("S4"));
+					break;
 				} else {
 					fieldElement = tableRowNumber.getElement();
 					if (!fieldElement.getAttribute("Descriptions").equals((String)tableModelIOTableFieldList.getValueAt(i, 4))) {
@@ -23324,6 +23459,16 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		public boolean isCellEditable( int row, int col) {
 			if (col != 4) {return false;} else {return true;}
+		}
+	}
+
+	/**
+	 * Class of Table Model for TableFieldList
+	 */
+	class TableModelTableFieldList extends DefaultTableModel {
+		private static final long serialVersionUID = 1L;
+		public boolean isCellEditable( int row, int col) {
+			if (col != 3) {return false;} else {return true;}
 		}
 	}
 
@@ -24080,14 +24225,17 @@ public class Modeler extends JFrame {
 	 * @param e :Caret Event
 	 */
 	void jTextPaneIOPanelImage_caretUpdate(CaretEvent e) {
-		drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
-		
-		Element elm = jTextPaneIOPanelImage.getStyledDocument().getCharacterElement(jTextPaneIOPanelImage.getCaretPosition());
-		Color bg = StyleConstants.getBackground(elm.getAttributes());
-		if (bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
-			jTextPaneIOPanelImage.setCaretColor(Color.white);
-		} else {
-			jTextPaneIOPanelImage.setCaretColor(Color.black);
+		if (jTextPaneIOPanelImage.getStyle("style1") != null) {
+			drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
+
+			Element elm = jTextPaneIOPanelImage.getStyledDocument().getCharacterElement(jTextPaneIOPanelImage.getCaretPosition());
+//			Color bg = StyleConstants.getBackground(elm.getAttributes());
+//			if (bg.equals(Color.black) || bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+//				jTextPaneIOPanelImage.setCaretColor(Color.white);
+//			} else {
+//				jTextPaneIOPanelImage.setCaretColor(Color.black);
+//			}
+			jTextPaneIOPanelImage.setCaretColor(StyleConstants.getForeground(elm.getAttributes()));
 		}
 	}
 	/**
@@ -24681,7 +24829,6 @@ public class Modeler extends JFrame {
 			jMenuItemIOImageSelectAll.setEnabled(false);
 			jMenuItemIOImageBlockSelect.setEnabled(false);
 			jMenuIOImageChangeBackgroundColor.setEnabled(false);
-			jMenuIOImageChangeFontSize.setEnabled(false);
 			jMenuItemIOImageChangeFormSize.setEnabled(false);
 			jMenuItemIOImageCaptureImage.setEnabled(false);
 			jMenuItemIOImagePrintImage.setEnabled(false);
@@ -24696,7 +24843,6 @@ public class Modeler extends JFrame {
 			} else {
 
 				org.w3c.dom.Element element = currentMainTreeNode.getElement();
-				//String fontSize = element.getAttribute("FontSize");
 				String background = element.getAttribute("Background");
 
 				jMenuItemIOImagePaste.setEnabled(true);
@@ -24717,20 +24863,6 @@ public class Modeler extends JFrame {
 				jMenuItemIOImageChangeBackgroundColorToRed.setState(background.equals("RED"));
 				jMenuItemIOImageChangeBackgroundColorToWhite.setState(background.equals("WHITE"));
 				jMenuItemIOImageChangeBackgroundColorToYellow.setState(background.equals("YELLOW"));
-				jMenuIOImageChangeFontSize.setEnabled(true);
-				String fontSize = "";
-				if (currentMainTreeNode.getType().equals("IOPanel")) {
-					fontSize = Integer.toString(iOPanelFontSize);
-				}
-				if (currentMainTreeNode.getType().equals("IOSpool")) {
-					fontSize = Integer.toString(iOSpoolFontSize);
-				}
-				jMenuItemIOImageChangeFontSizeTo10.setState(fontSize.equals("10"));
-				jMenuItemIOImageChangeFontSizeTo12.setState(fontSize.equals("12"));
-				jMenuItemIOImageChangeFontSizeTo14.setState(fontSize.equals("14"));
-				jMenuItemIOImageChangeFontSizeTo16.setState(fontSize.equals("16"));
-				jMenuItemIOImageChangeFontSizeTo18.setState(fontSize.equals("18"));
-				jMenuItemIOImageChangeFontSizeTo20.setState(fontSize.equals("20"));
 				jMenuItemIOImageChangeFormSize.setEnabled(true);
 				jMenuItemIOImageCaptureImage.setEnabled(true);
 				jMenuItemIOImagePrintImage.setEnabled(true);
@@ -24893,16 +25025,18 @@ public class Modeler extends JFrame {
 		String menuItemColorString = menuItem.getText();
 		if (currentMainTreeNode.getType().equals("IOPanel")) {
 			jTextPaneIOPanelImage.setBackground(menuItemColor);
-			jTextPaneIOPanelImage.setCaretColor(SystemColor.control);
-			if (jTextPaneIOPanelImage.getBackground().equals(SystemColor.control)) {
-				jTextPaneIOPanelImage.setCaretColor(Color.BLACK);
+			jTextPaneIOPanelImage.setCaretColor(Color.black);
+			Color bg = jTextPaneIOPanelImage.getBackground();
+			if (bg.equals(Color.black) || bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+				jTextPaneIOPanelImage.setCaretColor(Color.white);
 			}
 		}
 		if (currentMainTreeNode.getType().equals("IOSpool")) {
 			jTextPaneIOSpoolImage.setBackground(menuItemColor);
-			jTextPaneIOSpoolImage.setCaretColor(SystemColor.control);
-			if (jTextPaneIOSpoolImage.getBackground().equals(SystemColor.control)) {
-				jTextPaneIOSpoolImage.setCaretColor(Color.BLACK);
+			jTextPaneIOSpoolImage.setCaretColor(Color.black);
+			Color bg = jTextPaneIOSpoolImage.getBackground();
+			if (bg.equals(Color.black) || bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
+				jTextPaneIOSpoolImage.setCaretColor(Color.white);
 			}
 		}
 		currentMainTreeNode.getElement().setAttribute("Background", menuItemColorString);
@@ -25429,86 +25563,6 @@ public class Modeler extends JFrame {
 	 */
 	void jMenuItemIOImagePrintImage_actionPerformed(ActionEvent e) {
 		jMenuItemComponentToPrintImage_actionPerformed(e);
-	}
-	/**
-	 * Method to handle font of IOImage
-	 * @param fontSizeString :new font size specified
-	 */
-	void jMenuItemIOImageChangeFontSize(String fontSizeString) {
-		int fontSize = Integer.parseInt(fontSizeString);
-		int pixelSizeX = 500;
-		int pixelSizeY = 400;
-		//
-		informationOnThisPageChanged = true;
-		//
-		if (currentMainTreeNode.getType().equals("IOPanel")) {
-			jTextPaneIOPanelImage.setFont(new java.awt.Font(ioImageFontName, 0, fontSize));
-			Font font = jTextPaneIOPanelImage.getFont();
-			FontMetrics metrics = jTextPaneIOPanelImage.getFontMetrics(font);
-			pixelSizeY = iOPanelCharLengthY * metrics.getHeight();
-			pixelSizeX = iOPanelCharLengthX * font.getSize()/2 + 6;
-			jScrollPaneIOPanelImage1.setBounds(15, 15, pixelSizeX, pixelSizeY);
-			jPanelIOPanel.updateUI();
-			iOPanelFontSize = fontSize;
-		}
-		if (currentMainTreeNode.getType().equals("IOSpool")) {
-			jTextPaneIOSpoolImage.setFont(new java.awt.Font(ioImageFontName, 0, fontSize));
-			Font font = jTextPaneIOSpoolImage.getFont();
-			FontMetrics metrics = jTextPaneIOSpoolImage.getFontMetrics(font);
-			pixelSizeY = iOSpoolCharLengthY * metrics.getHeight();
-			pixelSizeX = iOSpoolCharLengthX * font.getSize()/2 + 6;
-			jScrollPaneIOSpoolImage1.setBounds(15, 15, pixelSizeX, pixelSizeY);
-			jPanelIOSpool.updateUI();
-			iOSpoolFontSize = fontSize;
-		}
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo10
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo10_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("10");
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo12
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo12_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("12");
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo14
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo14_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("14");
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo16
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo16_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("16");
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo18
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo18_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("18");
-	}
-	/**
-	 * Select Event Handler for jMenuItemIOImageChangeFontSizeTo20
-	 * @param e :Action Event
-	 */
-	void jMenuItemIOImageChangeFontSizeTo20_actionPerformed(ActionEvent e) {
-		informationOnThisPageChanged = true;
-		jMenuItemIOImageChangeFontSize("20");
 	}
 	/**
 	 * Key Event Handler for jTextPaneIOPanelImage
@@ -32796,60 +32850,6 @@ class Modeler_jMenuItemIOImageSelectAll_actionAdapter implements java.awt.event.
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemIOImageSelectAll_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo10_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo10_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo10_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo12_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo12_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo12_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo14_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo14_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo14_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo16_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo16_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo16_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo18_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo18_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo18_actionPerformed(e);
-	}
-}
-class Modeler_jMenuItemIOImageChangeFontSizeTo20_actionAdapter implements java.awt.event.ActionListener {
-	Modeler adaptee;
-	Modeler_jMenuItemIOImageChangeFontSizeTo20_actionAdapter(Modeler adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jMenuItemIOImageChangeFontSizeTo20_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemIOImageCaptureImage_actionAdapter implements java.awt.event.ActionListener {

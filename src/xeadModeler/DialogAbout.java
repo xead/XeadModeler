@@ -47,7 +47,15 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M3";
+	public static final String FULL_VERSION = "V1.R4.M4";
+	// 1.4.4での変更点
+	//・フィールド一覧上でモデル表示を設定できるようにするとともに、フィールド定義パネル上から表示設定項目をはずした
+	//・パネルイメージ上のカーソルの色を領域の文字色に合わせた
+	//・パネルイメージ上で下線を引くためのショートカット(Ctrl+U)を設けた
+	//・パネルイメージのフォントサイズをproperties指定での固定にした
+	//・インスタンス表示の行高の問題を修正した
+	//・起動時にJavaのバージョンをチェックするようにした
+	//
 	// 1.4.3での変更点
 	//・パネル／帳票イメージ上の矩形選択用ガイドがずれていた問題を修正
 	//・パネル／帳票イメージの画像ファイル探索フォルダをpropertiesで指定できるようにした
