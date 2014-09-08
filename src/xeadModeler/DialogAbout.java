@@ -47,7 +47,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M4";
+	public static final String FULL_VERSION = "V1.R4.M5";
+	// 1.4.5での変更点
+	//・インスタンス表示をキャンセルしたときテーブルが元の位置に戻らない問題を修正した
+	//・データモデルのコンテキストメニューの「テーブル幅の設定」を「テーブルの整列」に統合した
+	//・データフロー図に職務をドラッグ＆ドロップして「システム・主体」のノードを作成できるようにした
+	//・インポート処理のパフォーマンスを改善するとともに細かいバグを修正した
+	//・「データタイプの整理」のツールメニューアイテムを追加した
+	//
 	// 1.4.4での変更点
 	//・フィールド一覧上でモデル表示を設定できるようにするとともに、フィールド定義パネル上から表示設定項目をはずした
 	//・パネルイメージ上のカーソルの色を領域の文字色に合わせた

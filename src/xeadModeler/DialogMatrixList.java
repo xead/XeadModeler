@@ -32,12 +32,17 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import java.awt.event.*;
+
 import org.w3c.dom.*;
+
 import java.io.*;
 import java.util.*;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -262,7 +267,15 @@ public class DialogMatrixList extends JDialog {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
 			if (countOfErrors == 0) {
-				JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S81") + "\n" + xlsFileName);
+				//JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S81") + "\n" + xlsFileName);
+				File workXlsFile = new File(xlsFileName);
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					frame_.desktop.open(workXlsFile);
+				} catch (Exception ex) {
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
 			} else {
 				countOfDefinitions = countOfDefinitions - countOfErrors;
 				JOptionPane.showMessageDialog(this.getContentPane(), "Generating Matrix List has failed possibly because that too many columns for a Excel sheet has been demanded.");

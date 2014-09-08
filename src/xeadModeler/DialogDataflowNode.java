@@ -244,16 +244,29 @@ public class DialogDataflowNode extends JDialog {
 					jComboBoxEventPos.setSelectedIndex(1);
 				}
 			} else {
-				jTextFieldLabel.setText(element.getAttribute("Name"));
-				jTextFieldLabel.setBackground(Color.white);
-				jTextFieldLabel.setEditable(true);
-				jLabel1Ext.setEnabled(true);
-				jTextFieldLabelExt.setText(element.getAttribute("NameExt"));
-				jTextFieldLabelExt.setBackground(Color.white);
-				jTextFieldLabelExt.setEditable(true);
-				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n"));
-				jTextAreaDescriptions.setBackground(Color.white);
-				jTextAreaDescriptions.setEditable(true);
+				if (element.getAttribute("RoleID").equals("")) {
+					jTextFieldLabel.setText(element.getAttribute("Name"));
+					jTextFieldLabel.setBackground(Color.white);
+					jTextFieldLabel.setEditable(true);
+					jLabel1Ext.setEnabled(true);
+					jTextFieldLabelExt.setText(element.getAttribute("NameExt"));
+					jTextFieldLabelExt.setBackground(Color.white);
+					jTextFieldLabelExt.setEditable(true);
+					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n"));
+					jTextAreaDescriptions.setBackground(Color.white);
+					jTextAreaDescriptions.setEditable(true);
+				} else {
+					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", element.getAttribute("RoleID"), null);
+					jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
+					jTextFieldLabel.setBackground(SystemColor.control);
+					jTextFieldLabel.setEditable(false);
+					jLabel1Ext.setEnabled(false);
+					jTextFieldLabelExt.setBackground(SystemColor.control);
+					jTextFieldLabelExt.setEditable(false);
+					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(node.getElement().getAttribute("Descriptions"), "\n"));
+					jTextAreaDescriptions.setBackground(SystemColor.control);
+					jTextAreaDescriptions.setEditable(false);
+				}
 			}
 		}
 		//

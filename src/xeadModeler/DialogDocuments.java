@@ -32,13 +32,18 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import java.awt.event.*;
 import java.util.ResourceBundle;
+
 import org.w3c.dom.*;
+
 import java.io.*;
 import java.util.*;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -367,7 +372,15 @@ public class DialogDocuments extends JDialog {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			//
 			if (countOfErrors == 0) {
-				JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName);
+				//JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName);
+				File workXlsFile = new File(xlsFileName);
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					frame_.desktop.open(workXlsFile);
+				} catch (Exception ex) {
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
 			} else {
 				countOfDefinitions = countOfDefinitions - countOfErrors;
 				JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName + "\n" + countOfErrors + res.getString("DialogDocuments12"));
