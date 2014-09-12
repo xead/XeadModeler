@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M5";
+	public static final String FULL_VERSION = "V1.R4.M6";
+	// 1.4.6での変更点
+	//・システムノードに「用語とルール」のタブを設けた
+	//・インポート処理のバグによる不整合を修復するためのメニューオプションを組み込んだ
+	//
 	// 1.4.5での変更点
 	//・インスタンス表示をキャンセルしたときテーブルが元の位置に戻らない問題を修正した
 	//・データモデルのコンテキストメニューの「テーブル幅の設定」を「テーブルの整列」に統合した

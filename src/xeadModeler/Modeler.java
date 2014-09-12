@@ -109,6 +109,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
 	private JMenu jMenuImport = new JMenu();
 	private JMenuItem jMenuItemImportXEAD = new JMenuItem();
+	private JMenuItem jMenuItemImportRecover = new JMenuItem();
 	private JMenuItem jMenuItemImportSQL = new JMenuItem();
 	private JMenu jMenuEdit = new JMenu();
 	private JMenuItem jMenuItemEditUndo = new JMenuItem();
@@ -268,6 +269,7 @@ public class Modeler extends JFrame {
 	private ImageIcon imageIconTree;
 	private ImageIcon imageIconModel;
 	private ImageIcon imageIconText;
+	private ImageIcon imageIconBook;
 	/**
 	 * Desktop Launcher
 	 */
@@ -485,6 +487,24 @@ public class Modeler extends JFrame {
 	private TableModelReadOnlyList tableModelSystemFunctionTypeWhereUsedList = new TableModelReadOnlyList();
 	private JTable jTableSystemFunctionTypeWhereUsedList = new JTable(tableModelSystemFunctionTypeWhereUsedList);
 	private HashMap<String, org.w3c.dom.Element> functionTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+	//(SystemTermsList)//
+	private boolean tableSystemTermsListSelectChangeActivated = false;
+	private int selectedRow_jTableSystemTermsList;
+	private JSplitPane jSplitPaneSystemTermsList = new JSplitPane();
+	private JScrollPane jScrollPaneSystemTermsList = new JScrollPane();
+	private TableModelReadOnlyList tableModelSystemTermsList = new TableModelReadOnlyList();
+	private JTable jTableSystemTermsList = new JTable(tableModelSystemTermsList);
+	private JPanel jPanelSystemTermsList = new JPanel();
+	private JPanel jPanelSystemTermsList1 = new JPanel();
+	private JPanel jPanelSystemTermsList2 = new JPanel();
+	private JPanel jPanelSystemTermsList3 = new JPanel();
+	private JLabel jLabelSystemTermsHeadder = new JLabel();
+	private JTextField jTextFieldSystemTermsHeadder = new JTextField();
+	private JLabel jLabelSystemTermsSortKey = new JLabel();
+	private JTextField jTextFieldSystemTermsSortKey = new JTextField();
+	private JLabel jLabelSystemTermsDescriptions = new JLabel();
+	private JScrollPane jScrollPaneSystemTermsDescriptions = new JScrollPane();
+	private KanjiTextArea jTextAreaSystemTermsDescriptions = new KanjiTextArea();
 	//(SystemMaintenanceLogList)//
 	private boolean tableSystemMaintenanceLogSelectChangeActivated = false;
 	private int selectedRow_jTableSystemMaintenanceLog;
@@ -1435,6 +1455,7 @@ public class Modeler extends JFrame {
 		imageIconTree = new ImageIcon(xeadModeler.Modeler.class.getResource("itree.png"));
 		imageIconModel = new ImageIcon(xeadModeler.Modeler.class.getResource("imodel.png"));
 		imageIconText = new ImageIcon(xeadModeler.Modeler.class.getResource("itext.png"));
+		imageIconBook = new ImageIcon(xeadModeler.Modeler.class.getResource("ibook.png"));
 
 		/**
 		 * Title Name and Title Icon
@@ -1509,6 +1530,8 @@ public class Modeler extends JFrame {
 		jMenuItemImportXEAD.addActionListener(new Modeler_jMenuItemImportXEAD_ActionAdapter(this));
 		jMenuItemImportSQL.setText(res.getString("S66"));
 		jMenuItemImportSQL.addActionListener(new Modeler_jMenuItemImportSQL_ActionAdapter(this));
+		jMenuItemImportRecover.setText(res.getString("S67"));
+		jMenuItemImportRecover.addActionListener(new Modeler_jMenuItemImportRecover_ActionAdapter(this));
 		jMenuEdit.setText(res.getString("S58"));
 		jMenuEdit.addMenuListener(new Modeler_jMenuEdit_menuAdapter(this));
 		jMenuItemEditUndo.setText(res.getString("S59"));
@@ -1614,6 +1637,7 @@ public class Modeler extends JFrame {
 		jMenuFile.add(jMenuImport);
 		jMenuImport.add(jMenuItemImportXEAD);
 		jMenuImport.add(jMenuItemImportSQL);
+		jMenuImport.add(jMenuItemImportRecover);
 		jMenuFile.addSeparator();
 		jMenuFile.add(jMenuItemFileSave);
 		jMenuFile.add(jMenuItemFileSaveAs);
@@ -2377,9 +2401,63 @@ public class Modeler extends JFrame {
 		jScrollPaneSystemFunctionTypeList.setBorder(null);
 		jScrollPaneSystemFunctionTypeWhereUsedList.getViewport().add(jTableSystemFunctionTypeWhereUsedList, null);
 		jScrollPaneSystemFunctionTypeWhereUsedList.setBorder(null);
+		//(SystemTermsList)//
+		jTabbedPaneSystem.add(jSplitPaneSystemTermsList, res.getString("S245"));
+		jTabbedPaneSystem.setIconAt(6, imageIconBook);
+		jSplitPaneSystemTermsList.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		jSplitPaneSystemTermsList.setBorder(null);
+		jSplitPaneSystemTermsList.setDividerLocation(200);
+		jSplitPaneSystemTermsList.setFocusable(false);
+		jScrollPaneSystemTermsList.setBorder(null);
+		jScrollPaneSystemTermsList.addMouseListener(new Modeler_jScrollPaneSystemTermsList_mouseAdapter(this));
+		jPanelSystemTermsList.setLayout(new BorderLayout());
+		jPanelSystemTermsList.setBorder(BorderFactory.createEtchedBorder());
+		jPanelSystemTermsList1.setLayout(null);
+		jPanelSystemTermsList1.setBorder(null);
+		jPanelSystemTermsList1.setPreferredSize(new Dimension(10, 42));
+		jPanelSystemTermsList2.setLayout(new BorderLayout());
+		jPanelSystemTermsList2.setBorder(null);
+		jPanelSystemTermsList3.setLayout(null);
+		jPanelSystemTermsList3.setBorder(null);
+		jPanelSystemTermsList3.setPreferredSize(new Dimension(140, 10));
+		jLabelSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSystemTermsSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTermsSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTermsSortKey.setText(res.getString("S248"));
+		jLabelSystemTermsSortKey.setBounds(new Rectangle(5, 12, 130, 20));
+		jTextFieldSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(140, 9, 150, 25));
+		jLabelSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSystemTermsHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTermsHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTermsHeadder.setText(res.getString("S246"));
+		jLabelSystemTermsHeadder.setBounds(new Rectangle(290, 12, 130, 20));
+		jTextFieldSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(425, 9, 400, 25));
+		jLabelSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSystemTermsDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTermsDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTermsDescriptions.setText(res.getString("S247"));
+		jLabelSystemTermsDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
+		jTextAreaSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextAreaSystemTermsDescriptions.setLineWrap(true);
+		jScrollPaneSystemTermsDescriptions.setBounds(new Rectangle(140, 40, 600, 42));
+		jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
+		jPanelSystemTermsList.add(jPanelSystemTermsList1, BorderLayout.NORTH);
+		jPanelSystemTermsList.add(jPanelSystemTermsList2, BorderLayout.CENTER);
+		jPanelSystemTermsList1.add(jLabelSystemTermsSortKey, null);
+		jPanelSystemTermsList1.add(jTextFieldSystemTermsSortKey, null);
+		jPanelSystemTermsList1.add(jLabelSystemTermsHeadder, null);
+		jPanelSystemTermsList1.add(jTextFieldSystemTermsHeadder, null);
+		jPanelSystemTermsList2.add(jPanelSystemTermsList3, BorderLayout.WEST);
+		jPanelSystemTermsList2.add(jScrollPaneSystemTermsDescriptions, BorderLayout.CENTER);
+		jPanelSystemTermsList3.add(jLabelSystemTermsDescriptions, null);
+		jScrollPaneSystemTermsList.getViewport().add(jTableSystemTermsList, null);
+		jSplitPaneSystemTermsList.add(jScrollPaneSystemTermsList, JSplitPane.TOP);
+		jSplitPaneSystemTermsList.add(jPanelSystemTermsList, JSplitPane.BOTTOM);
 		//(SystemMaintenanceLog)//
 		jTabbedPaneSystem.add(jSplitPaneSystemMaintenanceLog, res.getString("S252"));
-		jTabbedPaneSystem.setIconAt(6, imageIconText);
+		jTabbedPaneSystem.setIconAt(7, imageIconText);
 		jSplitPaneSystemMaintenanceLog.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneSystemMaintenanceLog.setBorder(null);
 		jSplitPaneSystemMaintenanceLog.setDividerLocation(200);
@@ -2740,6 +2818,35 @@ public class Modeler extends JFrame {
 		column4.setCellRenderer(rendererAlignmentLeft);
 		jTableSystemFunctionTypeWhereUsedList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemFunctionTypeWhereUsedList.getTableHeader().getDefaultRenderer();
+		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		//(jTableSystemTermsList)//
+		jTableSystemTermsList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTableSystemTermsList.setBackground(SystemColor.control);
+		jTableSystemTermsList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jTableSystemTermsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jTableSystemTermsList.getSelectionModel().addListSelectionListener(new Modeler_jTableSystemTermsList_listSelectionAdapter(this));
+		jTableSystemTermsList.addMouseListener(new Modeler_jTableSystemTermsList_mouseAdapter(this));
+		jTableSystemTermsList.addFocusListener(new Modeler_FocusListener());
+		jTableSystemTermsList.addKeyListener(new Modeler_TableKeyAdapter(this));
+		jTableSystemTermsList.setRowHeight(TABLE_ROW_HEIGHT);
+		tableModelSystemTermsList.addColumn("NO.");
+		tableModelSystemTermsList.addColumn(res.getString("S248"));
+		tableModelSystemTermsList.addColumn(res.getString("S246"));
+		tableModelSystemTermsList.addColumn(res.getString("S247"));
+		column0 = jTableSystemTermsList.getColumnModel().getColumn(0);
+		column1 = jTableSystemTermsList.getColumnModel().getColumn(1);
+		column2 = jTableSystemTermsList.getColumnModel().getColumn(2);
+		column3 = jTableSystemTermsList.getColumnModel().getColumn(3);
+		column0.setPreferredWidth(40);
+		column1.setPreferredWidth(150);
+		column2.setPreferredWidth(300);
+		column3.setPreferredWidth(700);
+		column0.setCellRenderer(rendererAlignmentCenter);
+		column1.setCellRenderer(rendererAlignmentLeft);
+		column2.setCellRenderer(rendererAlignmentLeft);
+		column3.setCellRenderer(rendererAlignmentLeft);
+		jTableSystemTermsList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemTermsList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		//(jTableSystemMaintenanceLog)//
 		jTableSystemMaintenanceLog.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -5957,6 +6064,31 @@ public class Modeler extends JFrame {
 			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
 		}
 		//
+		if (e.getComponent().equals(jScrollPaneSystemTermsList)) {
+			componentType_jPopupMenuComponent = "SystemTermsList";
+			jPopupMenuComponent.add(jMenuItemComponentToAdd);
+			jPopupMenuComponent.add(jMenuItemComponentToPaste);
+			if (pastingDomElement != null) {
+				if (pastingDomElement.getTagName().equals("Terms")) {jMenuItemComponentToPaste.setEnabled(true);}
+			}
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+		}
+		if (e.getComponent().equals(jTableSystemTermsList)) {
+			componentType_jPopupMenuComponent = "SystemTermsList";
+			jPopupMenuComponent.add(jMenuItemComponentToAdd);
+			jPopupMenuComponent.add(jMenuItemComponentToPaste);
+			if (pastingDomElement != null) {
+				if (pastingDomElement.getTagName().equals("Terms")) {jMenuItemComponentToPaste.setEnabled(true);}
+			}
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToCopy);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToDelete);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
+		}
+		//
 		if (e.getComponent().equals(jScrollPaneSystemMaintenanceLog)) {
 			componentType_jPopupMenuComponent = "SystemMaintenanceLog";
 			jPopupMenuComponent.add(jMenuItemComponentToAdd);
@@ -7244,6 +7376,97 @@ public class Modeler extends JFrame {
 	}
 
 	/**
+	 * [File|Recover Import Irregulars]
+	 * @param e :Action Event
+	 */
+	void jMenuItemImportRecover_actionPerformed(ActionEvent e) {
+		int rtn1 = 0; int rtn2 = 0;
+
+		currentMainTreeNode.updateFields();
+		if (changeState.isChanged()) {
+			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
+			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1116"),
+					res.getString("S1118"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn1 == 0) {
+				saveFileWithCurrentFileName();
+				xeadUndoManager.resetLog();
+				changeState.setChanged(false);
+			}
+		}
+
+		if (rtn1 == 0) {
+			Object[] bts1 = {res.getString("S69"), res.getString("S68")} ;
+			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S70"),
+					res.getString("S67"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts1, bts1[0]);
+			if (rtn1 == 0) {
+				int count = 0;
+				boolean isProcessed = false;
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					NodeList subsystemList = systemNode.getElement().getElementsByTagName("Subsystem");
+					NodeList relationshipList = systemNode.getElement().getElementsByTagName("Relationship");
+					for (int i = 0; i < relationshipList.getLength(); i++) {
+						isProcessed = false;
+						for (int j = 0; j < subsystemList.getLength(); j++) {
+							if (createSubsystemAttributesForRelationship((org.w3c.dom.Element)relationshipList.item(i), (org.w3c.dom.Element)subsystemList.item(j))) {
+								isProcessed = true;
+							}
+						}
+						if (isProcessed) {
+							count++;
+						}
+					}
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+				if (count == 0) {
+					JOptionPane.showMessageDialog(this, res.getString("S72"));
+				} else {
+					Object[] bts2 = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
+					rtn2 = JOptionPane.showOptionDialog(this, count + res.getString("S71"),
+							res.getString("S1105"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts2, bts2[0]);
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+						////////////////
+						//Save changes//
+						////////////////
+						if (rtn2 == 0) {
+							saveFileWithCurrentFileName();
+							xeadUndoManager.resetLog();
+							changeState.setChanged(false);
+						}
+
+						//////////////////////////////
+						//Save changes as other name//
+						//////////////////////////////
+						if (rtn2 == 1) {
+							String name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
+							if (!name.equals("")) {
+								currentFileName = name;
+								this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
+								saveFileWithCurrentFileName();
+								changeState.setChanged(false);
+								xeadUndoManager.resetLog();
+							}
+						}
+
+						//////////////////////
+						//Setup MainTreeNode//
+						//////////////////////
+						setupMainTreeModelWithCurrentFileName();
+
+					} catch(Exception exception) {
+						exception.printStackTrace();
+					} finally {
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * [File|Save]
 	 * @param e :Action Event
 	 */
@@ -7749,12 +7972,13 @@ public class Modeler extends JFrame {
 		}
 	}
 
-	public void createSubsystemAttributesForRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element subsystemElement) {
+	public boolean createSubsystemAttributesForRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element subsystemElement) {
 		org.w3c.dom.Element elementSubsystemTable, elementSubsystemRelationship, newElement;
 		boolean table1OK, table2OK, needToAdd;
+		boolean isUpdated = false;
 		NodeList subsystemTableList = subsystemElement.getElementsByTagName("SubsystemTable");
 		NodeList subsystemRelationshipList = subsystemElement.getElementsByTagName("SubsystemRelationship");
-		//
+
 		//Check whether the pair of tables of the relationship are related to the subsystem//
 		table1OK = false;
 		table2OK = false;
@@ -7768,7 +7992,7 @@ public class Modeler extends JFrame {
 				table2OK = true;
 			}
 		}
-		//
+
 		//Check whether subsystem attributes for the relationship are already existing//
 		if (table1OK && table2OK) {
 			for (int i = 0; i < subsystemRelationshipList.getLength(); i++) {
@@ -7778,7 +8002,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		//Add attributes of the relationship to the subsystem//
 		if (table1OK && table2OK && needToAdd) {
 			newElement = domDocument.createElement("SubsystemRelationship");
@@ -7786,7 +8010,10 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("TerminalIndex1", "-1");
 			newElement.setAttribute("TerminalIndex2", "-1");
 			subsystemElement.appendChild(newElement);
+			isUpdated = true;
 		}
+
+		return isUpdated;
 	}
 
 	private void createSubsystemAttributesForTable(String tableID, String subsystemID) {
@@ -14942,7 +15169,7 @@ public class Modeler extends JFrame {
 					}
 				}
 			}
-			//
+
 			jPanelCanvas.updateUI();
 			informationOnThisPageChanged = true;
 		}
@@ -17809,9 +18036,53 @@ public class Modeler extends JFrame {
 				tableSystemFunctionTypeListSelectChangeActivated = true;
 			}
 			//
-			//Setup MaintenanceLog List//
+			//Setup Terms List//
 			if (jTabbedPaneSystem.getSelectedIndex() == 6) {
 				previousSelectedIndex_jTabbedPaneSystem = 6;
+				tableSystemTermsListSelectChangeActivated = false;
+				selectedRow_jTableSystemTermsList = -1;
+				//
+				//Clear list rows//
+				if (tableModelSystemTermsList.getRowCount() > 0) {
+					int rowCount = tableModelSystemTermsList.getRowCount();
+					for (int i = 0; i < rowCount; i++) {tableModelSystemTermsList.removeRow(0);}
+				}
+				//
+				//Add rows to list//
+				nodeList1 = domDocument.getElementsByTagName("Terms");
+				sortableDomElementListModel.removeAllElements();
+				for (int i = 0; i < nodeList1.getLength(); i++) {
+					sortableDomElementListModel.addElement((Object)nodeList1.item(i));
+				}
+				sortableDomElementListModel.sortElements();
+				for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
+					org.w3c.dom.Element element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
+					Object[] Cell = new Object[4];
+					Cell[0] =  new TableRowNumber(i+1, element);
+					Cell[1] = element.getAttribute("SortKey");
+					Cell[2] = element.getAttribute("Header");
+					Cell[3] = substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n");
+					tableModelSystemTermsList.addRow(Cell);
+				}
+				//
+				//Clear and lock edit-panel//
+				jTextFieldSystemTermsSortKey.setText("");
+				jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
+				jTextFieldSystemTermsSortKey.setEditable(false);
+				jTextFieldSystemTermsHeadder.setText("");
+				jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
+				jTextFieldSystemTermsHeadder.setEditable(false);
+				jTextAreaSystemTermsDescriptions.setText("");
+				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.control);
+				jTextAreaSystemTermsDescriptions.setEditable(false);
+				//
+				//Activate routine for ListSelectionChangeEvent//
+				tableSystemTermsListSelectChangeActivated = true;
+			}
+			//
+			//Setup MaintenanceLog List//
+			if (jTabbedPaneSystem.getSelectedIndex() == 7) {
+				previousSelectedIndex_jTabbedPaneSystem = 7;
 				tableSystemMaintenanceLogSelectChangeActivated = false;
 				selectedRow_jTableSystemMaintenanceLog = -1;
 				//
@@ -22281,9 +22552,7 @@ public class Modeler extends JFrame {
 					int decimal2 = 0;
 					try {
 						decimal2 = Integer.parseInt(jTextFieldSystemDataTypeDecimal.getText());
-					}
-					catch (NumberFormatException ex1) {
-					}
+					} catch (NumberFormatException ex1) {}
 					if (decimal1 != decimal2) {
 						valueOfFieldsChangedByTabbedPane = true;
 					}
@@ -22334,21 +22603,48 @@ public class Modeler extends JFrame {
 						//
 						//Update DOM element//
 						element.setAttribute("SortKey", jTextFieldSystemFunctionTypeSortKey.getText());
-						tableModelSystemFunctionTypeList.
-						setValueAt(jTextFieldSystemFunctionTypeSortKey.getText(),selectedRow_jTableSystemFunctionTypeList,1);
+						tableModelSystemFunctionTypeList.setValueAt(jTextFieldSystemFunctionTypeSortKey.getText(),selectedRow_jTableSystemFunctionTypeList,1);
 						element.setAttribute("Name", jTextFieldSystemFunctionTypeName.getText());
-						tableModelSystemFunctionTypeList.
-						setValueAt(jTextFieldSystemFunctionTypeName.getText(),selectedRow_jTableSystemFunctionTypeList,2);
-						element.setAttribute("Descriptions",
-								concatLinesWithTokenOfEOL(jTextAreaSystemFunctionTypeDescriptions.getText()));
-						tableModelSystemFunctionTypeList.
-						setValueAt(jTextAreaSystemFunctionTypeDescriptions.getText(),selectedRow_jTableSystemFunctionTypeList,3);
+						tableModelSystemFunctionTypeList.setValueAt(jTextFieldSystemFunctionTypeName.getText(),selectedRow_jTableSystemFunctionTypeList,2);
+						element.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaSystemFunctionTypeDescriptions.getText()));
+						tableModelSystemFunctionTypeList.setValueAt(jTextAreaSystemFunctionTypeDescriptions.getText(),selectedRow_jTableSystemFunctionTypeList,3);
+					}
+				}
+			}
+			//
+			//Check change and update terms//
+			if (previousSelectedIndex_jTabbedPaneSystem == 6) {
+				if (selectedRow_jTableSystemTermsList >= 0) {
+					TableRowNumber tableRowNumber = (TableRowNumber)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,0);
+					org.w3c.dom.Element element = tableRowNumber.getElement();
+					if (!element.getAttribute("SortKey").equals(jTextFieldSystemTermsSortKey.getText())) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (!element.getAttribute("Header").equals(jTextFieldSystemTermsHeadder.getText())) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (!element.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaSystemTermsDescriptions.getText()))) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
+					if (valueOfFieldsChangedByTabbedPane) {
+						//
+						valueOfFieldsChanged = true;
+						//
+						//Update DOM element//
+						element.setAttribute("SortKey", jTextFieldSystemTermsSortKey.getText());
+						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsSortKey.getText(),selectedRow_jTableSystemTermsList,1);
+						element.setAttribute("Header", jTextFieldSystemTermsHeadder.getText());
+						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsHeadder.getText(),selectedRow_jTableSystemTermsList,2);
+						element.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaSystemTermsDescriptions.getText()));
+						tableModelSystemTermsList.setValueAt(jTextAreaSystemTermsDescriptions.getText(),selectedRow_jTableSystemTermsList,3);
+						//
+						currentMainTreeNode.activateContentsPane();
 					}
 				}
 			}
 			//
 			//Check change and update maintenance log//
-			if (previousSelectedIndex_jTabbedPaneSystem == 6) {
+			if (previousSelectedIndex_jTabbedPaneSystem == 7) {
 				if (selectedRow_jTableSystemMaintenanceLog >= 0) {
 					TableRowNumber tableRowNumber =
 						(TableRowNumber)tableModelSystemMaintenanceLog.getValueAt(selectedRow_jTableSystemMaintenanceLog,0);
@@ -27255,6 +27551,46 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jTableSystemTermsList in case Row Selection Changed
+	 * @param e :List Selection Event
+	 */
+	void jTableSystemTermsList_valueChanged(ListSelectionEvent e) {
+		if (tableSystemTermsListSelectChangeActivated) {
+			if (selectedRow_jTableSystemTermsList != jTableSystemTermsList.getSelectedRow()) {
+				//
+				//Update fields of the row previously selected and refresh list//
+				if (selectedRow_jTableSystemTermsList > -1) {
+					currentMainTreeNode.updateFieldsForSystem();
+				}
+				selectedRow_jTableSystemTermsList = jTableSystemTermsList.getSelectedRow();
+			}
+			if (selectedRow_jTableSystemTermsList >= 0) {
+				jTextFieldSystemTermsSortKey.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,1));
+				jTextFieldSystemTermsSortKey.setBackground(SystemColor.window);
+				jTextFieldSystemTermsSortKey.setEditable(true);
+				jTextFieldSystemTermsHeadder.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,2));
+				jTextFieldSystemTermsHeadder.setBackground(SystemColor.window);
+				jTextFieldSystemTermsHeadder.setEditable(true);
+				jTextAreaSystemTermsDescriptions.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,3));
+				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.window);
+				jTextAreaSystemTermsDescriptions.setEditable(true);
+			}
+		}
+		if (selectedRow_jTableSystemTermsList == -1) {
+			//
+			//Clear and lock edit-panel//
+			jTextFieldSystemTermsSortKey.setText("");
+			jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
+			jTextFieldSystemTermsSortKey.setEditable(false);
+			jTextFieldSystemTermsHeadder.setText("");
+			jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
+			jTextFieldSystemTermsHeadder.setEditable(false);
+			jTextAreaSystemTermsDescriptions.setText("");
+			jTextAreaSystemTermsDescriptions.setBackground(SystemColor.control);
+			jTextAreaSystemTermsDescriptions.setEditable(false);
+		}
+	}
+	/**
 	 * Event Handler for jTableSystemMaintenanceLog in case Row Selection Changed
 	 * @param e :List Selection Event
 	 */
@@ -27399,6 +27735,16 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jScrollPaneSystemTermsList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jScrollPaneSystemTermsList_mouseClicked(MouseEvent e) {
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+			jTableSystemTermsList.clearSelection();
+			showPopupMenuComponent(e);
+		}
+	}
+	/**
 	 * Event Handler for jScrollPaneSystemMaintenanceLog in case mouse clicked
 	 * @param e :Mouse Event
 	 */
@@ -27479,6 +27825,20 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Event Handler for jTableSystemTermsList in case mouse clicked
+	 * @param e :Mouse Event
+	 */
+	void jTableSystemTermsList_mouseClicked(MouseEvent e) {
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
+			currentMainTreeNode.updateFieldsForSystem();
+			xeadUndoManager.saveNodeBeforeModified(currentMainTreeNode);
+			//
+			selectedRow_jTableSystemTermsList = jTableSystemTermsList.rowAtPoint(e.getPoint());
+			jTableSystemTermsList.setRowSelectionInterval(selectedRow_jTableSystemTermsList, selectedRow_jTableSystemTermsList);
+			showPopupMenuComponent(e);
+		}
+	}
+	/**
 	 * Event Handler for jTableSystemMaintenanceLog in case mouse clicked
 	 * @param e :Mouse Event
 	 */
@@ -27534,6 +27894,9 @@ public class Modeler extends JFrame {
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemFunctionTypeWhereUsedList")) {
 			tableModel = tableModelSystemFunctionTypeWhereUsedList;
+		}
+		if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
+			tableModel = tableModelSystemTermsList;
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
 			tableModel = tableModelSystemMaintenanceLog;
@@ -28050,8 +28413,12 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Name", res.getString("S2184"));
 			newElement.setAttribute("Descriptions", "");
 			newElement.setAttribute("SortKey", "");
-			nextSiblingNode = lastElement.getNextSibling();
-			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
 			Object[] Cell = new Object[4];
 			Cell[0] =  new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newElement);
 			Cell[1] = newElement.getAttribute("SortKey");
@@ -28112,8 +28479,12 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Name", res.getString("S2198"));
 			newElement.setAttribute("Descriptions", "");
 			newElement.setAttribute("SortKey", "");
-			nextSiblingNode = lastElement.getNextSibling();
-			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
 			Object[] Cell = new Object[4];
 			Cell[0] =  new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
 			Cell[1] = newElement.getAttribute("SortKey");
@@ -28144,8 +28515,12 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Length", "10");
 			newElement.setAttribute("Decimal", "0");
 			newElement.setAttribute("SQLExpression", "CHAR(10)");
-			nextSiblingNode = lastElement.getNextSibling();
-			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
 			Object[] Cell = new Object[7];
 			Cell[0] =  new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newElement);
 			Cell[1] = newElement.getAttribute("SortKey");
@@ -28178,8 +28553,12 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Name", res.getString("S2235"));
 			newElement.setAttribute("Descriptions", "");
 			newElement.setAttribute("SortKey", "");
-			nextSiblingNode = lastElement.getNextSibling();
-			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
 			Object[] Cell = new Object[4];
 			Cell[0] =  new TableRowNumber(jTableSystemFunctionTypeList.getRowCount() + 1, newElement);
 			Cell[1] = newElement.getAttribute("SortKey");
@@ -28188,6 +28567,40 @@ public class Modeler extends JFrame {
 			tableModelSystemFunctionTypeList.addRow(Cell);
 			selectedRow_jTableSystemFunctionTypeList = jTableSystemFunctionTypeList.getRowCount() - 1;
 			jTableSystemFunctionTypeList.setRowSelectionInterval(selectedRow_jTableSystemFunctionTypeList, selectedRow_jTableSystemFunctionTypeList);
+		}
+		//
+		//Add Terms and Rules//
+		if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
+			//
+			currentMainTreeNode.updateFields();
+			informationOnThisPageChanged = true;
+			//
+			//Update DOM element//
+			newElement = domDocument.createElement("Terms");
+			lastElement = getLastDomElementOfTheType("Terms");
+			if (lastElement == null) {
+				id = 0;
+			} else {
+				id = Integer.parseInt(lastElement.getAttribute("ID"));
+			}
+			newElement.setAttribute("ID", Integer.toString(id + 1));
+			newElement.setAttribute("SortKey", "");
+			newElement.setAttribute("Header", res.getString("S2236"));
+			newElement.setAttribute("Descriptions", "");
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
+			Object[] Cell = new Object[4];
+			Cell[0] =  new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
+			Cell[1] = newElement.getAttribute("SortKey");
+			Cell[2] = newElement.getAttribute("Header");
+			Cell[3] = newElement.getAttribute("Descriptions");
+			tableModelSystemTermsList.addRow(Cell);
+			selectedRow_jTableSystemTermsList = jTableSystemTermsList.getRowCount() - 1;
+			jTableSystemTermsList.setRowSelectionInterval(selectedRow_jTableSystemTermsList, selectedRow_jTableSystemTermsList);
 		}
 		//
 		//Add MaintenanceLog//
@@ -28207,8 +28620,12 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
 			newElement.setAttribute("Descriptions", xeadUndoManager.getText());
 			newElement.setAttribute("SortKey", getStringValueOfDateTime("withUnderbarAndTime"));
-			nextSiblingNode = lastElement.getNextSibling();
-			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			if (lastElement == null) {
+				systemNode.getElement().appendChild(newElement);
+			} else {
+				nextSiblingNode = lastElement.getNextSibling();
+				systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			}
 			Object[] Cell = new Object[4];
 			Cell[0] =  new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newElement);
 			Cell[1] = newElement.getAttribute("SortKey");
@@ -28541,6 +28958,41 @@ public class Modeler extends JFrame {
 			jTableSystemFunctionTypeList.setRowSelectionInterval(selectedRow_jTableSystemFunctionTypeList, selectedRow_jTableSystemFunctionTypeList);
 		}
 		//
+		//Paste TermsList//
+		if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
+			//
+			informationOnThisPageChanged = true;
+			//
+			//Update DOM element//
+			newElement = domDocument.createElement("Terms");
+			lastElement = getLastDomElementOfTheType("Terms");
+			if (lastElement == null) {
+				id = 0;
+			} else {
+				id = Integer.parseInt(lastElement.getAttribute("ID"));
+			}
+			newElement.setAttribute("ID", Integer.toString(id + 1));
+			if (jTableSystemTermsList.getRowCount() == 0) {
+				newElement.setAttribute("SortKey", "10");
+			} else {
+				TableRowNumber tableRowNumber = (TableRowNumber)tableModelSystemTermsList.getValueAt(jTableSystemTermsList.getRowCount()-1,0);
+				lastElement = tableRowNumber.getElement();
+				id = Integer.parseInt(lastElement.getAttribute("ID"));
+				newElement.setAttribute("SortKey", Integer.toString(id + 10));
+			}
+			newElement.setAttribute("Header", pastingDomElement.getAttribute("Header"));
+			newElement.setAttribute("Descriptions", pastingDomElement.getAttribute("Descriptions"));
+			nextSiblingNode = lastElement.getNextSibling();
+			systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+			Object[] Cell = new Object[3];
+			Cell[0] =  new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
+			Cell[1] = newElement.getAttribute("Header");
+			Cell[2] = newElement.getAttribute("Descriptions");
+			tableModelSystemTermsList.addRow(Cell);
+			selectedRow_jTableSystemTermsList = jTableSystemTermsList.getRowCount() - 1;
+			jTableSystemTermsList.setRowSelectionInterval(selectedRow_jTableSystemTermsList, selectedRow_jTableSystemTermsList);
+		}
+		//
 		//Paste MaintenanceLog//
 		if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
 			//
@@ -28789,6 +29241,10 @@ public class Modeler extends JFrame {
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemFunctionTypeList")) {
 			tableRowNumber = (TableRowNumber)tableModelSystemFunctionTypeList.getValueAt(selectedRow_jTableSystemFunctionTypeList,0);
+			pastingDomElement = tableRowNumber.getElement();
+		}
+		if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
+			tableRowNumber = (TableRowNumber)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,0);
 			pastingDomElement = tableRowNumber.getElement();
 		}
 		if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
@@ -29048,6 +29504,15 @@ public class Modeler extends JFrame {
 						currentMainTreeNode.activateContentsPane();
 					}
 				}
+			}
+			if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
+				table = jTableSystemTermsList;
+				rowNumberDeleted = jTableSystemTermsList.getSelectedRow();
+				isDeleted = true;
+				tableRowNumber = (TableRowNumber)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,0);
+				systemNode.getElement().removeChild(tableRowNumber.getElement());
+				xeadUndoManager.addLogAfterModified(currentMainTreeNode);
+				currentMainTreeNode.activateContentsPane();
 			}
 			if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
 				table = jTableSystemMaintenanceLog;
@@ -31943,6 +32408,15 @@ class Modeler_jMenuItemImportSQL_ActionAdapter implements ActionListener {
 		adaptee.jMenuItemImportSQL_actionPerformed(e);
 	}
 }
+class Modeler_jMenuItemImportRecover_ActionAdapter implements ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemImportRecover_ActionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemImportRecover_actionPerformed(e);
+	}
+}
 class Modeler_jMenuItemFileSave_ActionAdapter implements ActionListener {
 	Modeler adaptee;
 	Modeler_jMenuItemFileSave_ActionAdapter(Modeler adaptee) {
@@ -32487,6 +32961,15 @@ class Modeler_jTableSystemFunctionTypeList_listSelectionAdapter  implements List
 	}
 	public void valueChanged(ListSelectionEvent e) {
 		adaptee.jTableSystemFunctionTypeList_valueChanged(e);
+	}
+}
+class Modeler_jTableSystemTermsList_listSelectionAdapter  implements ListSelectionListener {
+	Modeler adaptee;
+	Modeler_jTableSystemTermsList_listSelectionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void valueChanged(ListSelectionEvent e) {
+		adaptee.jTableSystemTermsList_valueChanged(e);
 	}
 }
 class Modeler_jTableSystemMaintenanceLog_listSelectionAdapter  implements ListSelectionListener {
@@ -33439,6 +33922,15 @@ class Modeler_jScrollPaneSystemFunctionTypeWhereUsedList_mouseAdapter extends ja
 		adaptee.jScrollPaneSystemFunctionTypeWhereUsedList_mouseClicked(e);
 	}
 }
+class Modeler_jScrollPaneSystemTermsList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jScrollPaneSystemTermsList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jScrollPaneSystemTermsList_mouseClicked(e);
+	}
+}
 class Modeler_jScrollPaneSystemMaintenanceLog_mouseAdapter extends java.awt.event.MouseAdapter {
 	Modeler adaptee;
 	Modeler_jScrollPaneSystemMaintenanceLog_mouseAdapter(Modeler adaptee) {
@@ -33536,6 +34028,15 @@ class Modeler_jTableSystemFunctionTypeWhereUsedList_mouseAdapter extends java.aw
 	}
 	public void mouseClicked(MouseEvent e) {
 		adaptee.jTableSystemFunctionTypeWhereUsedList_mouseClicked(e);
+	}
+}
+class Modeler_jTableSystemTermsList_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jTableSystemTermsList_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jTableSystemTermsList_mouseClicked(e);
 	}
 }
 class Modeler_jTableSystemMaintenanceLog_mouseAdapter extends java.awt.event.MouseAdapter {

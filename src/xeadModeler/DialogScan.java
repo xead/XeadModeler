@@ -79,6 +79,7 @@ public class DialogScan extends JDialog {
 	private JCheckBox jCheckBoxTableType = new JCheckBox();
 	private JCheckBox jCheckBoxDataType = new JCheckBox();
 	private JCheckBox jCheckBoxFunctionType = new JCheckBox();
+	private JCheckBox jCheckBoxTerms = new JCheckBox();
 	private JCheckBox jCheckBoxMaintenanceLog = new JCheckBox();
 	private JCheckBox jCheckBoxSubjectArea = new JCheckBox();
 	private JCheckBox jCheckBoxRole = new JCheckBox();
@@ -193,7 +194,11 @@ public class DialogScan extends JDialog {
 		jCheckBoxFunctionType.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxFunctionType.setText(res.getString("DialogScan10"));
 		jCheckBoxFunctionType.setSelected(true);
-		jCheckBoxMaintenanceLog.setBounds(new Rectangle(440, 72, 150, 25));
+		jCheckBoxTerms.setBounds(new Rectangle(440, 72, 150, 25));
+		jCheckBoxTerms.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jCheckBoxTerms.setText(res.getString("DialogScan84"));
+		jCheckBoxTerms.setSelected(true);
+		jCheckBoxMaintenanceLog.setBounds(new Rectangle(590, 72, 150, 25));
 		jCheckBoxMaintenanceLog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxMaintenanceLog.setText(res.getString("DialogScan11"));
 		jCheckBoxMaintenanceLog.setSelected(true);
@@ -248,6 +253,7 @@ public class DialogScan extends JDialog {
 		jPanelNorth.add(jCheckBoxTableType, null);
 		jPanelNorth.add(jCheckBoxDataType, null);
 		jPanelNorth.add(jCheckBoxFunctionType, null);
+		jPanelNorth.add(jCheckBoxTerms, null);
 		jPanelNorth.add(jCheckBoxMaintenanceLog, null);
 		jPanelNorth.add(jCheckBoxRole, null);
 		jPanelNorth.add(jCheckBoxTask, null);
@@ -426,6 +432,7 @@ public class DialogScan extends JDialog {
 		NodeList tableTypeList = null;
 		NodeList dataTypeList = null;
 		NodeList functionTypeList = null;
+		NodeList termsList = null;
 		NodeList maintenanceLogList = null;
 		NodeList subjectAreaList = null;
 		NodeList roleList = null;
@@ -497,6 +504,10 @@ public class DialogScan extends JDialog {
 			if (jCheckBoxFunctionType.isSelected()) {
 				functionTypeList = frame_.domDocument.getElementsByTagName("FunctionType");
 				countOfElementsToBeScanned += functionTypeList.getLength();
+			}
+			if (jCheckBoxTerms.isSelected()) {
+				termsList = frame_.domDocument.getElementsByTagName("Terms");
+				countOfElementsToBeScanned += termsList.getLength();
 			}
 			if (jCheckBoxMaintenanceLog.isSelected()) {
 				maintenanceLogList = frame_.domDocument.getElementsByTagName("MaintenanceLog");
@@ -646,6 +657,17 @@ public class DialogScan extends JDialog {
 					scanAttribute(element, "FunctionType", "Descriptions");
 				}
 			}
+			if (jCheckBoxTerms.isSelected()) {
+				for (int i = 0; i < termsList.getLength(); i++) {
+					jProgressBar.setValue(jProgressBar.getValue() + 1);
+					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+					//
+					org.w3c.dom.Element element = (org.w3c.dom.Element)termsList.item(i);
+					scanAttribute(element, "Terms", "SortKey");
+					scanAttribute(element, "Terms", "Header");
+					scanAttribute(element, "Terms", "Descriptions");
+				}
+			}
 			if (jCheckBoxMaintenanceLog.isSelected()) {
 				for (int i = 0; i < maintenanceLogList.getLength(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -653,7 +675,7 @@ public class DialogScan extends JDialog {
 					//
 					org.w3c.dom.Element element = (org.w3c.dom.Element)maintenanceLogList.item(i);
 					scanAttribute(element, "MaintenanceLog", "SortKey");
-					scanAttribute(element, "MaintenanceLog", "Header");
+					scanAttribute(element, "MaintenanceLog", "Headder");
 					scanAttribute(element, "MaintenanceLog", "Descriptions");
 				}
 			}
@@ -967,6 +989,9 @@ public class DialogScan extends JDialog {
 		if (elementType.equals("FunctionType")) {
 			result = res.getString("DialogScan39");
 		}
+		if (elementType.equals("Terms")) {
+			result = res.getString("DialogScan84");
+		}
 		if (elementType.equals("MaintenanceLog")) {
 			result = res.getString("DialogScan40");
 		}
@@ -1109,6 +1134,10 @@ public class DialogScan extends JDialog {
 		String workString = "";
 		org.w3c.dom.Element workElement1, workElement2, workElement3;
 		String itemName =  element.getAttribute("Name") + "(" + element.getAttribute("SortKey") + ")";
+		//
+		if (elementType.equals("Terms")) {
+			itemName = element.getAttribute("Header");
+		}
 		//
 		if (elementType.equals("MaintenanceLog")) {
 			itemName = element.getAttribute("Headder");
