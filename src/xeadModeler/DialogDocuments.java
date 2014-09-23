@@ -32,31 +32,20 @@ package xeadModeler;
  */
 
 import java.awt.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
 import java.awt.event.*;
-import java.util.ResourceBundle;
-
-import org.w3c.dom.*;
-
 import java.io.*;
 import java.util.*;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFFooter;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.hssf.util.CellRangeAddress;
+import java.util.ResourceBundle;
+import javax.swing.*;
+import javax.swing.event.*;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Footer;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.*;
+import org.w3c.dom.*;
 
 public class DialogDocuments extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -108,23 +97,23 @@ public class DialogDocuments extends JDialog {
 	private XeadNode[] elementArray2 = new XeadNode[1000];
 	private int countOfElementArray2 = -1;
 	//
-	private HSSFFont fontTitle = null;
-	private HSSFFont fontHeader1 = null;
-	private HSSFFont fontHeader2 = null;
-	private HSSFFont fontValue = null;
-	private HSSFFont fontImage = null;
-	private HSSFFont fontImageUL = null;
-	private HSSFWorkbook workBook = null;
-	private HSSFCellStyle styleTitle = null;
-	private HSSFCellStyle styleHeader1 = null;
-	private HSSFCellStyle styleHeader2 = null;
-	private HSSFCellStyle styleHeader2Number = null;
-	private HSSFCellStyle styleValue = null;
-	private HSSFCellStyle styleValueNumber = null;
-	private HSSFCellStyle styleImage = null;
-	private HSSFPatriarch patriarch = null;
-	private HSSFClientAnchor anchor = null;
-	protected HSSFPicture picture = null;
+	private XSSFFont fontTitle = null;
+	private XSSFFont fontHeader1 = null;
+	private XSSFFont fontHeader2 = null;
+	private XSSFFont fontValue = null;
+	private XSSFFont fontImage = null;
+	private XSSFFont fontImageUL = null;
+	private XSSFWorkbook workBook = null;
+	private XSSFCellStyle styleTitle = null;
+	private XSSFCellStyle styleHeader1 = null;
+	private XSSFCellStyle styleHeader2 = null;
+	private XSSFCellStyle styleHeader2Number = null;
+	private XSSFCellStyle styleValue = null;
+	private XSSFCellStyle styleValueNumber = null;
+	private XSSFCellStyle styleImage = null;
+	//private XSSFPatriarch patriarch = null;
+	//private XSSFClientAnchor anchor = null;
+	protected XSSFPicture picture = null;
 
 	public DialogDocuments(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
@@ -212,6 +201,7 @@ public class DialogDocuments extends JDialog {
 		jButtonStart.addActionListener(new DialogDocuments_jButtonStart_actionAdapter(this));
 		jProgressBar.setBounds(new Rectangle(30, 7, 200, 27));
 		jProgressBar.setVisible(false);
+		jProgressBar.setStringPainted(true);
 		jButtonCloseDialog.setBounds(new Rectangle(440, 7, 110, 27));
 		jButtonCloseDialog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCloseDialog.setText(res.getString("DialogDocuments08"));
@@ -298,7 +288,7 @@ public class DialogDocuments extends JDialog {
 					if (countOfDefinitions > 1) {
 						Arrays.sort(definitionArray, 0, countOfDefinitions, new NodeComparator());
 					}
-					xlsFileName = file.getParent() + File.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xls";
+					xlsFileName = file.getParent() + File.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xlsx";
 					//xlsFileName = "C:" + file.separator + "Documents and Settings" + file.separator + "Administrator" + file.separator + "My Documents" + file.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xls";
 				}
 				//
@@ -323,7 +313,7 @@ public class DialogDocuments extends JDialog {
 					if (countOfDefinitions > 1) {
 						Arrays.sort(definitionArray, 0, countOfDefinitions, new NodeComparator());
 					}
-					xlsFileName = file.getParent() + File.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xls";
+					xlsFileName = file.getParent() + File.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xlsx";
 					//xlsFileName = "C:" + file.separator + "Documents and Settings" + file.separator + "Administrator" + file.separator + "My Documents" + file.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xls";
 				}
 				//
@@ -389,19 +379,19 @@ public class DialogDocuments extends JDialog {
 	}
 
 	void createWorkBookAndStyles() {
-		workBook = new HSSFWorkbook();
+		workBook = new XSSFWorkbook();
 		//
 		fontTitle = workBook.createFont();
 		fontTitle.setFontName(res.getString("DialogDocuments13"));
 		fontTitle.setFontHeightInPoints((short)14);
-		fontTitle.setColor(HSSFColor.WHITE.index);
-		fontTitle.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		fontTitle.setColor(new XSSFColor(Color.black)); //this turns to white :XSSFColor bug! 
+		fontTitle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
 		//
 		fontHeader1 = workBook.createFont();
 		fontHeader1.setFontName(res.getString("DialogDocuments13"));
 		fontHeader1.setFontHeightInPoints((short)10);
 		fontHeader1.setItalic(true);
-		fontHeader1.setColor(HSSFColor.WHITE.index);
+		fontHeader1.setColor(new XSSFColor(Color.black)); //this turns to white :XSSFColor bug!
 		//
 		fontHeader2 = workBook.createFont();
 		fontHeader2.setFontName(res.getString("DialogDocuments13"));
@@ -418,78 +408,78 @@ public class DialogDocuments extends JDialog {
 		fontImageUL = workBook.createFont();
 		fontImageUL.setFontName(res.getString("DialogDocuments15"));
 		fontImageUL.setFontHeightInPoints((short)6);
-		fontImageUL.setUnderline(HSSFFont.U_SINGLE);
+		fontImageUL.setUnderline(XSSFFont.U_SINGLE);
 		//
 		styleTitle = workBook.createCellStyle();
-		styleTitle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setFillForegroundColor(HSSFColor.GREY_80_PERCENT.index);
-		styleTitle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleTitle.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setFillForegroundColor(new XSSFColor(Color.DARK_GRAY));
+		styleTitle.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		styleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+		styleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleTitle.setFont(fontTitle);
 		//
 		styleHeader1 = workBook.createCellStyle();
-		styleHeader1.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeader1.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeader1.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeader1.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeader1.setFillForegroundColor(HSSFColor.GREY_80_PERCENT.index);
-		styleHeader1.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		styleHeader1.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleHeader1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleHeader1.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeader1.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeader1.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeader1.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeader1.setFillForegroundColor(new XSSFColor(Color.DARK_GRAY));
+		styleHeader1.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		styleHeader1.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleHeader1.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader1.setFont(fontHeader1);
 		//
 		styleHeader2 = workBook.createCellStyle();
-		styleHeader2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeader2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeader2.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeader2.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeader2.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		styleHeader2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		styleHeader2.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleHeader2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleHeader2.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeader2.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeader2.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeader2.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeader2.setFillForegroundColor(new XSSFColor(Color.LIGHT_GRAY));
+		styleHeader2.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		styleHeader2.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleHeader2.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader2.setFont(fontHeader2);
 		//
 		styleHeader2Number = workBook.createCellStyle();
-		styleHeader2Number.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeader2Number.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeader2Number.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeader2Number.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeader2Number.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		styleHeader2Number.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		styleHeader2Number.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-		styleHeader2Number.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleHeader2Number.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeader2Number.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeader2Number.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeader2Number.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeader2Number.setFillForegroundColor(new XSSFColor(Color.LIGHT_GRAY));
+		styleHeader2Number.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		styleHeader2Number.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
+		styleHeader2Number.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader2Number.setFont(fontHeader2);
 		//
 		styleValue = workBook.createCellStyle();
-		styleValue.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleValue.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleValue.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		styleValue.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleValue.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleValue.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValue.setFont(fontValue);
 		styleValue.setWrapText(true);
 		//
 		styleValueNumber = workBook.createCellStyle();
-		styleValueNumber.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-		styleValueNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		styleValueNumber.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
+		styleValueNumber.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValueNumber.setFont(fontValue);
 		//
 		styleImage = workBook.createCellStyle();
-		styleImage.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleImage.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleImage.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleImage.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleImage.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleImage.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		styleImage.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleImage.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleImage.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleImage.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleImage.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleImage.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleImage.setFont(fontImage);
 		styleImage.setWrapText(true);
 	}
@@ -497,13 +487,13 @@ public class DialogDocuments extends JDialog {
 	void generateTableDocument(org.w3c.dom.Element element) {
 		//
 		try {
-			HSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
+			XSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
 			sheet.setDefaultRowHeight( (short) 300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
 			sheet.setColumnWidth(1, 4100);
-			HSSFFooter footer = sheet.getFooter();
-			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page " + HSSFFooter.page() + " / " + HSSFFooter.numPages() );
+			Footer footer = sheet.getFooter();
+			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page &P / &N");
 			//
 			setupTableSummary(sheet, element);
 			setupTableFieldList(sheet, element);
@@ -519,14 +509,14 @@ public class DialogDocuments extends JDialog {
 	void generateFunctionDocument(org.w3c.dom.Element element) {
 		//
 		try {
-			HSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
+			XSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
 			sheet.setDefaultRowHeight( (short) 300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
 			sheet.setColumnWidth(1, 4100);
-			HSSFFooter footer = sheet.getFooter();
-			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page " + HSSFFooter.page() + " / " + HSSFFooter.numPages() );
-			patriarch = sheet.createDrawingPatriarch();
+			Footer footer = sheet.getFooter();
+			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page &P / &N");
+			//patriarch = sheet.createDrawingPatriarch();
 			//
 			setupFunctionSummary(sheet, element);
 			setupFunctionIOList(sheet, element);
@@ -540,120 +530,120 @@ public class DialogDocuments extends JDialog {
 		}
 	}
 
-	void setupFunctionSummary(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupFunctionSummary(XSSFSheet sheet, org.w3c.dom.Element element) {
 		//NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		//org.w3c.dom.Element workElement2 = null;
 		String workString = "";
 		//
-		HSSFRow row0 = sheet.createRow(0);
-		HSSFRow row1 = sheet.createRow(1);
-		HSSFRow row2 = sheet.createRow(2);
-		HSSFRow row3 = sheet.createRow(3);
-		HSSFRow row4 = sheet.createRow(4);
-		HSSFRow row5 = sheet.createRow(5);
-		HSSFRow row6 = sheet.createRow(6);
-		HSSFRow row7 = sheet.createRow(7);
-		HSSFRow row8 = sheet.createRow(8);
-		HSSFRow row9 = sheet.createRow(9);
+		XSSFRow row0 = sheet.createRow(0);
+		XSSFRow row1 = sheet.createRow(1);
+		XSSFRow row2 = sheet.createRow(2);
+		XSSFRow row3 = sheet.createRow(3);
+		XSSFRow row4 = sheet.createRow(4);
+		XSSFRow row5 = sheet.createRow(5);
+		XSSFRow row6 = sheet.createRow(6);
+		XSSFRow row7 = sheet.createRow(7);
+		XSSFRow row8 = sheet.createRow(8);
+		XSSFRow row9 = sheet.createRow(9);
 		//
 		//Title
-		HSSFRichTextString title = new HSSFRichTextString(res.getString("DialogDocuments16"));
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRichTextString title = new XSSFRichTextString(res.getString("DialogDocuments16"));
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleTitle);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleTitle);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleTitle);
-		HSSFCell cellB1 = row1.createCell(1);
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleTitle);
 		cellA0.setCellValue(title);
 		sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 1));
 		//
 		//Label Subsystem
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader2);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader2);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader2);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader2);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader2);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader2);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader2);
-		cellC0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments17")));
+		cellC0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments17")));
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 8));
 		//
 		//Value Subsystem
-		HSSFCell cellC1 = row1.createCell(2);
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleValue);
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleValue);
-		HSSFCell cellE1 = row1.createCell(4);
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleValue);
-		HSSFCell cellF1 = row1.createCell(5);
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleValue);
-		HSSFCell cellG1 = row1.createCell(6);
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleValue);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleValue);
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleValue);
-		cellC1.setCellValue(new HSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
+		cellC1.setCellValue(new XSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 8));
 		//
 		//Label Function
-		HSSFCell cellA2 = row2.createCell(0);
+		XSSFCell cellA2 = row2.createCell(0);
 		cellA2.setCellStyle(styleHeader2);
-		HSSFCell cellB2 = row2.createCell(1);
+		XSSFCell cellB2 = row2.createCell(1);
 		cellB2.setCellStyle(styleHeader2);
-		HSSFCell cellC2 = row2.createCell(2);
+		XSSFCell cellC2 = row2.createCell(2);
 		cellC2.setCellStyle(styleHeader2);
-		HSSFCell cellD2 = row2.createCell(3);
+		XSSFCell cellD2 = row2.createCell(3);
 		cellD2.setCellStyle(styleHeader2);
-		HSSFCell cellE2 = row2.createCell(4);
+		XSSFCell cellE2 = row2.createCell(4);
 		cellE2.setCellStyle(styleHeader2);
-		cellA2.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments18")));
+		cellA2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments18")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 4));
 		//
 		//Value Function
-		HSSFCell cellA3 = row3.createCell(0);
+		XSSFCell cellA3 = row3.createCell(0);
 		cellA3.setCellStyle(styleValue);
-		HSSFCell cellB3 = row3.createCell(1);
+		XSSFCell cellB3 = row3.createCell(1);
 		cellB3.setCellStyle(styleValue);
-		HSSFCell cellC3 = row3.createCell(2);
+		XSSFCell cellC3 = row3.createCell(2);
 		cellC3.setCellStyle(styleValue);
-		HSSFCell cellD3 = row3.createCell(3);
+		XSSFCell cellD3 = row3.createCell(3);
 		cellD3.setCellStyle(styleValue);
-		HSSFCell cellE3 = row3.createCell(4);
+		XSSFCell cellE3 = row3.createCell(4);
 		cellE3.setCellStyle(styleValue);
-		cellA3.setCellValue(new HSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
+		cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
 		//
 		//Label FunctionType
-		HSSFCell cellF2 = row2.createCell(5);
+		XSSFCell cellF2 = row2.createCell(5);
 		cellF2.setCellStyle(styleHeader2);
-		HSSFCell cellG2 = row2.createCell(6);
+		XSSFCell cellG2 = row2.createCell(6);
 		cellG2.setCellStyle(styleHeader2);
-		HSSFCell cellH2 = row2.createCell(7);
+		XSSFCell cellH2 = row2.createCell(7);
 		cellH2.setCellStyle(styleHeader2);
-		HSSFCell cellI2 = row2.createCell(8);
+		XSSFCell cellI2 = row2.createCell(8);
 		cellI2.setCellStyle(styleHeader2);
-		cellF2.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments19")));
+		cellF2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments19")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 8));
 		//
 		//Value FunctionType
-		HSSFCell cellF3 = row3.createCell(5);
+		XSSFCell cellF3 = row3.createCell(5);
 		cellF3.setCellStyle(styleValue);
-		HSSFCell cellG3 = row3.createCell(6);
+		XSSFCell cellG3 = row3.createCell(6);
 		cellG3.setCellStyle(styleValue);
-		HSSFCell cellH3 = row3.createCell(7);
+		XSSFCell cellH3 = row3.createCell(7);
 		cellH3.setCellStyle(styleValue);
-		HSSFCell cellI3 = row3.createCell(8);
+		XSSFCell cellI3 = row3.createCell(8);
 		cellI3.setCellStyle(styleValue);
 		for (int i = 0; i < functionTypeList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)functionTypeList.item(i);
@@ -662,155 +652,155 @@ public class DialogDocuments extends JDialog {
 				break;
 			}
 		}
-		cellF3.setCellValue(new HSSFRichTextString(workString));
+		cellF3.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 5, 8));
 		//
 		//Label Summary
-		HSSFCell cellA4 = row4.createCell(0);
+		XSSFCell cellA4 = row4.createCell(0);
 		cellA4.setCellStyle(styleHeader2);
-		HSSFCell cellB4 = row4.createCell(1);
+		XSSFCell cellB4 = row4.createCell(1);
 		cellB4.setCellStyle(styleHeader2);
-		HSSFCell cellC4 = row4.createCell(2);
+		XSSFCell cellC4 = row4.createCell(2);
 		cellC4.setCellStyle(styleHeader2);
-		HSSFCell cellD4 = row4.createCell(3);
+		XSSFCell cellD4 = row4.createCell(3);
 		cellD4.setCellStyle(styleHeader2);
-		HSSFCell cellE4 = row4.createCell(4);
+		XSSFCell cellE4 = row4.createCell(4);
 		cellE4.setCellStyle(styleHeader2);
-		HSSFCell cellF4 = row4.createCell(5);
+		XSSFCell cellF4 = row4.createCell(5);
 		cellF4.setCellStyle(styleHeader2);
-		HSSFCell cellG4 = row4.createCell(6);
+		XSSFCell cellG4 = row4.createCell(6);
 		cellG4.setCellStyle(styleHeader2);
-		HSSFCell cellH4 = row4.createCell(7);
+		XSSFCell cellH4 = row4.createCell(7);
 		cellH4.setCellStyle(styleHeader2);
-		HSSFCell cellI4 = row4.createCell(8);
+		XSSFCell cellI4 = row4.createCell(8);
 		cellI4.setCellStyle(styleHeader2);
-		cellA4.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments20")));
+		cellA4.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments20")));
 		sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 8));
 		//
 		//Value Summary
-		HSSFCell cellA5 = row5.createCell(0);
+		XSSFCell cellA5 = row5.createCell(0);
 		cellA5.setCellStyle(styleValue);
-		HSSFCell cellB5 = row5.createCell(1);
+		XSSFCell cellB5 = row5.createCell(1);
 		cellB5.setCellStyle(styleValue);
-		HSSFCell cellC5 = row5.createCell(2);
+		XSSFCell cellC5 = row5.createCell(2);
 		cellC5.setCellStyle(styleValue);
-		HSSFCell cellD5 = row5.createCell(3);
+		XSSFCell cellD5 = row5.createCell(3);
 		cellD5.setCellStyle(styleValue);
-		HSSFCell cellE5 = row5.createCell(4);
+		XSSFCell cellE5 = row5.createCell(4);
 		cellE5.setCellStyle(styleValue);
-		HSSFCell cellF5 = row5.createCell(5);
+		XSSFCell cellF5 = row5.createCell(5);
 		cellF5.setCellStyle(styleValue);
-		HSSFCell cellG5 = row5.createCell(6);
+		XSSFCell cellG5 = row5.createCell(6);
 		cellG5.setCellStyle(styleValue);
-		HSSFCell cellH5 = row5.createCell(7);
+		XSSFCell cellH5 = row5.createCell(7);
 		cellH5.setCellStyle(styleValue);
-		HSSFCell cellI5 = row5.createCell(8);
+		XSSFCell cellI5 = row5.createCell(8);
 		cellI5.setCellStyle(styleValue);
-		cellA5.setCellValue(new HSSFRichTextString(element.getAttribute("Summary")));
+		cellA5.setCellValue(new XSSFRichTextString(element.getAttribute("Summary")));
 		sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 8));
 		//
 		//Label Parameters
-		HSSFCell cellA6 = row6.createCell(0);
+		XSSFCell cellA6 = row6.createCell(0);
 		cellA6.setCellStyle(styleHeader2);
-		HSSFCell cellB6 = row6.createCell(1);
+		XSSFCell cellB6 = row6.createCell(1);
 		cellB6.setCellStyle(styleHeader2);
-		HSSFCell cellC6 = row6.createCell(2);
+		XSSFCell cellC6 = row6.createCell(2);
 		cellC6.setCellStyle(styleHeader2);
-		HSSFCell cellD6 = row6.createCell(3);
+		XSSFCell cellD6 = row6.createCell(3);
 		cellD6.setCellStyle(styleHeader2);
-		HSSFCell cellE6 = row6.createCell(4);
+		XSSFCell cellE6 = row6.createCell(4);
 		cellE6.setCellStyle(styleHeader2);
-		HSSFCell cellF6 = row6.createCell(5);
+		XSSFCell cellF6 = row6.createCell(5);
 		cellF6.setCellStyle(styleHeader2);
-		cellA6.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments21")));
+		cellA6.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments21")));
 		sheet.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
 		//
 		//Value Parameters
-		HSSFCell cellA7 = row7.createCell(0);
+		XSSFCell cellA7 = row7.createCell(0);
 		cellA7.setCellStyle(styleValue);
-		HSSFCell cellB7 = row7.createCell(1);
+		XSSFCell cellB7 = row7.createCell(1);
 		cellB7.setCellStyle(styleValue);
-		HSSFCell cellC7 = row7.createCell(2);
+		XSSFCell cellC7 = row7.createCell(2);
 		cellC7.setCellStyle(styleValue);
-		HSSFCell cellD7 = row7.createCell(3);
+		XSSFCell cellD7 = row7.createCell(3);
 		cellD7.setCellStyle(styleValue);
-		HSSFCell cellE7 = row7.createCell(4);
+		XSSFCell cellE7 = row7.createCell(4);
 		cellE7.setCellStyle(styleValue);
-		HSSFCell cellF7 = row7.createCell(5);
+		XSSFCell cellF7 = row7.createCell(5);
 		cellF7.setCellStyle(styleValue);
-		cellA7.setCellValue(new HSSFRichTextString(element.getAttribute("Parameters")));
+		cellA7.setCellValue(new XSSFRichTextString(element.getAttribute("Parameters")));
 		sheet.addMergedRegion(new CellRangeAddress(7, 7, 0, 5));
 		//
 		//Label Return
-		HSSFCell cellG6 = row6.createCell(6);
+		XSSFCell cellG6 = row6.createCell(6);
 		cellG6.setCellStyle(styleHeader2);
-		HSSFCell cellH6 = row6.createCell(7);
+		XSSFCell cellH6 = row6.createCell(7);
 		cellH6.setCellStyle(styleHeader2);
-		HSSFCell cellI6 = row6.createCell(8);
+		XSSFCell cellI6 = row6.createCell(8);
 		cellI6.setCellStyle(styleHeader2);
-		cellG6.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments22")));
+		cellG6.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments22")));
 		sheet.addMergedRegion(new CellRangeAddress(6, 6, 6, 8));
 		//
 		//Value Return
-		HSSFCell cellG7 = row7.createCell(6);
+		XSSFCell cellG7 = row7.createCell(6);
 		cellG7.setCellStyle(styleValue);
-		HSSFCell cellH7 = row7.createCell(7);
+		XSSFCell cellH7 = row7.createCell(7);
 		cellH7.setCellStyle(styleValue);
-		HSSFCell cellI7 = row7.createCell(8);
+		XSSFCell cellI7 = row7.createCell(8);
 		cellI7.setCellStyle(styleValue);
-		cellG7.setCellValue(new HSSFRichTextString(element.getAttribute("Return")));
+		cellG7.setCellValue(new XSSFRichTextString(element.getAttribute("Return")));
 		sheet.addMergedRegion(new CellRangeAddress(7, 7, 6, 8));
 		//
 		//Label Descriptions
-		HSSFCell cellA8 = row8.createCell(0);
+		XSSFCell cellA8 = row8.createCell(0);
 		cellA8.setCellStyle(styleHeader2);
-		HSSFCell cellB8 = row8.createCell(1);
+		XSSFCell cellB8 = row8.createCell(1);
 		cellB8.setCellStyle(styleHeader2);
-		HSSFCell cellC8 = row8.createCell(2);
+		XSSFCell cellC8 = row8.createCell(2);
 		cellC8.setCellStyle(styleHeader2);
-		HSSFCell cellD8 = row8.createCell(3);
+		XSSFCell cellD8 = row8.createCell(3);
 		cellD8.setCellStyle(styleHeader2);
-		HSSFCell cellE8 = row8.createCell(4);
+		XSSFCell cellE8 = row8.createCell(4);
 		cellE8.setCellStyle(styleHeader2);
-		HSSFCell cellF8 = row8.createCell(5);
+		XSSFCell cellF8 = row8.createCell(5);
 		cellF8.setCellStyle(styleHeader2);
-		HSSFCell cellG8 = row8.createCell(6);
+		XSSFCell cellG8 = row8.createCell(6);
 		cellG8.setCellStyle(styleHeader2);
-		HSSFCell cellH8 = row8.createCell(7);
+		XSSFCell cellH8 = row8.createCell(7);
 		cellH8.setCellStyle(styleHeader2);
-		HSSFCell cellI8 = row8.createCell(8);
+		XSSFCell cellI8 = row8.createCell(8);
 		cellI8.setCellStyle(styleHeader2);
-		cellA8.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+		cellA8.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(8, 8, 0, 8));
 		//
 		//Value Descriptions
-		HSSFCell cellA9 = row9.createCell(0);
+		XSSFCell cellA9 = row9.createCell(0);
 		cellA9.setCellStyle(styleValue);
-		HSSFCell cellB9 = row9.createCell(1);
+		XSSFCell cellB9 = row9.createCell(1);
 		cellB9.setCellStyle(styleValue);
-		HSSFCell cellC9 = row9.createCell(2);
+		XSSFCell cellC9 = row9.createCell(2);
 		cellC9.setCellStyle(styleValue);
-		HSSFCell cellD9 = row9.createCell(3);
+		XSSFCell cellD9 = row9.createCell(3);
 		cellD9.setCellStyle(styleValue);
-		HSSFCell cellE9 = row9.createCell(4);
+		XSSFCell cellE9 = row9.createCell(4);
 		cellE9.setCellStyle(styleValue);
-		HSSFCell cellF9 = row9.createCell(5);
+		XSSFCell cellF9 = row9.createCell(5);
 		cellF9.setCellStyle(styleValue);
-		HSSFCell cellG9 = row9.createCell(6);
+		XSSFCell cellG9 = row9.createCell(6);
 		cellG9.setCellStyle(styleValue);
-		HSSFCell cellH9 = row9.createCell(7);
+		XSSFCell cellH9 = row9.createCell(7);
 		cellH9.setCellStyle(styleValue);
-		HSSFCell cellI9 = row9.createCell(8);
+		XSSFCell cellI9 = row9.createCell(8);
 		cellI9.setCellStyle(styleValue);
 		workString = substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n");
-		cellA9.setCellValue(new HSSFRichTextString(workString));
+		cellA9.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(9, 9, 0, 8));
 		row9.setHeight((short)1000);
 		//
 		currentRowNumber = 9;
 	}
 
-	void setupFunctionIOList(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupFunctionIOList(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
@@ -820,54 +810,54 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label IOList
 		currentRowNumber++;
-		HSSFRow row0 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRow row0 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments24")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments24")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header IOList
 		currentRowNumber++;
-		HSSFRow row1 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFRow row1 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = row1.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = row1.createCell(2);
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments25")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments25")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-		HSSFCell cellE1 = row1.createCell(4);
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		cellE1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments26")));
-		HSSFCell cellF1 = row1.createCell(5);
+		cellE1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments26")));
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		HSSFCell cellG1 = row1.createCell(6);
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellF1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 		//
 		countOfElementArray1 = -1;
@@ -902,17 +892,17 @@ public class DialogDocuments extends JDialog {
 		rowSequence = 0;
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
 			workElement1 = (org.w3c.dom.Element)elementArray1[i].getElement();
 			rowSequence++;
-			HSSFCell cellA = nextRow.createCell(0);
+			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
 			cellA.setCellValue(rowSequence);
-			HSSFCell cellB = nextRow.createCell(1);
+			XSSFCell cellB = nextRow.createCell(1);
 			cellB.setCellStyle(styleValue);
-			HSSFCell cellC = nextRow.createCell(2);
+			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
-			HSSFCell cellD = nextRow.createCell(3);
+			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
 			workString = "";
 			if (elementArray1[i].getType().equals("IOTable")) {
@@ -926,9 +916,9 @@ public class DialogDocuments extends JDialog {
 			} else {
 				workString = elementArray1[i].getName();
 			}
-			cellB.setCellValue(new HSSFRichTextString(workString));
+			cellB.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-			HSSFCell cellE = nextRow.createCell(4);
+			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
 			workString = "";
 			if (elementArray1[i].getType().equals("IOPanel")) {
@@ -956,48 +946,48 @@ public class DialogDocuments extends JDialog {
 				}
 				workString = workString + "]";
 			}
-			cellE.setCellValue(new HSSFRichTextString(workString));
-			HSSFCell cellF = nextRow.createCell(5);
+			cellE.setCellValue(new XSSFRichTextString(workString));
+			XSSFCell cellF = nextRow.createCell(5);
 			cellF.setCellStyle(styleValue);
-			HSSFCell cellG = nextRow.createCell(6);
+			XSSFCell cellG = nextRow.createCell(6);
 			cellG.setCellStyle(styleValue);
-			HSSFCell cellH = nextRow.createCell(7);
+			XSSFCell cellH = nextRow.createCell(7);
 			cellH.setCellStyle(styleValue);
-			HSSFCell cellI = nextRow.createCell(8);
+			XSSFCell cellI = nextRow.createCell(8);
 			cellI.setCellStyle(styleValue);
 			workString = substringLinesWithTokenOfEOL(workElement1.getAttribute("Descriptions"), "\n");
-			cellF.setCellValue(new HSSFRichTextString(workString));
+			cellF.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 		}
 		//
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
-			HSSFCell cellB = nextRow.createCell(1);
+			XSSFCell cellB = nextRow.createCell(1);
 			cellB.setCellStyle(styleValue);
-			HSSFCell cellC = nextRow.createCell(2);
+			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
-			HSSFCell cellD = nextRow.createCell(3);
+			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
-			cellB.setCellValue(new HSSFRichTextString("(None)"));
+			cellB.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-			HSSFCell cellE = nextRow.createCell(4);
+			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
-			HSSFCell cellF = nextRow.createCell(5);
+			XSSFCell cellF = nextRow.createCell(5);
 			cellF.setCellStyle(styleValue);
-			HSSFCell cellG = nextRow.createCell(6);
+			XSSFCell cellG = nextRow.createCell(6);
 			cellG.setCellStyle(styleValue);
-			HSSFCell cellH = nextRow.createCell(7);
+			XSSFCell cellH = nextRow.createCell(7);
 			cellH.setCellStyle(styleValue);
-			HSSFCell cellI = nextRow.createCell(8);
+			XSSFCell cellI = nextRow.createCell(8);
 			cellI.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 		}
 	}
 
-	void setupFunctionsCalledByThisFunction(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupFunctionsCalledByThisFunction(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
@@ -1007,55 +997,55 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label FunctionsCalledByThis
 		currentRowNumber++;
-		HSSFRow rowLabel = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = rowLabel.createCell(0);
+		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = rowLabel.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = rowLabel.createCell(1);
+		XSSFCell cellB0 = rowLabel.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = rowLabel.createCell(2);
+		XSSFCell cellC0 = rowLabel.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = rowLabel.createCell(3);
+		XSSFCell cellD0 = rowLabel.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = rowLabel.createCell(4);
+		XSSFCell cellE0 = rowLabel.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = rowLabel.createCell(5);
+		XSSFCell cellF0 = rowLabel.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = rowLabel.createCell(6);
+		XSSFCell cellG0 = rowLabel.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = rowLabel.createCell(7);
+		XSSFCell cellH0 = rowLabel.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = rowLabel.createCell(8);
+		XSSFCell cellI0 = rowLabel.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments30")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments30")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header FunctionsCalledByThis
 		currentRowNumber++;
-		HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = rowColumnHeading.createCell(0);
+		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = rowColumnHeading.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = rowColumnHeading.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = rowColumnHeading.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = rowColumnHeading.createCell(2);
+		XSSFCell cellC1 = rowColumnHeading.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		HSSFCell cellD1 = rowColumnHeading.createCell(3);
+		XSSFCell cellD1 = rowColumnHeading.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments18")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments18")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-		HSSFCell cellE1 = rowColumnHeading.createCell(4);
+		XSSFCell cellE1 = rowColumnHeading.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		HSSFCell cellF1 = rowColumnHeading.createCell(5);
+		XSSFCell cellF1 = rowColumnHeading.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		cellE1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments21")));
+		cellE1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments21")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-		HSSFCell cellG1 = rowColumnHeading.createCell(6);
+		XSSFCell cellG1 = rowColumnHeading.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = rowColumnHeading.createCell(7);
+		XSSFCell cellH1 = rowColumnHeading.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = rowColumnHeading.createCell(8);
+		XSSFCell cellI1 = rowColumnHeading.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellG1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments31")));
+		cellG1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments31")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		//
 		//Rows of FunctionsCalledByThis
@@ -1063,16 +1053,16 @@ public class DialogDocuments extends JDialog {
 		for (int i = 0; i < workList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)workList.item(i);
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
 			rowSequence++;
 			cellA.setCellValue(rowSequence);
-			HSSFCell cellB = nextRow.createCell(1);
+			XSSFCell cellB = nextRow.createCell(1);
 			cellB.setCellStyle(styleValue);
-			HSSFCell cellC = nextRow.createCell(2);
+			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
-			HSSFCell cellD = nextRow.createCell(3);
+			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
 			workString1 = "";
 			workString2 = "";
@@ -1084,53 +1074,53 @@ public class DialogDocuments extends JDialog {
 					break;
 				}
 			}
-			cellB.setCellValue(new HSSFRichTextString(workString1));
+			cellB.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-			HSSFCell cellE = nextRow.createCell(4);
+			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
-			HSSFCell cellF = nextRow.createCell(5);
+			XSSFCell cellF = nextRow.createCell(5);
 			cellF.setCellStyle(styleValue);
-			cellE.setCellValue(new HSSFRichTextString(workString2));
+			cellE.setCellValue(new XSSFRichTextString(workString2));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-			HSSFCell cellG = nextRow.createCell(6);
+			XSSFCell cellG = nextRow.createCell(6);
 			cellG.setCellStyle(styleValue);
-			HSSFCell cellH = nextRow.createCell(7);
+			XSSFCell cellH = nextRow.createCell(7);
 			cellH.setCellStyle(styleValue);
-			HSSFCell cellI = nextRow.createCell(8);
+			XSSFCell cellI = nextRow.createCell(8);
 			cellI.setCellStyle(styleValue);
-			cellG.setCellValue(new HSSFRichTextString(workElement1.getAttribute("LaunchEvent")));
+			cellG.setCellValue(new XSSFRichTextString(workElement1.getAttribute("LaunchEvent")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
 		//
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = nextRow.createCell(0);
 			cellA2.setCellStyle(styleValueNumber);
-			HSSFCell cellB2 = nextRow.createCell(1);
+			XSSFCell cellB2 = nextRow.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = nextRow.createCell(2);
+			XSSFCell cellC2 = nextRow.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			HSSFCell cellD2 = nextRow.createCell(3);
+			XSSFCell cellD2 = nextRow.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			cellB2.setCellValue(new HSSFRichTextString("(None)"));
+			cellB2.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-			HSSFCell cellE2 = nextRow.createCell(4);
+			XSSFCell cellE2 = nextRow.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = nextRow.createCell(5);
+			XSSFCell cellF2 = nextRow.createCell(5);
 			cellF2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-			HSSFCell cellG2 = nextRow.createCell(6);
+			XSSFCell cellG2 = nextRow.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = nextRow.createCell(7);
+			XSSFCell cellH2 = nextRow.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = nextRow.createCell(8);
+			XSSFCell cellI2 = nextRow.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
 	}
 
-	void setupFunctionsCallingThis(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupFunctionsCallingThis(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
@@ -1138,53 +1128,53 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label FunctionsCallingThis
 		currentRowNumber++;
-		HSSFRow rowLabel = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = rowLabel.createCell(0);
+		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = rowLabel.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = rowLabel.createCell(1);
+		XSSFCell cellB0 = rowLabel.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = rowLabel.createCell(2);
+		XSSFCell cellC0 = rowLabel.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = rowLabel.createCell(3);
+		XSSFCell cellD0 = rowLabel.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = rowLabel.createCell(4);
+		XSSFCell cellE0 = rowLabel.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = rowLabel.createCell(5);
+		XSSFCell cellF0 = rowLabel.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = rowLabel.createCell(6);
+		XSSFCell cellG0 = rowLabel.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = rowLabel.createCell(7);
+		XSSFCell cellH0 = rowLabel.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = rowLabel.createCell(8);
+		XSSFCell cellI0 = rowLabel.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments32")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments32")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header FunctionsCallingThis
 		currentRowNumber++;
-		HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = rowColumnHeading.createCell(0);
+		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = rowColumnHeading.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = rowColumnHeading.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = rowColumnHeading.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = rowColumnHeading.createCell(2);
+		XSSFCell cellC1 = rowColumnHeading.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		HSSFCell cellD1 = rowColumnHeading.createCell(3);
+		XSSFCell cellD1 = rowColumnHeading.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments18")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments18")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-		HSSFCell cellE1 = rowColumnHeading.createCell(4);
+		XSSFCell cellE1 = rowColumnHeading.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		HSSFCell cellF1 = rowColumnHeading.createCell(5);
+		XSSFCell cellF1 = rowColumnHeading.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		HSSFCell cellG1 = rowColumnHeading.createCell(6);
+		XSSFCell cellG1 = rowColumnHeading.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = rowColumnHeading.createCell(7);
+		XSSFCell cellH1 = rowColumnHeading.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = rowColumnHeading.createCell(8);
+		XSSFCell cellI1 = rowColumnHeading.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellE1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments31")));
+		cellE1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments31")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 		//
 		for (int i = 0; i < functionList.getLength(); i++) {
@@ -1194,30 +1184,30 @@ public class DialogDocuments extends JDialog {
 				workElement2 = (org.w3c.dom.Element)workList.item(j);
 				if (workElement2.getAttribute("FunctionID").equals(element.getAttribute("ID"))) {
 					currentRowNumber++;
-					HSSFRow nextRow = sheet.createRow(currentRowNumber);
-					HSSFCell cellA = nextRow.createCell(0);
+					XSSFRow nextRow = sheet.createRow(currentRowNumber);
+					XSSFCell cellA = nextRow.createCell(0);
 					cellA.setCellStyle(styleValueNumber);
 					rowSequence++;
 					cellA.setCellValue(rowSequence);
-					HSSFCell cellB = nextRow.createCell(1);
+					XSSFCell cellB = nextRow.createCell(1);
 					cellB.setCellStyle(styleValue);
-					HSSFCell cellC = nextRow.createCell(2);
+					XSSFCell cellC = nextRow.createCell(2);
 					cellC.setCellStyle(styleValue);
-					HSSFCell cellD = nextRow.createCell(3);
+					XSSFCell cellD = nextRow.createCell(3);
 					cellD.setCellStyle(styleValue);
-					cellB.setCellValue(new HSSFRichTextString(workElement1.getAttribute("SortKey") + " / " + workElement1.getAttribute("Name")));
+					cellB.setCellValue(new XSSFRichTextString(workElement1.getAttribute("SortKey") + " / " + workElement1.getAttribute("Name")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-					HSSFCell cellE = nextRow.createCell(4);
+					XSSFCell cellE = nextRow.createCell(4);
 					cellE.setCellStyle(styleValue);
-					HSSFCell cellF = nextRow.createCell(5);
+					XSSFCell cellF = nextRow.createCell(5);
 					cellF.setCellStyle(styleValue);
-					HSSFCell cellG = nextRow.createCell(6);
+					XSSFCell cellG = nextRow.createCell(6);
 					cellG.setCellStyle(styleValue);
-					HSSFCell cellH = nextRow.createCell(7);
+					XSSFCell cellH = nextRow.createCell(7);
 					cellH.setCellStyle(styleValue);
-					HSSFCell cellI = nextRow.createCell(8);
+					XSSFCell cellI = nextRow.createCell(8);
 					cellI.setCellStyle(styleValue);
-					cellE.setCellValue(new HSSFRichTextString(workElement2.getAttribute("LaunchEvent")));
+					cellE.setCellValue(new XSSFRichTextString(workElement2.getAttribute("LaunchEvent")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 				}
 			}
@@ -1225,32 +1215,32 @@ public class DialogDocuments extends JDialog {
 		//
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = nextRow.createCell(0);
 			cellA2.setCellStyle(styleValueNumber);
-			HSSFCell cellB2 = nextRow.createCell(1);
+			XSSFCell cellB2 = nextRow.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = nextRow.createCell(2);
+			XSSFCell cellC2 = nextRow.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			HSSFCell cellD2 = nextRow.createCell(3);
+			XSSFCell cellD2 = nextRow.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			cellB2.setCellValue(new HSSFRichTextString("(None)"));
+			cellB2.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
-			HSSFCell cellE2 = nextRow.createCell(4);
+			XSSFCell cellE2 = nextRow.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = nextRow.createCell(5);
+			XSSFCell cellF2 = nextRow.createCell(5);
 			cellF2.setCellStyle(styleValue);
-			HSSFCell cellG2 = nextRow.createCell(6);
+			XSSFCell cellG2 = nextRow.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = nextRow.createCell(7);
+			XSSFCell cellH2 = nextRow.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = nextRow.createCell(8);
+			XSSFCell cellI2 = nextRow.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 		}
 	}
 
-	void setupTasksUsingThisFunction(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTasksUsingThisFunction(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
 		NodeList workList2 = null;
 		org.w3c.dom.Element workElement1 = null;
@@ -1264,55 +1254,55 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label TasksUsingThisFunction
 		currentRowNumber++;
-		HSSFRow rowLabel = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = rowLabel.createCell(0);
+		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = rowLabel.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = rowLabel.createCell(1);
+		XSSFCell cellB0 = rowLabel.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = rowLabel.createCell(2);
+		XSSFCell cellC0 = rowLabel.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = rowLabel.createCell(3);
+		XSSFCell cellD0 = rowLabel.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = rowLabel.createCell(4);
+		XSSFCell cellE0 = rowLabel.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = rowLabel.createCell(5);
+		XSSFCell cellF0 = rowLabel.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = rowLabel.createCell(6);
+		XSSFCell cellG0 = rowLabel.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = rowLabel.createCell(7);
+		XSSFCell cellH0 = rowLabel.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = rowLabel.createCell(8);
+		XSSFCell cellI0 = rowLabel.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments33")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments33")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header TasksUsingThisFunction
 		currentRowNumber++;
-		HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = rowColumnHeading.createCell(0);
+		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = rowColumnHeading.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = rowColumnHeading.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = rowColumnHeading.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = rowColumnHeading.createCell(2);
+		XSSFCell cellC1 = rowColumnHeading.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments34")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments34")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-		HSSFCell cellD1 = rowColumnHeading.createCell(3);
+		XSSFCell cellD1 = rowColumnHeading.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		HSSFCell cellE1 = rowColumnHeading.createCell(4);
+		XSSFCell cellE1 = rowColumnHeading.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		cellD1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments35")));
+		cellD1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments35")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 4));
-		HSSFCell cellF1 = rowColumnHeading.createCell(5);
+		XSSFCell cellF1 = rowColumnHeading.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		HSSFCell cellG1 = rowColumnHeading.createCell(6);
+		XSSFCell cellG1 = rowColumnHeading.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = rowColumnHeading.createCell(7);
+		XSSFCell cellH1 = rowColumnHeading.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = rowColumnHeading.createCell(8);
+		XSSFCell cellI1 = rowColumnHeading.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellF1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments36")));
+		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments36")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 		//
 		for (int i = 0; i < taskList.getLength(); i++) {
@@ -1325,14 +1315,14 @@ public class DialogDocuments extends JDialog {
 					workElement3 = (org.w3c.dom.Element)workList2.item(k);
 					if (workElement3.getAttribute("FunctionID").equals(element.getAttribute("ID"))) {
 						currentRowNumber++;
-						HSSFRow nextRow = sheet.createRow(currentRowNumber);
-						HSSFCell cellA = nextRow.createCell(0);
+						XSSFRow nextRow = sheet.createRow(currentRowNumber);
+						XSSFCell cellA = nextRow.createCell(0);
 						cellA.setCellStyle(styleValueNumber);
 						rowSequence++;
 						cellA.setCellValue(rowSequence);
-						HSSFCell cellB = nextRow.createCell(1);
+						XSSFCell cellB = nextRow.createCell(1);
 						cellB.setCellStyle(styleValue);
-						HSSFCell cellC = nextRow.createCell(2);
+						XSSFCell cellC = nextRow.createCell(2);
 						cellC.setCellStyle(styleValue);
 						workString1 = "";
 						for (int m = 0; m < roleList.getLength(); m++) {
@@ -1342,23 +1332,23 @@ public class DialogDocuments extends JDialog {
 								break;
 							}
 						}
-						cellB.setCellValue(new HSSFRichTextString(workString1));
+						cellB.setCellValue(new XSSFRichTextString(workString1));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-						HSSFCell cellD = nextRow.createCell(3);
+						XSSFCell cellD = nextRow.createCell(3);
 						cellD.setCellStyle(styleValue);
-						HSSFCell cellE = nextRow.createCell(4);
+						XSSFCell cellE = nextRow.createCell(4);
 						cellE.setCellStyle(styleValue);
-						cellD.setCellValue(new HSSFRichTextString(workElement1.getAttribute("Name")));
+						cellD.setCellValue(new XSSFRichTextString(workElement1.getAttribute("Name")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 4));
-						HSSFCell cellF = nextRow.createCell(5);
+						XSSFCell cellF = nextRow.createCell(5);
 						cellF.setCellStyle(styleValue);
-						HSSFCell cellG = nextRow.createCell(6);
+						XSSFCell cellG = nextRow.createCell(6);
 						cellG.setCellStyle(styleValue);
-						HSSFCell cellH = nextRow.createCell(7);
+						XSSFCell cellH = nextRow.createCell(7);
 						cellH.setCellStyle(styleValue);
-						HSSFCell cellI = nextRow.createCell(8);
+						XSSFCell cellI = nextRow.createCell(8);
 						cellI.setCellStyle(styleValue);
-						cellF.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Label")));
+						cellF.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Label")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 					}
 				}
@@ -1367,33 +1357,33 @@ public class DialogDocuments extends JDialog {
 		//
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = nextRow.createCell(0);
 			cellA2.setCellStyle(styleValueNumber);
-			HSSFCell cellB2 = nextRow.createCell(1);
+			XSSFCell cellB2 = nextRow.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = nextRow.createCell(2);
+			XSSFCell cellC2 = nextRow.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			cellB2.setCellValue(new HSSFRichTextString("(None)"));
+			cellB2.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-			HSSFCell cellD2 = nextRow.createCell(3);
+			XSSFCell cellD2 = nextRow.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			HSSFCell cellE2 = nextRow.createCell(4);
+			XSSFCell cellE2 = nextRow.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = nextRow.createCell(5);
+			XSSFCell cellF2 = nextRow.createCell(5);
 			cellF2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 5));
-			HSSFCell cellG2 = nextRow.createCell(6);
+			XSSFCell cellG2 = nextRow.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = nextRow.createCell(7);
+			XSSFCell cellH2 = nextRow.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = nextRow.createCell(8);
+			XSSFCell cellI2 = nextRow.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
 	}
 
-	void setupFunctionIODetails(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupFunctionIODetails(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
 		NodeList workList2 = null;
 		NodeList workList3 = null;
@@ -1417,68 +1407,68 @@ public class DialogDocuments extends JDialog {
 			sectionNumber++;
 			//
 			currentRowNumber++;
-			HSSFRow rowLabel = sheet.createRow(currentRowNumber);
-			HSSFCell cellA0 = rowLabel.createCell(0);
+			XSSFRow rowLabel = sheet.createRow(currentRowNumber);
+			XSSFCell cellA0 = rowLabel.createCell(0);
 			cellA0.setCellStyle(styleHeader1);
-			HSSFCell cellB0 = rowLabel.createCell(1);
+			XSSFCell cellB0 = rowLabel.createCell(1);
 			cellB0.setCellStyle(styleHeader1);
-			HSSFCell cellC0 = rowLabel.createCell(2);
+			XSSFCell cellC0 = rowLabel.createCell(2);
 			cellC0.setCellStyle(styleHeader1);
-			HSSFCell cellD0 = rowLabel.createCell(3);
+			XSSFCell cellD0 = rowLabel.createCell(3);
 			cellD0.setCellStyle(styleHeader1);
-			HSSFCell cellE0 = rowLabel.createCell(4);
+			XSSFCell cellE0 = rowLabel.createCell(4);
 			cellE0.setCellStyle(styleHeader1);
-			HSSFCell cellF0 = rowLabel.createCell(5);
+			XSSFCell cellF0 = rowLabel.createCell(5);
 			cellF0.setCellStyle(styleHeader1);
-			HSSFCell cellG0 = rowLabel.createCell(6);
+			XSSFCell cellG0 = rowLabel.createCell(6);
 			cellG0.setCellStyle(styleHeader1);
-			HSSFCell cellH0 = rowLabel.createCell(7);
+			XSSFCell cellH0 = rowLabel.createCell(7);
 			cellH0.setCellStyle(styleHeader1);
-			HSSFCell cellI0 = rowLabel.createCell(8);
+			XSSFCell cellI0 = rowLabel.createCell(8);
 			cellI0.setCellStyle(styleHeader1);
-			cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments37") + "(" + sectionNumber + "/" + totalSectionNumber + ")"));
+			cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments37") + "(" + sectionNumber + "/" + totalSectionNumber + ")"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			//
 			currentRowNumber++;
-			HSSFRow rowHeading1 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA1 = rowHeading1.createCell(0);
+			XSSFRow rowHeading1 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA1 = rowHeading1.createCell(0);
 			cellA1.setCellStyle(styleHeader2);
-			HSSFCell cellB1 = rowHeading1.createCell(1);
+			XSSFCell cellB1 = rowHeading1.createCell(1);
 			cellB1.setCellStyle(styleHeader2);
-			HSSFCell cellC1 = rowHeading1.createCell(2);
+			XSSFCell cellC1 = rowHeading1.createCell(2);
 			cellC1.setCellStyle(styleHeader2);
-			HSSFCell cellD1 = rowHeading1.createCell(3);
+			XSSFCell cellD1 = rowHeading1.createCell(3);
 			cellD1.setCellStyle(styleHeader2);
-			HSSFCell cellE1 = rowHeading1.createCell(4);
+			XSSFCell cellE1 = rowHeading1.createCell(4);
 			cellE1.setCellStyle(styleHeader2);
-			HSSFCell cellF1 = rowHeading1.createCell(5);
+			XSSFCell cellF1 = rowHeading1.createCell(5);
 			cellF1.setCellStyle(styleHeader2);
-			HSSFCell cellG1 = rowHeading1.createCell(6);
+			XSSFCell cellG1 = rowHeading1.createCell(6);
 			cellG1.setCellStyle(styleHeader2);
-			cellA1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments25")));
+			cellA1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments25")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 6));
-			HSSFCell cellH1 = rowHeading1.createCell(7);
+			XSSFCell cellH1 = rowHeading1.createCell(7);
 			cellH1.setCellStyle(styleHeader2);
-			HSSFCell cellI1 = rowHeading1.createCell(8);
+			XSSFCell cellI1 = rowHeading1.createCell(8);
 			cellI1.setCellStyle(styleHeader2);
-			cellH1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments38")));
+			cellH1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments38")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 7, 8));
 			//
 			currentRowNumber++;
-			HSSFRow rowValue1 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = rowValue1.createCell(0);
+			XSSFRow rowValue1 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = rowValue1.createCell(0);
 			cellA2.setCellStyle(styleValue);
-			HSSFCell cellB2 = rowValue1.createCell(1);
+			XSSFCell cellB2 = rowValue1.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = rowValue1.createCell(2);
+			XSSFCell cellC2 = rowValue1.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			HSSFCell cellD2 = rowValue1.createCell(3);
+			XSSFCell cellD2 = rowValue1.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			HSSFCell cellE2 = rowValue1.createCell(4);
+			XSSFCell cellE2 = rowValue1.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = rowValue1.createCell(5);
+			XSSFCell cellF2 = rowValue1.createCell(5);
 			cellF2.setCellStyle(styleValue);
-			HSSFCell cellG2 = rowValue1.createCell(6);
+			XSSFCell cellG2 = rowValue1.createCell(6);
 			cellG2.setCellStyle(styleValue);
 			workString1 = "";
 			if (elementArray1[i].getType().equals("IOTable")) {
@@ -1492,11 +1482,11 @@ public class DialogDocuments extends JDialog {
 			} else {
 				workString1 = elementArray1[i].getName();
 			}
-			cellA2.setCellValue(new HSSFRichTextString(workString1));
+			cellA2.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 6));
-			HSSFCell cellH2 = rowValue1.createCell(7);
+			XSSFCell cellH2 = rowValue1.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = rowValue1.createCell(8);
+			XSSFCell cellI2 = rowValue1.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			workString1 = "";
 			if (elementArray1[i].getType().equals("IOPanel")) {
@@ -1524,158 +1514,177 @@ public class DialogDocuments extends JDialog {
 				}
 				workString1 = workString1 + "]";
 			}
-			cellH2.setCellValue(new HSSFRichTextString(workString1));
+			cellH2.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 7, 8));
 			//
 			currentRowNumber++;
-			HSSFRow rowLabelHeading2 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA3 = rowLabelHeading2.createCell(0);
+			XSSFRow rowLabelHeading2 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA3 = rowLabelHeading2.createCell(0);
 			cellA3.setCellStyle(styleHeader2);
-			HSSFCell cellB3 = rowLabelHeading2.createCell(1);
+			XSSFCell cellB3 = rowLabelHeading2.createCell(1);
 			cellB3.setCellStyle(styleHeader2);
-			HSSFCell cellC3 = rowLabelHeading2.createCell(2);
+			XSSFCell cellC3 = rowLabelHeading2.createCell(2);
 			cellC3.setCellStyle(styleHeader2);
-			HSSFCell cellD3 = rowLabelHeading2.createCell(3);
+			XSSFCell cellD3 = rowLabelHeading2.createCell(3);
 			cellD3.setCellStyle(styleHeader2);
-			HSSFCell cellE3 = rowLabelHeading2.createCell(4);
+			XSSFCell cellE3 = rowLabelHeading2.createCell(4);
 			cellE3.setCellStyle(styleHeader2);
-			HSSFCell cellF3 = rowLabelHeading2.createCell(5);
+			XSSFCell cellF3 = rowLabelHeading2.createCell(5);
 			cellF3.setCellStyle(styleHeader2);
-			HSSFCell cellG3 = rowLabelHeading2.createCell(6);
+			XSSFCell cellG3 = rowLabelHeading2.createCell(6);
 			cellG3.setCellStyle(styleHeader2);
-			HSSFCell cellH3 = rowLabelHeading2.createCell(7);
+			XSSFCell cellH3 = rowLabelHeading2.createCell(7);
 			cellH3.setCellStyle(styleHeader2);
-			HSSFCell cellI3 = rowLabelHeading2.createCell(8);
+			XSSFCell cellI3 = rowLabelHeading2.createCell(8);
 			cellI3.setCellStyle(styleHeader2);
-			cellA3.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+			cellA3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			//
 			currentRowNumber++;
-			HSSFRow rowValueDescriptions = sheet.createRow(currentRowNumber);
-			HSSFCell cellA4 = rowValueDescriptions.createCell(0);
+			XSSFRow rowValueDescriptions = sheet.createRow(currentRowNumber);
+			XSSFCell cellA4 = rowValueDescriptions.createCell(0);
 			cellA4.setCellStyle(styleValue);
-			HSSFCell cellB4 = rowValueDescriptions.createCell(1);
+			XSSFCell cellB4 = rowValueDescriptions.createCell(1);
 			cellB4.setCellStyle(styleValue);
-			HSSFCell cellC4 = rowValueDescriptions.createCell(2);
+			XSSFCell cellC4 = rowValueDescriptions.createCell(2);
 			cellC4.setCellStyle(styleValue);
-			HSSFCell cellD4 = rowValueDescriptions.createCell(3);
+			XSSFCell cellD4 = rowValueDescriptions.createCell(3);
 			cellD4.setCellStyle(styleValue);
-			HSSFCell cellE4 = rowValueDescriptions.createCell(4);
+			XSSFCell cellE4 = rowValueDescriptions.createCell(4);
 			cellE4.setCellStyle(styleValue);
-			HSSFCell cellF4 = rowValueDescriptions.createCell(5);
+			XSSFCell cellF4 = rowValueDescriptions.createCell(5);
 			cellF4.setCellStyle(styleValue);
-			HSSFCell cellG4 = rowValueDescriptions.createCell(6);
+			XSSFCell cellG4 = rowValueDescriptions.createCell(6);
 			cellG4.setCellStyle(styleValue);
-			HSSFCell cellH4 = rowValueDescriptions.createCell(7);
+			XSSFCell cellH4 = rowValueDescriptions.createCell(7);
 			cellH4.setCellStyle(styleValue);
-			HSSFCell cellI4 = rowValueDescriptions.createCell(8);
+			XSSFCell cellI4 = rowValueDescriptions.createCell(8);
 			cellI4.setCellStyle(styleValue);
 			workString1 = substringLinesWithTokenOfEOL(workElement1.getAttribute("Descriptions"), "\n");
-			cellA4.setCellValue(new HSSFRichTextString(workString1));
+			cellA4.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			rowValueDescriptions.setHeight((short)1000);
 			//
 			if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOSpool") || elementArray1[i].getType().equals("IOWebPage")) {
 				//
 				currentRowNumber++;
-				HSSFRow rowLabelImage = sheet.createRow(currentRowNumber);
-				HSSFCell cellA5 = rowLabelImage.createCell(0);
+				XSSFRow rowLabelImage = sheet.createRow(currentRowNumber);
+				XSSFCell cellA5 = rowLabelImage.createCell(0);
 				cellA5.setCellStyle(styleHeader2);
-				HSSFCell cellB5 = rowLabelImage.createCell(1);
+				XSSFCell cellB5 = rowLabelImage.createCell(1);
 				cellB5.setCellStyle(styleHeader2);
-				HSSFCell cellC5 = rowLabelImage.createCell(2);
+				XSSFCell cellC5 = rowLabelImage.createCell(2);
 				cellC5.setCellStyle(styleHeader2);
-				HSSFCell cellD5 = rowLabelImage.createCell(3);
+				XSSFCell cellD5 = rowLabelImage.createCell(3);
 				cellD5.setCellStyle(styleHeader2);
-				HSSFCell cellE5 = rowLabelImage.createCell(4);
+				XSSFCell cellE5 = rowLabelImage.createCell(4);
 				cellE5.setCellStyle(styleHeader2);
-				HSSFCell cellF5 = rowLabelImage.createCell(5);
+				XSSFCell cellF5 = rowLabelImage.createCell(5);
 				cellF5.setCellStyle(styleHeader2);
-				HSSFCell cellG5 = rowLabelImage.createCell(6);
+				XSSFCell cellG5 = rowLabelImage.createCell(6);
 				cellG5.setCellStyle(styleHeader2);
-				HSSFCell cellH5 = rowLabelImage.createCell(7);
+				XSSFCell cellH5 = rowLabelImage.createCell(7);
 				cellH5.setCellStyle(styleHeader2);
-				HSSFCell cellI5 = rowLabelImage.createCell(8);
+				XSSFCell cellI5 = rowLabelImage.createCell(8);
 				cellI5.setCellStyle(styleHeader2);
-				cellA5.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments39")));
+				cellA5.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments39")));
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 				//
 				currentRowNumber++;
-				HSSFRow rowValueImage = sheet.createRow(currentRowNumber);
-				HSSFCell cellA6 = rowValueImage.createCell(0);
+				XSSFRow rowValueImage = sheet.createRow(currentRowNumber);
+				XSSFCell cellA6 = rowValueImage.createCell(0);
 				cellA6.setCellStyle(styleImage);
-				HSSFCell cellB6 = rowValueImage.createCell(1);
+				XSSFCell cellB6 = rowValueImage.createCell(1);
 				cellB6.setCellStyle(styleImage);
-				HSSFCell cellC6 = rowValueImage.createCell(2);
+				XSSFCell cellC6 = rowValueImage.createCell(2);
 				cellC6.setCellStyle(styleImage);
-				HSSFCell cellD6 = rowValueImage.createCell(3);
+				XSSFCell cellD6 = rowValueImage.createCell(3);
 				cellD6.setCellStyle(styleImage);
-				HSSFCell cellE6 = rowValueImage.createCell(4);
+				XSSFCell cellE6 = rowValueImage.createCell(4);
 				cellE6.setCellStyle(styleImage);
-				HSSFCell cellF6 = rowValueImage.createCell(5);
+				XSSFCell cellF6 = rowValueImage.createCell(5);
 				cellF6.setCellStyle(styleImage);
-				HSSFCell cellG6 = rowValueImage.createCell(6);
+				XSSFCell cellG6 = rowValueImage.createCell(6);
 				cellG6.setCellStyle(styleImage);
-				HSSFCell cellH6 = rowValueImage.createCell(7);
+				XSSFCell cellH6 = rowValueImage.createCell(7);
 				cellH6.setCellStyle(styleImage);
-				HSSFCell cellI6 = rowValueImage.createCell(8);
+				XSSFCell cellI6 = rowValueImage.createCell(8);
 				cellI6.setCellStyle(styleImage);
-				HSSFRichTextString valueImage = null;
+				XSSFRichTextString valueImage = null;
 				if (elementArray1[i].getType().equals("IOWebPage")) {
 					workString1 = res.getString("DialogDocuments40a") + workElement1.getAttribute("FileName") + res.getString("DialogDocuments40b");
-					valueImage = new HSSFRichTextString(workString1);
+					valueImage = new XSSFRichTextString(workString1);
 					cellA6.setCellValue(valueImage);
 				}
 				if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOSpool")) {
 					int imageType = -1;
 					File file = new File(fileName_);
-					String imageFileName = file.getParent() + File.separator + element.getAttribute("SortKey") + "_" + workElement1.getAttribute("SortKey");
+					String imageFileName = "";
+					if (frame_.ioImageFolder.equals("") || frame_.ioImageFolder.equals("<CURRENT>")) {
+						imageFileName = file.getParent() + File.separator + element.getAttribute("SortKey") + "_" + workElement1.getAttribute("SortKey");
+					} else {
+						if (frame_.ioImageFolder.contains("<CURRENT>")) {
+							imageFileName = frame_.ioImageFolder.replace("<CURRENT>", file.getParent());
+							imageFileName = imageFileName + File.separator + element.getAttribute("SortKey") + "_" + workElement1.getAttribute("SortKey");
+						} else {
+							imageFileName = frame_.ioImageFolder + File.separator + element.getAttribute("SortKey") + "_" + workElement1.getAttribute("SortKey");
+						}
+					}
 					File imageFile = new File(imageFileName + ".png");
 					if (imageFile.exists()) {
-						imageType = HSSFWorkbook.PICTURE_TYPE_PNG;
+						imageType = XSSFWorkbook.PICTURE_TYPE_PNG;
 					} else {
-						imageFile = new File(imageFileName + ".jpg");
+						imageFile = new File(imageFileName + ".PNG");
 						if (imageFile.exists()) {
-							imageType = HSSFWorkbook.PICTURE_TYPE_JPEG;
+							imageType = XSSFWorkbook.PICTURE_TYPE_PNG;
 						} else {
-							imageFile = new File(imageFileName + ".jpeg");
+							imageFile = new File(imageFileName + ".jpg");
 							if (imageFile.exists()) {
-								imageType = HSSFWorkbook.PICTURE_TYPE_JPEG;
+								imageType = XSSFWorkbook.PICTURE_TYPE_JPEG;
+							} else {
+								imageFile = new File(imageFileName + ".JPG");
+								if (imageFile.exists()) {
+									imageType = XSSFWorkbook.PICTURE_TYPE_JPEG;
+								} else {
+									imageFile = new File(imageFileName + ".jpeg");
+									if (imageFile.exists()) {
+										imageType = XSSFWorkbook.PICTURE_TYPE_JPEG;
+									} else {
+										imageFile = new File(imageFileName + ".JPEG");
+										if (imageFile.exists()) {
+											imageType = XSSFWorkbook.PICTURE_TYPE_JPEG;
+										}
+									}
+								}
 							}
 						}
 					}
-					//
+
 					if (imageFile.exists()) {
-						int pictureIndex;
 						FileInputStream fis = null;
-						ByteArrayOutputStream bos = null;
 						try {
-							// read in the image file
 							fis = new FileInputStream(imageFile);
-							bos = new ByteArrayOutputStream( );
-							int c;
-							// copy the image bytes into the ByteArrayOutputStream
-							while ((c = fis.read()) != -1) {
-								bos.write(c);
-							}
-							// add the image bytes to the workbook
-							pictureIndex = workBook.addPicture( bos.toByteArray(), imageType);
-							anchor = new HSSFClientAnchor(0,0,0,0,(short)0,cellA6.getRowIndex(),(short)9,cellA6.getRowIndex()+1);
-							anchor.setAnchorType(0);
-							// 0 = Move and size with Cells.
-							// 2 = Move but don't size with cells.
-							// 3 = Don't move or size with cells.
-							picture = patriarch.createPicture(anchor, pictureIndex);
-							//
+							byte[] bytes = IOUtils.toByteArray(fis);
+							int pictureIndex = workBook.addPicture(bytes, imageType);
+
+							CreationHelper helper = workBook.getCreationHelper();
+							Drawing drawing = sheet.createDrawingPatriarch();
+							ClientAnchor anchor = helper.createClientAnchor();
+							anchor.setCol1((short)0);
+							anchor.setRow1(cellA6.getRowIndex());
+							anchor.setCol2((short)9);
+							anchor.setRow2(cellA6.getRowIndex()+1);
+							anchor.setDx1(0);
+							anchor.setDy1(0);
+							anchor.setDx2(0);
+							anchor.setDy2(0);
+							drawing.createPicture(anchor, pictureIndex);
 						} catch(Exception ex) {
 							ex.printStackTrace();
 						} finally {
 							try {
 								if (fis != null) {
 									fis.close();
-								}
-								if (bos != null) {
-									bos.close();
 								}
 							} catch (IOException ex1) {
 							}
@@ -1707,7 +1716,7 @@ public class DialogDocuments extends JDialog {
 								}
 							}
 						}
-						valueImage = new HSSFRichTextString(workString1);
+						valueImage = new XSSFRichTextString(workString1);
 						valueImage.applyFont(0, workString1.length(), fontImage);
 						for (int j = 0; j < workList1.getLength(); j++) {
 							org.w3c.dom.Element elementTextStyle = (org.w3c.dom.Element)
@@ -1728,32 +1737,32 @@ public class DialogDocuments extends JDialog {
 				//
 				if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOWebPage")) {
 					currentRowNumber++;
-					HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-					HSSFCell cellA7 = rowColumnHeading.createCell(0);
+					XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+					XSSFCell cellA7 = rowColumnHeading.createCell(0);
 					cellA7.setCellStyle(styleHeader2Number);
-					cellA7.setCellValue(new HSSFRichTextString("No."));
-					HSSFCell cellB7 = rowColumnHeading.createCell(1);
+					cellA7.setCellValue(new XSSFRichTextString("No."));
+					XSSFCell cellB7 = rowColumnHeading.createCell(1);
 					cellB7.setCellStyle(styleHeader2);
-					cellB7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments41")));
-					HSSFCell cellC7 = rowColumnHeading.createCell(2);
+					cellB7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments41")));
+					XSSFCell cellC7 = rowColumnHeading.createCell(2);
 					cellC7.setCellStyle(styleHeader2);
-					HSSFCell cellD7 = rowColumnHeading.createCell(3);
+					XSSFCell cellD7 = rowColumnHeading.createCell(3);
 					cellD7.setCellStyle(styleHeader2);
-					cellC7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments42")));
+					cellC7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments42")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-					HSSFCell cellE7 = rowColumnHeading.createCell(4);
+					XSSFCell cellE7 = rowColumnHeading.createCell(4);
 					cellE7.setCellStyle(styleHeader2);
-					HSSFCell cellF7 = rowColumnHeading.createCell(5);
+					XSSFCell cellF7 = rowColumnHeading.createCell(5);
 					cellF7.setCellStyle(styleHeader2);
-					cellE7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments43")));
+					cellE7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments43")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-					HSSFCell cellG7 = rowColumnHeading.createCell(6);
+					XSSFCell cellG7 = rowColumnHeading.createCell(6);
 					cellG7.setCellStyle(styleHeader2);
-					HSSFCell cellH7 = rowColumnHeading.createCell(7);
+					XSSFCell cellH7 = rowColumnHeading.createCell(7);
 					cellH7.setCellStyle(styleHeader2);
-					HSSFCell cellI7 = rowColumnHeading.createCell(8);
+					XSSFCell cellI7 = rowColumnHeading.createCell(8);
 					cellI7.setCellStyle(styleHeader2);
-					cellG7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+					cellG7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 					//
 					//Rows of Field
@@ -1781,23 +1790,23 @@ public class DialogDocuments extends JDialog {
 					for (int j = 0; j <= countOfElementArray2; j++) {
 						workElement2 = (org.w3c.dom.Element)elementArray2[j].getElement();
 						currentRowNumber++;
-						HSSFRow rowValue2 = sheet.createRow(currentRowNumber);
-						HSSFCell cellA = rowValue2.createCell(0);
+						XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
+						XSSFCell cellA = rowValue2.createCell(0);
 						cellA.setCellStyle(styleValueNumber);
 						rowSequence++;
 						cellA.setCellValue(rowSequence);
-						HSSFCell cellB = rowValue2.createCell(1);
+						XSSFCell cellB = rowValue2.createCell(1);
 						cellB.setCellStyle(styleValue);
-						cellB.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Label")));
-						HSSFCell cellC = rowValue2.createCell(2);
+						cellB.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Label")));
+						XSSFCell cellC = rowValue2.createCell(2);
 						cellC.setCellStyle(styleValue);
-						HSSFCell cellD = rowValue2.createCell(3);
+						XSSFCell cellD = rowValue2.createCell(3);
 						cellD.setCellStyle(styleValue);
-						cellC.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Name")));
+						cellC.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Name")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-						HSSFCell cellE = rowValue2.createCell(4);
+						XSSFCell cellE = rowValue2.createCell(4);
 						cellE.setCellStyle(styleValue);
-						HSSFCell cellF = rowValue2.createCell(5);
+						XSSFCell cellF = rowValue2.createCell(5);
 						cellF.setCellStyle(styleValue);
 						workString1 = "";
 						if (workElement2.getAttribute("IOType").equals("INPUT")) {
@@ -1812,71 +1821,71 @@ public class DialogDocuments extends JDialog {
 						if (workElement2.getAttribute("IOType").equals("CONTROL")) {
 							workString1 = res.getString("DialogDocuments47");
 						}
-						cellE.setCellValue(new HSSFRichTextString(workString1));
+						cellE.setCellValue(new XSSFRichTextString(workString1));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-						HSSFCell cellG = rowValue2.createCell(6);
+						XSSFCell cellG = rowValue2.createCell(6);
 						cellG.setCellStyle(styleValue);
-						HSSFCell cellH = rowValue2.createCell(7);
+						XSSFCell cellH = rowValue2.createCell(7);
 						cellH.setCellStyle(styleValue);
-						HSSFCell cellI = rowValue2.createCell(8);
+						XSSFCell cellI = rowValue2.createCell(8);
 						cellI.setCellStyle(styleValue);
-						cellG.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Descriptions")));
+						cellG.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Descriptions")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 					}
 					//
 					if (rowSequence == 0) {
 						currentRowNumber++;
-						HSSFRow rowBlank = sheet.createRow(currentRowNumber);
-						HSSFCell cellA8 = rowBlank.createCell(0);
+						XSSFRow rowBlank = sheet.createRow(currentRowNumber);
+						XSSFCell cellA8 = rowBlank.createCell(0);
 						cellA8.setCellStyle(styleValueNumber);
-						HSSFCell cellB8 = rowBlank.createCell(1);
+						XSSFCell cellB8 = rowBlank.createCell(1);
 						cellB8.setCellStyle(styleValue);
-						cellB8.setCellValue(new HSSFRichTextString("(None)"));
-						HSSFCell cellC8 = rowBlank.createCell(2);
+						cellB8.setCellValue(new XSSFRichTextString("(None)"));
+						XSSFCell cellC8 = rowBlank.createCell(2);
 						cellC8.setCellStyle(styleValue);
-						HSSFCell cellD8 = rowBlank.createCell(3);
+						XSSFCell cellD8 = rowBlank.createCell(3);
 						cellD8.setCellStyle(styleValue);
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-						HSSFCell cellE8 = rowBlank.createCell(4);
+						XSSFCell cellE8 = rowBlank.createCell(4);
 						cellE8.setCellStyle(styleValue);
-						HSSFCell cellF8 = rowBlank.createCell(5);
+						XSSFCell cellF8 = rowBlank.createCell(5);
 						cellF8.setCellStyle(styleValue);
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 5));
-						HSSFCell cellG8 = rowBlank.createCell(6);
+						XSSFCell cellG8 = rowBlank.createCell(6);
 						cellG8.setCellStyle(styleValue);
-						HSSFCell cellH8 = rowBlank.createCell(7);
+						XSSFCell cellH8 = rowBlank.createCell(7);
 						cellH8.setCellStyle(styleValue);
-						HSSFCell cellI8 = rowBlank.createCell(8);
+						XSSFCell cellI8 = rowBlank.createCell(8);
 						cellI8.setCellStyle(styleValue);
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 					}
 				}
 				if (elementArray1[i].getType().equals("IOSpool")) {
 					currentRowNumber++;
-					HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-					HSSFCell cellA7 = rowColumnHeading.createCell(0);
+					XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+					XSSFCell cellA7 = rowColumnHeading.createCell(0);
 					cellA7.setCellStyle(styleHeader2Number);
-					cellA7.setCellValue(new HSSFRichTextString("No."));
-					HSSFCell cellB7 = rowColumnHeading.createCell(1);
+					cellA7.setCellValue(new XSSFRichTextString("No."));
+					XSSFCell cellB7 = rowColumnHeading.createCell(1);
 					cellB7.setCellStyle(styleHeader2);
-					cellB7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments41")));
-					HSSFCell cellC7 = rowColumnHeading.createCell(2);
+					cellB7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments41")));
+					XSSFCell cellC7 = rowColumnHeading.createCell(2);
 					cellC7.setCellStyle(styleHeader2);
-					HSSFCell cellD7 = rowColumnHeading.createCell(3);
+					XSSFCell cellD7 = rowColumnHeading.createCell(3);
 					cellD7.setCellStyle(styleHeader2);
-					cellC7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments42")));
+					cellC7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments42")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-					HSSFCell cellE7 = rowColumnHeading.createCell(4);
+					XSSFCell cellE7 = rowColumnHeading.createCell(4);
 					cellE7.setCellStyle(styleHeader2);
-					HSSFCell cellF7 = rowColumnHeading.createCell(5);
+					XSSFCell cellF7 = rowColumnHeading.createCell(5);
 					cellF7.setCellStyle(styleHeader2);
-					HSSFCell cellG7 = rowColumnHeading.createCell(6);
+					XSSFCell cellG7 = rowColumnHeading.createCell(6);
 					cellG7.setCellStyle(styleHeader2);
-					HSSFCell cellH7 = rowColumnHeading.createCell(7);
+					XSSFCell cellH7 = rowColumnHeading.createCell(7);
 					cellH7.setCellStyle(styleHeader2);
-					HSSFCell cellI7 = rowColumnHeading.createCell(8);
+					XSSFCell cellI7 = rowColumnHeading.createCell(8);
 					cellI7.setCellStyle(styleHeader2);
-					cellE7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+					cellE7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 					//
 					//Rows of Field
@@ -1894,56 +1903,56 @@ public class DialogDocuments extends JDialog {
 					for (int j = 0; j <= countOfElementArray2; j++) {
 						workElement2 = (org.w3c.dom.Element)elementArray2[j].getElement();
 						currentRowNumber++;
-						HSSFRow rowValue2 = sheet.createRow(currentRowNumber);
-						HSSFCell cellA = rowValue2.createCell(0);
+						XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
+						XSSFCell cellA = rowValue2.createCell(0);
 						cellA.setCellStyle(styleValueNumber);
 						rowSequence++;
 						cellA.setCellValue(rowSequence);
-						HSSFCell cellB = rowValue2.createCell(1);
+						XSSFCell cellB = rowValue2.createCell(1);
 						cellB.setCellStyle(styleValue);
-						cellB.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Label")));
-						HSSFCell cellC = rowValue2.createCell(2);
+						cellB.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Label")));
+						XSSFCell cellC = rowValue2.createCell(2);
 						cellC.setCellStyle(styleValue);
-						HSSFCell cellD = rowValue2.createCell(3);
+						XSSFCell cellD = rowValue2.createCell(3);
 						cellD.setCellStyle(styleValue);
-						cellC.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Name")));
+						cellC.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Name")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-						HSSFCell cellE = rowValue2.createCell(4);
+						XSSFCell cellE = rowValue2.createCell(4);
 						cellE.setCellStyle(styleValue);
-						HSSFCell cellF = rowValue2.createCell(5);
+						XSSFCell cellF = rowValue2.createCell(5);
 						cellF.setCellStyle(styleValue);
-						HSSFCell cellG = rowValue2.createCell(6);
+						XSSFCell cellG = rowValue2.createCell(6);
 						cellG.setCellStyle(styleValue);
-						HSSFCell cellH = rowValue2.createCell(7);
+						XSSFCell cellH = rowValue2.createCell(7);
 						cellH.setCellStyle(styleValue);
-						HSSFCell cellI = rowValue2.createCell(8);
+						XSSFCell cellI = rowValue2.createCell(8);
 						cellI.setCellStyle(styleValue);
-						cellE.setCellValue(new HSSFRichTextString(workElement2.getAttribute("Descriptions")));
+						cellE.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Descriptions")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 					}
 					//
 					if (rowSequence == 0) {
 						currentRowNumber++;
-						HSSFRow rowBlank = sheet.createRow(currentRowNumber);
-						HSSFCell cellA8 = rowBlank.createCell(0);
+						XSSFRow rowBlank = sheet.createRow(currentRowNumber);
+						XSSFCell cellA8 = rowBlank.createCell(0);
 						cellA8.setCellStyle(styleValueNumber);
-						HSSFCell cellB8 = rowBlank.createCell(1);
+						XSSFCell cellB8 = rowBlank.createCell(1);
 						cellB8.setCellStyle(styleValue);
-						cellB8.setCellValue(new HSSFRichTextString("(None)"));
-						HSSFCell cellC8 = rowBlank.createCell(2);
+						cellB8.setCellValue(new XSSFRichTextString("(None)"));
+						XSSFCell cellC8 = rowBlank.createCell(2);
 						cellC8.setCellStyle(styleValue);
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 3));
-						HSSFCell cellD8 = rowBlank.createCell(3);
+						XSSFCell cellD8 = rowBlank.createCell(3);
 						cellD8.setCellStyle(styleValue);
-						HSSFCell cellE8 = rowBlank.createCell(4);
+						XSSFCell cellE8 = rowBlank.createCell(4);
 						cellE8.setCellStyle(styleValue);
-						HSSFCell cellF8 = rowBlank.createCell(5);
+						XSSFCell cellF8 = rowBlank.createCell(5);
 						cellF8.setCellStyle(styleValue);
-						HSSFCell cellG8 = rowBlank.createCell(6);
+						XSSFCell cellG8 = rowBlank.createCell(6);
 						cellG8.setCellStyle(styleValue);
-						HSSFCell cellH8 = rowBlank.createCell(7);
+						XSSFCell cellH8 = rowBlank.createCell(7);
 						cellH8.setCellStyle(styleValue);
-						HSSFCell cellI8 = rowBlank.createCell(8);
+						XSSFCell cellI8 = rowBlank.createCell(8);
 						cellI8.setCellStyle(styleValue);
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 					}
@@ -1956,31 +1965,31 @@ public class DialogDocuments extends JDialog {
 						NodeList ioFieldList = workElement1.getElementsByTagName("IOTableField");
 						//
 						currentRowNumber++;
-						HSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
-						HSSFCell cellA7 = rowColumnHeading.createCell(0);
+						XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
+						XSSFCell cellA7 = rowColumnHeading.createCell(0);
 						cellA7.setCellStyle(styleHeader2Number);
-						cellA7.setCellValue(new HSSFRichTextString("No."));
-						HSSFCell cellB7 = rowColumnHeading.createCell(1);
+						cellA7.setCellValue(new XSSFRichTextString("No."));
+						XSSFCell cellB7 = rowColumnHeading.createCell(1);
 						cellB7.setCellStyle(styleHeader2);
-						HSSFCell cellC7 = rowColumnHeading.createCell(2);
+						XSSFCell cellC7 = rowColumnHeading.createCell(2);
 						cellC7.setCellStyle(styleHeader2);
-						cellB7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments48")));
+						cellB7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments48")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-						HSSFCell cellD7 = rowColumnHeading.createCell(3);
+						XSSFCell cellD7 = rowColumnHeading.createCell(3);
 						cellD7.setCellStyle(styleHeader2);
-						HSSFCell cellE7 = rowColumnHeading.createCell(4);
+						XSSFCell cellE7 = rowColumnHeading.createCell(4);
 						cellE7.setCellStyle(styleHeader2);
-						cellD7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments49")));
+						cellD7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments49")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 4));
-						HSSFCell cellF7 = rowColumnHeading.createCell(5);
+						XSSFCell cellF7 = rowColumnHeading.createCell(5);
 						cellF7.setCellStyle(styleHeader2);
-						HSSFCell cellG7 = rowColumnHeading.createCell(6);
+						XSSFCell cellG7 = rowColumnHeading.createCell(6);
 						cellG7.setCellStyle(styleHeader2);
-						HSSFCell cellH7 = rowColumnHeading.createCell(7);
+						XSSFCell cellH7 = rowColumnHeading.createCell(7);
 						cellH7.setCellStyle(styleHeader2);
-						HSSFCell cellI7 = rowColumnHeading.createCell(8);
+						XSSFCell cellI7 = rowColumnHeading.createCell(8);
 						cellI7.setCellStyle(styleHeader2);
-						cellF7.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments50")));
+						cellF7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments50")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 						//
 						NodeList primaryKeyFieldList = null;
@@ -2007,14 +2016,14 @@ public class DialogDocuments extends JDialog {
 						for (int k = 0; k <= countOfElementArray2; k++) {
 							workElement3 = (org.w3c.dom.Element)elementArray2[k].getElement();
 							currentRowNumber++;
-							HSSFRow rowValue2 = sheet.createRow(currentRowNumber);
-							HSSFCell cellA = rowValue2.createCell(0);
+							XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
+							XSSFCell cellA = rowValue2.createCell(0);
 							cellA.setCellStyle(styleValueNumber);
 							rowSequence++;
 							cellA.setCellValue(rowSequence);
-							HSSFCell cellB = rowValue2.createCell(1);
+							XSSFCell cellB = rowValue2.createCell(1);
 							cellB.setCellStyle(styleValue);
-							HSSFCell cellC = rowValue2.createCell(2);
+							XSSFCell cellC = rowValue2.createCell(2);
 							cellC.setCellStyle(styleValue);
 							workString1 = "";
 							boolean primaryKeyField = false;
@@ -2038,11 +2047,11 @@ public class DialogDocuments extends JDialog {
 									workString1 = workElement3.getAttribute("Alias") + " / " + workElement3.getAttribute("Name");
 								}
 							}
-							cellB.setCellValue(new HSSFRichTextString(workString1));
+							cellB.setCellValue(new XSSFRichTextString(workString1));
 							sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-							HSSFCell cellD = rowValue2.createCell(3);
+							XSSFCell cellD = rowValue2.createCell(3);
 							cellD.setCellStyle(styleValue);
-							HSSFCell cellE = rowValue2.createCell(4);
+							XSSFCell cellE = rowValue2.createCell(4);
 							cellE.setCellStyle(styleValue);
 							workString1 = "";
 							for (int m = 0; m < dataTypeList.getLength(); m++) {
@@ -2057,15 +2066,15 @@ public class DialogDocuments extends JDialog {
 									break;
 								}
 							}
-							cellD.setCellValue(new HSSFRichTextString(workString1));
+							cellD.setCellValue(new XSSFRichTextString(workString1));
 							sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 4));
-							HSSFCell cellF = rowValue2.createCell(5);
+							XSSFCell cellF = rowValue2.createCell(5);
 							cellF.setCellStyle(styleValue);
-							HSSFCell cellG = rowValue2.createCell(6);
+							XSSFCell cellG = rowValue2.createCell(6);
 							cellG.setCellStyle(styleValue);
-							HSSFCell cellH = rowValue2.createCell(7);
+							XSSFCell cellH = rowValue2.createCell(7);
 							cellH.setCellStyle(styleValue);
-							HSSFCell cellI = rowValue2.createCell(8);
+							XSSFCell cellI = rowValue2.createCell(8);
 							cellI.setCellStyle(styleValue);
 							workString1 = "test";
 							for (int m = 0; m < ioFieldList.getLength(); m++) {
@@ -2075,7 +2084,7 @@ public class DialogDocuments extends JDialog {
 									break;
 								}
 							}
-							cellF.setCellValue(new HSSFRichTextString(workString1));
+							cellF.setCellValue(new XSSFRichTextString(workString1));
 							sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 						}
 						break;
@@ -2085,115 +2094,115 @@ public class DialogDocuments extends JDialog {
 		}
 	}
 
-	void setupTableSummary(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTableSummary(XSSFSheet sheet, org.w3c.dom.Element element) {
 		//NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		String workString = "";
 		//
-		HSSFRow row0 = sheet.createRow(0);
-		HSSFRow row1 = sheet.createRow(1);
-		HSSFRow row2 = sheet.createRow(2);
-		HSSFRow row3 = sheet.createRow(3);
-		HSSFRow row4 = sheet.createRow(4);
-		HSSFRow row5 = sheet.createRow(5);
+		XSSFRow row0 = sheet.createRow(0);
+		XSSFRow row1 = sheet.createRow(1);
+		XSSFRow row2 = sheet.createRow(2);
+		XSSFRow row3 = sheet.createRow(3);
+		XSSFRow row4 = sheet.createRow(4);
+		XSSFRow row5 = sheet.createRow(5);
 		//
 		//Title
-		HSSFRichTextString title = new HSSFRichTextString(res.getString("DialogDocuments51"));
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRichTextString title = new XSSFRichTextString(res.getString("DialogDocuments51"));
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleTitle);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleTitle);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleTitle);
-		HSSFCell cellB1 = row1.createCell(1);
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleTitle);
 		cellA0.setCellValue(title);
 		sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 1));
 		//
 		//Label Subsystem
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader2);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader2);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader2);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader2);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader2);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader2);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader2);
-		cellC0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments17")));
+		cellC0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments17")));
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 8));
 		//
 		//Value Subsystem
-		HSSFCell cellC1 = row1.createCell(2);
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleValue);
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleValue);
-		HSSFCell cellE1 = row1.createCell(4);
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleValue);
-		HSSFCell cellF1 = row1.createCell(5);
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleValue);
-		HSSFCell cellG1 = row1.createCell(6);
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleValue);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleValue);
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleValue);
-		cellC1.setCellValue(new HSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
+		cellC1.setCellValue(new XSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 8));
 		//
 		//Label Table Name
-		HSSFCell cellA2 = row2.createCell(0);
+		XSSFCell cellA2 = row2.createCell(0);
 		cellA2.setCellStyle(styleHeader2);
-		HSSFCell cellB2 = row2.createCell(1);
+		XSSFCell cellB2 = row2.createCell(1);
 		cellB2.setCellStyle(styleHeader2);
-		HSSFCell cellC2 = row2.createCell(2);
+		XSSFCell cellC2 = row2.createCell(2);
 		cellC2.setCellStyle(styleHeader2);
-		HSSFCell cellD2 = row2.createCell(3);
+		XSSFCell cellD2 = row2.createCell(3);
 		cellD2.setCellStyle(styleHeader2);
-		HSSFCell cellE2 = row2.createCell(4);
+		XSSFCell cellE2 = row2.createCell(4);
 		cellE2.setCellStyle(styleHeader2);
-		cellA2.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments52")));
+		cellA2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments52")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 4));
 		//
 		//Value Table Name
-		HSSFCell cellA3 = row3.createCell(0);
+		XSSFCell cellA3 = row3.createCell(0);
 		cellA3.setCellStyle(styleValue);
-		HSSFCell cellB3 = row3.createCell(1);
+		XSSFCell cellB3 = row3.createCell(1);
 		cellB3.setCellStyle(styleValue);
-		HSSFCell cellC3 = row3.createCell(2);
+		XSSFCell cellC3 = row3.createCell(2);
 		cellC3.setCellStyle(styleValue);
-		HSSFCell cellD3 = row3.createCell(3);
+		XSSFCell cellD3 = row3.createCell(3);
 		cellD3.setCellStyle(styleValue);
-		HSSFCell cellE3 = row3.createCell(4);
+		XSSFCell cellE3 = row3.createCell(4);
 		cellE3.setCellStyle(styleValue);
-		cellA3.setCellValue(new HSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
+		cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
 		//
 		//Label TableType
-		HSSFCell cellF2 = row2.createCell(5);
+		XSSFCell cellF2 = row2.createCell(5);
 		cellF2.setCellStyle(styleHeader2);
-		HSSFCell cellG2 = row2.createCell(6);
+		XSSFCell cellG2 = row2.createCell(6);
 		cellG2.setCellStyle(styleHeader2);
-		HSSFCell cellH2 = row2.createCell(7);
+		XSSFCell cellH2 = row2.createCell(7);
 		cellH2.setCellStyle(styleHeader2);
-		HSSFCell cellI2 = row2.createCell(8);
+		XSSFCell cellI2 = row2.createCell(8);
 		cellI2.setCellStyle(styleHeader2);
-		cellF2.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments53")));
+		cellF2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments53")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 8));
 		//
 		//Value TableType
-		HSSFCell cellF3 = row3.createCell(5);
+		XSSFCell cellF3 = row3.createCell(5);
 		cellF3.setCellStyle(styleValue);
-		HSSFCell cellG3 = row3.createCell(6);
+		XSSFCell cellG3 = row3.createCell(6);
 		cellG3.setCellStyle(styleValue);
-		HSSFCell cellH3 = row3.createCell(7);
+		XSSFCell cellH3 = row3.createCell(7);
 		cellH3.setCellStyle(styleValue);
-		HSSFCell cellI3 = row3.createCell(8);
+		XSSFCell cellI3 = row3.createCell(8);
 		cellI3.setCellStyle(styleValue);
 		for (int i = 0; i < tableTypeList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)tableTypeList.item(i);
@@ -2202,59 +2211,59 @@ public class DialogDocuments extends JDialog {
 				break;
 			}
 		}
-		cellF3.setCellValue(new HSSFRichTextString(workString));
+		cellF3.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 5, 8));
 		//
 		//Label Descriptions
-		HSSFCell cellA4 = row4.createCell(0);
+		XSSFCell cellA4 = row4.createCell(0);
 		cellA4.setCellStyle(styleHeader2);
-		HSSFCell cellB4 = row4.createCell(1);
+		XSSFCell cellB4 = row4.createCell(1);
 		cellB4.setCellStyle(styleHeader2);
-		HSSFCell cellC4 = row4.createCell(2);
+		XSSFCell cellC4 = row4.createCell(2);
 		cellC4.setCellStyle(styleHeader2);
-		HSSFCell cellD4 = row4.createCell(3);
+		XSSFCell cellD4 = row4.createCell(3);
 		cellD4.setCellStyle(styleHeader2);
-		HSSFCell cellE4 = row4.createCell(4);
+		XSSFCell cellE4 = row4.createCell(4);
 		cellE4.setCellStyle(styleHeader2);
-		HSSFCell cellF4 = row4.createCell(5);
+		XSSFCell cellF4 = row4.createCell(5);
 		cellF4.setCellStyle(styleHeader2);
-		HSSFCell cellG4 = row4.createCell(6);
+		XSSFCell cellG4 = row4.createCell(6);
 		cellG4.setCellStyle(styleHeader2);
-		HSSFCell cellH4 = row4.createCell(7);
+		XSSFCell cellH4 = row4.createCell(7);
 		cellH4.setCellStyle(styleHeader2);
-		HSSFCell cellI4 = row4.createCell(8);
+		XSSFCell cellI4 = row4.createCell(8);
 		cellI4.setCellStyle(styleHeader2);
-		cellA4.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+		cellA4.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 8));
 		//
 		//Value Descriptions
-		HSSFCell cellA5 = row5.createCell(0);
+		XSSFCell cellA5 = row5.createCell(0);
 		cellA5.setCellStyle(styleValue);
-		HSSFCell cellB5 = row5.createCell(1);
+		XSSFCell cellB5 = row5.createCell(1);
 		cellB5.setCellStyle(styleValue);
-		HSSFCell cellC5 = row5.createCell(2);
+		XSSFCell cellC5 = row5.createCell(2);
 		cellC5.setCellStyle(styleValue);
-		HSSFCell cellD5 = row5.createCell(3);
+		XSSFCell cellD5 = row5.createCell(3);
 		cellD5.setCellStyle(styleValue);
-		HSSFCell cellE5 = row5.createCell(4);
+		XSSFCell cellE5 = row5.createCell(4);
 		cellE5.setCellStyle(styleValue);
-		HSSFCell cellF5 = row5.createCell(5);
+		XSSFCell cellF5 = row5.createCell(5);
 		cellF5.setCellStyle(styleValue);
-		HSSFCell cellG5 = row5.createCell(6);
+		XSSFCell cellG5 = row5.createCell(6);
 		cellG5.setCellStyle(styleValue);
-		HSSFCell cellH5 = row5.createCell(7);
+		XSSFCell cellH5 = row5.createCell(7);
 		cellH5.setCellStyle(styleValue);
-		HSSFCell cellI5 = row5.createCell(8);
+		XSSFCell cellI5 = row5.createCell(8);
 		cellI5.setCellStyle(styleValue);
 		workString = substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n");
-		cellA5.setCellValue(new HSSFRichTextString(workString));
+		cellA5.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 8));
 		row5.setHeight((short)1000);
 		//
 		currentRowNumber = 5;
 	}
 
-	void setupTableFieldList(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTableFieldList(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
@@ -2265,56 +2274,56 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label FieldList
 		currentRowNumber++;
-		HSSFRow row0 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRow row0 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments54")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments54")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header FieldList
 		currentRowNumber++;
-		HSSFRow row1 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFRow row1 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = row1.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = row1.createCell(2);
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments55")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments55")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		cellD1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments56")));
-		HSSFCell cellE1 = row1.createCell(4);
+		cellD1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments56")));
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		cellE1.setCellValue(new HSSFRichTextString("Null"));
-		HSSFCell cellF1 = row1.createCell(5);
+		cellE1.setCellValue(new XSSFRichTextString("Null"));
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		cellF1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments57")));
-		HSSFCell cellG1 = row1.createCell(6);
+		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments57")));
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellG1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments23")));
+		cellG1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		//
 		//Rows of TableField
@@ -2331,12 +2340,12 @@ public class DialogDocuments extends JDialog {
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			workElement1 = (org.w3c.dom.Element)elementArray1[i].getElement();
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
 			rowSequence++;
 			cellA.setCellValue(rowSequence);
-			HSSFCell cellB = nextRow.createCell(1);
+			XSSFCell cellB = nextRow.createCell(1);
 			cellB.setCellStyle(styleValue);
 			if (workElement1.getAttribute("Alias").equals("")) {
 				if (workElement1.getAttribute("AttributeType").equals("NATIVE")) {
@@ -2351,11 +2360,11 @@ public class DialogDocuments extends JDialog {
 					workString1 = "(" + workElement1.getAttribute("Alias") + " / " + workElement1.getAttribute("Name") + ")";
 				}
 			}
-			cellB.setCellValue(new HSSFRichTextString(workString1));
-			HSSFCell cellC = nextRow.createCell(2);
+			cellB.setCellValue(new XSSFRichTextString(workString1));
+			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-			HSSFCell cellD = nextRow.createCell(3);
+			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
 			workString1 = "";
 			for (int m = 0; m < dataTypeList.getLength(); m++) {
@@ -2370,57 +2379,57 @@ public class DialogDocuments extends JDialog {
 					break;
 				}
 			}
-			cellD.setCellValue(new HSSFRichTextString(workString1));
-			HSSFCell cellE = nextRow.createCell(4);
+			cellD.setCellValue(new XSSFRichTextString(workString1));
+			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
 			if (workElement1.getAttribute("NotNull").equals("true")) {
 				workString1 = res.getString("DialogDocuments58");
 			} else {
 				workString1 = res.getString("DialogDocuments59");
 			}
-			cellE.setCellValue(new HSSFRichTextString(workString1));
-			HSSFCell cellF = nextRow.createCell(5);
+			cellE.setCellValue(new XSSFRichTextString(workString1));
+			XSSFCell cellF = nextRow.createCell(5);
 			cellF.setCellStyle(styleValue);
-			cellF.setCellValue(new HSSFRichTextString(workElement1.getAttribute("Default")));
-			HSSFCell cellG = nextRow.createCell(6);
+			cellF.setCellValue(new XSSFRichTextString(workElement1.getAttribute("Default")));
+			XSSFCell cellG = nextRow.createCell(6);
 			cellG.setCellStyle(styleValue);
-			HSSFCell cellH = nextRow.createCell(7);
+			XSSFCell cellH = nextRow.createCell(7);
 			cellH.setCellStyle(styleValue);
-			HSSFCell cellI = nextRow.createCell(8);
+			XSSFCell cellI = nextRow.createCell(8);
 			cellI.setCellStyle(styleValue);
 			workString1 = substringLinesWithTokenOfEOL(workElement1.getAttribute("Descriptions"), "\n");
-			cellG.setCellValue(new HSSFRichTextString(workString1));
+			cellG.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
 		//
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = nextRow.createCell(0);
 			cellA2.setCellStyle(styleValueNumber);
-			HSSFCell cellB2 = nextRow.createCell(1);
+			XSSFCell cellB2 = nextRow.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = nextRow.createCell(2);
+			XSSFCell cellC2 = nextRow.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			cellB2.setCellValue(new HSSFRichTextString("(None)"));
+			cellB2.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-			HSSFCell cellD2 = nextRow.createCell(3);
+			XSSFCell cellD2 = nextRow.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			HSSFCell cellE2 = nextRow.createCell(4);
+			XSSFCell cellE2 = nextRow.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = nextRow.createCell(5);
+			XSSFCell cellF2 = nextRow.createCell(5);
 			cellF2.setCellStyle(styleValue);
-			HSSFCell cellG2 = nextRow.createCell(6);
+			XSSFCell cellG2 = nextRow.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = nextRow.createCell(7);
+			XSSFCell cellH2 = nextRow.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = nextRow.createCell(8);
+			XSSFCell cellI2 = nextRow.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
 	}
 
-	void setupTableKeyList(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTableKeyList(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
 		NodeList workList2 = null;
 		NodeList fieldList = null;
@@ -2434,52 +2443,52 @@ public class DialogDocuments extends JDialog {
 		//
 		//Label KeyList
 		currentRowNumber++;
-		HSSFRow row0 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRow row0 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments60")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments60")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header KeyList
 		currentRowNumber++;
-		HSSFRow row1 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFRow row1 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = row1.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments61")));
-		HSSFCell cellC1 = row1.createCell(2);
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments61")));
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		HSSFCell cellE1 = row1.createCell(4);
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		HSSFCell cellF1 = row1.createCell(5);
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		HSSFCell cellG1 = row1.createCell(6);
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellC1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments62")));
+		cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
 		//
 		//Rows of Key
@@ -2488,12 +2497,12 @@ public class DialogDocuments extends JDialog {
 		for (int i = 0; i < workList1.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)workList1.item(i);
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
 			rowSequence++;
 			cellA.setCellValue(rowSequence);
-			HSSFCell cellB = nextRow.createCell(1);
+			XSSFCell cellB = nextRow.createCell(1);
 			cellB.setCellStyle(styleValue);
 			if (workElement1.getAttribute("Type").equals("PK")) {
 				workString1 = res.getString("DialogDocuments63");
@@ -2504,20 +2513,20 @@ public class DialogDocuments extends JDialog {
 			if (workElement1.getAttribute("Type").equals("SK")) {
 				workString1 = res.getString("DialogDocuments65");
 			}
-			cellB.setCellValue(new HSSFRichTextString(workString1));
-			HSSFCell cellC = nextRow.createCell(2);
+			cellB.setCellValue(new XSSFRichTextString(workString1));
+			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
-			HSSFCell cellD = nextRow.createCell(3);
+			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
-			HSSFCell cellE = nextRow.createCell(4);
+			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
-			HSSFCell cellF = nextRow.createCell(5);
+			XSSFCell cellF = nextRow.createCell(5);
 			cellF.setCellStyle(styleValue);
-			HSSFCell cellG = nextRow.createCell(6);
+			XSSFCell cellG = nextRow.createCell(6);
 			cellG.setCellStyle(styleValue);
-			HSSFCell cellH = nextRow.createCell(7);
+			XSSFCell cellH = nextRow.createCell(7);
 			cellH.setCellStyle(styleValue);
-			HSSFCell cellI = nextRow.createCell(8);
+			XSSFCell cellI = nextRow.createCell(8);
 			cellI.setCellStyle(styleValue);
 			workString1 = "";
 			countOfElementArray1 = -1;
@@ -2547,74 +2556,71 @@ public class DialogDocuments extends JDialog {
 			if (workString1.equals("")) {
 				workString1 = "*None";
 			}
-			cellC.setCellValue(new HSSFRichTextString(workString1));
+			cellC.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
 		}
 	}
 
-	void setupTableUsageList(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTableUsageList(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
-		//NodeList workList2 = null;
-		//NodeList fieldList = null;
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
 		org.w3c.dom.Element workElement3 = null;
 		String workString1 = "";
-		//String workString2 = "";
 		int rowSequence = 0;
 		XeadNode node = null;
 		//
 		//Label FieldList
 		currentRowNumber++;
-		HSSFRow row0 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA0 = row0.createCell(0);
+		XSSFRow row0 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA0 = row0.createCell(0);
 		cellA0.setCellStyle(styleHeader1);
-		HSSFCell cellB0 = row0.createCell(1);
+		XSSFCell cellB0 = row0.createCell(1);
 		cellB0.setCellStyle(styleHeader1);
-		HSSFCell cellC0 = row0.createCell(2);
+		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader1);
-		HSSFCell cellD0 = row0.createCell(3);
+		XSSFCell cellD0 = row0.createCell(3);
 		cellD0.setCellStyle(styleHeader1);
-		HSSFCell cellE0 = row0.createCell(4);
+		XSSFCell cellE0 = row0.createCell(4);
 		cellE0.setCellStyle(styleHeader1);
-		HSSFCell cellF0 = row0.createCell(5);
+		XSSFCell cellF0 = row0.createCell(5);
 		cellF0.setCellStyle(styleHeader1);
-		HSSFCell cellG0 = row0.createCell(6);
+		XSSFCell cellG0 = row0.createCell(6);
 		cellG0.setCellStyle(styleHeader1);
-		HSSFCell cellH0 = row0.createCell(7);
+		XSSFCell cellH0 = row0.createCell(7);
 		cellH0.setCellStyle(styleHeader1);
-		HSSFCell cellI0 = row0.createCell(8);
+		XSSFCell cellI0 = row0.createCell(8);
 		cellI0.setCellStyle(styleHeader1);
-		cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments66")));
+		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments66")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 		//
 		//Header FunctionList
 		currentRowNumber++;
-		HSSFRow row1 = sheet.createRow(currentRowNumber);
-		HSSFCell cellA1 = row1.createCell(0);
+		XSSFRow row1 = sheet.createRow(currentRowNumber);
+		XSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellStyle(styleHeader2Number);
-		cellA1.setCellValue(new HSSFRichTextString("No."));
-		HSSFCell cellB1 = row1.createCell(1);
+		cellA1.setCellValue(new XSSFRichTextString("No."));
+		XSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellStyle(styleHeader2);
-		HSSFCell cellC1 = row1.createCell(2);
+		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleHeader2);
-		cellB1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments17")));
+		cellB1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments17")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-		HSSFCell cellD1 = row1.createCell(3);
+		XSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellStyle(styleHeader2);
-		HSSFCell cellE1 = row1.createCell(4);
+		XSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellStyle(styleHeader2);
-		HSSFCell cellF1 = row1.createCell(5);
+		XSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellStyle(styleHeader2);
-		HSSFCell cellG1 = row1.createCell(6);
+		XSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellStyle(styleHeader2);
-		HSSFCell cellH1 = row1.createCell(7);
+		XSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellStyle(styleHeader2);
-		cellD1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments18")));
+		cellD1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments18")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 7));
-		HSSFCell cellI1 = row1.createCell(8);
+		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
-		cellI1.setCellValue(new HSSFRichTextString("CRUD"));
+		cellI1.setCellValue(new XSSFRichTextString("CRUD"));
 		//
 		//Rows of Function
 		countOfElementArray1 = -1;
@@ -2636,14 +2642,14 @@ public class DialogDocuments extends JDialog {
 				workElement2 = (org.w3c.dom.Element)workList1.item(j);
 				if (workElement2.getAttribute("TableID").equals(element.getAttribute("ID"))) {
 					currentRowNumber++;
-					HSSFRow nextRow = sheet.createRow(currentRowNumber);
-					HSSFCell cellA = nextRow.createCell(0);
+					XSSFRow nextRow = sheet.createRow(currentRowNumber);
+					XSSFCell cellA = nextRow.createCell(0);
 					cellA.setCellStyle(styleValueNumber);
 					rowSequence++;
 					cellA.setCellValue(rowSequence);
-					HSSFCell cellB = nextRow.createCell(1);
+					XSSFCell cellB = nextRow.createCell(1);
 					cellB.setCellStyle(styleValue);
-					HSSFCell cellC = nextRow.createCell(2);
+					XSSFCell cellC = nextRow.createCell(2);
 					cellC.setCellStyle(styleValue);
 					workString1 = "";
 					for (int k = 0; k < subsystemList.getLength(); k++) {
@@ -2653,21 +2659,21 @@ public class DialogDocuments extends JDialog {
 							break;
 						}
 					}
-					cellB.setCellValue(new HSSFRichTextString(workString1));
+					cellB.setCellValue(new XSSFRichTextString(workString1));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-					HSSFCell cellD = nextRow.createCell(3);
+					XSSFCell cellD = nextRow.createCell(3);
 					cellD.setCellStyle(styleValue);
-					HSSFCell cellE = nextRow.createCell(4);
+					XSSFCell cellE = nextRow.createCell(4);
 					cellE.setCellStyle(styleValue);
-					HSSFCell cellF = nextRow.createCell(5);
+					XSSFCell cellF = nextRow.createCell(5);
 					cellF.setCellStyle(styleValue);
-					HSSFCell cellG = nextRow.createCell(6);
+					XSSFCell cellG = nextRow.createCell(6);
 					cellG.setCellStyle(styleValue);
-					HSSFCell cellH = nextRow.createCell(7);
+					XSSFCell cellH = nextRow.createCell(7);
 					cellH.setCellStyle(styleValue);
-					cellD.setCellValue(new HSSFRichTextString(workElement1.getAttribute("SortKey") + " / " + workElement1.getAttribute("Name")));
+					cellD.setCellValue(new XSSFRichTextString(workElement1.getAttribute("SortKey") + " / " + workElement1.getAttribute("Name")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 7));
-					HSSFCell cellI = nextRow.createCell(8);
+					XSSFCell cellI = nextRow.createCell(8);
 					cellI.setCellStyle(styleValue);
 					workString1 = "";
 					if (workElement2.getAttribute("OpC").equals("+")) {
@@ -2682,38 +2688,38 @@ public class DialogDocuments extends JDialog {
 					if (workElement2.getAttribute("OpD").equals("+")) {
 						workString1 = workString1 + "D";
 					}
-					cellI.setCellValue(new HSSFRichTextString(workString1));
+					cellI.setCellValue(new XSSFRichTextString(workString1));
 				}
 			}
 		}
 		if (rowSequence == 0) {
 			currentRowNumber++;
-			HSSFRow nextRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = nextRow.createCell(0);
+			XSSFRow nextRow = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = nextRow.createCell(0);
 			cellA2.setCellStyle(styleValueNumber);
-			HSSFCell cellB2 = nextRow.createCell(1);
+			XSSFCell cellB2 = nextRow.createCell(1);
 			cellB2.setCellStyle(styleValue);
-			HSSFCell cellC2 = nextRow.createCell(2);
+			XSSFCell cellC2 = nextRow.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			cellB2.setCellValue(new HSSFRichTextString("(None)"));
+			cellB2.setCellValue(new XSSFRichTextString("(None)"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 2));
-			HSSFCell cellD2 = nextRow.createCell(3);
+			XSSFCell cellD2 = nextRow.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			HSSFCell cellE2 = nextRow.createCell(4);
+			XSSFCell cellE2 = nextRow.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = nextRow.createCell(5);
+			XSSFCell cellF2 = nextRow.createCell(5);
 			cellF2.setCellStyle(styleValue);
-			HSSFCell cellG2 = nextRow.createCell(6);
+			XSSFCell cellG2 = nextRow.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = nextRow.createCell(7);
+			XSSFCell cellH2 = nextRow.createCell(7);
 			cellH2.setCellStyle(styleValue);
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 3, 7));
-			HSSFCell cellI2 = nextRow.createCell(8);
+			XSSFCell cellI2 = nextRow.createCell(8);
 			cellI2.setCellStyle(styleValue);
 		}
 	}
 
-	void setupTableKeyDetails(HSSFSheet sheet, org.w3c.dom.Element element) {
+	void setupTableKeyDetails(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
 		NodeList workList2 = null;
 		NodeList workList3 = null;
@@ -2739,60 +2745,60 @@ public class DialogDocuments extends JDialog {
 			//
 			//Label Key Definition
 			currentRowNumber++;
-			HSSFRow row0 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA0 = row0.createCell(0);
+			XSSFRow row0 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA0 = row0.createCell(0);
 			cellA0.setCellStyle(styleHeader1);
-			HSSFCell cellB0 = row0.createCell(1);
+			XSSFCell cellB0 = row0.createCell(1);
 			cellB0.setCellStyle(styleHeader1);
-			HSSFCell cellC0 = row0.createCell(2);
+			XSSFCell cellC0 = row0.createCell(2);
 			cellC0.setCellStyle(styleHeader1);
-			HSSFCell cellD0 = row0.createCell(3);
+			XSSFCell cellD0 = row0.createCell(3);
 			cellD0.setCellStyle(styleHeader1);
-			HSSFCell cellE0 = row0.createCell(4);
+			XSSFCell cellE0 = row0.createCell(4);
 			cellE0.setCellStyle(styleHeader1);
-			HSSFCell cellF0 = row0.createCell(5);
+			XSSFCell cellF0 = row0.createCell(5);
 			cellF0.setCellStyle(styleHeader1);
-			HSSFCell cellG0 = row0.createCell(6);
+			XSSFCell cellG0 = row0.createCell(6);
 			cellG0.setCellStyle(styleHeader1);
-			HSSFCell cellH0 = row0.createCell(7);
+			XSSFCell cellH0 = row0.createCell(7);
 			cellH0.setCellStyle(styleHeader1);
-			HSSFCell cellI0 = row0.createCell(8);
+			XSSFCell cellI0 = row0.createCell(8);
 			cellI0.setCellStyle(styleHeader1);
 			sectionNumber++;
-			cellA0.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments67") + "(" + sectionNumber + "/" + workList1.getLength() + ")"));
+			cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments67") + "(" + sectionNumber + "/" + workList1.getLength() + ")"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			//
 			//Header Key Definition
 			currentRowNumber++;
-			HSSFRow row1 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA1 = row1.createCell(0);
+			XSSFRow row1 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA1 = row1.createCell(0);
 			cellA1.setCellStyle(styleHeader2);
-			HSSFCell cellB1 = row1.createCell(1);
+			XSSFCell cellB1 = row1.createCell(1);
 			cellB1.setCellStyle(styleHeader2);
-			cellA1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments61")));
+			cellA1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments61")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
-			HSSFCell cellC1 = row1.createCell(2);
+			XSSFCell cellC1 = row1.createCell(2);
 			cellC1.setCellStyle(styleHeader2);
-			HSSFCell cellD1 = row1.createCell(3);
+			XSSFCell cellD1 = row1.createCell(3);
 			cellD1.setCellStyle(styleHeader2);
-			HSSFCell cellE1 = row1.createCell(4);
+			XSSFCell cellE1 = row1.createCell(4);
 			cellE1.setCellStyle(styleHeader2);
-			HSSFCell cellF1 = row1.createCell(5);
+			XSSFCell cellF1 = row1.createCell(5);
 			cellF1.setCellStyle(styleHeader2);
-			HSSFCell cellG1 = row1.createCell(6);
+			XSSFCell cellG1 = row1.createCell(6);
 			cellG1.setCellStyle(styleHeader2);
-			HSSFCell cellH1 = row1.createCell(7);
+			XSSFCell cellH1 = row1.createCell(7);
 			cellH1.setCellStyle(styleHeader2);
-			HSSFCell cellI1 = row1.createCell(8);
+			XSSFCell cellI1 = row1.createCell(8);
 			cellI1.setCellStyle(styleHeader2);
-			cellC1.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments62")));
+			cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
 			//
 			currentRowNumber++;
-			HSSFRow next2 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA2 = next2.createCell(0);
+			XSSFRow next2 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA2 = next2.createCell(0);
 			cellA2.setCellStyle(styleValue);
-			HSSFCell cellB2 = next2.createCell(1);
+			XSSFCell cellB2 = next2.createCell(1);
 			cellB2.setCellStyle(styleValue);
 			if (workElement1.getAttribute("Type").equals("PK")) {
 				workString = res.getString("DialogDocuments63");
@@ -2803,21 +2809,21 @@ public class DialogDocuments extends JDialog {
 			if (workElement1.getAttribute("Type").equals("SK")) {
 				workString = res.getString("DialogDocuments65");
 			}
-			cellA2.setCellValue(new HSSFRichTextString(workString));
+			cellA2.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
-			HSSFCell cellC2 = next2.createCell(2);
+			XSSFCell cellC2 = next2.createCell(2);
 			cellC2.setCellStyle(styleValue);
-			HSSFCell cellD2 = next2.createCell(3);
+			XSSFCell cellD2 = next2.createCell(3);
 			cellD2.setCellStyle(styleValue);
-			HSSFCell cellE2 = next2.createCell(4);
+			XSSFCell cellE2 = next2.createCell(4);
 			cellE2.setCellStyle(styleValue);
-			HSSFCell cellF2 = next2.createCell(5);
+			XSSFCell cellF2 = next2.createCell(5);
 			cellF2.setCellStyle(styleValue);
-			HSSFCell cellG2 = next2.createCell(6);
+			XSSFCell cellG2 = next2.createCell(6);
 			cellG2.setCellStyle(styleValue);
-			HSSFCell cellH2 = next2.createCell(7);
+			XSSFCell cellH2 = next2.createCell(7);
 			cellH2.setCellStyle(styleValue);
-			HSSFCell cellI2 = next2.createCell(8);
+			XSSFCell cellI2 = next2.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			workString = "";
 			countOfElementArray1 = -1;
@@ -2847,35 +2853,35 @@ public class DialogDocuments extends JDialog {
 			if (workString.equals("")) {
 				workString = "*None";
 			}
-			cellC2.setCellValue(new HSSFRichTextString(workString));
+			cellC2.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
 			//
 			//Header RelationshipList
 			currentRowNumber++;
-			HSSFRow row3 = sheet.createRow(currentRowNumber);
-			HSSFCell cellA3 = row3.createCell(0);
+			XSSFRow row3 = sheet.createRow(currentRowNumber);
+			XSSFCell cellA3 = row3.createCell(0);
 			cellA3.setCellStyle(styleHeader2Number);
-			cellA3.setCellValue(new HSSFRichTextString("No."));
-			HSSFCell cellB3 = row3.createCell(1);
+			cellA3.setCellValue(new XSSFRichTextString("No."));
+			XSSFCell cellB3 = row3.createCell(1);
 			cellB3.setCellStyle(styleHeader2);
-			cellB3.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments68")));
-			HSSFCell cellC3 = row3.createCell(2);
+			cellB3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments68")));
+			XSSFCell cellC3 = row3.createCell(2);
 			cellC3.setCellStyle(styleHeader2);
-			HSSFCell cellD3 = row3.createCell(3);
+			XSSFCell cellD3 = row3.createCell(3);
 			cellD3.setCellStyle(styleHeader2);
-			HSSFCell cellE3 = row3.createCell(4);
+			XSSFCell cellE3 = row3.createCell(4);
 			cellE3.setCellStyle(styleHeader2);
-			cellC3.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments69")));
+			cellC3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments69")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
-			HSSFCell cellF3 = row3.createCell(5);
+			XSSFCell cellF3 = row3.createCell(5);
 			cellF3.setCellStyle(styleHeader2);
-			HSSFCell cellG3 = row3.createCell(6);
+			XSSFCell cellG3 = row3.createCell(6);
 			cellG3.setCellStyle(styleHeader2);
-			HSSFCell cellH3 = row3.createCell(7);
+			XSSFCell cellH3 = row3.createCell(7);
 			cellH3.setCellStyle(styleHeader2);
-			HSSFCell cellI3 = row3.createCell(8);
+			XSSFCell cellI3 = row3.createCell(8);
 			cellI3.setCellStyle(styleHeader2);
-			cellF3.setCellValue(new HSSFRichTextString(res.getString("DialogDocuments70")));
+			cellF3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments70")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 			//
 			for (int j = 0; j < relationshipList.getLength(); j++) {
@@ -2883,12 +2889,12 @@ public class DialogDocuments extends JDialog {
 				if ((workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID"))))
 						|| (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) ) {
 					currentRowNumber++;
-					HSSFRow nextRow = sheet.createRow(currentRowNumber);
-					HSSFCell cellA = nextRow.createCell(0);
+					XSSFRow nextRow = sheet.createRow(currentRowNumber);
+					XSSFCell cellA = nextRow.createCell(0);
 					cellA.setCellStyle(styleValueNumber);
 					rowSequence++;
 					cellA.setCellValue(rowSequence);
-					HSSFCell cellB = nextRow.createCell(1);
+					XSSFCell cellB = nextRow.createCell(1);
 					cellB.setCellStyle(styleValue);
 					workString = "";
 					if (workElement2.getAttribute("Type").equals("FAMILY")) {
@@ -2900,12 +2906,12 @@ public class DialogDocuments extends JDialog {
 					if (workElement2.getAttribute("Type").equals("SUBTYPE")) {
 						workString = res.getString("DialogDocuments73");
 					}
-					cellB.setCellValue(new HSSFRichTextString(workString));
-					HSSFCell cellC = nextRow.createCell(2);
+					cellB.setCellValue(new XSSFRichTextString(workString));
+					XSSFCell cellC = nextRow.createCell(2);
 					cellC.setCellStyle(styleValue);
-					HSSFCell cellD = nextRow.createCell(3);
+					XSSFCell cellD = nextRow.createCell(3);
 					cellD.setCellStyle(styleValue);
-					HSSFCell cellE = nextRow.createCell(4);
+					XSSFCell cellE = nextRow.createCell(4);
 					cellE.setCellStyle(styleValue);
 					workString = "";
 					for (int m = 0; m < tableList.getLength(); m++) {
@@ -2925,15 +2931,15 @@ public class DialogDocuments extends JDialog {
 							}
 						}
 					}
-					cellC.setCellValue(new HSSFRichTextString(workString));
+					cellC.setCellValue(new XSSFRichTextString(workString));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
-					HSSFCell cellF = nextRow.createCell(5);
+					XSSFCell cellF = nextRow.createCell(5);
 					cellF.setCellStyle(styleValue);
-					HSSFCell cellG = nextRow.createCell(6);
+					XSSFCell cellG = nextRow.createCell(6);
 					cellG.setCellStyle(styleValue);
-					HSSFCell cellH = nextRow.createCell(7);
+					XSSFCell cellH = nextRow.createCell(7);
 					cellH.setCellStyle(styleValue);
-					HSSFCell cellI = nextRow.createCell(8);
+					XSSFCell cellI = nextRow.createCell(8);
 					cellI.setCellStyle(styleValue);
 					workString = "";
 					if (workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID")))) {
@@ -2975,32 +2981,32 @@ public class DialogDocuments extends JDialog {
 							break;
 						}
 					}
-					cellF.setCellValue(new HSSFRichTextString(workString));
+					cellF.setCellValue(new XSSFRichTextString(workString));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 				}
 			}
 			if (rowSequence == 0) {
 				currentRowNumber++;
-				HSSFRow row4 = sheet.createRow(currentRowNumber);
-				HSSFCell cellA4 = row4.createCell(0);
+				XSSFRow row4 = sheet.createRow(currentRowNumber);
+				XSSFCell cellA4 = row4.createCell(0);
 				cellA4.setCellStyle(styleValueNumber);
-				HSSFCell cellB4 = row4.createCell(1);
+				XSSFCell cellB4 = row4.createCell(1);
 				cellB4.setCellStyle(styleValue);
-				HSSFCell cellC4 = row4.createCell(2);
+				XSSFCell cellC4 = row4.createCell(2);
 				cellC4.setCellStyle(styleValue);
-				cellC4.setCellValue(new HSSFRichTextString("(None)"));
-				HSSFCell cellD4 = row4.createCell(3);
+				cellC4.setCellValue(new XSSFRichTextString("(None)"));
+				XSSFCell cellD4 = row4.createCell(3);
 				cellD4.setCellStyle(styleValue);
-				HSSFCell cellE4 = row4.createCell(4);
+				XSSFCell cellE4 = row4.createCell(4);
 				cellE4.setCellStyle(styleValue);
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
-				HSSFCell cellF4 = row4.createCell(5);
+				XSSFCell cellF4 = row4.createCell(5);
 				cellF4.setCellStyle(styleValue);
-				HSSFCell cellG4 = row4.createCell(6);
+				XSSFCell cellG4 = row4.createCell(6);
 				cellG4.setCellStyle(styleValue);
-				HSSFCell cellH4 = row4.createCell(7);
+				XSSFCell cellH4 = row4.createCell(7);
 				cellH4.setCellStyle(styleValue);
-				HSSFCell cellI4 = row4.createCell(8);
+				XSSFCell cellI4 = row4.createCell(8);
 				cellI4.setCellStyle(styleValue);
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 			}

@@ -499,7 +499,7 @@ public class Modeler extends JFrame {
 	private JPanel jPanelSystemTermsList2 = new JPanel();
 	private JPanel jPanelSystemTermsList3 = new JPanel();
 	private JLabel jLabelSystemTermsHeadder = new JLabel();
-	private JTextField jTextFieldSystemTermsHeadder = new JTextField();
+	private KanjiTextField jTextFieldSystemTermsHeadder = new KanjiTextField();
 	private JLabel jLabelSystemTermsSortKey = new JLabel();
 	private JTextField jTextFieldSystemTermsSortKey = new JTextField();
 	private JLabel jLabelSystemTermsDescriptions = new JLabel();
@@ -13756,7 +13756,98 @@ public class Modeler extends JFrame {
 
 			//1:TOP 2:BOTTOM//
 			if (terminalIndex1 >= 23 && terminalIndex2 <= 17) {
-				line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
+					//1:left-above 2:right-below//
+					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
+						line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+					}
+					//1:right-above 2:left-below//
+					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
+						line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+					}
+					//1:left-below 2:right-above//
+					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
+						if (terminal2Optional && !terminal1Optional) {
+							arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+							arc2D_y = lineTerminalPoint1.y - 25;
+							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint1.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y - 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && !terminal2Optional) {
+							arc2D_x = lineTerminalPoint1.x;
+							arc2D_y = lineTerminalPoint2.y + 5;
+							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y + 15;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y + 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && terminal2Optional) {
+							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+						}
+					}
+					//1:right-below 2:left-above//
+					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
+						if (terminal2Optional && !terminal1Optional) {
+							arc2D_x = lineTerminalPoint2.x;
+							arc2D_y = lineTerminalPoint1.y - 25;
+							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint1.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y - 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && !terminal2Optional) {
+							arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+							arc2D_y = lineTerminalPoint2.y + 5;
+							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x + (lineTerminalPoint1.x - lineTerminalPoint2.x);
+							line2D_1y = lineTerminalPoint2.y + 15;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y + 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && terminal2Optional) {
+							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+						}
+					}
+				} else {
+					line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+				}
 			}
 
 			//1:LEFT 2:TOP//
@@ -13887,7 +13978,98 @@ public class Modeler extends JFrame {
 
 			//1:BOTTOM 2:TOP//
 			if (terminalIndex1 <= 17 && terminalIndex2 >= 23) {
-				line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
+					//1:left-above 2:right-below//
+					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
+						if (terminal2Optional && !terminal1Optional) {
+							arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+							arc2D_y = lineTerminalPoint1.y + 5;
+							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y + 15;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y + 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && !terminal2Optional) {
+							arc2D_x = lineTerminalPoint1.x;
+							arc2D_y = lineTerminalPoint2.y - 25;
+							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint2.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y - 5;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && terminal2Optional) {
+							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+						}
+					}
+					//1:right-above 2:left-below//
+					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
+						if (terminal2Optional && !terminal1Optional) {
+							arc2D_x = lineTerminalPoint2.x;
+							arc2D_y = lineTerminalPoint1.y + 5;
+							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y + 15;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y + 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && !terminal2Optional) {
+							arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+							arc2D_y = lineTerminalPoint2.y - 25;
+							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint2.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y - 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (terminal1Optional && terminal2Optional) {
+							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+						}
+					}
+					//1:left-below 2:right-above//
+					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
+						line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+					}
+					//1:right-below 2:left-above//
+					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
+						line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+					}
+				} else {
+					line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
+				}
 			}
 
 			//1:BOTTOM 2:LEFT//
@@ -24154,6 +24336,7 @@ public class Modeler extends JFrame {
 		int indexOfRedoMax = -1;
 		int indexOfLastUndo = -1;
 		boolean undoRedoActionBeingExecuted = false;
+		StringBuffer stringBufferForAmendment = new StringBuffer();
 
 		void addLogOfAdd(XeadTreeNode node) {
 			if (node.isUndoable() && !undoRedoActionBeingExecuted) {
@@ -24277,6 +24460,7 @@ public class Modeler extends JFrame {
 		}
 
 		void resetLog() {
+			stringBufferForAmendment.append(getText());
 			indexOfLastUndo = -1;
 			indexOfLastElement = 0;
 			jMenuItemEditUndo.setEnabled(false);
@@ -24286,6 +24470,7 @@ public class Modeler extends JFrame {
 		String getText() {
 			ArrayList<String> logList = new ArrayList<String>();
 			StringBuffer bf;
+
 			for (int i = 0; i < indexOfLastElement; i++) {
 				bf = new StringBuffer();
 				bf.append(res.getString("S3319"));
@@ -24310,6 +24495,9 @@ public class Modeler extends JFrame {
 						bf.append(res.getString("S242"));
 					}
 					if (selectedIndex == 6) {
+						bf.append(res.getString("S245"));
+					}
+					if (selectedIndex == 7) {
 						bf.append(res.getString("S252"));
 					}
 				} else {
@@ -24332,7 +24520,9 @@ public class Modeler extends JFrame {
 					logList.add(bf.toString());
 				}
 			}
+
 			bf = new StringBuffer();
+			bf.append(stringBufferForAmendment.toString());
 			for (int i = 0; i < logList.size(); i++) {
 				bf.append(logList.get(i));
 			}

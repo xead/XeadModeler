@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2012 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -32,25 +32,13 @@ package xeadModeler;
  */
 
 import java.awt.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
 import java.awt.event.*;
-
-import org.w3c.dom.*;
-
 import java.io.*;
 import java.util.*;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.util.HSSFColor;
+import javax.swing.*;
+import javax.swing.event.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.w3c.dom.*;
 
 public class DialogMatrixList extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -89,18 +77,18 @@ public class DialogMatrixList extends JDialog {
 	private ArrayList<String> keyList = new ArrayList<String>();
 	private HashMap<String, String> hashKeyList = new HashMap<String, String>();
 
-	private HSSFFont fontTitle = null;
-	private HSSFFont fontHeader1 = null;
-	private HSSFFont fontHeader2 = null;
-	private HSSFFont fontValue = null;
-	private HSSFWorkbook workBook = null;
-	private HSSFCellStyle styleTitle = null;
-	private HSSFCellStyle styleHeaderRotated = null;
-	private HSSFCellStyle styleHeaderNormal = null;
-	private HSSFCellStyle styleHeaderNumber = null;
-	private HSSFCellStyle styleValue = null;
-	private HSSFCellStyle styleValueNumber = null;
-	private HSSFCellStyle styleCheck = null;
+	private XSSFFont fontTitle = null;
+	private XSSFFont fontHeader1 = null;
+	private XSSFFont fontHeader2 = null;
+	private XSSFFont fontValue = null;
+	private XSSFWorkbook workBook = null;
+	private XSSFCellStyle styleTitle = null;
+	private XSSFCellStyle styleHeaderRotated = null;
+	private XSSFCellStyle styleHeaderNormal = null;
+	private XSSFCellStyle styleHeaderNumber = null;
+	private XSSFCellStyle styleValue = null;
+	private XSSFCellStyle styleValueNumber = null;
+	private XSSFCellStyle styleCheck = null;
 
 	public DialogMatrixList(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
@@ -216,7 +204,7 @@ public class DialogMatrixList extends JDialog {
 			countOfErrors = 0;
 
 			File file = new File(fileName_);
-			xlsFileName = file.getParent() + File.separator + "MatrixList" + getStringValueOfDateAndTime() + ".xls";
+			xlsFileName = file.getParent() + File.separator + "MatrixList" + getStringValueOfDateAndTime() + ".xlsx";
 
 			if (jCheckBoxSubjectAreaAndTask.isSelected()) {
 				countOfDefinitions = countOfDefinitions + taskList.getLength();
@@ -289,7 +277,7 @@ public class DialogMatrixList extends JDialog {
 			currentRowNumber = 0;
 			countOfErrors = 0;
 
-			HSSFSheet sheet = workBook.createSheet(res.getString("S75"));
+			XSSFSheet sheet = workBook.createSheet(res.getString("S75"));
 			sheet.setDefaultRowHeight((short)300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
@@ -297,19 +285,20 @@ public class DialogMatrixList extends JDialog {
 			sheet.setColumnWidth(2, 6000); // Role //
 			sheet.setColumnWidth(3, 8000); // Task //
 
-			HSSFRow topRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellSequence = topRow.createCell(0);
+			XSSFRow topRow = sheet.createRow(currentRowNumber);
+			topRow.setHeight((short)2500);
+			XSSFCell cellSequence = topRow.createCell(0);
 			cellSequence.setCellStyle(styleHeaderNumber);
-			cellSequence.setCellValue(new HSSFRichTextString("No"));
-			HSSFCell cellTaskType = topRow.createCell(1);
+			cellSequence.setCellValue(new XSSFRichTextString("No"));
+			XSSFCell cellTaskType = topRow.createCell(1);
 			cellTaskType.setCellStyle(styleHeaderNormal);
-			cellTaskType.setCellValue(new HSSFRichTextString(res.getString("S362")));
-			HSSFCell cellRoleName = topRow.createCell(2);
+			cellTaskType.setCellValue(new XSSFRichTextString(res.getString("S362")));
+			XSSFCell cellRoleName = topRow.createCell(2);
 			cellRoleName.setCellStyle(styleHeaderNormal);
-			cellRoleName.setCellValue(new HSSFRichTextString(res.getString("S348")));
-			HSSFCell cellTaskName = topRow.createCell(3);
+			cellRoleName.setCellValue(new XSSFRichTextString(res.getString("S348")));
+			XSSFCell cellTaskName = topRow.createCell(3);
 			cellTaskName.setCellStyle(styleHeaderNormal);
-			cellTaskName.setCellValue(new HSSFRichTextString(res.getString("S360")));
+			cellTaskName.setCellValue(new XSSFRichTextString(res.getString("S360")));
 
 			setupSubjectAreaColumnsForTask(sheet, topRow);
 			setupTaskRowsForSubjectAreas(sheet);
@@ -324,7 +313,7 @@ public class DialogMatrixList extends JDialog {
 			currentRowNumber = 0;
 			countOfErrors = 0;
 
-			HSSFSheet sheet = workBook.createSheet(res.getString("S76"));
+			XSSFSheet sheet = workBook.createSheet(res.getString("S76"));
 			sheet.setDefaultRowHeight((short)300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
@@ -332,19 +321,20 @@ public class DialogMatrixList extends JDialog {
 			sheet.setColumnWidth(2, 12000); // Function //
 			sheet.setColumnWidth(3, 6000); // Function Type //
 
-			HSSFRow topRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellSequence = topRow.createCell(0);
+			XSSFRow topRow = sheet.createRow(currentRowNumber);
+			topRow.setHeight((short)2500);
+			XSSFCell cellSequence = topRow.createCell(0);
 			cellSequence.setCellStyle(styleHeaderNumber);
-			cellSequence.setCellValue(new HSSFRichTextString("No"));
-			HSSFCell cellTaskType = topRow.createCell(1);
+			cellSequence.setCellValue(new XSSFRichTextString("No"));
+			XSSFCell cellTaskType = topRow.createCell(1);
 			cellTaskType.setCellStyle(styleHeaderNormal);
-			cellTaskType.setCellValue(new HSSFRichTextString(res.getString("S413")));
-			HSSFCell cellRoleName = topRow.createCell(2);
+			cellTaskType.setCellValue(new XSSFRichTextString(res.getString("S413")));
+			XSSFCell cellRoleName = topRow.createCell(2);
 			cellRoleName.setCellStyle(styleHeaderNormal);
-			cellRoleName.setCellValue(new HSSFRichTextString(res.getString("S415")));
-			HSSFCell cellTaskName = topRow.createCell(3);
+			cellRoleName.setCellValue(new XSSFRichTextString(res.getString("S415")));
+			XSSFCell cellTaskName = topRow.createCell(3);
 			cellTaskName.setCellStyle(styleHeaderNormal);
-			cellTaskName.setCellValue(new HSSFRichTextString(res.getString("S417")));
+			cellTaskName.setCellValue(new XSSFRichTextString(res.getString("S417")));
 
 			setupSubjectAreaColumnsForFunction(sheet, topRow);
 			setupFunctionRowsForSubjectAreas(sheet);
@@ -359,7 +349,7 @@ public class DialogMatrixList extends JDialog {
 			currentRowNumber = 0;
 			countOfErrors = 0;
 
-			HSSFSheet sheet = workBook.createSheet(res.getString("S77"));
+			XSSFSheet sheet = workBook.createSheet(res.getString("S77"));
 			sheet.setDefaultRowHeight((short)300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
@@ -367,19 +357,20 @@ public class DialogMatrixList extends JDialog {
 			sheet.setColumnWidth(2, 12000); // Function //
 			sheet.setColumnWidth(3, 6000); // Function Type //
 
-			HSSFRow topRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellSequence = topRow.createCell(0);
+			XSSFRow topRow = sheet.createRow(currentRowNumber);
+			topRow.setHeight((short)2500);
+			XSSFCell cellSequence = topRow.createCell(0);
 			cellSequence.setCellStyle(styleHeaderNumber);
-			cellSequence.setCellValue(new HSSFRichTextString("No"));
-			HSSFCell cellTaskType = topRow.createCell(1);
+			cellSequence.setCellValue(new XSSFRichTextString("No"));
+			XSSFCell cellTaskType = topRow.createCell(1);
 			cellTaskType.setCellStyle(styleHeaderNormal);
-			cellTaskType.setCellValue(new HSSFRichTextString(res.getString("S413")));
-			HSSFCell cellRoleName = topRow.createCell(2);
+			cellTaskType.setCellValue(new XSSFRichTextString(res.getString("S413")));
+			XSSFCell cellRoleName = topRow.createCell(2);
 			cellRoleName.setCellStyle(styleHeaderNormal);
-			cellRoleName.setCellValue(new HSSFRichTextString(res.getString("S415")));
-			HSSFCell cellTaskName = topRow.createCell(3);
+			cellRoleName.setCellValue(new XSSFRichTextString(res.getString("S415")));
+			XSSFCell cellTaskName = topRow.createCell(3);
 			cellTaskName.setCellStyle(styleHeaderNormal);
-			cellTaskName.setCellValue(new HSSFRichTextString(res.getString("S417")));
+			cellTaskName.setCellValue(new XSSFRichTextString(res.getString("S417")));
 
 			setupTaskColumnsForFunction(sheet, topRow);
 			setupFunctionRowsForTasks(sheet);
@@ -394,7 +385,7 @@ public class DialogMatrixList extends JDialog {
 			currentRowNumber = 0;
 			countOfErrors = 0;
 
-			HSSFSheet sheet = workBook.createSheet(res.getString("S78"));
+			XSSFSheet sheet = workBook.createSheet(res.getString("S78"));
 			sheet.setDefaultRowHeight((short)300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
@@ -402,19 +393,20 @@ public class DialogMatrixList extends JDialog {
 			sheet.setColumnWidth(2, 8000); // Table //
 			sheet.setColumnWidth(3, 4500); // Table Type //
 
-			HSSFRow topRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellSequence = topRow.createCell(0);
+			XSSFRow topRow = sheet.createRow(currentRowNumber);
+			topRow.setHeight((short)2500);
+			XSSFCell cellSequence = topRow.createCell(0);
 			cellSequence.setCellStyle(styleHeaderNumber);
-			cellSequence.setCellValue(new HSSFRichTextString("No"));
-			HSSFCell cellTaskType = topRow.createCell(1);
+			cellSequence.setCellValue(new XSSFRichTextString("No"));
+			XSSFCell cellTaskType = topRow.createCell(1);
 			cellTaskType.setCellStyle(styleHeaderNormal);
-			cellTaskType.setCellValue(new HSSFRichTextString(res.getString("S413")));
-			HSSFCell cellRoleName = topRow.createCell(2);
+			cellTaskType.setCellValue(new XSSFRichTextString(res.getString("S413")));
+			XSSFCell cellRoleName = topRow.createCell(2);
 			cellRoleName.setCellStyle(styleHeaderNormal);
-			cellRoleName.setCellValue(new HSSFRichTextString(res.getString("S471")));
-			HSSFCell cellTaskName = topRow.createCell(3);
+			cellRoleName.setCellValue(new XSSFRichTextString(res.getString("S471")));
+			XSSFCell cellTaskName = topRow.createCell(3);
 			cellTaskName.setCellStyle(styleHeaderNormal);
-			cellTaskName.setCellValue(new HSSFRichTextString(res.getString("S477")));
+			cellTaskName.setCellValue(new XSSFRichTextString(res.getString("S477")));
 
 			setupTaskColumnsForTable(sheet, topRow);
 			setupTableRowsForTask(sheet);
@@ -429,7 +421,7 @@ public class DialogMatrixList extends JDialog {
 			currentRowNumber = 0;
 			countOfErrors = 0;
 
-			HSSFSheet sheet = workBook.createSheet(res.getString("S79"));
+			XSSFSheet sheet = workBook.createSheet(res.getString("S79"));
 			sheet.setDefaultRowHeight((short)300);
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
@@ -437,19 +429,20 @@ public class DialogMatrixList extends JDialog {
 			sheet.setColumnWidth(2, 12000); // Function //
 			sheet.setColumnWidth(3, 6000); // Function Type //
 
-			HSSFRow topRow = sheet.createRow(currentRowNumber);
-			HSSFCell cellSequence = topRow.createCell(0);
+			XSSFRow topRow = sheet.createRow(currentRowNumber);
+			topRow.setHeight((short)2500);
+			XSSFCell cellSequence = topRow.createCell(0);
 			cellSequence.setCellStyle(styleHeaderNumber);
-			cellSequence.setCellValue(new HSSFRichTextString("No"));
-			HSSFCell cellTaskType = topRow.createCell(1);
+			cellSequence.setCellValue(new XSSFRichTextString("No"));
+			XSSFCell cellTaskType = topRow.createCell(1);
 			cellTaskType.setCellStyle(styleHeaderNormal);
-			cellTaskType.setCellValue(new HSSFRichTextString(res.getString("S413")));
-			HSSFCell cellRoleName = topRow.createCell(2);
+			cellTaskType.setCellValue(new XSSFRichTextString(res.getString("S413")));
+			XSSFCell cellRoleName = topRow.createCell(2);
 			cellRoleName.setCellStyle(styleHeaderNormal);
-			cellRoleName.setCellValue(new HSSFRichTextString(res.getString("S415")));
-			HSSFCell cellTaskName = topRow.createCell(3);
+			cellRoleName.setCellValue(new XSSFRichTextString(res.getString("S415")));
+			XSSFCell cellTaskName = topRow.createCell(3);
 			cellTaskName.setCellStyle(styleHeaderNormal);
-			cellTaskName.setCellValue(new HSSFRichTextString(res.getString("S417")));
+			cellTaskName.setCellValue(new XSSFRichTextString(res.getString("S417")));
 
 			setupTableColumnsForFunction(sheet, topRow);
 			setupFunctionRowsForTable(sheet);
@@ -459,7 +452,7 @@ public class DialogMatrixList extends JDialog {
 		}
 	}
 
-	void setupSubjectAreaColumnsForTask(HSSFSheet sheet, HSSFRow topRow) {
+	void setupSubjectAreaColumnsForTask(XSSFSheet sheet, XSSFRow topRow) {
 		org.w3c.dom.Element workElement1 = null;
 		String workString = "";
 
@@ -470,20 +463,20 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
 			workElement1 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(i);
-			HSSFCell cell = topRow.createCell(i+4);
+			XSSFCell cell = topRow.createCell(i+4);
 			cell.setCellStyle(styleHeaderRotated);
 			workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-			cell.setCellValue(new HSSFRichTextString(workString));
+			cell.setCellValue(new XSSFRichTextString(workString));
 			sheet.setColumnWidth(i+4, 1000);
 		}
 		if (sortableDomElementListModel0.getSize() == 0) {
-			HSSFCell cell = topRow.createCell(3);
+			XSSFCell cell = topRow.createCell(3);
 			cell.setCellStyle(styleHeaderNormal);
-			cell.setCellValue(new HSSFRichTextString("N/A"));
+			cell.setCellValue(new XSSFRichTextString("N/A"));
 		}
 	}
 
-	void setupSubjectAreaColumnsForFunction(HSSFSheet sheet, HSSFRow topRow) {
+	void setupSubjectAreaColumnsForFunction(XSSFSheet sheet, XSSFRow topRow) {
 		org.w3c.dom.Element workElement1, workElement2, workElement3, workElement4;
 		String workString = "";
 		NodeList nodeList1, nodeList2;
@@ -496,10 +489,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
 			workElement1 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(i);
-			HSSFCell cell = topRow.createCell(i+4);
+			XSSFCell cell = topRow.createCell(i+4);
 			cell.setCellStyle(styleHeaderRotated);
 			workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-			cell.setCellValue(new HSSFRichTextString(workString));
+			cell.setCellValue(new XSSFRichTextString(workString));
 			sheet.setColumnWidth(i+4, 1000);
 			
 			nodeList1 = workElement1.getElementsByTagName("DataflowNode");
@@ -527,13 +520,13 @@ public class DialogMatrixList extends JDialog {
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 		}
 		if (sortableDomElementListModel0.getSize() == 0) {
-			HSSFCell cell = topRow.createCell(3);
+			XSSFCell cell = topRow.createCell(3);
 			cell.setCellStyle(styleHeaderNormal);
-			cell.setCellValue(new HSSFRichTextString("N/A"));
+			cell.setCellValue(new XSSFRichTextString("N/A"));
 		}
 	}
 
-	void setupTaskColumnsForFunction(HSSFSheet sheet, HSSFRow topRow) {
+	void setupTaskColumnsForFunction(XSSFSheet sheet, XSSFRow topRow) {
 		org.w3c.dom.Element workElement1, workElement2;
 		String workString = "";
 		NodeList nodeList1;
@@ -546,10 +539,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
 			workElement1 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(i);
-			HSSFCell cell = topRow.createCell(i+4);
+			XSSFCell cell = topRow.createCell(i+4);
 			cell.setCellStyle(styleHeaderRotated);
 			workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-			cell.setCellValue(new HSSFRichTextString(workString));
+			cell.setCellValue(new XSSFRichTextString(workString));
 			sheet.setColumnWidth(i+4, 1000);
 			
 			nodeList1 = workElement1.getElementsByTagName("TaskFunctionIO");
@@ -565,13 +558,13 @@ public class DialogMatrixList extends JDialog {
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 		}
 		if (sortableDomElementListModel0.getSize() == 0) {
-			HSSFCell cell = topRow.createCell(3);
+			XSSFCell cell = topRow.createCell(3);
 			cell.setCellStyle(styleHeaderNormal);
-			cell.setCellValue(new HSSFRichTextString("N/A"));
+			cell.setCellValue(new XSSFRichTextString("N/A"));
 		}
 	}
 
-	void setupTaskColumnsForTable(HSSFSheet sheet, HSSFRow topRow) {
+	void setupTaskColumnsForTable(XSSFSheet sheet, XSSFRow topRow) {
 		org.w3c.dom.Element workElement1, workElement2, workElement3, workElement4;
 		String workString = "";
 		String crudMark = "";
@@ -585,10 +578,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
 			workElement1 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(i);
-			HSSFCell cell = topRow.createCell(i+4);
+			XSSFCell cell = topRow.createCell(i+4);
 			cell.setCellStyle(styleHeaderRotated);
 			workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-			cell.setCellValue(new HSSFRichTextString(workString));
+			cell.setCellValue(new XSSFRichTextString(workString));
 			sheet.setColumnWidth(i+4, 1400);
 			
 			nodeList1 = workElement1.getElementsByTagName("TaskFunctionIO");
@@ -628,13 +621,13 @@ public class DialogMatrixList extends JDialog {
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 		}
 		if (sortableDomElementListModel0.getSize() == 0) {
-			HSSFCell cell = topRow.createCell(3);
+			XSSFCell cell = topRow.createCell(3);
 			cell.setCellStyle(styleHeaderNormal);
-			cell.setCellValue(new HSSFRichTextString("N/A"));
+			cell.setCellValue(new XSSFRichTextString("N/A"));
 		}
 	}
 
-	void setupTableColumnsForFunction(HSSFSheet sheet, HSSFRow topRow) {
+	void setupTableColumnsForFunction(XSSFSheet sheet, XSSFRow topRow) {
 		org.w3c.dom.Element workElement1;
 		String workString = "";
 
@@ -647,23 +640,23 @@ public class DialogMatrixList extends JDialog {
 		
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
 			workElement1 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(i);
-			HSSFCell cell = topRow.createCell(i+4);
+			XSSFCell cell = topRow.createCell(i+4);
 			cell.setCellStyle(styleHeaderRotated);
 			workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-			cell.setCellValue(new HSSFRichTextString(workString));
+			cell.setCellValue(new XSSFRichTextString(workString));
 			sheet.setColumnWidth(i+4, 1400);
 
 			jProgressBar.setValue(jProgressBar.getValue() + 1);
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 		}
 		if (sortableDomElementListModel0.getSize() == 0) {
-			HSSFCell cell = topRow.createCell(3);
+			XSSFCell cell = topRow.createCell(3);
 			cell.setCellStyle(styleHeaderNormal);
-			cell.setCellValue(new HSSFRichTextString("N/A"));
+			cell.setCellValue(new XSSFRichTextString("N/A"));
 		}
 	}
 
-	void setupTaskRowsForSubjectAreas(HSSFSheet sheet) {
+	void setupTaskRowsForSubjectAreas(XSSFSheet sheet) {
 		org.w3c.dom.Element workElement0, workElement1, workElement2, workElement3, workElement4;
 		String workString = "";
 		NodeList nodeList;
@@ -696,25 +689,25 @@ public class DialogMatrixList extends JDialog {
 								&& workElement3.getAttribute("TaskTypeID").equals(workElement1.getAttribute("ID"))) {
 
 							currentRowNumber++;
-							HSSFRow row = sheet.createRow(currentRowNumber);
-							HSSFCell cellSequence = row.createCell(0);
+							XSSFRow row = sheet.createRow(currentRowNumber);
+							XSSFCell cellSequence = row.createCell(0);
 							cellSequence.setCellStyle(styleValueNumber);
 							cellSequence.setCellValue(currentRowNumber);
 
-							HSSFCell cellTaskType = row.createCell(1);
+							XSSFCell cellTaskType = row.createCell(1);
 							cellTaskType.setCellStyle(styleValue);
 							workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-							cellTaskType.setCellValue(new HSSFRichTextString(workString));
+							cellTaskType.setCellValue(new XSSFRichTextString(workString));
 
-							HSSFCell cellRole = row.createCell(2);
+							XSSFCell cellRole = row.createCell(2);
 							cellRole.setCellStyle(styleValue);
 							workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
-							cellRole.setCellValue(new HSSFRichTextString(workString));
+							cellRole.setCellValue(new XSSFRichTextString(workString));
 
-							HSSFCell cellTask = row.createCell(3);
+							XSSFCell cellTask = row.createCell(3);
 							cellTask.setCellStyle(styleValue);
 							workString = workElement3.getAttribute("SortKey") + " " + workElement3.getAttribute("Name");
-							cellTask.setCellValue(new HSSFRichTextString(workString));
+							cellTask.setCellValue(new XSSFRichTextString(workString));
 
 							for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 								workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
@@ -727,10 +720,10 @@ public class DialogMatrixList extends JDialog {
 										break;
 									}
 								}
-								HSSFCell cellMatrix = row.createCell(m+4);
+								XSSFCell cellMatrix = row.createCell(m+4);
 								cellMatrix.setCellStyle(styleCheck);
 								if (hasThisTask) {
-									cellMatrix.setCellValue(new HSSFRichTextString(res.getString("S80")));
+									cellMatrix.setCellValue(new XSSFRichTextString(res.getString("S80")));
 								}
 							}
 							jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -746,24 +739,24 @@ public class DialogMatrixList extends JDialog {
 					workElement3 = (org.w3c.dom.Element)sortableDomElementListModel3.getElementAt(k);
 					if (workElement3.getAttribute("RoleID").equals(workElement2.getAttribute("ID"))) {
 						currentRowNumber++;
-						HSSFRow row = sheet.createRow(currentRowNumber);
-						HSSFCell cellSequence = row.createCell(0);
+						XSSFRow row = sheet.createRow(currentRowNumber);
+						XSSFCell cellSequence = row.createCell(0);
 						cellSequence.setCellStyle(styleValueNumber);
 						cellSequence.setCellValue(currentRowNumber);
 
-						HSSFCell cellTaskType = row.createCell(1);
+						XSSFCell cellTaskType = row.createCell(1);
 						cellTaskType.setCellStyle(styleValue);
-						cellTaskType.setCellValue(new HSSFRichTextString("N/A"));
+						cellTaskType.setCellValue(new XSSFRichTextString("N/A"));
 
-						HSSFCell cellRole = row.createCell(2);
+						XSSFCell cellRole = row.createCell(2);
 						cellRole.setCellStyle(styleValue);
 						workString = workElement2.getAttribute("SortKey") + " / " + workElement2.getAttribute("Name");
-						cellRole.setCellValue(new HSSFRichTextString(workString));
+						cellRole.setCellValue(new XSSFRichTextString(workString));
 
-						HSSFCell cellTask = row.createCell(3);
+						XSSFCell cellTask = row.createCell(3);
 						cellTask.setCellStyle(styleValue);
 						workString = workElement3.getAttribute("SortKey") + " / " + workElement3.getAttribute("Name");
-						cellTask.setCellValue(new HSSFRichTextString(workString));
+						cellTask.setCellValue(new XSSFRichTextString(workString));
 
 						for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 							workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
@@ -775,10 +768,10 @@ public class DialogMatrixList extends JDialog {
 									hasThisTask = true;
 								}
 							}
-							HSSFCell cellMatrix = row.createCell(m+4);
+							XSSFCell cellMatrix = row.createCell(m+4);
 							cellMatrix.setCellStyle(styleCheck);
 							if (hasThisTask) {
-								cellMatrix.setCellValue(new HSSFRichTextString(res.getString("S80")));
+								cellMatrix.setCellValue(new XSSFRichTextString(res.getString("S80")));
 							}
 						}
 						jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -789,7 +782,7 @@ public class DialogMatrixList extends JDialog {
 		}
 	}
 
-	void setupFunctionRowsForSubjectAreas(HSSFSheet sheet) {
+	void setupFunctionRowsForSubjectAreas(XSSFSheet sheet) {
 		org.w3c.dom.Element workElement0, workElement1, workElement2, workElement3;
 		String workString = "";
 
@@ -811,22 +804,22 @@ public class DialogMatrixList extends JDialog {
 				if (workElement2.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
 					
 					currentRowNumber++;
-					HSSFRow row = sheet.createRow(currentRowNumber);
-					HSSFCell cellSequence = row.createCell(0);
+					XSSFRow row = sheet.createRow(currentRowNumber);
+					XSSFCell cellSequence = row.createCell(0);
 					cellSequence.setCellStyle(styleValueNumber);
 					cellSequence.setCellValue(currentRowNumber);
 
-					HSSFCell cellTaskType = row.createCell(1);
+					XSSFCell cellTaskType = row.createCell(1);
 					cellTaskType.setCellStyle(styleValue);
 					workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-					cellTaskType.setCellValue(new HSSFRichTextString(workString));
+					cellTaskType.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellRole = row.createCell(2);
+					XSSFCell cellRole = row.createCell(2);
 					cellRole.setCellStyle(styleValue);
 					workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
-					cellRole.setCellValue(new HSSFRichTextString(workString));
+					cellRole.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellTask = row.createCell(3);
+					XSSFCell cellTask = row.createCell(3);
 					cellTask.setCellStyle(styleValue);
 					for (int k = 0; k < functionTypeList.getLength(); k++) {
 						workElement3 = (org.w3c.dom.Element)functionTypeList.item(k);
@@ -835,15 +828,15 @@ public class DialogMatrixList extends JDialog {
 							break;
 						}
 					}
-					cellTask.setCellValue(new HSSFRichTextString(workString));
+					cellTask.setCellValue(new XSSFRichTextString(workString));
 
 					for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 						workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
-						HSSFCell cellMatrix = row.createCell(m+4);
+						XSSFCell cellMatrix = row.createCell(m+4);
 						cellMatrix.setCellStyle(styleCheck);
 						workString = workElement0.getAttribute("ID") + "," + workElement2.getAttribute("ID");
 						if (keyList.contains(workString)) {
-							cellMatrix.setCellValue(new HSSFRichTextString(res.getString("S80")));
+							cellMatrix.setCellValue(new XSSFRichTextString(res.getString("S80")));
 						}
 					}
 
@@ -854,7 +847,7 @@ public class DialogMatrixList extends JDialog {
 		}
 	}
 
-	void setupFunctionRowsForTasks(HSSFSheet sheet) {
+	void setupFunctionRowsForTasks(XSSFSheet sheet) {
 		org.w3c.dom.Element workElement0, workElement1, workElement2, workElement3;
 		String workString = "";
 
@@ -876,22 +869,22 @@ public class DialogMatrixList extends JDialog {
 				if (workElement2.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
 					
 					currentRowNumber++;
-					HSSFRow row = sheet.createRow(currentRowNumber);
-					HSSFCell cellSequence = row.createCell(0);
+					XSSFRow row = sheet.createRow(currentRowNumber);
+					XSSFCell cellSequence = row.createCell(0);
 					cellSequence.setCellStyle(styleValueNumber);
 					cellSequence.setCellValue(currentRowNumber);
 
-					HSSFCell cellTaskType = row.createCell(1);
+					XSSFCell cellTaskType = row.createCell(1);
 					cellTaskType.setCellStyle(styleValue);
 					workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-					cellTaskType.setCellValue(new HSSFRichTextString(workString));
+					cellTaskType.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellRole = row.createCell(2);
+					XSSFCell cellRole = row.createCell(2);
 					cellRole.setCellStyle(styleValue);
 					workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
-					cellRole.setCellValue(new HSSFRichTextString(workString));
+					cellRole.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellTask = row.createCell(3);
+					XSSFCell cellTask = row.createCell(3);
 					cellTask.setCellStyle(styleValue);
 					for (int k = 0; k < functionTypeList.getLength(); k++) {
 						workElement3 = (org.w3c.dom.Element)functionTypeList.item(k);
@@ -900,15 +893,15 @@ public class DialogMatrixList extends JDialog {
 							break;
 						}
 					}
-					cellTask.setCellValue(new HSSFRichTextString(workString));
+					cellTask.setCellValue(new XSSFRichTextString(workString));
 
 					for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 						workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
-						HSSFCell cellMatrix = row.createCell(m+4);
+						XSSFCell cellMatrix = row.createCell(m+4);
 						cellMatrix.setCellStyle(styleCheck);
 						workString = workElement0.getAttribute("ID") + "," + workElement2.getAttribute("ID");
 						if (keyList.contains(workString)) {
-							cellMatrix.setCellValue(new HSSFRichTextString(res.getString("S80")));
+							cellMatrix.setCellValue(new XSSFRichTextString(res.getString("S80")));
 						}
 					}
 
@@ -919,7 +912,7 @@ public class DialogMatrixList extends JDialog {
 		}
 	}
 
-	void setupTableRowsForTask(HSSFSheet sheet) {
+	void setupTableRowsForTask(XSSFSheet sheet) {
 		org.w3c.dom.Element workElement0, workElement1, workElement2, workElement3;
 		String workString = "";
 		String crudMark = "";
@@ -943,22 +936,22 @@ public class DialogMatrixList extends JDialog {
 				if (workElement2.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
 					
 					currentRowNumber++;
-					HSSFRow row = sheet.createRow(currentRowNumber);
-					HSSFCell cellSequence = row.createCell(0);
+					XSSFRow row = sheet.createRow(currentRowNumber);
+					XSSFCell cellSequence = row.createCell(0);
 					cellSequence.setCellStyle(styleValueNumber);
 					cellSequence.setCellValue(currentRowNumber);
 
-					HSSFCell cellTaskType = row.createCell(1);
+					XSSFCell cellTaskType = row.createCell(1);
 					cellTaskType.setCellStyle(styleValue);
 					workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-					cellTaskType.setCellValue(new HSSFRichTextString(workString));
+					cellTaskType.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellRole = row.createCell(2);
+					XSSFCell cellRole = row.createCell(2);
 					cellRole.setCellStyle(styleValue);
 					workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
-					cellRole.setCellValue(new HSSFRichTextString(workString));
+					cellRole.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellTask = row.createCell(3);
+					XSSFCell cellTask = row.createCell(3);
 					cellTask.setCellStyle(styleValue);
 					for (int k = 0; k < tableTypeList.getLength(); k++) {
 						workElement3 = (org.w3c.dom.Element)tableTypeList.item(k);
@@ -967,11 +960,11 @@ public class DialogMatrixList extends JDialog {
 							break;
 						}
 					}
-					cellTask.setCellValue(new HSSFRichTextString(workString));
+					cellTask.setCellValue(new XSSFRichTextString(workString));
 
 					for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 						workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
-						HSSFCell cellMatrix = row.createCell(m+4);
+						XSSFCell cellMatrix = row.createCell(m+4);
 						cellMatrix.setCellStyle(styleCheck);
 						workString = workElement0.getAttribute("ID") + "," + workElement2.getAttribute("ID");
 						if (hashKeyList.containsKey(workString)) {
@@ -989,7 +982,7 @@ public class DialogMatrixList extends JDialog {
 							if (crudMark.contains("D")) {
 								crudCheck = crudCheck + "D";
 							}
-							cellMatrix.setCellValue(new HSSFRichTextString(crudCheck));
+							cellMatrix.setCellValue(new XSSFRichTextString(crudCheck));
 						}
 					}
 
@@ -1000,7 +993,7 @@ public class DialogMatrixList extends JDialog {
 		}
 	}
 
-	void setupFunctionRowsForTable(HSSFSheet sheet) {
+	void setupFunctionRowsForTable(XSSFSheet sheet) {
 		org.w3c.dom.Element workElement0, workElement1, workElement2, workElement3;
 		String workString = "";
 		String crudMark = "";
@@ -1025,22 +1018,22 @@ public class DialogMatrixList extends JDialog {
 				if (workElement2.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
 					
 					currentRowNumber++;
-					HSSFRow row = sheet.createRow(currentRowNumber);
-					HSSFCell cellSequence = row.createCell(0);
+					XSSFRow row = sheet.createRow(currentRowNumber);
+					XSSFCell cellSequence = row.createCell(0);
 					cellSequence.setCellStyle(styleValueNumber);
 					cellSequence.setCellValue(currentRowNumber);
 
-					HSSFCell cellTaskType = row.createCell(1);
+					XSSFCell cellTaskType = row.createCell(1);
 					cellTaskType.setCellStyle(styleValue);
 					workString = workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name");
-					cellTaskType.setCellValue(new HSSFRichTextString(workString));
+					cellTaskType.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellRole = row.createCell(2);
+					XSSFCell cellRole = row.createCell(2);
 					cellRole.setCellStyle(styleValue);
 					workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
-					cellRole.setCellValue(new HSSFRichTextString(workString));
+					cellRole.setCellValue(new XSSFRichTextString(workString));
 
-					HSSFCell cellTask = row.createCell(3);
+					XSSFCell cellTask = row.createCell(3);
 					cellTask.setCellStyle(styleValue);
 					for (int k = 0; k < functionTypeList.getLength(); k++) {
 						workElement3 = (org.w3c.dom.Element)functionTypeList.item(k);
@@ -1049,12 +1042,12 @@ public class DialogMatrixList extends JDialog {
 							break;
 						}
 					}
-					cellTask.setCellValue(new HSSFRichTextString(workString));
+					cellTask.setCellValue(new XSSFRichTextString(workString));
 
 					nodeList1 = workElement2.getElementsByTagName("IOTable");
 					for (int m = 0; m < sortableDomElementListModel0.getSize(); m++) {
 						workElement0 = (org.w3c.dom.Element)sortableDomElementListModel0.getElementAt(m);
-						HSSFCell cellMatrix = row.createCell(m+4);
+						XSSFCell cellMatrix = row.createCell(m+4);
 						cellMatrix.setCellStyle(styleCheck);
 						crudMark = "";
 						for (int p = 0; p < nodeList1.getLength(); p++) {
@@ -1087,7 +1080,7 @@ public class DialogMatrixList extends JDialog {
 						if (crudMark.contains("D")) {
 							crudCheck = crudCheck + "D";
 						}
-						cellMatrix.setCellValue(new HSSFRichTextString(crudCheck));
+						cellMatrix.setCellValue(new XSSFRichTextString(crudCheck));
 					}
 
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -1098,17 +1091,17 @@ public class DialogMatrixList extends JDialog {
 	}
 
 	void createWorkBookAndStyles() {
-		workBook = new HSSFWorkbook();
+		workBook = new XSSFWorkbook();
 		fontTitle = workBook.createFont();
 		fontTitle.setFontName(res.getString("DialogDocuments13"));
 		fontTitle.setFontHeightInPoints((short)14);
-		fontTitle.setColor(HSSFColor.WHITE.index);
-		fontTitle.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		fontTitle.setColor(new XSSFColor(Color.WHITE));
+		fontTitle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
 		fontHeader1 = workBook.createFont();
 		fontHeader1.setFontName(res.getString("DialogDocuments13"));
 		fontHeader1.setFontHeightInPoints((short)10);
 		fontHeader1.setItalic(true);
-		fontHeader1.setColor(HSSFColor.WHITE.index);
+		fontHeader1.setColor(new XSSFColor(Color.WHITE));
 		fontHeader2 = workBook.createFont();
 		fontHeader2.setFontName(res.getString("DialogDocuments13"));
 		fontHeader2.setFontHeightInPoints((short)10);
@@ -1116,65 +1109,65 @@ public class DialogMatrixList extends JDialog {
 		fontValue.setFontName(res.getString("DialogDocuments14"));
 		fontValue.setFontHeightInPoints((short)10);
 		styleTitle = workBook.createCellStyle();
-		styleTitle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleTitle.setFillForegroundColor(HSSFColor.GREY_80_PERCENT.index);
-		styleTitle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleTitle.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleTitle.setFillForegroundColor(new XSSFColor(Color.DARK_GRAY));
+		styleTitle.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		styleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+		styleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleTitle.setFont(fontTitle);
 		styleHeaderRotated = workBook.createCellStyle();
-		styleHeaderRotated.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeaderRotated.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeaderRotated.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeaderRotated.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeaderRotated.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleHeaderRotated.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-		styleHeaderRotated.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		styleHeaderRotated.setRotation((short)-90);
+		styleHeaderRotated.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeaderRotated.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeaderRotated.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeaderRotated.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeaderRotated.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleHeaderRotated.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
+		styleHeaderRotated.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+		styleHeaderRotated.setRotation((short)180);
 		styleHeaderRotated.setFont(fontValue);
 		styleHeaderNormal = workBook.createCellStyle();
-		styleHeaderNormal.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNormal.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNormal.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNormal.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNormal.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleHeaderNormal.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleHeaderNormal.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNormal.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNormal.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNormal.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNormal.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleHeaderNormal.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeaderNormal.setFont(fontValue);
 		styleHeaderNumber = workBook.createCellStyle();
-		styleHeaderNumber.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNumber.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNumber.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNumber.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleHeaderNumber.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-		styleHeaderNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleHeaderNumber.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNumber.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNumber.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNumber.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleHeaderNumber.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
+		styleHeaderNumber.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeaderNumber.setFont(fontValue);
 		styleValue = workBook.createCellStyle();
-		styleValue.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleValue.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleValue.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		styleValue.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		styleValue.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleValue.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleValue.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleValue.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValue.setFont(fontValue);
 		styleValue.setWrapText(true);
 		styleCheck = workBook.createCellStyle();
-		styleCheck.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleCheck.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleCheck.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleCheck.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleCheck.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		styleCheck.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleCheck.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleCheck.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleCheck.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleCheck.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleCheck.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+		styleCheck.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleCheck.setFont(fontValue);
 		styleValueNumber = workBook.createCellStyle();
-		styleValueNumber.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		styleValueNumber.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-		styleValueNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		styleValueNumber.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleValueNumber.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
+		styleValueNumber.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValueNumber.setFont(fontValue);
 	}
 

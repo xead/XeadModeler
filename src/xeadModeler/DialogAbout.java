@@ -47,7 +47,17 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M6";
+	public static final String FULL_VERSION = "V1.R4.M8";
+	// 1.4.8での変更点
+	//・データモデルの汎化関係の描線ロジックを微調整した
+	//・編集途中で保管した後でも、変更履歴の追加時には保管以前のアクションを含めて初期設定されるようにした
+	//・変更履歴の追加時の初期設定で「用語とルール」が抜けていた問題を修正した
+	//
+	// 1.4.7での変更点
+	//・データモデルの汎化関係において排他性を表現するための描線ロジックを組み込んだ
+	//・「用語とルール」の「タイトル」を漢字対応フィールドにした
+	//・「設計書出力」と「マトリックスリスト出力」のExcel出力をxlsxの形式に差し替えた
+	//
 	// 1.4.6での変更点
 	//・システムノードに「用語とルール」のタブを設けた
 	//・インポート処理のバグによる不整合を修復するためのメニューオプションを組み込んだ
