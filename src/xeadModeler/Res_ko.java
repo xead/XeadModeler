@@ -501,6 +501,7 @@ public class Res_ko extends java.util.ListResourceBundle {
 		{"S339","직무정의"},
 		{"S340","직무명"},
 		{"S341","부문"},
+		{"S342", "Tsk" },
 		{"S348","직무명"},
 		{"S356","부문"},
 		{"S359","업무정의"},

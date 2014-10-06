@@ -2424,16 +2424,16 @@ public class Modeler extends JFrame {
 		jLabelSystemTermsSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsSortKey.setText(res.getString("S248"));
-		jLabelSystemTermsSortKey.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemTermsSortKey.setBounds(new Rectangle(560, 12, 130, 20));
 		jTextFieldSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(140, 9, 150, 25));
+		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(695, 9, 150, 25));
 		jLabelSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsHeadder.setText(res.getString("S246"));
-		jLabelSystemTermsHeadder.setBounds(new Rectangle(290, 12, 130, 20));
+		jLabelSystemTermsHeadder.setBounds(new Rectangle(5, 12, 130, 20));
 		jTextFieldSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(425, 9, 400, 25));
+		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 400, 25));
 		jLabelSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -3028,22 +3028,26 @@ public class Modeler extends JFrame {
 		tableModelRoleList.addColumn(res.getString("S201"));
 		tableModelRoleList.addColumn(res.getString("S340"));
 		tableModelRoleList.addColumn(res.getString("S341"));
+		tableModelRoleList.addColumn(res.getString("S342"));
 		tableModelRoleList.addColumn(res.getString("S204"));
 		column0 = jTableRoleList.getColumnModel().getColumn(0);
 		column1 = jTableRoleList.getColumnModel().getColumn(1);
 		column2 = jTableRoleList.getColumnModel().getColumn(2);
 		column3 = jTableRoleList.getColumnModel().getColumn(3);
 		column4 = jTableRoleList.getColumnModel().getColumn(4);
+		column5 = jTableRoleList.getColumnModel().getColumn(5);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(100);
 		column2.setPreferredWidth(250);
 		column3.setPreferredWidth(150);
-		column4.setPreferredWidth(700);
+		column4.setPreferredWidth(40);
+		column5.setPreferredWidth(700);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
 		column3.setCellRenderer(rendererAlignmentLeft);
-		column4.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentCenter);
+		column5.setCellRenderer(rendererAlignmentLeft);
 		jTableRoleList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableRoleList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -9314,7 +9318,7 @@ public class Modeler extends JFrame {
 		}
 
 		if (rtn1 == 0) {
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			//setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			boolean scanAndUpdated = dialogReorganizeDataTypes.request();
 			if (scanAndUpdated) {
 				Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
@@ -18452,13 +18456,14 @@ public class Modeler extends JFrame {
 			for (int i = 0; i < this.getChildCount(); i++) {
 				node = (XeadTreeNode)this.getChildAt(i);
 				element = (org.w3c.dom.Element)node.getElement();
-				Object[] Cell = new Object[5];
+				Object[] Cell = new Object[6];
 				Cell[0] =  new TableRowNumber(i+1, element);
 				Cell[1] = node.getElement().getAttribute("SortKey");
 				Cell[2] = node.getElement().getAttribute("Name");
 				departmentNode = getSpecificXeadTreeNode("Department", node.getElement().getAttribute("DepartmentID"), null);
 				Cell[3] = departmentNode.getElement().getAttribute("Name");
-				Cell[4] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
+				Cell[4] = Integer.toString(node.getChildCount());
+				Cell[5] = getFirstSentence(node.getElement().getAttribute("Descriptions"));
 				tableModelRoleList.addRow(Cell);
 			}
 			//

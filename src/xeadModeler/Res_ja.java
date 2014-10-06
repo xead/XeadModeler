@@ -502,6 +502,7 @@ public class Res_ja extends java.util.ListResourceBundle {
 		{ "S339", "E–±’è‹`" },
 		{ "S340", "E–±–¼" },
 		{ "S341", "•”–å" },
+		{ "S342", "‹Æ" },
 		{ "S348", "E–±–¼" },
 		{ "S356", "•”–å" },
 		{ "S359", "‹Æ–±’è‹`" },

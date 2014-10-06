@@ -47,7 +47,13 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M8";
+	public static final String FULL_VERSION = "V1.R4.M9";
+	// 1.4.9での変更点
+	//・文字列走査用ダイアログで「業務フロー」のチェックボックスが隠れていた問題を修正した
+	//・職務一覧に「担当業務数」の列を追加した
+	//・「用語とルール」のレイアウトを微調整した
+	//・「データタイプの整理」のダイアログを閉じた場合のカーソル設定の問題を修正した
+	//
 	// 1.4.8での変更点
 	//・データモデルの汎化関係の描線ロジックを微調整した
 	//・編集途中で保管した後でも、変更履歴の追加時には保管以前のアクションを含めて初期設定されるようにした

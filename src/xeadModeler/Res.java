@@ -501,6 +501,7 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S339", "Role" },
 		{ "S340", "Role Name" },
 		{ "S341", "Section" },
+		{ "S342", "Tsk" },
 		{ "S348", "Role Name" },
 		{ "S356", "Section" },
 		{ "S359", "Tasks" },
