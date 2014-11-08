@@ -402,7 +402,8 @@ public class DialogImportXEAD extends JDialog {
 			jButtonStart.setVisible(false);
 
 			String dateTime = getStringValueOfDateAndTime();
-			logFileName = "XeadImportLog" + dateTime + ".txt";
+			File file = new File(frame_.currentFileName);
+			logFileName = file.getParent() + File.separator + "XeadImportLog" + dateTime + ".txt";
 			fileWriter = new FileWriter(logFileName);
 			bufferedWriter = new BufferedWriter(fileWriter);
 			bufferedWriter.write(res.getString("DialogImportXEAD01") + "(" + dateTime + ")" + "\n");

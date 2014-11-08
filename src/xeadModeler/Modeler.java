@@ -111,6 +111,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemImportXEAD = new JMenuItem();
 	private JMenuItem jMenuItemImportRecover = new JMenuItem();
 	private JMenuItem jMenuItemImportSQL = new JMenuItem();
+	private JMenuItem jMenuItemImportXEAF = new JMenuItem();
 	private JMenu jMenuEdit = new JMenu();
 	private JMenuItem jMenuItemEditUndo = new JMenuItem();
 	private JMenuItem jMenuItemEditRedo = new JMenuItem();
@@ -225,6 +226,7 @@ public class Modeler extends JFrame {
 	private DialogMatrixList dialogMatrixList;
 	private DialogDocuments dialogDocuments;
 	private DialogImportXEAD dialogImportXEAD;
+	private DialogImportXEAF dialogImportXEAF;
 	private DialogImportSQL dialogImportSQL;
 	/**
 	 * Print Controller
@@ -1409,6 +1411,7 @@ public class Modeler extends JFrame {
 		dialogMatrixList = new DialogMatrixList(this);
 		dialogDocuments = new DialogDocuments(this);
 		dialogImportXEAD = new DialogImportXEAD(this);
+		dialogImportXEAF = new DialogImportXEAF(this);
 		dialogImportSQL = new DialogImportSQL(this);
 
 		/**
@@ -1528,6 +1531,8 @@ public class Modeler extends JFrame {
 		jMenuImport.setText(res.getString("S64"));
 		jMenuItemImportXEAD.setText(res.getString("S65"));
 		jMenuItemImportXEAD.addActionListener(new Modeler_jMenuItemImportXEAD_ActionAdapter(this));
+		jMenuItemImportXEAF.setText(res.getString("S7"));
+		jMenuItemImportXEAF.addActionListener(new Modeler_jMenuItemImportXEAF_ActionAdapter(this));
 		jMenuItemImportSQL.setText(res.getString("S66"));
 		jMenuItemImportSQL.addActionListener(new Modeler_jMenuItemImportSQL_ActionAdapter(this));
 		jMenuItemImportRecover.setText(res.getString("S67"));
@@ -1636,6 +1641,7 @@ public class Modeler extends JFrame {
 		jMenuFile.addSeparator();
 		jMenuFile.add(jMenuImport);
 		jMenuImport.add(jMenuItemImportXEAD);
+		jMenuImport.add(jMenuItemImportXEAF);
 		jMenuImport.add(jMenuItemImportSQL);
 		jMenuImport.add(jMenuItemImportRecover);
 		jMenuFile.addSeparator();
@@ -2983,7 +2989,7 @@ public class Modeler extends JFrame {
 		jPanelBoundaryMoveGuide.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		jPanelBoundaryMoveGuide.setOpaque(false);
 		//(Slide Show Screen Dialog)//
-		jDialogDataflowSlideShow.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		//jDialogDataflowSlideShow.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		jDialogDataflowSlideShow.setResizable(false);
 		jDialogDataflowSlideShow.setFocusable(true);
 		jDialogDataflowSlideShow.setUndecorated(true);
@@ -3000,7 +3006,7 @@ public class Modeler extends JFrame {
 		jPanelSubjectAreaDataflowSlideShow2.addMouseListener(new Modeler_jPanelSubjectAreaDataflowSlideShow2_mouseAdapter(this));
 		jLabelDataflowSlideShowPageGuide.setFont(new java.awt.Font(mainFontName, 0, 17));
 		jLabelDataflowSlideShowPageGuide.setForeground(Color.lightGray);
-		jLabelDataflowSlideShowPageGuide.setBounds(new Rectangle(5, 5, 600, 20));
+		jLabelDataflowSlideShowPageGuide.setBounds(new Rectangle(10, 10, 600, 20));
 		jDialogDataflowSlideShow.getContentPane().add(jPanelSubjectAreaDataflowSlideShow, null);
 		jPanelSubjectAreaDataflowSlideShow.add(jLabelDataflowSlideShowPageGuide, null);
 		jPanelSubjectAreaDataflowSlideShow.add(jPanelSubjectAreaDataflowSlideShow1, null);
@@ -7259,6 +7265,74 @@ public class Modeler extends JFrame {
 			String name = specifyNameOfExistingFile(res.getString("S1120"), "xead");
 			if (!name.equals("")) {
 				String importResult = dialogImportXEAD.request(name);
+				if (!importResult.equals("")) {
+					Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
+					rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
+							res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+						////////////////
+						//Save changes//
+						////////////////
+						if (rtn2 == 0) {
+							saveFileWithCurrentFileName();
+							xeadUndoManager.resetLog();
+							changeState.setChanged(false);
+						}
+
+						//////////////////////////////
+						//Save changes as other name//
+						//////////////////////////////
+						if (rtn2 == 1) {
+							name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
+							if (!name.equals("")) {
+								currentFileName = name;
+								this.setTitle(DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
+								saveFileWithCurrentFileName();
+								changeState.setChanged(false);
+								xeadUndoManager.resetLog();
+							}
+						}
+
+						//////////////////////
+						//Setup MainTreeNode//
+						//////////////////////
+						setupMainTreeModelWithCurrentFileName();
+
+					} catch(Exception exception) {
+						exception.printStackTrace();
+					} finally {
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * [File|Import XEAF Definitions]
+	 * @param e :Action Event
+	 */
+	void jMenuItemImportXEAF_actionPerformed(ActionEvent e) {
+		int rtn1 = 0; int rtn2 = 0;
+
+		currentMainTreeNode.updateFields();
+		if (changeState.isChanged()) {
+			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
+			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1116"),
+					res.getString("S1118"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn1 == 0) {
+				saveFileWithCurrentFileName();
+				xeadUndoManager.resetLog();
+				changeState.setChanged(false);
+			}
+		}
+
+		if (rtn1 == 0) {
+			String name = specifyNameOfExistingFile(res.getString("S1120"), "xeaf");
+			if (!name.equals("")) {
+				String importResult = dialogImportXEAF.request(name);
 				if (!importResult.equals("")) {
 					Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
 					rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
@@ -24905,13 +24979,16 @@ public class Modeler extends JFrame {
 	 */
 	static Point getCaretPositionInText(JTextPane textpane) {
 		int rowNumber = 1;
+		int charPosOfLine = 0;
 		Point caretPosition = new Point();
-		String text = textpane.getText().substring(0, textpane.getSelectionEnd());
-		String lastLine = text;
-		for (int i = 0; i < text.length(); i++) {
+		String text = textpane.getText();
+		String lastLine = text.substring(0, textpane.getSelectionEnd());
+		for (int i = 0; i < textpane.getSelectionEnd(); i++) {
 			if (text.substring(i,i+1).equals("\n")) {
 				rowNumber++;
-				lastLine = text.substring(i+1, text.length());
+				lastLine = text.substring(charPosOfLine + rowNumber-1, textpane.getSelectionEnd() + rowNumber-1);
+			} else {
+				charPosOfLine++;
 			}
 		}
 		caretPosition.x = rowNumber;
@@ -24920,7 +24997,136 @@ public class Modeler extends JFrame {
 	}
 
 	/**
-	 * Method to get caret position of text
+	 * Method to get caret position of text to ignore CR character
+	 * @param textpane :JTextpane where the caret is placed
+	 * @return Point :calculated position of caret
+	 */
+//	static Point getCaretPositionInTextToIgnoreCR(JTextPane textpane) {
+//		int rowNumber = 1;
+//		int charPosOfLine = 0;
+//		Point caretPosition = new Point();
+//		String text = textpane.getText().replaceAll("\r\n", "\n");
+//		for (int i = 0; i < textpane.getSelectionEnd(); i++) {
+//			if (text.substring(i,i+1).equals("\n")) {
+//				rowNumber++;
+//			} else {
+//				charPosOfLine++;
+//			}
+//		}
+//		caretPosition.x = rowNumber;
+//		caretPosition.y = textpane.getSelectionEnd() - charPosOfLine - rowNumber + 1;
+//		return caretPosition;
+//	}
+	static Point getCaretPositionInTextToIgnoreCR(JTextPane textpane) {
+		int rowNumber = 1;
+		int charPosOfLine = 0;
+		Point caretPosition = new Point();
+		String text = textpane.getText().replaceAll("\r\n", "\n");
+		for (int i = 0; i < textpane.getCaretPosition(); i++) {
+			if (text.substring(i,i+1).equals("\n")) {
+				rowNumber++;
+				charPosOfLine = 0;
+			} else {
+				charPosOfLine++;
+			}
+		}
+		caretPosition.x = rowNumber;
+		caretPosition.y = charPosOfLine;
+		return caretPosition;
+	}
+
+	static Point getBytePositionOfCaretInText(JTextPane textpane) {
+		int rowNumber = 1;
+		int firstPosOfLine = 0;
+		Point caretPosition = new Point();
+		String text = textpane.getText().replaceAll("\r\n", "\n");
+		for (int i = 0; i < textpane.getCaretPosition(); i++) {
+			if (text.substring(i,i+1).equals("\n")) {
+				rowNumber++;
+				firstPosOfLine = i;
+			}
+		}
+		caretPosition.x = rowNumber;
+		caretPosition.y = textpane.getText().substring(firstPosOfLine, textpane.getCaretPosition()).getBytes().length -1;
+		return caretPosition;
+	}
+
+//	/**
+//	 * Method to get caret position of text
+//	 * @param textpane :JTextpane where the caret is placed
+//	 * @param point :caret position
+//	 * @return int :logical position of caret
+//	 */
+//	static int getPointPositionInText(JTextPane textpane, Point point) {
+//		int position = 0;
+//		int rowNumber = 1;
+//		String wrkStr1 = "";
+//		String wrkStr2 = "";
+//		byte[] byteArray;
+//
+//		String text = textpane.getText();
+//		for (int i = 0; i < text.length(); i++) {
+//			if (point.x == rowNumber) {
+//				if (point.y == 0) {
+//					position = i;
+//				} else {
+//					for (int j = i; j < text.length(); j++) {
+//						wrkStr2 = text.substring(j,j+1);
+//						wrkStr1 = wrkStr1 + wrkStr2;
+//						byteArray = wrkStr1.getBytes();
+//						if (byteArray.length >= point.y) {
+//							position = j + 1;
+//							break;
+//						} else {
+//							if (wrkStr2.equals("\n")) {
+//								position = j;
+//								wrkStr1 = "";
+//								for (int k = byteArray.length; k <= point.y; k++) {
+//									wrkStr1 = wrkStr1 + " ";
+//									position++;
+//								}
+//								wrkStr1 = wrkStr1 + "\n";
+//								textpane.select(j, j+1);
+//								textpane.replaceSelection(wrkStr1);
+//								break;
+//							}
+//						}
+//					}
+//				}
+//				break;
+//			}
+//			if (text.substring(i,i+1).equals("\n")) {
+//				rowNumber++;
+//			}
+//		}
+//
+//		//Process in case that point is on the last line only with "\n"//
+//		if (!(point.x == 1 && point.y == 0)) {
+//			if (point.x == rowNumber && position == 0 && text.length() > 0) {
+//				position = text.length();
+//			}
+//		}
+//
+//		//Process in case additional rows required//
+//		if (point.x > rowNumber) {
+//			position = text.length() - 1;
+//			int additionalLines = point.x - rowNumber;
+//			for (int i = 0; i < additionalLines; i++) {
+//				wrkStr1 = "\n";
+//				position++;
+//				for (int j = 0; j <= point.y; j++) {
+//					wrkStr1 = wrkStr1 + " ";
+//					position++;
+//				}
+//				textpane.select(text.length(), text.length() + 1);
+//				textpane.replaceSelection(wrkStr1);
+//			}
+//		}
+//
+//		return position;
+//	}
+	/**
+	 * Method to get caret position of text ignoring CR char
 	 * @param textpane :JTextpane where the caret is placed
 	 * @param point :caret position
 	 * @return int :logical position of caret
@@ -24933,6 +25139,81 @@ public class Modeler extends JFrame {
 		byte[] byteArray;
 
 		String text = textpane.getText();
+		for (int i = 0; i < text.length(); i++) {
+			if (point.x == rowNumber) {
+				if (point.y == 0) {
+					position = i - rowNumber + 1;
+				} else {
+					for (int j = i; j < text.length(); j++) {
+						wrkStr2 = text.substring(j,j+1);
+						wrkStr1 = wrkStr1 + wrkStr2;
+						byteArray = wrkStr1.getBytes();
+						if (byteArray.length >= point.y) {
+							position = j + 1;
+							break;
+						} else {
+							if (wrkStr2.equals("\n")) {
+								position = j;
+								wrkStr1 = "";
+								for (int k = byteArray.length; k <= point.y; k++) {
+									wrkStr1 = wrkStr1 + " ";
+									position++;
+								}
+								wrkStr1 = wrkStr1 + "\n";
+								textpane.select(j, j+1);
+								textpane.replaceSelection(wrkStr1);
+								break;
+							}
+						}
+					}
+				}
+				break;
+			}
+			if (text.substring(i,i+1).equals("\n")) {
+				rowNumber++;
+			}
+		}
+
+		//Process in case that point is on the last line only with "\n"//
+		if (!(point.x == 1 && point.y == 0)) {
+			if (point.x == rowNumber && position == 0 && text.length() > 0) {
+				position = text.length();
+			}
+		}
+
+		//Process in case additional rows required//
+		if (point.x > rowNumber) {
+			position = text.length() - 1;
+			int additionalLines = point.x - rowNumber;
+			for (int i = 0; i < additionalLines; i++) {
+				wrkStr1 = "\n";
+				position++;
+				for (int j = 0; j <= point.y; j++) {
+					wrkStr1 = wrkStr1 + " ";
+					position++;
+				}
+				textpane.select(text.length(), text.length() + 1);
+				textpane.replaceSelection(wrkStr1);
+			}
+		}
+
+		return position;
+	}
+
+	/**
+	 * Method to get caret position of text ignoring CR char
+	 * @param textpane :JTextpane where the caret is placed
+	 * @param point :caret position
+	 * @return int :logical position of caret
+	 */
+	static int getPointPositionInTextToIgnoreCR(JTextPane textpane, Point point) {
+		int position = 0;
+		int rowNumber = 1;
+		String wrkStr1 = "";
+		String wrkStr2 = "";
+		byte[] byteArray = "".getBytes();
+
+		String text = textpane.getText().replaceAll("\r\n", "\n");
 		for (int i = 0; i < text.length(); i++) {
 			if (point.x == rowNumber) {
 				if (point.y == 0) {
@@ -24995,6 +25276,30 @@ public class Modeler extends JFrame {
 	}
 
 	/**
+	 * Method to get caret position of text ignoring CR char
+	 * @param textpane :JTextpane where the caret is placed
+	 * @param point :caret position
+	 * @return int :logical position of caret
+	 */
+	static Point getBytePointOfTextPoint(JTextPane textpane, Point point) {
+		int rowNumber = 1;
+		String wrkStr = "";
+		Point bytePoint = new Point(point.x,0);
+		String text = textpane.getText().replaceAll("\r\n", "\n");
+		for (int i = 0; i < text.length(); i++) {
+			if (point.x == rowNumber) {
+				wrkStr = text.substring(i,i+point.y);
+				bytePoint.y = wrkStr.getBytes().length;
+				break;
+			}
+			if (text.substring(i,i+1).equals("\n")) {
+				rowNumber++;
+			}
+		}
+		return bytePoint;
+	}
+
+	/**
 	 * Drawer of block select rectangle
 	 * @param textpane :TextPane component where drawn on
 	 */
@@ -25002,7 +25307,7 @@ public class Modeler extends JFrame {
 		if (inBlockSelectMode && !textpane.getCaret().isSelectionVisible()) {
 			textpane.setCaretPosition(textpane.getCaretPosition());
 			textpane.getCaret().setSelectionVisible(false);
-			blockSelectPointThru = getCaretPositionInText(textpane);
+			blockSelectPointThru = getBytePositionOfCaretInText(textpane);
 			textpane.paint(savedImage);
 			Graphics2D g2 = (Graphics2D)textpane.getGraphics();
 
@@ -25076,7 +25381,7 @@ public class Modeler extends JFrame {
 	void jTextPaneIOPanelImage_mouseDragged(MouseEvent e) {
 		if (inBlockSelectMode) {
 			if (jTextPaneIOPanelImage.getCaret().isSelectionVisible()) {
-				blockSelectPointFrom = getCaretPositionInText(jTextPaneIOPanelImage);
+				blockSelectPointFrom = getBytePositionOfCaretInText(jTextPaneIOPanelImage);
 				jTextPaneIOPanelImage.getCaret().setSelectionVisible(false);
 				Graphics g = jTextPaneIOPanelImage.getGraphics();
 				savedImage = g.create();
@@ -25116,7 +25421,7 @@ public class Modeler extends JFrame {
 	void jTextPaneIOSpoolImage_mouseDragged(MouseEvent e) {
 		if (inBlockSelectMode) {
 			if (jTextPaneIOSpoolImage.getCaret().isSelectionVisible()) {
-				blockSelectPointFrom = getCaretPositionInText(jTextPaneIOSpoolImage);
+				blockSelectPointFrom = getBytePositionOfCaretInText(jTextPaneIOSpoolImage);
 				jTextPaneIOSpoolImage.getCaret().setSelectionVisible(false);
 				Graphics g = jTextPaneIOSpoolImage.getGraphics();
 				savedImage = g.create();
@@ -25622,6 +25927,8 @@ public class Modeler extends JFrame {
 	void jPanelSubjectAreaDataflowSlideShow2_mouseClicked(MouseEvent e) {
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 			showPopupMenuComponent(e);
+		} else {
+			jDialogDataflowSlideShow_keyPressed(null);
 		}
 	}
 
@@ -26000,9 +26307,9 @@ public class Modeler extends JFrame {
 					topOfSelection = false;
 					point.x = rowNumber;
 					point.y = blockSelectRec.y;
-					selectionStartPos = getPointPositionInText(textPane, point);
+					selectionStartPos = getPointPositionInTextToIgnoreCR(textPane, point);
 					point.y = blockSelectRec.y + blockSelectRec.width;
-					selectionEndPos = getPointPositionInText(textPane, point);
+					selectionEndPos = getPointPositionInTextToIgnoreCR(textPane, point);
 					textPane.select(selectionStartPos, selectionEndPos);
 					textPane.replaceSelection("");
 				}
@@ -26091,9 +26398,9 @@ public class Modeler extends JFrame {
 						//
 						point.x = rowNumber;
 						point.y = blockSelectRec.y;
-						selectionStartPos = getPointPositionInText(textPane, point);
+						selectionStartPos = getPointPositionInTextToIgnoreCR(textPane, point);
 						point.y = blockSelectRec.y + blockSelectRec.width;
-						selectionEndPos = getPointPositionInText(textPane, point);
+						selectionEndPos = getPointPositionInTextToIgnoreCR(textPane, point);
 						textPane.select(selectionStartPos, selectionEndPos);
 						textPane.replaceSelection("");
 					}
@@ -26140,11 +26447,11 @@ public class Modeler extends JFrame {
 		Point point = new Point(0,0);
 		Point pointWherePasteStart = new Point(0,0);
 		int selectionStartPos = 0;
-		int selectionEndPos = 0;
-		//
+//		int selectionEndPos = 0;
+
 		informationOnThisPageChanged = true;
 		textPane.requestFocus();
-		//
+
 		//Transfer data from the system ClipBoard//
 		Clipboard clipboard = getToolkit().getSystemClipboard();
 		Transferable contentsReceived = clipboard.getContents(this);
@@ -26156,27 +26463,29 @@ public class Modeler extends JFrame {
 				} catch (Exception ex) {}
 			}
 		}
-		//
+
 		//Remove block select area//
 		if (inBlockSelectMode) {
-			for (int j = 0; j < blockSelectRec.height; j++) {
-				point.x = blockSelectRec.x + j;
-				point.y = blockSelectRec.y;
-				selectionStartPos = getPointPositionInText(textPane, point);
-				point.y = blockSelectRec.y + blockSelectRec.width;
-				selectionEndPos = getPointPositionInText(textPane, point);
-				textPane.select(selectionStartPos, selectionEndPos);
-				textPane.replaceSelection("");
-			}
-			pointWherePasteStart.x = blockSelectRec.x;
-			pointWherePasteStart.y = blockSelectRec.y;
+//			for (int j = 0; j < blockSelectRec.height; j++) {
+//				point.x = blockSelectRec.x + j;
+//				point.y = blockSelectRec.y;
+//				selectionStartPos = getPointPositionInText(textPane, point);
+//				point.y = blockSelectRec.y + blockSelectRec.width;
+//				selectionEndPos = getPointPositionInText(textPane, point);
+//				textPane.select(selectionStartPos, selectionEndPos);
+//				textPane.replaceSelection("");
+//			}
+//			pointWherePasteStart.x = blockSelectRec.x;
+//			pointWherePasteStart.y = blockSelectRec.y;
 		} else {
 			if (textPane.getSelectionStart() < textPane.getSelectionEnd()) {
 				textPane.replaceSelection("");
 			}
-			pointWherePasteStart = getCaretPositionInText(textPane);
+			pointWherePasteStart = getCaretPositionInTextToIgnoreCR(textPane);
 		}
-		//
+		
+		Point bytePointOfTextPoint = getBytePointOfTextPoint(textPane, pointWherePasteStart);
+
 		//Paste data to TextPane from ClipBoard or styledDocumentCopiedText//
 		String wrkStr = "";
 		if (styledDocumentCopiedTextList.size() == 1) {
@@ -26191,9 +26500,12 @@ public class Modeler extends JFrame {
 			int pastingPos = 0;
 			StyledDocument styledDocument = textPane.getStyledDocument();
 			for (int j = 0; j < styledDocumentCopiedTextList.size(); j++) {
-				point.x = pointWherePasteStart.x + j;
-				point.y = pointWherePasteStart.y;
-				pastingPos = getPointPositionInText(textPane, point);
+				//point.x = pointWherePasteStart.x + j;
+				//point.y = pointWherePasteStart.y;
+				point.x = bytePointOfTextPoint.x + j;
+				point.y = bytePointOfTextPoint.y;
+				pastingPos = getPointPositionInTextToIgnoreCR(textPane, point);
+				//JOptionPane.showMessageDialog(null, point.x+","+point.y+":"+pastingPos);
 				for (int i = 0; i < styledDocumentCopiedTextList.get(j).length(); i++) {
 					javax.swing.text.Element textElement = styledDocumentCopiedSegmentList.get(j).getCharacterElement(i);
 					try {
@@ -26218,7 +26530,7 @@ public class Modeler extends JFrame {
 	 */
 	void jTextPaneIOPanelImage_keyPressed(KeyEvent e) {
 		if (inBlockSelectMode && e.getKeyCode() == KeyEvent.VK_SHIFT && jTextPaneIOPanelImage.getCaret().isSelectionVisible()) {
-			blockSelectPointFrom = getCaretPositionInText(jTextPaneIOPanelImage);
+			blockSelectPointFrom = getBytePositionOfCaretInText(jTextPaneIOPanelImage);
 			jTextPaneIOPanelImage.getCaret().setSelectionVisible(false);
 			Graphics g = jTextPaneIOPanelImage.getGraphics();
 			savedImage = g.create();
@@ -26295,7 +26607,7 @@ public class Modeler extends JFrame {
 	 */
 	void jTextPaneIOSpoolImage_keyPressed(KeyEvent e) {
 		if (inBlockSelectMode && e.getKeyCode() == KeyEvent.VK_SHIFT && jTextPaneIOSpoolImage.getCaret().isSelectionVisible()) {
-			blockSelectPointFrom = getCaretPositionInText(jTextPaneIOSpoolImage);
+			blockSelectPointFrom = getBytePositionOfCaretInText(jTextPaneIOSpoolImage);
 			jTextPaneIOSpoolImage.getCaret().setSelectionVisible(false);
 			Graphics g = jTextPaneIOSpoolImage.getGraphics();
 			savedImage = g.create();
@@ -27077,7 +27389,7 @@ public class Modeler extends JFrame {
 	void jDialogDataflowSlideShow_keyPressed(KeyEvent e) {
 		//
 		//Left arrow key pressed//
-		if (e.getKeyCode() == 37) {
+		if (e != null && e.getKeyCode() == 37) {
 			//
 			//Shift key pressed to restart//
 			if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0){
@@ -27110,10 +27422,10 @@ public class Modeler extends JFrame {
 		}
 		//
 		//Right arrow key pressed//
-		if (e.getKeyCode() == 39) {
+		if (e == null || e.getKeyCode() == 39) {
 			//
 			//Shift key pressed to skip to the end//
-			if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0){
+			if (e != null && (e.getModifiers() & InputEvent.SHIFT_MASK) != 0){
 				dataflowSlideNumber = dataflowSlideTotalNumber;
 				for (int i = 0; i < dataflowNodeSlideShowArray.size(); i++) {
 					dataflowNodeSlideShowArray.get(i).setVisible(true);
@@ -27143,7 +27455,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		//Escape key pressed//
-		if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+		if (e != null && e.getKeyChar() == KeyEvent.VK_ESCAPE) {
 			jDialogDataflowSlideShow.setVisible(false);
 		}
 		//
@@ -30074,11 +30386,17 @@ public class Modeler extends JFrame {
 		}
 		//
 		//Setup Parent panel and dialog panel//
+		jDialogDataflowSlideShow.setSize(this.getSize());
+		jDialogDataflowSlideShow.setLocation(this.getLocation());
 		Dimension dimDialog = jDialogDataflowSlideShow.getSize();
 		int posX = 0;
 		int posY = 0;
-		if (dataflowBoundarySlideShow.boundaryWidth < dimDialog.width) {posX = (dimDialog.width - dataflowBoundarySlideShow.boundaryWidth)/2 - dataflowBoundarySlideShow.boundaryPosX;}
-		if (dataflowBoundarySlideShow.boundaryHeight < dimDialog.height) {posY = (dimDialog.height - dataflowBoundarySlideShow.boundaryHeight)/2 - dataflowBoundarySlideShow.boundaryPosY;}
+		if (dataflowBoundarySlideShow.boundaryWidth < dimDialog.width) {
+			posX = (dimDialog.width - dataflowBoundarySlideShow.boundaryWidth)/2 - dataflowBoundarySlideShow.boundaryPosX;
+		}
+		if (dataflowBoundarySlideShow.boundaryHeight < dimDialog.height) {
+			posY = (dimDialog.height - dataflowBoundarySlideShow.boundaryHeight)/2 - dataflowBoundarySlideShow.boundaryPosY;
+		}
 		jPanelSubjectAreaDataflowSlideShow1.setLocation(posX, posY);
 		jLabelDataflowSlideShowPageGuide.setText(res.getString("S1846") + dataflowPageTitle + res.getString("S1847") + dataflowSlideNumber + " / " + dataflowSlideTotalNumber + ")");
 		jDialogDataflowSlideShow.setVisible(true);
@@ -32592,6 +32910,15 @@ class Modeler_jMenuItemImportXEAD_ActionAdapter implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemImportXEAD_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemImportXEAF_ActionAdapter implements ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemImportXEAF_ActionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemImportXEAF_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemImportSQL_ActionAdapter implements ActionListener {

@@ -47,7 +47,13 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M9";
+	public static final String FULL_VERSION = "V1.R4.M10";
+	// 1.4.10での変更点
+	//・XEAD Driver用のシステム定義ファイル(*.xeaf)からインポートできるようにした
+	//・スライドショーでマウスクリックすると右矢印キーと同様に次ページに進むようにした
+	//・スライドショーの表示位置とサイズを親のフレームに合わせるようにした(プロジェクタにうまく表示するための措置）
+	//・UIイメージの矩形選択ロジックがフォント可変対応になっていなかった問題を修正した
+	//
 	// 1.4.9での変更点
 	//・文字列走査用ダイアログで「業務フロー」のチェックボックスが隠れていた問題を修正した
 	//・職務一覧に「担当業務数」の列を追加した
