@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M10";
+	public static final String FULL_VERSION = "V1.R4.M11";
+	// 1.4.11での変更点
+	//・業務フローのインポート処理においてフロータイプが取り込まれなかった問題を修正した
+	//・xeafのインポート処理でのフィールドの並び順の設定ミスを修正した
+	//
 	// 1.4.10での変更点
 	//・XEAD Driver用のシステム定義ファイル(*.xeaf)からインポートできるようにした
 	//・スライドショーでマウスクリックすると右矢印キーと同様に次ページに進むようにした

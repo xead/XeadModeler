@@ -1042,6 +1042,7 @@ public class DialogImportXEAD extends JDialog {
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", workElement1.getAttribute("Name"));
 				newElement.setAttribute("NameExt", workElement1.getAttribute("NameExt"));
+				newElement.setAttribute("ImageType", workElement1.getAttribute("ImageType"));
 				newElement.setAttribute("NodeID1", nodeIDListInto.get(nodeIDListFrom.indexOf(workElement1.getAttribute("NodeID1"))));
 				newElement.setAttribute("NodeID2", nodeIDListInto.get(nodeIDListFrom.indexOf(workElement1.getAttribute("NodeID2"))));
 				newElement.setAttribute("ShowArrow1", workElement1.getAttribute("ShowArrow1"));

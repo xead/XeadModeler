@@ -749,7 +749,7 @@ public class DialogImportXEAF extends JDialog {
 			}
 			childElement.setAttribute("ID", Integer.toString(lastID + 1));
 			childElement.setAttribute("Name", workElement1.getAttribute("Name"));
-			childElement.setAttribute("SortKey", Integer.toString(i * 10));
+			childElement.setAttribute("SortKey", Modeler.getFormatted4ByteString(i * 10));
 			childElement.setAttribute("Descriptions", workElement1.getAttribute("Remarks"));
 			childElement.setAttribute("Alias", workElement1.getAttribute("ID"));
 			if (workElement1.getAttribute("TypeOptions").contains("VIRTUAL")) {
@@ -807,7 +807,7 @@ public class DialogImportXEAF extends JDialog {
 					fieldID = workTokenizer.nextToken();
 					org.w3c.dom.Element grandChildElement = frame_.domDocument.createElement("TableKeyField");
 					grandChildElement.setAttribute("FieldID", fieldIDMap.get(fieldID));
-					grandChildElement.setAttribute("SortKey", Integer.toString(i * 10));
+					grandChildElement.setAttribute("SortKey", Modeler.getFormatted4ByteString(i * 10));
 					childElement.appendChild(grandChildElement);
 				}
 				newElement.appendChild(childElement);
