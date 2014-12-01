@@ -47,7 +47,12 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M11";
+	public static final String FULL_VERSION = "V1.R4.M12";
+	// 1.4.12での変更点
+	//・フィールド定義一覧上だけでなく、個々のフィールド定義上でも「モデル表示」を設定できるようにした
+	//・業務フローとデータモデルの画像出力について、ベクター形式(SVG)に対応するとともに、それぞれの描画ロジックを微調整した
+	//・xeafのキー無しテーブルについて、インポート処理のバグを修正した
+	//
 	// 1.4.11での変更点
 	//・業務フローのインポート処理においてフロータイプが取り込まれなかった問題を修正した
 	//・xeafのインポート処理でのフィールドの並び順の設定ミスを修正した

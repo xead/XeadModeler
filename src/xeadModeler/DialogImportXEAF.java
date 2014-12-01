@@ -787,6 +787,7 @@ public class DialogImportXEAF extends JDialog {
 		///////////////////
 		//Create TableKey//
 		///////////////////
+		boolean hasPK = false;
 		StringTokenizer workTokenizer;
 		String fieldID;
 		elementList1 = elementFrom.getElementsByTagName("Key");
@@ -812,6 +813,16 @@ public class DialogImportXEAF extends JDialog {
 				}
 				newElement.appendChild(childElement);
 			}
+			if (workElement1.getAttribute("Type").equals("PK")) {
+				hasPK = true;
+			}
+		}
+		if (!hasPK) {
+			org.w3c.dom.Element childElement = frame_.domDocument.createElement("TableKey");
+			childElement.setAttribute("ID", Integer.toString(0));
+			childElement.setAttribute("Type", "PK");
+			childElement.setAttribute("SortKey", "000");
+			newElement.appendChild(childElement);
 		}
 		
 		return tableID;

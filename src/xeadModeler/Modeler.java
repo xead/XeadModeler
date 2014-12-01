@@ -54,6 +54,9 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
 
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -933,7 +936,7 @@ public class Modeler extends JFrame {
 	private JRadioButton jRadioButtonTableFieldAttributeTypeINHERITED = new JRadioButton();
 	private JRadioButton jRadioButtonTableFieldAttributeTypeNATIVE = new JRadioButton();
 	private JRadioButton jRadioButtonTableFieldAttributeTypeDERIVABLE = new JRadioButton();
-	//private JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
+	private JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
 	private JLabel jLabelTableFieldDefault = new JLabel();
 	private JTextField jTextFieldTableFieldDefault = new JTextField();
 	private JCheckBox jCheckBoxTableFieldNotNull = new JCheckBox();
@@ -1328,34 +1331,6 @@ public class Modeler extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
-//	/**
-//	 * Initialize components properties
-//	 * @throws Exception
-//	 */
-//	void jbInit() throws Exception {
-//		jbInitComponentsAndVariants();
-//		jbInitComponentsForSystem();
-//		jbInitComponentsForSubjectAreaList();
-//		jbInitComponentsForSubjectArea();
-//		jbInitComponentsForRoleList();
-//		jbInitComponentsForRole();
-//		jbInitComponentsForTask();
-//		jbInitComponentsForSubsystemList();
-//		jbInitComponentsForSubsystem();
-//		jbInitComponentsForTableList();
-//		jbInitComponentsForTable();
-//		jbInitComponentsForTableFieldList();
-//		jbInitComponentsForTableField();
-//		jbInitComponentsForTableKeyList();
-//		jbInitComponentsForTableKey();
-//		jbInitComponentsForFunctionList();
-//		jbInitComponentsForFunction();
-//		jbInitComponentsForIOPanel();
-//		jbInitComponentsForIOSpool();
-//		jbInitComponentsForIOTable();
-//		jbInitComponentsForIOWebPage();
-//	}
 
 	/**
 	 * Initialize main components and variants
@@ -2951,6 +2926,7 @@ public class Modeler extends JFrame {
 		jPanelSubjectArea2.setLayout(new BorderLayout());
 		jPanelSubjectArea3.setPreferredSize(new Dimension(10, 38));
 		jPanelSubjectArea3.setLayout(null);
+		jPanelSubjectAreaDataflowEditor1.setBorder(null);
 		jPanelSubjectAreaDataflowEditor1.setLayout(null);
 		jPanelSubjectAreaDataflowEditor1.setBackground(DESKTOP_COLOR);
 		jPanelSubjectAreaDataflowEditor2.setLayout(null);
@@ -2997,6 +2973,7 @@ public class Modeler extends JFrame {
 		jPanelSubjectAreaDataflowSlideShow.setLayout(null);
 		jPanelSubjectAreaDataflowSlideShow.setBounds(new Rectangle(0,0,2000,1500));
 		jPanelSubjectAreaDataflowSlideShow.setBackground(DESKTOP_COLOR);
+		jPanelSubjectAreaDataflowSlideShow.addMouseListener(new Modeler_jPanelSubjectAreaDataflowSlideShow2_mouseAdapter(this));
 		jPanelSubjectAreaDataflowSlideShow1.setBackground(DESKTOP_COLOR);
 		jPanelSubjectAreaDataflowSlideShow1.setBounds(new Rectangle(10,50,2000,1500));
 		jPanelSubjectAreaDataflowSlideShow1.setLayout(null);
@@ -3696,6 +3673,7 @@ public class Modeler extends JFrame {
 		jPanelTableList.setMinimumSize(new Dimension(103, 70));
 		jPanelTableList.setPreferredSize(new Dimension(459, 430));
 		jPanelTableList.setLayout(new BorderLayout());
+		jPanelDatamodel.setBorder(null);
 		jPanelDatamodel.setBackground(DESKTOP_COLOR);
 		jPanelDatamodel.setLayout(null);
 		jPanelDatamodel.addMouseListener(new Modeler_jPanelDatamodel_mouseAdapter(this));
@@ -4106,19 +4084,19 @@ public class Modeler extends JFrame {
 		jLabelTableFieldName.setBounds(new Rectangle(5, 9, 130, 20));
 		jTextFieldTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableFieldName.setBounds(new Rectangle(140, 6, 250, 25));
-//		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(400, 8, 120, 25));
-//		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
-//		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-//		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
 		jLabelTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAlias.setText(res.getString("S297"));
 		jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 15));
 		jTextFieldTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 300, 25));
-		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(930, 8, 100, 25));
+		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 100, 25));
 		jCheckBoxTableFieldNotNull.setText("Not Null");
 		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1040, 8, 120, 25));
+		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
+		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
 		jLabelTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldDataType.setRequestFocusEnabled(true);
 		jLabelTableFieldDataType.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -4215,7 +4193,7 @@ public class Modeler extends JFrame {
 		jPanelTableField2.add(jTextFieldTableFieldAlias);
 		jPanelTableField2.add(jButtonTableFieldDataTypeChange);
 		jPanelTableField2.add(jLabelTableFieldAttributeType);
-//		jPanelTableField2.add(jCheckBoxTableFieldShowOnModel);
+		jPanelTableField2.add(jCheckBoxTableFieldShowOnModel);
 		jPanelTableField2.add(jCheckBoxTableFieldNotNull);
 		jPanelTableField2.add(jLabelTableFieldDefault);
 		jPanelTableField2.add(jTextFieldTableFieldDefault);
@@ -6173,7 +6151,7 @@ public class Modeler extends JFrame {
 			jPopupMenuComponent.add(jMenuItemComponentToShowTips);
 		}
 		//
-		if (e.getComponent().equals(jPanelSubjectAreaDataflowSlideShow2)) {
+		if (e.getComponent().equals(jPanelSubjectAreaDataflowSlideShow) || e.getComponent().equals(jPanelSubjectAreaDataflowSlideShow2)) {
 			componentType_jPopupMenuComponent = "SubjectAreaDataflowSlideShow";
 			jPopupMenuComponent.add(jMenuItemComponentToCaptureImage);
 			jPopupMenuComponent.add(jMenuItemComponentToPrintImage);
@@ -10753,7 +10731,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		public void updateColors() {
-			if (nodeType.equals("Process")) {
+			if (nodeType.equals("Process") || nodeType.equals("Subject")) {
 				if (inPrintMode) {
 					jTextFieldNodeName.setForeground(Color.BLACK);
 					jTextFieldNodeNameExt.setForeground(Color.BLACK);
@@ -10827,43 +10805,53 @@ public class Modeler extends JFrame {
 			//
 			if (nodeType.equals("Subject")) {
 				painted = true;
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setPaint(new GradientPaint(5.0f, 5.0f, Color.WHITE, 10.0f, 10.0f, Color.LIGHT_GRAY));
-				g2.fillArc(0,1,40,40,90,90);
-				g2.setPaint(new GradientPaint(5.0f, 35.0f, Color.WHITE, 10.0f, 30.0f, Color.LIGHT_GRAY));
-				g2.fillArc(0,0,40,40,180,90);
-				g2.setPaint(new GradientPaint(165.0f, 5.0f, Color.WHITE, 160.0f, 10.0f, Color.LIGHT_GRAY));
-				g2.fillArc(130,1,40,40,0,90);
-				g2.setPaint(new GradientPaint(165.0f, 35.0f, Color.WHITE, 160.0f, 30.0f, Color.LIGHT_GRAY));
-				g2.fillArc(130,0,40,40,270,90);
-				g2.setPaint(new GradientPaint(10.0f, 10.0f, Color.LIGHT_GRAY, 21.0f, 21.0f, DESKTOP_COLOR));
-				int[] x1={0, 20, 20};
-				int[] y1={20,20,  0};
-				g2.fillPolygon(x1,y1,3);
-				g2.setPaint(new GradientPaint(10.0f, 30.0f, Color.LIGHT_GRAY, 21.0f, 19.0f, DESKTOP_COLOR));
-				int[] x2={ 0,20,20};
-				int[] y2={20,40,20};
-				g2.fillPolygon(x2,y2,3);
-				g2.setPaint(new GradientPaint(160.0f, 10.0f, Color.LIGHT_GRAY, 149.0f, 21.0f, DESKTOP_COLOR));
-				int[] x3={150,150,170};
-				int[] y3={  0, 20, 20};
-				g2.fillPolygon(x3,y3,3);
-				g2.setPaint(new GradientPaint(160.0f, 30.0f, Color.LIGHT_GRAY, 149.0f, 19.0f, DESKTOP_COLOR));
-				int[] x4={150,150,170};
-				int[] y4={ 20, 40, 20};
-				g2.fillPolygon(x4,y4,3);
-				g2.setPaint(new GradientPaint(85.0f, 0.0f, Color.LIGHT_GRAY, 85.0f, 23.0f, DESKTOP_COLOR));
-				g2.fillRect(20,0,130,20);
-				g2.setPaint(new GradientPaint(85.0f, 40.0f, Color.LIGHT_GRAY, 85.0f, 17.0f, DESKTOP_COLOR));
-				g2.fillRect(20,20,130,20);
-				g2.setColor(Color.darkGray);
-				g2.drawArc(0,0,40,40,90,90);
-				g2.drawArc(0,0,40,40,180,90);
-				g2.drawArc(130,0,40,40,0,90);
-				g2.drawArc(130,0,40,40,270,90);
-				g2.drawLine(20,0,150,0);
-				g2.drawLine(20,40,150,40);
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+				if (inPrintMode) {
+					g2.setColor(Color.black);
+					g2.drawArc(1,1,39,39,90,90);
+					g2.drawArc(1,1,39,39,180,90);
+					g2.drawArc(130,1,39,39,0,90);
+					g2.drawArc(130,1,39,39,270,90);
+					g2.drawLine(21,1,149,1);
+					g2.drawLine(21,40,149,40);
+				} else {
+					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g2.setPaint(new GradientPaint(5.0f, 5.0f, Color.WHITE, 10.0f, 10.0f, Color.LIGHT_GRAY));
+					g2.fillArc(0,1,40,40,90,90);
+					g2.setPaint(new GradientPaint(5.0f, 35.0f, Color.WHITE, 10.0f, 30.0f, Color.LIGHT_GRAY));
+					g2.fillArc(0,0,40,40,180,90);
+					g2.setPaint(new GradientPaint(165.0f, 5.0f, Color.WHITE, 160.0f, 10.0f, Color.LIGHT_GRAY));
+					g2.fillArc(130,1,40,40,0,90);
+					g2.setPaint(new GradientPaint(165.0f, 35.0f, Color.WHITE, 160.0f, 30.0f, Color.LIGHT_GRAY));
+					g2.fillArc(130,0,40,40,270,90);
+					g2.setPaint(new GradientPaint(10.0f, 10.0f, Color.LIGHT_GRAY, 21.0f, 21.0f, DESKTOP_COLOR));
+					int[] x1={0, 20, 20};
+					int[] y1={20,20,  0};
+					g2.fillPolygon(x1,y1,3);
+					g2.setPaint(new GradientPaint(10.0f, 30.0f, Color.LIGHT_GRAY, 21.0f, 19.0f, DESKTOP_COLOR));
+					int[] x2={ 0,20,20};
+					int[] y2={20,40,20};
+					g2.fillPolygon(x2,y2,3);
+					g2.setPaint(new GradientPaint(160.0f, 10.0f, Color.LIGHT_GRAY, 149.0f, 21.0f, DESKTOP_COLOR));
+					int[] x3={150,150,170};
+					int[] y3={  0, 20, 20};
+					g2.fillPolygon(x3,y3,3);
+					g2.setPaint(new GradientPaint(160.0f, 30.0f, Color.LIGHT_GRAY, 149.0f, 19.0f, DESKTOP_COLOR));
+					int[] x4={150,150,170};
+					int[] y4={ 20, 40, 20};
+					g2.fillPolygon(x4,y4,3);
+					g2.setPaint(new GradientPaint(85.0f, 0.0f, Color.LIGHT_GRAY, 85.0f, 23.0f, DESKTOP_COLOR));
+					g2.fillRect(20,0,130,20);
+					g2.setPaint(new GradientPaint(85.0f, 40.0f, Color.LIGHT_GRAY, 85.0f, 17.0f, DESKTOP_COLOR));
+					g2.fillRect(20,20,130,20);
+					g2.setColor(Color.darkGray);
+					g2.drawArc(0,0,40,40,90,90);
+					g2.drawArc(0,0,40,40,180,90);
+					g2.drawArc(130,0,40,40,0,90);
+					g2.drawArc(130,0,40,40,270,90);
+					g2.drawLine(20,0,150,0);
+					g2.drawLine(20,40,150,40);
+					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+				}
 			}
 			//
 			if (nodeType.equals("Folder")) {
@@ -12186,15 +12174,15 @@ public class Modeler extends JFrame {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			if (inPrintMode) {
-				g2.setColor(Color.DARK_GRAY);
-				g2.drawArc(0,0,40,40,90,90);
-				g2.drawArc(0,boundaryHeight-40,40,40,180,90);
-				g2.drawArc(boundaryWidth-40,0,40,40,0,90);
+				g2.setColor(Color.black);
+				g2.drawArc(1,1,40,40,90,90);
+				g2.drawArc(1,boundaryHeight-40,40,40,180,90);
+				g2.drawArc(boundaryWidth-40,1,40,40,0,90);
 				g2.drawArc(boundaryWidth-40, boundaryHeight-40,40,40,270,90);
-				g2.drawLine(20,0,boundaryWidth-20,0);
-				g2.drawLine(20,boundaryHeight,boundaryWidth-20,boundaryHeight);
-				g2.drawLine(0,20,0,boundaryHeight-20);
-				g2.drawLine(boundaryWidth,20,boundaryWidth,boundaryHeight-20);
+				g2.drawLine(21,1,boundaryWidth-21,1);
+				g2.drawLine(22,boundaryHeight,boundaryWidth-21,boundaryHeight);
+				g2.drawLine(1,21,1,boundaryHeight-21);
+				g2.drawLine(boundaryWidth,21,boundaryWidth,boundaryHeight-21);
 			} else {
 				g2.setPaint(new GradientPaint(5, 5, Color.WHITE, 10, 10, Color.LIGHT_GRAY));
 				g2.fillArc(0,1,40,40,90,90);
@@ -13298,8 +13286,9 @@ public class Modeler extends JFrame {
 		private DatamodelEntityBox entityBox1, entityBox2;
 		private JPanel jPanelCanvas;
 		private int terminalIndex, terminalIndex1, terminalIndex2;
-		private Line2D iconPart_11, iconPart_12, iconPart_13, iconPart_14, iconPart_15;
-		private Line2D iconPart_21, iconPart_22, iconPart_23, iconPart_24, iconPart_25;
+		private Line2D iconPart_11, iconPart_12, iconPart_13, iconPart_14;
+		private Line2D iconPart_21, iconPart_22, iconPart_23, iconPart_24;
+		private RoundRectangle2D iconPart_15, iconPart_25;
 		private Arc2D arc2D_A, arc2D_B;
 		private int arc2D_x, arc2D_y, arc2D_w, arc2D_h;
 		private Line2D line2D_A, line2D_B;
@@ -13499,23 +13488,23 @@ public class Modeler extends JFrame {
 			jMenuItemRelationshipLineHide.addActionListener(new jMenuItemRelationshipLineHide_actionAdapter(this));
 			jPopupMenuRelationshipLine.add(jMenuItemRelationshipLineHide);
 		}
-		//
+
 		public boolean isShowOnModel() {
 			return showOnModel;
 		}
-		//
+
 		public void setShowOnModel(boolean show) {
 			showOnModel = show;
 		}
-		//
+
 		public DatamodelEntityBox getEntityBox1() {
 			return entityBox1;
 		}
-		//
+
 		public DatamodelEntityBox getEntityBox2() {
 			return entityBox2;
 		}
-		//
+
 		public void drawLine(Graphics2D g2) {
 			if (entityBox1.isShowOnModel() && entityBox2.isShowOnModel()) {
 				if (showOnModel) {
@@ -13526,7 +13515,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-		//
+
 		public void drawTerminals() {
 			if (entityBox1.isShowOnModel() && entityBox2.isShowOnModel()) {
 				if (showOnModel) {
@@ -13558,12 +13547,12 @@ public class Modeler extends JFrame {
 			if (terminalIndex1 >= 23 && terminalIndex1 <= 40) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
 					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
 					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
 					//optional-cross shape//
 					if (terminal1Optional) {
@@ -13573,7 +13562,7 @@ public class Modeler extends JFrame {
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
 					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
 					//optional-cross shape//
 					if (terminal1Optional) {
@@ -13587,27 +13576,27 @@ public class Modeler extends JFrame {
 			if (terminalIndex1 >= 18 && terminalIndex1 <= 22) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 3, 7, 3);
-					iconPart_12 = new Line2D.Double(3, 0, 3, 6);
+					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
+					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 3, 7, 3);
-					iconPart_12 = new Line2D.Double(3, 0, 3, 6);
+					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
+					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
 					//optional-cross shape//
 					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(0, 2, 1, 2);
-						iconPart_14 = new Line2D.Double(0, 4, 1, 4);
+						iconPart_13 = new Line2D.Double(0, 3, 1, 3);
+						iconPart_14 = new Line2D.Double(0, 5, 1, 5);
 					}
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 3, 7, 3);
-					iconPart_12 = new Line2D.Double(3, 0, 3, 6);
+					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
+					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
 					//optional-cross shape//
 					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(0, 2, 1, 2);
-						iconPart_14 = new Line2D.Double(0, 4, 1, 4);
+						iconPart_13 = new Line2D.Double(0, 3, 1, 3);
+						iconPart_14 = new Line2D.Double(0, 5, 1, 5);
 					}
 				}
 			}
@@ -13616,12 +13605,12 @@ public class Modeler extends JFrame {
 			if (terminalIndex1 >= 00 && terminalIndex1 <= 17) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
 					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
 					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
 					//optional-cross shape//
 					if (terminal1Optional) {
@@ -13631,7 +13620,7 @@ public class Modeler extends JFrame {
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 7);
+					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
 					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
 					//optional-cross shape//
 					if (terminal1Optional) {
@@ -13655,11 +13644,8 @@ public class Modeler extends JFrame {
 			if (terminalIndex2 >= 23 && terminalIndex2 <= 40) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(4, 0, 4, 7);
-					iconPart_22 = new Line2D.Double(1, 3, 1, 7);
-					iconPart_23 = new Line2D.Double(7, 3, 7, 7);
-					iconPart_24 = new Line2D.Double(3, 1, 2, 2);
-					iconPart_25 = new Line2D.Double(5, 1, 6, 2);
+					iconPart_21 = new Line2D.Double(4, 0, 4, 10);
+					iconPart_25 = new RoundRectangle2D.Double(1, 0, 6, 15, 8, 8);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
@@ -13682,25 +13668,22 @@ public class Modeler extends JFrame {
 			if (terminalIndex2 >= 18 && terminalIndex2 <= 22) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(3, 0, 7, 0);
-					iconPart_22 = new Line2D.Double(2, 1, 1, 2);
-					iconPart_23 = new Line2D.Double(0, 3, 7, 3);
-					iconPart_24 = new Line2D.Double(1, 4, 2, 5);
-					iconPart_25 = new Line2D.Double(3, 6, 7, 6);
+					iconPart_21 = new Line2D.Double(0, 4, 10, 4);
+					iconPart_25 = new RoundRectangle2D.Double(0, 1, 15, 6, 8, 8);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
-					iconPart_21 = new Line2D.Double(2, 3, 3, 3);
-					iconPart_22 = new Line2D.Double(6, 3, 7, 3);
+					iconPart_21 = new Line2D.Double(3, 4, 4, 4);
+					iconPart_22 = new Line2D.Double(6, 4, 7, 4);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_21 = new Line2D.Double(0, 3, 7, 3);
-					iconPart_22 = new Line2D.Double(3, 0, 3, 6);
+					iconPart_21 = new Line2D.Double(0, 4, 10, 4);
+					iconPart_22 = new Line2D.Double(4, 1, 4, 7);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						iconPart_23 = new Line2D.Double(0, 2, 1, 2);
-						iconPart_24 = new Line2D.Double(0, 4, 1, 4);
+						iconPart_23 = new Line2D.Double(0, 3, 1, 3);
+						iconPart_24 = new Line2D.Double(0, 5, 1, 5);
 					}
 				}
 			}
@@ -13709,11 +13692,8 @@ public class Modeler extends JFrame {
 			if (terminalIndex2 >= 00 && terminalIndex2 <= 17) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(4, 0, 4, 7);
-					iconPart_22 = new Line2D.Double(1, 0, 1, 4);
-					iconPart_23 = new Line2D.Double(7, 0, 7, 4);
-					iconPart_24 = new Line2D.Double(2, 5, 3, 6);
-					iconPart_25 = new Line2D.Double(5, 6, 6, 5);
+					iconPart_21 = new Line2D.Double(4, -3, 4, 7);
+					iconPart_25 = new RoundRectangle2D.Double(1, -8, 6, 15, 8, 8);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
@@ -13748,7 +13728,7 @@ public class Modeler extends JFrame {
 			//Left-Sided//
 			if (terminalIndex1 >= 18 && terminalIndex1 <= 22) {
 				iconPoint1 = new Point(boxPoint1.x - 8, boxPoint1.y + (22 - terminalIndex1) * 8);
-				lineTerminalPoint1 = new Point(iconPoint1.x - 1, iconPoint1.y + 3);
+				lineTerminalPoint1 = new Point(iconPoint1.x, iconPoint1.y + 4);
 			}
 
 			//Bottom-Sided//
@@ -13771,8 +13751,8 @@ public class Modeler extends JFrame {
 
 			//Left-Sided//
 			if (terminalIndex2 >= 18 && terminalIndex2 <= 22) {
-				iconPoint2 = new Point(boxPoint2.x - 8, boxPoint2.y + (22 - terminalIndex2) * 8);
-				lineTerminalPoint2 = new Point(iconPoint2.x - 1, iconPoint2.y + 3);
+				iconPoint2 = new Point(boxPoint2.x - 8, boxPoint2.y + (22 - terminalIndex2) * 8 + 1);
+				lineTerminalPoint2 = new Point(iconPoint2.x, iconPoint2.y + 4);
 			}
 
 			//Bottom-Sided//
@@ -19592,11 +19572,11 @@ public class Modeler extends JFrame {
 					+ ((XeadTreeNode)this.getParent().getParent()).getName() + " - " + this.getName());
 			jTextFieldTableFieldName.setText(domNode_.getAttribute("Name"));
 			jTextFieldTableFieldAlias.setText(domNode_.getAttribute("Alias"));
-//			if (domNode_.getAttribute("ShowOnModel").equals("true")) {
-//				jCheckBoxTableFieldShowOnModel.setSelected(true);
-//			} else {
-//				jCheckBoxTableFieldShowOnModel.setSelected(false);
-//			}
+			if (domNode_.getAttribute("ShowOnModel").equals("true")) {
+				jCheckBoxTableFieldShowOnModel.setSelected(true);
+			} else {
+				jCheckBoxTableFieldShowOnModel.setSelected(false);
+			}
 			if (domNode_.getAttribute("AttributeType").equals("NATIVE")) {
 				jRadioButtonTableFieldAttributeTypeNATIVE.setSelected(true);
 			}
@@ -23393,12 +23373,12 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("Alias").equals(jTextFieldTableFieldAlias.getText())) {
 				valueOfFieldsChanged = true;
 			}
-//			if (!domNode_.getAttribute("ShowOnModel").equals("true") && jCheckBoxTableFieldShowOnModel.isSelected()) {
-//				valueOfFieldsChanged = true;
-//			}
-//			if (domNode_.getAttribute("ShowOnModel").equals("true") && !jCheckBoxTableFieldShowOnModel.isSelected()) {
-//				valueOfFieldsChanged = true;
-//			}
+			if (!domNode_.getAttribute("ShowOnModel").equals("true") && jCheckBoxTableFieldShowOnModel.isSelected()) {
+				valueOfFieldsChanged = true;
+			}
+			if (domNode_.getAttribute("ShowOnModel").equals("true") && !jCheckBoxTableFieldShowOnModel.isSelected()) {
+				valueOfFieldsChanged = true;
+			}
 			if (!tableFieldDataTypeID.equals(domNode_.getAttribute("DataTypeID"))) {
 				valueOfFieldsChanged = true;
 			}
@@ -23434,11 +23414,11 @@ public class Modeler extends JFrame {
 				//Update DOM element//
 				domNode_.setAttribute("Name", jTextFieldTableFieldName.getText());
 				domNode_.setAttribute("Alias", jTextFieldTableFieldAlias.getText());
-//				if (jCheckBoxTableFieldShowOnModel.isSelected()) {
-//					domNode_.setAttribute("ShowOnModel", "true");
-//				} else {
-//					domNode_.setAttribute("ShowOnModel", "false");
-//				}
+				if (jCheckBoxTableFieldShowOnModel.isSelected()) {
+					domNode_.setAttribute("ShowOnModel", "true");
+				} else {
+					domNode_.setAttribute("ShowOnModel", "false");
+				}
 				domNode_.setAttribute("DataTypeID", tableFieldDataTypeID);
 				if (jRadioButtonTableFieldAttributeTypeNATIVE.isSelected()) {
 					domNode_.setAttribute("AttributeType", "NATIVE");
@@ -30485,124 +30465,262 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToCaptureImage_actionPerformed(ActionEvent e) {
-		String imageFileType = "";
-		Object[] bts = {"JPEG", "PNG", res.getString("S806")};
-		int rtn = 2;
-		//
-		rtn = JOptionPane.showOptionDialog(this, res.getString("S2612"),
-				res.getString("S2613"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-		//
-		if (rtn == 0 || rtn == 1) {
-			//
-			if (rtn == 0) {
-				imageFileType = "JPEG";
-			}
-			if (rtn == 1) {
-				imageFileType = "PNG";
-			}
-			//
-			String fileName = specifyNameOfNewFile(res.getString("S2616") + imageFileType + res.getString("S2617"),res.getString("S1125"), "image." + imageFileType);
-			if (!fileName.equals("")) {
-				File file = new File(fileName);
-				BufferedImage image = null;
-				Graphics2D g2 = null;
-				Border borderSaved = null;
-				Color  colorSaved = null;
-				try {
-					if (currentMainTreeNode.getType().equals("SubjectArea")) {
-						if (jDialogDataflowSlideShow.isVisible()) {
-							image = new BufferedImage(jPanelSubjectAreaDataflowEditor1.getWidth(), jPanelSubjectAreaDataflowEditor1.getHeight(), BufferedImage.TYPE_INT_RGB);
-							g2 = (Graphics2D)image.getGraphics();
-							jPanelSubjectAreaDataflowSlideShow1.paint(g2);
-						} else {
-							//
-							Object[] bts2 = {res.getString("S2622"), res.getString("S2623")};
-							int rtn2 = 0;
-							rtn2 = JOptionPane.showOptionDialog(this, res.getString("S2624"),
-									res.getString("S2625"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts2, bts2[0]);
-							//
-							image = new BufferedImage(jPanelSubjectAreaDataflowEditor1.getWidth(), jPanelSubjectAreaDataflowEditor1.getHeight(), BufferedImage.TYPE_INT_RGB);
-							g2 = (Graphics2D)image.getGraphics();
-							//
-							if (rtn2 == 1) {
-								borderSaved = jPanelSubjectAreaDataflowEditor1.getBorder();
+			String imageFileType = "";
+
+			Object[] bts = {"PNG", "JPEG", "Vector(SVG)", res.getString("S806")};
+			int rtn = 3;
+			rtn = JOptionPane.showOptionDialog(this, res.getString("S2612"),
+					res.getString("S2613"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn == 0 || rtn == 1 || rtn == 2) {
+				if (rtn == 0) {
+					imageFileType = "PNG";
+				}
+				if (rtn == 1) {
+					imageFileType = "JPEG";
+				}
+				if (rtn == 2) {
+					imageFileType = "SVG";
+				}
+
+				String fileName = specifyNameOfNewFile(res.getString("S2616") + imageFileType + res.getString("S2617"),res.getString("S1125"), "image." + imageFileType);
+				if (!fileName.equals("")) {
+					File file = new File(fileName);
+					BufferedImage image = null;
+					Graphics2D g2 = null;
+					Color  colorSaved = null;
+					Point imageSize = new Point(0,0);
+					Rectangle wrkRec;
+					try {
+
+						if (currentMainTreeNode.getType().equals("SubjectArea")) {
+
+							wrkRec = dataflowBoundaryEditor.getBounds();
+							imageSize.x = wrkRec.x + wrkRec.width + 30; 
+							imageSize.y = wrkRec.y + wrkRec.height + 30; 
+							for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+								wrkRec = dataflowNodeEditorArray.get(i).getBounds();
+								if (wrkRec.x + wrkRec.width + 30 > imageSize.x) {
+									imageSize.x = wrkRec.x + wrkRec.width + 30; 
+								}
+								if (wrkRec.y + wrkRec.height + 30 > imageSize.y) {
+									imageSize.y = wrkRec.y + wrkRec.height + 30; 
+								}
+							}
+
+							if (imageFileType == "SVG") {
+								DOMImplementation domImpl=GenericDOMImplementation.getDOMImplementation();
+								org.w3c.dom.Document document=domImpl.createDocument(null, "svg", null);
+								SVGGraphics2D svg2d=new SVGGraphics2D(document);
+								svg2d.setBackground(new Color(255,255,255,0));
+								svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+
 								colorSaved = jPanelSubjectAreaDataflowEditor1.getBackground();
+								if (jDialogDataflowSlideShow.isVisible()) {
+									inPrintMode = true;
+									jPanelSubjectAreaDataflowSlideShow1.setBackground(Color.white);
+									dataflowBoundarySlideShow.updateColors();
+									for (int i = 0; i < dataflowNodeSlideShowArray.size(); i++) {
+										dataflowNodeSlideShowArray.get(i).updateColors();
+									}
+									for (int i = 0; i < dataflowLineSlideShowArray.size(); i++) {
+										dataflowLineSlideShowArray.get(i).updateColors();
+									}
+									jPanelSubjectAreaDataflowSlideShow1.setBounds(jPanelSubjectAreaDataflowSlideShow1.getBounds().x, jPanelSubjectAreaDataflowSlideShow1.getBounds().y, imageSize.x, imageSize.y);
+									jPanelSubjectAreaDataflowSlideShow1.paint(svg2d);
+									inPrintMode = false;
+									jPanelSubjectAreaDataflowSlideShow1.setBackground(colorSaved);
+									dataflowBoundarySlideShow.updateColors();
+									for (int i = 0; i < dataflowNodeSlideShowArray.size(); i++) {
+										dataflowNodeSlideShowArray.get(i).updateColors();
+									}
+									for (int i = 0; i < dataflowLineSlideShowArray.size(); i++) {
+										dataflowLineSlideShowArray.get(i).updateColors();
+									}
+								} else {
+									inPrintMode = true;
+									jPanelSubjectAreaDataflowEditor1.setBackground(Color.white);
+									dataflowBoundaryEditor.updateColors();
+									for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+										dataflowNodeEditorArray.get(i).updateColors();
+									}
+									for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+										dataflowLineEditorArray.get(i).updateColors();
+									}
+									jPanelSubjectAreaDataflowEditor1.setBounds(0, 0, imageSize.x, imageSize.y);
+									jPanelSubjectAreaDataflowEditor1.paint(svg2d);
+									inPrintMode = false;
+									jPanelSubjectAreaDataflowEditor1.setBackground(colorSaved);
+									dataflowBoundaryEditor.updateColors();
+									for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+										dataflowNodeEditorArray.get(i).updateColors();
+									}
+									for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+										dataflowLineEditorArray.get(i).updateColors();
+									}
+								}
+
+								org.w3c.dom.Element sv=svg2d.getRoot();
+								sv.setAttribute("xml:space", "preserve");
+								sv.setAttribute("width", Integer.toString(imageSize.x));
+								sv.setAttribute("height", Integer.toString(imageSize.y));
+								sv.setAttribute("viewBox", "0 0 "+ Integer.toString(imageSize.x) +" "+ Integer.toString(imageSize.y));
+								try {
+									OutputStream os = new FileOutputStream(file);
+									BufferedOutputStream bos = new BufferedOutputStream(os);
+									Writer out = new OutputStreamWriter(bos, "UTF-8");
+									svg2d.stream(sv,out);
+								} catch (UnsupportedEncodingException ue){
+									ue.printStackTrace();
+								} catch (SVGGraphics2DIOException se){
+									se.printStackTrace();
+								} catch (IOException ioe){
+									ioe.printStackTrace();
+								}
+							} else {
+								image = new BufferedImage(imageSize.x, imageSize.y, BufferedImage.TYPE_INT_RGB);
+								g2 = (Graphics2D)image.getGraphics();
+								if (jDialogDataflowSlideShow.isVisible()) {
+									jPanelSubjectAreaDataflowSlideShow1.paint(g2);
+								} else {
+									jPanelSubjectAreaDataflowEditor1.paint(g2);
+								}
+								ImageIO.write(image, imageFileType, file);
+							}
+						}
+
+						if (currentMainTreeNode.getType().equals("TableList")) {
+
+							for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+								if (datamodelEntityBoxArray.get(i).isShowOnModel()) {
+									wrkRec = datamodelEntityBoxArray.get(i).getBounds();
+									if (wrkRec.x + wrkRec.width + 30 > imageSize.x) {
+										imageSize.x = wrkRec.x + wrkRec.width + 30; 
+									}
+									if (wrkRec.y + wrkRec.height + 30 > imageSize.y) {
+										imageSize.y = wrkRec.y + wrkRec.height + 30; 
+									}
+								}
+							}
+
+							if (imageFileType == "SVG") {
+								DOMImplementation domImpl=GenericDOMImplementation.getDOMImplementation();
+								org.w3c.dom.Document document=domImpl.createDocument(null, "svg", null);
+								SVGGraphics2D svg2d=new SVGGraphics2D(document);
+								svg2d.setBackground(new Color(255,255,255,0));
+								svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+
 								inPrintMode = true;
-								jPanelSubjectAreaDataflowEditor1.setBorder(BorderFactory.createLineBorder(Color.black));
-								jPanelSubjectAreaDataflowEditor1.setBackground(Color.white);
-								dataflowBoundaryEditor.updateColors();
-								for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
-									dataflowNodeEditorArray.get(i).updateColors();
+								colorSaved = jPanelDatamodel.getBackground();
+								jPanelDatamodel.setBackground(Color.white);
+								for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+									datamodelEntityBoxArray.get(i).updateColors();
 								}
-								for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
-									dataflowLineEditorArray.get(i).updateColors();
-								}
-							}
-							//
-							jPanelSubjectAreaDataflowEditor1.paint(g2);
-							//
-							if (rtn2 == 1) {
+
+								jPanelDatamodel.setBounds(0, 0, imageSize.x, imageSize.y);
+								jPanelDatamodel.paint(svg2d);
+
 								inPrintMode = false;
-								jPanelSubjectAreaDataflowEditor1.setBackground(colorSaved);
-								jPanelSubjectAreaDataflowEditor1.setBorder(borderSaved);
-								dataflowBoundaryEditor.updateColors();
-								for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
-									dataflowNodeEditorArray.get(i).updateColors();
+								jPanelDatamodel.setBackground(colorSaved);
+								for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+									datamodelEntityBoxArray.get(i).updateColors();
 								}
-								for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
-									dataflowLineEditorArray.get(i).updateColors();
+
+								org.w3c.dom.Element sv=svg2d.getRoot();
+								sv.setAttribute("xml:space", "preserve");
+								sv.setAttribute("width", Integer.toString(imageSize.x));
+								sv.setAttribute("height", Integer.toString(imageSize.y));
+								sv.setAttribute("viewBox", "0 0 "+ Integer.toString(imageSize.x) +" "+ Integer.toString(imageSize.y));
+								try {
+									OutputStream os = new FileOutputStream(file);
+									BufferedOutputStream bos = new BufferedOutputStream(os);
+									Writer out = new OutputStreamWriter(bos, "UTF-8");
+									svg2d.stream(sv,out);
+								} catch (UnsupportedEncodingException ue){
+									ue.printStackTrace();
+								} catch (SVGGraphics2DIOException se){
+									se.printStackTrace();
+								} catch (IOException ioe){
+									ioe.printStackTrace();
 								}
+							} else {
+								image = new BufferedImage(imageSize.x, imageSize.y, BufferedImage.TYPE_INT_RGB);
+								g2 = (Graphics2D)image.getGraphics();
+								jPanelDatamodel.paint(g2);
+								ImageIO.write(image, imageFileType, file);
 							}
 						}
-					}
-					if (currentMainTreeNode.getType().equals("TableList")) {
-						Object[] bts2 = {res.getString("S2622"), res.getString("S2623")};
-						int rtn2 = 0;
-						rtn2 = JOptionPane.showOptionDialog(this, res.getString("S2629"),
-								res.getString("S2625"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts2, bts2[0]);
-						//
-						image = new BufferedImage(jPanelDatamodel.getPreferredSize().width, jPanelDatamodel.getPreferredSize().height, BufferedImage.TYPE_INT_RGB);
-						g2 = (Graphics2D)image.getGraphics();
-						//
-						if (rtn2 == 1) {
-							borderSaved = jPanelDatamodel.getBorder();
-							colorSaved = jPanelDatamodel.getBackground();
-							inPrintMode = true;
-							jPanelDatamodel.setBorder(BorderFactory.createLineBorder(Color.black));
-							jPanelDatamodel.setBackground(Color.white);
-							for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
-								datamodelEntityBoxArray.get(i).updateColors();
+
+						if (currentMainTreeNode.getType().equals("IOPanel")) {
+							if (imageFileType == "SVG") {
+								DOMImplementation domImpl=GenericDOMImplementation.getDOMImplementation();
+								org.w3c.dom.Document document=domImpl.createDocument(null, "svg", null);
+								SVGGraphics2D svg2d=new SVGGraphics2D(document);
+								svg2d.setBackground(new Color(255,255,255,0));
+								svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+								jTextPaneIOPanelImage.paint(svg2d);
+								org.w3c.dom.Element sv=svg2d.getRoot();
+								sv.setAttribute("xml:space", "preserve");
+								sv.setAttribute("width", Integer.toString(jTextPaneIOPanelImage.getWidth()));
+								sv.setAttribute("height", Integer.toString(jTextPaneIOPanelImage.getHeight()));
+								sv.setAttribute("viewBox", "0 0 "+ Integer.toString(jTextPaneIOPanelImage.getWidth()) +" "+ Integer.toString(jTextPaneIOPanelImage.getHeight()));
+								try {
+									OutputStream os = new FileOutputStream(file);
+									BufferedOutputStream bos = new BufferedOutputStream(os);
+									Writer out = new OutputStreamWriter(bos, "UTF-8");
+									svg2d.stream(sv,out);
+								} catch (UnsupportedEncodingException ue){
+									ue.printStackTrace();
+								} catch (SVGGraphics2DIOException se){
+									se.printStackTrace();
+								} catch (IOException ioe){
+									ioe.printStackTrace();
+								}
+							} else {
+								image = new BufferedImage(jTextPaneIOPanelImage.getWidth() + 30, jTextPaneIOPanelImage.getHeight() + 30, BufferedImage.TYPE_INT_RGB);
+								g2 = (Graphics2D)image.getGraphics();
+								jPanelIOPanelImage.paint(g2);
+								ImageIO.write(image, imageFileType, file);
 							}
 						}
-						//
-						jPanelDatamodel.paint(g2);
-						//
-						if (rtn2 == 1) {
-							inPrintMode = false;
-							jPanelDatamodel.setBackground(colorSaved);
-							jPanelDatamodel.setBorder(borderSaved);
-							for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
-								datamodelEntityBoxArray.get(i).updateColors();
+
+						if (currentMainTreeNode.getType().equals("IOSpool")) {
+							if (imageFileType == "SVG") {
+								DOMImplementation domImpl=GenericDOMImplementation.getDOMImplementation();
+								org.w3c.dom.Document document=domImpl.createDocument(null, "svg", null);
+								SVGGraphics2D svg2d=new SVGGraphics2D(document);
+								svg2d.setBackground(new Color(255,255,255,0));
+								svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+								jTextPaneIOSpoolImage.paint(svg2d);
+								org.w3c.dom.Element sv=svg2d.getRoot();
+								sv.setAttribute("xml:space", "preserve");
+								sv.setAttribute("width", Integer.toString(jTextPaneIOSpoolImage.getWidth()));
+								sv.setAttribute("height", Integer.toString(jTextPaneIOSpoolImage.getHeight()));
+								sv.setAttribute("viewBox", "0 0 "+ Integer.toString(jTextPaneIOSpoolImage.getWidth()) +" "+ Integer.toString(jTextPaneIOSpoolImage.getHeight()));
+								try {
+									OutputStream os = new FileOutputStream(file);
+									BufferedOutputStream bos = new BufferedOutputStream(os);
+									Writer out = new OutputStreamWriter(bos, "UTF-8");
+									svg2d.stream(sv,out);
+								} catch (UnsupportedEncodingException ue){
+									ue.printStackTrace();
+								} catch (SVGGraphics2DIOException se){
+									se.printStackTrace();
+								} catch (IOException ioe){
+									ioe.printStackTrace();
+								}
+							} else {
+								image = new BufferedImage(jTextPaneIOSpoolImage.getWidth() + 30, jTextPaneIOSpoolImage.getHeight() + 30, BufferedImage.TYPE_INT_RGB);
+								g2 = (Graphics2D)image.getGraphics();
+								jPanelIOSpoolImage.paint(g2);
+								ImageIO.write(image, imageFileType, file);
 							}
 						}
-					}
-					if (currentMainTreeNode.getType().equals("IOPanel")) {
-						image = new BufferedImage(jTextPaneIOPanelImage.getWidth() + 30, jTextPaneIOPanelImage.getHeight() + 30, BufferedImage.TYPE_INT_RGB);
-						g2 = (Graphics2D)image.getGraphics();
-						jPanelIOPanelImage.paint(g2);
-					}
-					if (currentMainTreeNode.getType().equals("IOSpool")) {
-						image = new BufferedImage(jTextPaneIOSpoolImage.getWidth() + 30, jTextPaneIOSpoolImage.getHeight() + 30, BufferedImage.TYPE_INT_RGB);
-						g2 = (Graphics2D)image.getGraphics();
-						jPanelIOSpoolImage.paint(g2);
-					}
-					ImageIO.write(image, imageFileType, file);
-				}
-				catch (IOException ex) {
+						desktop.browse(file.toURI());
+					} catch (Exception ex) {}
 				}
 			}
-		}
 	}
+
 	/**
 	 * Event Handler for jMenuItemComponentToMoveLeft in case item selected
 	 * @param e :Action Event

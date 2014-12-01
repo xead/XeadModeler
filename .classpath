@@ -8,5 +8,11 @@
 	<classpathentry kind="lib" path="C:/XeadProject/Modeler/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="C:/XeadProject/Modeler/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="C:/XeadProject/Modeler/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-dom.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-svggen.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-awt-util.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-ext.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-util.jar"/>
+	<classpathentry kind="lib" path="C:/XeadProject/Modeler/batik_jar/batik-xml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
