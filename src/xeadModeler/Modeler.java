@@ -10154,8 +10154,8 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		private org.w3c.dom.Element dataflowNodeElement_;
 		private JLabel jLabelID = new JLabel();
-		private JTextField jTextFieldNodeName = new JTextField();
-		private JTextField jTextFieldNodeNameExt = new JTextField();
+		private JLabel jTextFieldNodeName = new JLabel();
+		private JLabel jTextFieldNodeNameExt = new JLabel();
 		private JLabel[] jLabelEvent = new JLabel[3];
 		private JLabel jLabelRole = new JLabel();
 		private JLabel jLabelNumber = new JLabel();
@@ -10212,19 +10212,19 @@ public class Modeler extends JFrame {
 			jTextFieldNodeName.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldNodeName.setForeground(Color.WHITE);
 			jTextFieldNodeName.setText(dataflowNodeElement_.getAttribute("Name"));
-			jTextFieldNodeName.setEditable(false);
+			//jTextFieldNodeName.setEditable(false);
 			jTextFieldNodeName.setBorder(null);
 			jTextFieldNodeName.setOpaque(false);
-			jTextFieldNodeName.setSelectionColor(Color.blue);
+			//jTextFieldNodeName.setSelectionColor(Color.blue);
 			jTextFieldNodeName.setName("jTextFieldNodeName");
 			jTextFieldNodeNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			jTextFieldNodeNameExt.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldNodeNameExt.setForeground(Color.WHITE);
 			jTextFieldNodeNameExt.setText(dataflowNodeElement_.getAttribute("NameExt"));
-			jTextFieldNodeNameExt.setEditable(false);
+			//jTextFieldNodeNameExt.setEditable(false);
 			jTextFieldNodeNameExt.setBorder(null);
 			jTextFieldNodeNameExt.setOpaque(false);
-			jTextFieldNodeNameExt.setSelectionColor(Color.blue);
+			//jTextFieldNodeNameExt.setSelectionColor(Color.blue);
 			jTextFieldNodeNameExt.setName("jTextFieldNodeNameExt");
 			Integer num = new Integer(dataflowNodeElement_.getAttribute("SlideNumber"));
 			slideNumber = num.intValue();
@@ -10248,7 +10248,7 @@ public class Modeler extends JFrame {
 					eventPos = "L";
 				}
 				//
-				jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 				jLabelID.setForeground(Color.lightGray);
 				jLabelID.setText(taskNode.getElement().getAttribute("SortKey"));
 				if (eventPos.equals("L")) {
@@ -10262,7 +10262,7 @@ public class Modeler extends JFrame {
 				this.add(jLabelID,null);
 				//
 				jTextFieldNodeName.setText(taskNode.getElement().getAttribute("Name"));
-				jTextFieldNodeName.setBounds(new Rectangle(8, 80, 135, 15));
+				jTextFieldNodeName.setBounds(new Rectangle(8, 80, 135, 17));
 				adjustFontSizeOfTextField(jTextFieldNodeName);
 				this.add(jTextFieldNodeName,null);
 				//
@@ -10277,7 +10277,7 @@ public class Modeler extends JFrame {
 				jLabelNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 				jLabelNumber.setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelNumber.setForeground(Color.lightGray);
-				jLabelNumber.setBounds(new Rectangle(8, 97, 135, 15));
+				jLabelNumber.setBounds(new Rectangle(8, 99, 135, 15));
 				this.add(jLabelNumber,null);
 				//
 				jLabelEvent[0] = new JLabel();
@@ -10396,7 +10396,7 @@ public class Modeler extends JFrame {
 					}
 				}
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 17));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
@@ -12063,6 +12063,12 @@ public class Modeler extends JFrame {
 
 		private void node_mouseEntered(MouseEvent e) {
 			setCursor(new Cursor(Cursor.MOVE_CURSOR));
+			if (nodeType.equals("Process")
+					|| (nodeType.equals("Subject") && !dataflowNodeElement_.getAttribute("RoleID").equals(""))) {
+				jTextFieldNodeName.setText("<html><u>"+jTextFieldNodeName.getText());
+			} else {
+				jTextFieldNodeName.setText(jTextFieldNodeName.getText());
+			}
 			jTextFieldNodeName.setForeground(SELECT_COLOR);
 			jTextFieldNodeNameExt.setForeground(SELECT_COLOR);
 		}
@@ -12070,6 +12076,7 @@ public class Modeler extends JFrame {
 		private void node_mouseExited(MouseEvent e) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			if (!isSelected_) {
+				jTextFieldNodeName.setText(jTextFieldNodeName.getText().replace("<html><u>", ""));
 				jTextFieldNodeName.setForeground(Color.WHITE);
 				jTextFieldNodeNameExt.setForeground(Color.WHITE);
 			}
@@ -14701,16 +14708,27 @@ public class Modeler extends JFrame {
 				//
 				jLabelNo.setForeground(Color.black);
 				jLabelName.setForeground(Color.black);
-				jLabelSubsystemName.setForeground(Color.GRAY);
-				jPanel2.setBackground(Color.LIGHT_GRAY);
-				jLabelID.setForeground(Color.black);
-				jLabelCRUD.setForeground(Color.black);
+				jPanelElements.setBorder(BorderFactory.createMatteBorder(0,1,0,0,Color.black));
+				if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
+					jPanelElements.setBackground(new Color(233, 255, 255));
+					jPanel2.setBackground(new Color(183, 255, 255));
+					jLabelID.setForeground(Color.black);
+					jLabelCRUD.setForeground(Color.black);
+				} else {
+					jPanelElements.setBackground(new Color(243, 243, 243));
+					jPanel2.setBackground(new Color(226, 226, 226));
+					jLabelSubsystemName.setForeground(new Color(226, 226, 226));
+					jLabelID.setForeground(Color.black);
+					jLabelCRUD.setForeground(Color.black);
+				}
 			} else {
 				jPanel1.setBorder(normalBorder);
 				jTextAreaShowInstance.setForeground(Color.white);
 				//
 				jLabelNo.setForeground(Color.white);
 				jLabelName.setForeground(Color.white);
+				jPanelElements.setBorder(null);
+				jPanelElements.setBackground(Color.white);
 				jLabelSubsystemName.setForeground(Color.GRAY);
 				if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
 					jPanel2.setBackground(Color.BLUE);
@@ -28061,6 +28079,7 @@ public class Modeler extends JFrame {
 				jTextAreaSystemTermsDescriptions.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,3));
 				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.window);
 				jTextAreaSystemTermsDescriptions.setEditable(true);
+				jTextAreaSystemTermsDescriptions.setCaretPosition(0);
 			}
 		}
 		if (selectedRow_jTableSystemTermsList == -1) {
@@ -28104,7 +28123,7 @@ public class Modeler extends JFrame {
 				setText((String)tableModelSystemMaintenanceLog.getValueAt(selectedRow_jTableSystemMaintenanceLog,3));
 				jTextAreaSystemMaintenanceLogDescriptions.setBackground(SystemColor.window);
 				jTextAreaSystemMaintenanceLogDescriptions.setEditable(true);
-				//TableRowNumber tableRowNumber = (TableRowNumber)tableModelSystemMaintenanceLog.getValueAt(selectedRow_jTableSystemMaintenanceLog,0);
+				jTextAreaSystemMaintenanceLogDescriptions.setCaretPosition(0);
 			}
 		}
 		if (selectedRow_jTableSystemMaintenanceLog == -1) {

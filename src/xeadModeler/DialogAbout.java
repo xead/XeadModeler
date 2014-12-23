@@ -47,7 +47,12 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M12";
+	public static final String FULL_VERSION = "V1.R4.M13";
+	// 1.4.13での変更点
+	//・データモデルのSVG出力について、配色設定を改善
+	//・業務フローの「プロセス」と「主体・システム」について表示設定を改善
+	//・業務フローのフロー追加ダイアログで、職務とリンクされた「主体・システム」の要素名が表示されない問題を修正
+	//
 	// 1.4.12での変更点
 	//・フィールド定義一覧上だけでなく、個々のフィールド定義上でも「モデル表示」を設定できるようにした
 	//・業務フローとデータモデルの画像出力について、ベクター形式(SVG)に対応するとともに、それぞれの描画ロジックを微調整した

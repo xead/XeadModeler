@@ -374,7 +374,12 @@ public class DialogDataflowLine extends JDialog {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeElement.getAttribute("TaskID"), null);
 					jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
 				} else {
-					jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
+					if (nodeElement.getAttribute("Type").equals("Subject") && !nodeElement.getAttribute("RoleID").equals("")) {
+						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeElement.getAttribute("RoleID"), null);
+						jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
+					} else {
+						jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
+					}
 				}
 			}
 		}
@@ -401,7 +406,13 @@ public class DialogDataflowLine extends JDialog {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeArray.get(i).getElement().getAttribute("TaskID"), null);
 					jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
 				} else {
-					jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
+					if (nodeArray.get(i).getElement().getAttribute("Type").equals("Subject") && !nodeArray.get(i).getElement().getAttribute("RoleID").equals("")) {
+						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeArray.get(i).getElement().getAttribute("RoleID"), null);
+						jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
+					} else {
+						jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
+					}
+					//jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
 				}
 				numberOfStorageArray = numberOfStorageArray + 1;
 				storageArray[numberOfStorageArray] = nodeArray.get(i);
