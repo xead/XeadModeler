@@ -95,6 +95,7 @@ public class Modeler extends JFrame {
 	private JPanel jPanelContentsPane = new JPanel();
 	private CardLayout cardLayoutContentsPane = new CardLayout();
 	public String currentFileName, systemName;
+	private long lastModifyTime = 0;
 	private String applicationFolder;
 	private String urlString = "";
 	private int screenWidth = 800;
@@ -507,9 +508,12 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldSystemTermsHeadder = new KanjiTextField();
 	private JLabel jLabelSystemTermsSortKey = new JLabel();
 	private JTextField jTextFieldSystemTermsSortKey = new JTextField();
+	private JLabel jLabelSystemTermsHtmlFileName = new JLabel();
+	private JTextField jTextFieldSystemTermsHtmlFileName = new JTextField();
 	private JLabel jLabelSystemTermsDescriptions = new JLabel();
 	private JScrollPane jScrollPaneSystemTermsDescriptions = new JScrollPane();
 	private KanjiTextArea jTextAreaSystemTermsDescriptions = new KanjiTextArea();
+	private JEditorPane jEditorPaneSystemTermsDescriptions = new JEditorPane();
 	//(SystemMaintenanceLogList)//
 	private boolean tableSystemMaintenanceLogSelectChangeActivated = false;
 	private int selectedRow_jTableSystemMaintenanceLog;
@@ -2405,16 +2409,23 @@ public class Modeler extends JFrame {
 		jLabelSystemTermsSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsSortKey.setText(res.getString("S248"));
-		jLabelSystemTermsSortKey.setBounds(new Rectangle(560, 12, 130, 20));
+		jLabelSystemTermsSortKey.setBounds(new Rectangle(460, 12, 130, 20));
 		jTextFieldSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(695, 9, 150, 25));
+		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(595, 9, 150, 25));
 		jLabelSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsHeadder.setText(res.getString("S246"));
 		jLabelSystemTermsHeadder.setBounds(new Rectangle(5, 12, 130, 20));
 		jTextFieldSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 400, 25));
+		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 300, 25));
+		jLabelSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSystemTermsHtmlFileName.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTermsHtmlFileName.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTermsHtmlFileName.setText(res.getString("S249"));
+		jLabelSystemTermsHtmlFileName.setBounds(new Rectangle(750, 12, 130, 20));
+		jTextFieldSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldSystemTermsHtmlFileName.setBounds(new Rectangle(885, 9, 300, 25));
 		jLabelSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -2422,14 +2433,19 @@ public class Modeler extends JFrame {
 		jLabelSystemTermsDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
 		jTextAreaSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemTermsDescriptions.setLineWrap(true);
+		jEditorPaneSystemTermsDescriptions.setBorder(BorderFactory.createRaisedBevelBorder());
+		jEditorPaneSystemTermsDescriptions.setEditable(false);
+		jEditorPaneSystemTermsDescriptions.setContentType("text/html");
 		jScrollPaneSystemTermsDescriptions.setBounds(new Rectangle(140, 40, 600, 42));
 		jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
 		jPanelSystemTermsList.add(jPanelSystemTermsList1, BorderLayout.NORTH);
 		jPanelSystemTermsList.add(jPanelSystemTermsList2, BorderLayout.CENTER);
-		jPanelSystemTermsList1.add(jLabelSystemTermsSortKey, null);
-		jPanelSystemTermsList1.add(jTextFieldSystemTermsSortKey, null);
 		jPanelSystemTermsList1.add(jLabelSystemTermsHeadder, null);
 		jPanelSystemTermsList1.add(jTextFieldSystemTermsHeadder, null);
+		jPanelSystemTermsList1.add(jLabelSystemTermsSortKey, null);
+		jPanelSystemTermsList1.add(jTextFieldSystemTermsSortKey, null);
+		jPanelSystemTermsList1.add(jLabelSystemTermsHtmlFileName, null);
+		jPanelSystemTermsList1.add(jTextFieldSystemTermsHtmlFileName, null);
 		jPanelSystemTermsList2.add(jPanelSystemTermsList3, BorderLayout.WEST);
 		jPanelSystemTermsList2.add(jScrollPaneSystemTermsDescriptions, BorderLayout.CENTER);
 		jPanelSystemTermsList3.add(jLabelSystemTermsDescriptions, null);
@@ -2814,18 +2830,22 @@ public class Modeler extends JFrame {
 		tableModelSystemTermsList.addColumn(res.getString("S248"));
 		tableModelSystemTermsList.addColumn(res.getString("S246"));
 		tableModelSystemTermsList.addColumn(res.getString("S247"));
+		tableModelSystemTermsList.addColumn(res.getString("S249"));
 		column0 = jTableSystemTermsList.getColumnModel().getColumn(0);
 		column1 = jTableSystemTermsList.getColumnModel().getColumn(1);
 		column2 = jTableSystemTermsList.getColumnModel().getColumn(2);
 		column3 = jTableSystemTermsList.getColumnModel().getColumn(3);
+		column4 = jTableSystemTermsList.getColumnModel().getColumn(4);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(300);
-		column3.setPreferredWidth(700);
+		column3.setPreferredWidth(550);
+		column4.setPreferredWidth(300);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
 		column3.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentLeft);
 		jTableSystemTermsList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableSystemTermsList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -5377,6 +5397,7 @@ public class Modeler extends JFrame {
 				JOptionPane.showMessageDialog(this, res.getString("S811") + "\n" +
 						res.getString("S813"));
 			}
+			lastModifyTime = file.lastModified();
 			//
 			//Parse file in XML Format and setup Document//
 			DOMParser parser = new DOMParser();
@@ -5396,6 +5417,10 @@ public class Modeler extends JFrame {
 			treeModel = new DefaultTreeModel(systemNode);
 			systemName = systemNode.getElement().getAttribute("Name");
 			//
+			if (this.isVisible()) {
+				jProgressBar.setMaximum(9 + domDocument.getElementsByTagName("TableField").getLength());
+			}
+			//
 			// Add Node of "SubjectAreaList"//
 			SubjectAreaListNode = new XeadTreeNode("SubjectAreaList", null);
 			systemNode.add(SubjectAreaListNode);
@@ -5408,6 +5433,10 @@ public class Modeler extends JFrame {
 				SubjectAreaListNode.add(xeadTreeNode1);
 			}
 			SubjectAreaListNode.sortChildNodes();
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			//
 			// Add Node of "RoleList"//
 			roleListNode = new XeadTreeNode("RoleList", null);
@@ -5421,6 +5450,10 @@ public class Modeler extends JFrame {
 				roleListNode.add(xeadTreeNode1);
 			}
 			roleListNode.sortChildNodes();
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			//
 			// Add Node of "Task"//
 			xmlnodelist1 = domDocument.getElementsByTagName("Task");
@@ -5430,9 +5463,17 @@ public class Modeler extends JFrame {
 				xeadTreeNode2 = new XeadTreeNode("Task", element1);
 				xeadTreeNode1.add(xeadTreeNode2);
 			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			for (int i = 0; i < roleListNode.getChildCount(); i++) {
 				xeadTreeNode1 = (XeadTreeNode)roleListNode.getChildAt(i);
 				xeadTreeNode1.sortChildNodes();
+			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 			}
 			//
 			// Add Node of "SubsystemList"//
@@ -5462,6 +5503,10 @@ public class Modeler extends JFrame {
 				xeadTreeNode1.add(xeadTreeNode2);
 			}
 			subsystemListNode.sortChildNodes();
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			//
 			// Add Node of "Table" and its children//
 			xmlnodelist1 = domDocument.getElementsByTagName("Table");
@@ -5498,6 +5543,10 @@ public class Modeler extends JFrame {
 					xeadTreeNode3.add(xeadTreeNode4);
 				}
 			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			for (int i = 0; i < subsystemListNode.getChildCount(); i++) {
 				xeadTreeNode1 = (XeadTreeNode)subsystemListNode.getChildAt(i);
 				xeadTreeNode2 = (XeadTreeNode)xeadTreeNode1.getChildAt(0); //TableListNode//
@@ -5510,12 +5559,20 @@ public class Modeler extends JFrame {
 					xeadTreeNode4.sortChildNodes();
 				}
 			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			//
 			//Setup ID-Ordered Field List//
 			NodeList fieldList = domDocument.getElementsByTagName("TableField");
 			sortableDomElementFieldListModel.removeAllElements();
 			for (int j = 0; j < fieldList.getLength(); j++) {
 				sortableDomElementFieldListModel.addElement((Object)fieldList.item(j));
+				if (this.isVisible()) {
+					jProgressBar.setValue(jProgressBar.getValue()+1);
+					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+				}
 			}
 			sortableDomElementFieldListModel.sortElements();
 			isRequiredToSetupSortableFieldList = false;
@@ -5565,6 +5622,10 @@ public class Modeler extends JFrame {
 				//Sort IOList//
 				xeadTreeNode2.sortChildNodes();
 			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
 			for (int i = 0; i < subsystemListNode.getChildCount(); i++) {
 				xeadTreeNode1 = (XeadTreeNode)subsystemListNode.getChildAt(i);
 				xeadTreeNode2 = (XeadTreeNode)xeadTreeNode1.getChildAt(1); //FunctionListNode//
@@ -5573,6 +5634,10 @@ public class Modeler extends JFrame {
 					xeadTreeNode3 = (XeadTreeNode)xeadTreeNode2.getChildAt(j); //FunctionIOListNode//
 					xeadTreeNode3.sortChildNodes();
 				}
+			}
+			if (this.isVisible()) {
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 			}
 			//
 			// Set lastIDOfRelationship//
@@ -5584,6 +5649,7 @@ public class Modeler extends JFrame {
 				id = Integer.parseInt(element1.getAttribute("ID"));
 				if (id > lastIDOfRelationship) lastIDOfRelationship = id;
 			}
+			jProgressBar.setValue(0);
 		    //
 		    // Hide Splash Screen //
 			EventQueue.invokeLater(new Runnable() {
@@ -5598,8 +5664,7 @@ public class Modeler extends JFrame {
 			jTreeMain.setSelectionRow(0);
 			TreePath tp = jTreeMain.getSelectionPath();
 			setupContentsPaneForTreeNodeSelected((XeadTreeNode)tp.getLastPathComponent(), false);
-		}
-		catch(Exception e) {
+		} catch(Exception e) {
 			EventQueue.invokeLater(new Runnable() {
 				@Override public void run() {
 					application.hideSplash();
@@ -5607,6 +5672,8 @@ public class Modeler extends JFrame {
 			});
     		JOptionPane.showMessageDialog(this, "Failed to parse xml format of the file '" + currentFileName + "'.\n\n" + e.getMessage());
 			System.exit(0);
+		} finally {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
 
@@ -7624,34 +7691,51 @@ public class Modeler extends JFrame {
 	 */
 	void saveFileWithCurrentFileName() {
 		try {
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			//
-			updateFieldSortKey();
-			//
-			//if (isRequiredToReorganizeIOTable) {
+			//Check LastModify Time of the File//
+			int rtn = 0;
+			File file = new File(currentFileName);
+			if (lastModifyTime != file.lastModified()) {
+				Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")} ;
+				rtn = JOptionPane.showOptionDialog(this, res.getString("S1150"),
+						res.getString("S1102"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			}
+			if (rtn == 1) {
+				String name = specifyNameOfNewFile(res.getString("S788"),res.getString("S1125"), currentFileName);
+				if (!name.equals("")) {
+					currentFileName = name;
+					rtn = 0;
+				}
+			}
+			if (rtn == 0) {
+				setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+				updateFieldSortKey();
+
 				reorganizeIOTable();
-			//	isRequiredToReorganizeIOTable = false;
-			//}
-			//
-			if (isRequiredToPurgeInvalidSubsystemTable) {
-				purgeInvalidSubsystemTable();
-				isRequiredToPurgeInvalidSubsystemTable = false;
+
+				if (isRequiredToPurgeInvalidSubsystemTable) {
+					purgeInvalidSubsystemTable();
+					isRequiredToPurgeInvalidSubsystemTable = false;
+				}
+				if (isRequiredToPurgeInvalidSubsystemRelationship) {
+					purgeInvalidSubsystemRelationship();
+					isRequiredToPurgeInvalidSubsystemRelationship = false;
+				}
+
+				arrangeOrderOfDomElement();
+
+				OutputFormat outputFormat = new OutputFormat(domDocument);
+				outputFormat.setEncoding("UTF-8");
+				FileOutputStream fileOutStream = new FileOutputStream(currentFileName);
+				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutStream, "UTF-8");
+				Writer writer = new BufferedWriter(outputStreamWriter);
+				XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
+				xmlSerializer.serialize(domDocument.getDocumentElement());
+				writer.close();
+
+				file = new File(currentFileName);
+				lastModifyTime = file.lastModified();
 			}
-			if (isRequiredToPurgeInvalidSubsystemRelationship) {
-				purgeInvalidSubsystemRelationship();
-				isRequiredToPurgeInvalidSubsystemRelationship = false;
-			}
-			//
-			arrangeOrderOfDomElement();
-			//
-			OutputFormat outputFormat = new OutputFormat(domDocument);
-			outputFormat.setEncoding("UTF-8");
-			FileOutputStream fileOutStream = new FileOutputStream(currentFileName);
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutStream, "UTF-8");
-			Writer writer = new BufferedWriter(outputStreamWriter);
-			XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
-			xmlSerializer.serialize(domDocument.getDocumentElement());
-			writer.close();
 		}  catch(Exception ex){
 			JOptionPane.showMessageDialog(this, res.getString("S1149"));
 			ex.printStackTrace();
@@ -7797,7 +7881,6 @@ public class Modeler extends JFrame {
 	 */
 	void arrangeOrderOfDomElement() {
 		org.w3c.dom.Element topElement;
-		//org.w3c.dom.Node parentDomNode;
 		NodeList nodeList;
 		//
 		nodeList = domDocument.getElementsByTagName("Function");
@@ -11749,7 +11832,7 @@ public class Modeler extends JFrame {
 		}
 		//
 		void jMenuItemDataflowNodeChange_actionPerformed(ActionEvent e) {
-			boolean executed = dialogDataflowNode.request("Modify", dataflowNodeElement_);
+			boolean executed = dialogDataflowNode.request("Modify", dataflowNodeElement_, dataflowNodeEditorArray, dataflowLineEditorArray);
 			if (executed) {
 				informationOnThisPageChanged = true;
 				currentMainTreeNode.updateFields();
@@ -11814,7 +11897,7 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("TerminalPosIndex1", "0");
 			newElement.setAttribute("TerminalPosIndex2", "0");
 			newElement.setAttribute("SlideNumber", dataflowNodeElement_.getAttribute("SlideNumber"));
-			boolean executed = dialogDataflowLine.request("Add", newElement, dataflowNodeEditorArray);
+			boolean executed = dialogDataflowLine.request("Add", newElement, dataflowNodeEditorArray, dataflowLineEditorArray);
 			if (executed) {
 				informationOnThisPageChanged = true;
 				currentMainTreeNode.updateFields();
@@ -12821,6 +12904,10 @@ public class Modeler extends JFrame {
 			g2.draw(new Line2D.Float(29,20,29,5));
 		}
 
+		public org.w3c.dom.Element getElement() {
+			return dataflowLineElement_;
+		}
+
 		public DataflowNode getNode1() {
 			return dataflowNode1_;
 		}
@@ -13102,7 +13189,7 @@ public class Modeler extends JFrame {
 		}
 
 		void jMenuItemDataflowLineChange_actionPerformed(ActionEvent e) {
-			boolean executed = dialogDataflowLine.request("Modify", dataflowLineElement_, dataflowNodeEditorArray);
+			boolean executed = dialogDataflowLine.request("Modify", dataflowLineElement_, dataflowNodeEditorArray, dataflowLineEditorArray);
 			if (executed) {
 				informationOnThisPageChanged = true;
 				currentMainTreeNode.updateFields();
@@ -18315,11 +18402,12 @@ public class Modeler extends JFrame {
 				sortableDomElementListModel.sortElements();
 				for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
 					org.w3c.dom.Element element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
-					Object[] Cell = new Object[4];
+					Object[] Cell = new Object[5];
 					Cell[0] =  new TableRowNumber(i+1, element);
 					Cell[1] = element.getAttribute("SortKey");
 					Cell[2] = element.getAttribute("Header");
 					Cell[3] = substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n");
+					Cell[4] = element.getAttribute("HtmlFileName");
 					tableModelSystemTermsList.addRow(Cell);
 				}
 				//
@@ -18327,12 +18415,16 @@ public class Modeler extends JFrame {
 				jTextFieldSystemTermsSortKey.setText("");
 				jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
 				jTextFieldSystemTermsSortKey.setEditable(false);
+				jTextFieldSystemTermsHtmlFileName.setText("");
+				jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.control);
+				jTextFieldSystemTermsHtmlFileName.setEditable(false);
 				jTextFieldSystemTermsHeadder.setText("");
 				jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
 				jTextFieldSystemTermsHeadder.setEditable(false);
 				jTextAreaSystemTermsDescriptions.setText("");
 				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.control);
 				jTextAreaSystemTermsDescriptions.setEditable(false);
+				jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
 				//
 				//Activate routine for ListSelectionChangeEvent//
 				tableSystemTermsListSelectChangeActivated = true;
@@ -20705,11 +20797,14 @@ public class Modeler extends JFrame {
 				}
 				String fileName = "";
 				File xeadFile = new File(currentFileName);
-				String wrkStr1 = htmlFileName.substring(0,7);
-				if (wrkStr1.equals("http://")) {
+				if (htmlFileName.startsWith("http://")) {
 					fileName = htmlFileName;
 				} else {
-					fileName = "file:///" + xeadFile.getParent() + File.separator + htmlFileName;
+					if (htmlFileName.startsWith("file:")) {
+						fileName = htmlFileName;
+					} else {
+						fileName = "file:///" + xeadFile.getParent() + File.separator + htmlFileName;
+					}
 				}
 				try {
 					jEditorPaneIOWebPageImage.setPage(fileName);
@@ -22879,6 +22974,9 @@ public class Modeler extends JFrame {
 					if (!element.getAttribute("SortKey").equals(jTextFieldSystemTermsSortKey.getText())) {
 						valueOfFieldsChangedByTabbedPane = true;
 					}
+					if (!element.getAttribute("HtmlFileName").equals(jTextFieldSystemTermsHtmlFileName.getText())) {
+						valueOfFieldsChangedByTabbedPane = true;
+					}
 					if (!element.getAttribute("Header").equals(jTextFieldSystemTermsHeadder.getText())) {
 						valueOfFieldsChangedByTabbedPane = true;
 					}
@@ -22891,6 +22989,7 @@ public class Modeler extends JFrame {
 						//
 						//Update DOM element//
 						element.setAttribute("SortKey", jTextFieldSystemTermsSortKey.getText());
+						element.setAttribute("HtmlFileName", jTextFieldSystemTermsHtmlFileName.getText());
 						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsSortKey.getText(),selectedRow_jTableSystemTermsList,1);
 						element.setAttribute("Header", jTextFieldSystemTermsHeadder.getText());
 						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsHeadder.getText(),selectedRow_jTableSystemTermsList,2);
@@ -28073,13 +28172,45 @@ public class Modeler extends JFrame {
 				jTextFieldSystemTermsSortKey.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,1));
 				jTextFieldSystemTermsSortKey.setBackground(SystemColor.window);
 				jTextFieldSystemTermsSortKey.setEditable(true);
+
 				jTextFieldSystemTermsHeadder.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,2));
 				jTextFieldSystemTermsHeadder.setBackground(SystemColor.window);
 				jTextFieldSystemTermsHeadder.setEditable(true);
+
 				jTextAreaSystemTermsDescriptions.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,3));
 				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.window);
 				jTextAreaSystemTermsDescriptions.setEditable(true);
 				jTextAreaSystemTermsDescriptions.setCaretPosition(0);
+
+				jTextFieldSystemTermsHtmlFileName.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,4));
+				jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.window);
+				jTextFieldSystemTermsHtmlFileName.setEditable(true);
+				if (jTextFieldSystemTermsHtmlFileName.getText().equals("")) {
+					jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
+				} else {
+					try {
+						String fileName = "";
+						jScrollPaneSystemTermsDescriptions.getViewport().removeAll();
+						jScrollPaneSystemTermsDescriptions.getViewport().add(jEditorPaneSystemTermsDescriptions, null);
+						htmlFileName = jTextFieldSystemTermsHtmlFileName.getText();
+						if (htmlFileName.startsWith("http://")) {
+							fileName = htmlFileName;
+						} else {
+							if (htmlFileName.startsWith("file:")) {
+								fileName = htmlFileName;
+							} else {
+								if (!htmlFileName.contains("/") && !htmlFileName.contains("\\")) {
+									File xeadFile = new File(currentFileName);
+									fileName = "file:///" + xeadFile.getParent() + File.separator + htmlFileName;
+								} else {
+									fileName = "file:///" + htmlFileName;
+								}
+							}
+						}
+						jEditorPaneSystemTermsDescriptions.setPage(fileName);
+					} catch (Exception ex) {
+					}
+				}
 			}
 		}
 		if (selectedRow_jTableSystemTermsList == -1) {
@@ -28088,6 +28219,9 @@ public class Modeler extends JFrame {
 			jTextFieldSystemTermsSortKey.setText("");
 			jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
 			jTextFieldSystemTermsSortKey.setEditable(false);
+			jTextFieldSystemTermsHtmlFileName.setText("");
+			jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.control);
+			jTextFieldSystemTermsHtmlFileName.setEditable(false);
 			jTextFieldSystemTermsHeadder.setText("");
 			jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
 			jTextFieldSystemTermsHeadder.setEditable(false);
@@ -29167,7 +29301,7 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Name", res.getString("S2274"));
 			newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
 			newElement.setAttribute("SlideNumber", "01");
-			boolean executed = dialogDataflowNode.request("Add", newElement);
+			boolean executed = dialogDataflowNode.request("Add", newElement, dataflowNodeEditorArray, dataflowLineEditorArray);
 			if (executed) {
 				informationOnThisPageChanged = true;
 				currentMainTreeNode.updateFields();

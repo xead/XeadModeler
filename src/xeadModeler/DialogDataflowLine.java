@@ -32,10 +32,12 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
+
 import xeadModeler.Modeler.*;
-import org.w3c.dom.*;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -45,7 +47,8 @@ public class DialogDataflowLine extends JDialog {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	private JPanel panelMain = new JPanel();
 	private JLabel jLabel1 = new JLabel();
-	private JTextField jTextFieldNode1Name = new JTextField();
+	//private JTextField jTextFieldNode1Name = new JTextField();
+	private JComboBox jComboBoxNode1 = new JComboBox();
 	private ButtonGroup buttonGroupArrowStyle = new ButtonGroup();
 	private JLabel jLabel2 = new JLabel();
 	private JPanel jPanel1 = new JPanel();
@@ -87,7 +90,8 @@ public class DialogDataflowLine extends JDialog {
 	private boolean buttonOKIsPressed = false;
 	private Modeler frame_;
 	private JLabel jLabel6 = new JLabel();
-	private DataflowNode[] storageArray = new DataflowNode[100];
+	private DataflowNode[] storageArray1 = new DataflowNode[100];
+	private DataflowNode[] storageArray2 = new DataflowNode[100];
 	private ImageIcon iconFlow10, iconFlow11, iconFlow20, iconFlow21, iconFlow30, iconFlow31;
 
 	public DialogDataflowLine(Modeler frame, String title, boolean modal) {
@@ -138,12 +142,15 @@ public class DialogDataflowLine extends JDialog {
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogDataflowLine01"));
 		jLabel1.setBounds(new Rectangle(5, 43, 130, 20));
-		jTextFieldNode1Name.setBackground(SystemColor.control);
-		jTextFieldNode1Name.setEnabled(true);
-		jTextFieldNode1Name.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jTextFieldNode1Name.setDoubleBuffered(false);
-		jTextFieldNode1Name.setEditable(false);
-		jTextFieldNode1Name.setBounds(new Rectangle(140, 40, 200, 25));
+//		jTextFieldNode1Name.setBackground(SystemColor.control);
+//		jTextFieldNode1Name.setEnabled(true);
+//		jTextFieldNode1Name.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+//		jTextFieldNode1Name.setDoubleBuffered(false);
+//		jTextFieldNode1Name.setEditable(false);
+//		jTextFieldNode1Name.setBounds(new Rectangle(140, 40, 200, 25));
+		jComboBoxNode1.setBounds(new Rectangle(140, 40, 220, 25));
+		jComboBoxNode1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxNode1.setMaximumRowCount(30);
 
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -171,9 +178,9 @@ public class DialogDataflowLine extends JDialog {
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowLine29"));
 		jLabel5.setBounds(new Rectangle(5, 146, 130, 20));
-		jComboBoxNode2.setBounds(new Rectangle(140, 143, 200, 25));
+		jComboBoxNode2.setBounds(new Rectangle(140, 143, 220, 25));
 		jComboBoxNode2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jComboBoxNode2.setMaximumRowCount(20);
+		jComboBoxNode2.setMaximumRowCount(30);
 
 		jLabel4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel4.setText(res.getString("DialogDataflowLine28"));
@@ -276,7 +283,7 @@ public class DialogDataflowLine extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray) {
+	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 
 		panelMain.removeAll();
@@ -285,7 +292,8 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jLabel2, null);
 		panelMain.add(jLabel5, null);
 		panelMain.add(jLabel1, null);
-		panelMain.add(jTextFieldNode1Name, null);
+		//panelMain.add(jTextFieldNode1Name, null);
+		panelMain.add(jComboBoxNode1, null);
 		panelMain.add(jLabel6, null);
 		panelMain.add(jTextFieldName, null);
 		panelMain.add(jLabel3, null);
@@ -295,7 +303,9 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jPanel2, null);
 		panelMain.add(jComboBoxNode2, null);
 
+		/////////////////////////////////////////////
 		//Setup Title and RadioButtons of ImageType//
+		/////////////////////////////////////////////
 		if (action.equals("Add")) {
 			this.setTitle(res.getString("DialogDataflowLine32"));
 		} else {
@@ -364,27 +374,66 @@ public class DialogDataflowLine extends JDialog {
 		}
 		jTextFieldName.setText(element.getAttribute("Name"));
 		jTextFieldNameExt.setText(element.getAttribute("NameExt"));
-		jTextFieldNode1Name.setText("");
-		NodeList nodeList = frame_.currentMainTreeNode.getElement().getElementsByTagName("DataflowNode");
-		org.w3c.dom.Element nodeElement;
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			nodeElement = (org.w3c.dom.Element)nodeList.item(i);
-			if (nodeElement.getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
-				if (nodeElement.getAttribute("Type").equals("Process")) {
-					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeElement.getAttribute("TaskID"), null);
-					jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
+
+//		jTextFieldNode1Name.setText("");
+//		NodeList nodeList = frame_.currentMainTreeNode.getElement().getElementsByTagName("DataflowNode");
+//		org.w3c.dom.Element nodeElement;
+//		for (int i = 0; i < nodeList.getLength(); i++) {
+//			nodeElement = (org.w3c.dom.Element)nodeList.item(i);
+//			if (nodeElement.getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
+//				if (nodeElement.getAttribute("Type").equals("Process")) {
+//					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeElement.getAttribute("TaskID"), null);
+//					jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
+//				} else {
+//					if (nodeElement.getAttribute("Type").equals("Subject") && !nodeElement.getAttribute("RoleID").equals("")) {
+//						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeElement.getAttribute("RoleID"), null);
+//						jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
+//					} else {
+//						jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
+//					}
+//				}
+//			}
+//		}
+		/////////////////////////////////////////
+		//Setup ComboBox1 of nodes to be linked//
+		/////////////////////////////////////////
+		int numberOfStorageArray1 = -1;
+		int selectedIndex1 = 0;
+		String selectedItemName1 = "";
+		jComboBoxNode1.removeAllItems();
+		for (int i = 0; i < nodeArray.size(); i++) {
+			if (!nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID2"))) {
+				if (nodeArray.get(i).getElement().getAttribute("Type").equals("Process")) {
+					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeArray.get(i).getElement().getAttribute("TaskID"), null);
+					jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
+					numberOfStorageArray1 = numberOfStorageArray1 + 1;
+					storageArray1[numberOfStorageArray1] = nodeArray.get(i);
+					if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+						selectedIndex1 = numberOfStorageArray1;
+					}
 				} else {
-					if (nodeElement.getAttribute("Type").equals("Subject") && !nodeElement.getAttribute("RoleID").equals("")) {
-						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeElement.getAttribute("RoleID"), null);
-						jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
-					} else {
-						jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
+					if (nodeArray.get(i).getElement().getAttribute("Type").equals("Subject")) {
+						if (nodeArray.get(i).getElement().getAttribute("RoleID").equals("")) {
+							jComboBoxNode1.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
+						} else {
+							Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeArray.get(i).getElement().getAttribute("RoleID"), null);
+							jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
+						}
+						numberOfStorageArray1 = numberOfStorageArray1 + 1;
+						storageArray1[numberOfStorageArray1] = nodeArray.get(i);
+						if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+							selectedIndex1 = numberOfStorageArray1;
+						}
 					}
 				}
 			}
 		}
+		jComboBoxNode1.setSelectedIndex(selectedIndex1);
+		selectedItemName1 = jComboBoxNode1.getSelectedItem().toString();
 
+		/////////////////////
 		//Setup arrow style//
+		/////////////////////
 		if (element.getAttribute("ShowArrow1").equals("true")) {
 			if (element.getAttribute("ShowArrow2").equals("true")) {
 				jRadioButtonArrowStyle3.setSelected(true);
@@ -395,10 +444,12 @@ public class DialogDataflowLine extends JDialog {
 			jRadioButtonArrowStyle1.setSelected(true);
 		}
 
-		//Setup ComboBox of nodes to be linked//
-		int numberOfStorageArray = -1;
-		int selectedIndex = 0;
-		String selectedItemName = "";
+		/////////////////////////////////////////
+		//Setup ComboBox2 of nodes to be linked//
+		/////////////////////////////////////////
+		int numberOfStorageArray2 = -1;
+		int selectedIndex2 = 0;
+		String selectedItemName2 = "";
 		jComboBoxNode2.removeAllItems();
 		for (int i = 0; i < nodeArray.size(); i++) {
 			if (!nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
@@ -412,19 +463,20 @@ public class DialogDataflowLine extends JDialog {
 					} else {
 						jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
 					}
-					//jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
 				}
-				numberOfStorageArray = numberOfStorageArray + 1;
-				storageArray[numberOfStorageArray] = nodeArray.get(i);
+				numberOfStorageArray2 = numberOfStorageArray2 + 1;
+				storageArray2[numberOfStorageArray2] = nodeArray.get(i);
 				if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID2")) && !action.equals("Add")) {
-					selectedIndex = numberOfStorageArray;
+					selectedIndex2 = numberOfStorageArray2;
 				}
 			}
 		}
-		jComboBoxNode2.setSelectedIndex(selectedIndex);
-		selectedItemName = jComboBoxNode2.getSelectedItem().toString();
+		jComboBoxNode2.setSelectedIndex(selectedIndex2);
+		selectedItemName2 = jComboBoxNode2.getSelectedItem().toString();
 
+		/////////////////////////////////////////
 		//Create spinner with specified default//
+		/////////////////////////////////////////
 		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(defaultValue, 1, 30, 1);
 		JSpinner jSpinnerSlideNumber = new JSpinner(spinnerNumberModel);
@@ -435,7 +487,9 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jSpinnerSlideNumber, null);
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
 
+		/////////////////////////
 		//Setup dialog and show//
+		/////////////////////////
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize = frame_.getSize();
 		Point loc = frame_.getLocation();
@@ -443,26 +497,82 @@ public class DialogDataflowLine extends JDialog {
 		this.pack();
 		this.setVisible(true);
 
-		//Update and return parameter value//
+		///////////////////////////
+		//Update and return value//
+		///////////////////////////
 		if (buttonOKIsPressed) {
 
+			//////////////////////
 			//Update DOM element//
+			//////////////////////
 			element.setAttribute("Name", jTextFieldName.getText());
 			element.setAttribute("NameExt", jTextFieldNameExt.getText());
-			element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
-			//
-			String workName = jComboBoxNode2.getSelectedItem().toString();
-			if (!workName.equals(selectedItemName) || action.equals("Add")) {
-				int work = jComboBoxNode2.getSelectedIndex();
-				DataflowNode node2 = storageArray[work];
-				DataflowNode node1 = null;
-				Point[] pointArray1, pointArray2;
+			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
+			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
+			if (newSlideNumber != oldSlideNumber) {
+				int diff = newSlideNumber - oldSlideNumber;
+				int wrkInt;
+				boolean isToCheck = false;
 				for (int i = 0; i < nodeArray.size(); i++) {
-					if (nodeArray.get(i).getID().equals(element.getAttribute("NodeID1"))) {
-						node1 = nodeArray.get(i);
-						break;
+					if (nodeArray.get(i).getElement() != null
+							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+						if (wrkInt > oldSlideNumber) {
+							isToCheck = true;
+							break;
+						}
 					}
 				}
+				if (!isToCheck) {
+					for (int i = 0; i < lineArray.size(); i++) {
+						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+						if (wrkInt > oldSlideNumber) {
+							isToCheck = true;
+							break;
+						}
+					}
+				}
+				if (isToCheck) {
+					int rtn = JOptionPane.showOptionDialog(this, res.getString("DialogDataflowLine34"),
+							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+					if (rtn == JOptionPane.YES_OPTION) {
+						for (int i = 0; i < nodeArray.size(); i++) {
+							if (nodeArray.get(i).getElement() != null
+									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+								if (wrkInt > oldSlideNumber) {
+									wrkInt = wrkInt + diff;
+									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+								}
+							}
+						}
+						for (int i = 0; i < lineArray.size(); i++) {
+							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+							if (wrkInt > oldSlideNumber) {
+								wrkInt = wrkInt + diff;
+								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+							}
+						}
+					}
+				}
+				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+			}
+//			String workName = jComboBoxNode2.getSelectedItem().toString();
+//			if (!workName.equals(selectedItemName) || action.equals("Add")) {
+			if (!jComboBoxNode1.getSelectedItem().toString().equals(selectedItemName1)
+					|| !jComboBoxNode2.getSelectedItem().toString().equals(selectedItemName2)
+					|| action.equals("Add")) {
+
+				//int workx = jComboBoxNode2.getSelectedIndex();
+				DataflowNode node2 = storageArray2[jComboBoxNode2.getSelectedIndex()];
+				DataflowNode node1 = storageArray1[jComboBoxNode1.getSelectedIndex()];
+				Point[] pointArray1, pointArray2;
+//				for (int i = 0; i < nodeArray.size(); i++) {
+//					if (nodeArray.get(i).getID().equals(element.getAttribute("NodeID1"))) {
+//						node1 = nodeArray.get(i);
+//						break;
+//					}
+//				}
 				pointArray1 = node1.getArrowCordinates();
 				pointArray2 = node2.getArrowCordinates();
 				int workDistance = 0;
@@ -480,6 +590,7 @@ public class DialogDataflowLine extends JDialog {
 						}
 					}
 				}
+				element.setAttribute("NodeID1", node1.getElement().getAttribute("ID"));
 				element.setAttribute("NodeID2", node2.getElement().getAttribute("ID"));
 				element.setAttribute("TerminalPosIndex1", Integer.toString(shortestDistanceIndex1));
 				element.setAttribute("TerminalPosIndex2", Integer.toString(shortestDistanceIndex2));

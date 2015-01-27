@@ -32,8 +32,14 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
+
+import xeadModeler.Modeler.DataflowLine;
+import xeadModeler.Modeler.DataflowNode;
+
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -144,7 +150,7 @@ public class DialogDataflowNode extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, org.w3c.dom.Element element) {
+	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 		//
 		jComboBoxEventPos.setEnabled(false);
@@ -269,6 +275,7 @@ public class DialogDataflowNode extends JDialog {
 				}
 			}
 		}
+		jTextAreaDescriptions.setCaretPosition(0);
 		//
 		//Create spinner with specified default//
 		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
@@ -341,7 +348,57 @@ public class DialogDataflowNode extends JDialog {
 				}
 			}
 			//
-			element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+			//element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
+			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
+			if (newSlideNumber != oldSlideNumber) {
+				int diff = newSlideNumber - oldSlideNumber;
+				int wrkInt;
+				boolean isToCheck = false;
+				for (int i = 0; i < nodeArray.size(); i++) {
+					if (nodeArray.get(i).getElement() != null
+							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+						if (wrkInt > oldSlideNumber) {
+							isToCheck = true;
+							break;
+						}
+					}
+				}
+				if (!isToCheck) {
+					for (int i = 0; i < lineArray.size(); i++) {
+						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+						if (wrkInt > oldSlideNumber) {
+							isToCheck = true;
+							break;
+						}
+					}
+				}
+				if (isToCheck) {
+					int rtn = JOptionPane.showOptionDialog(this, res.getString("DialogDataflowLine34"),
+							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+					if (rtn == JOptionPane.YES_OPTION) {
+						for (int i = 0; i < nodeArray.size(); i++) {
+							if (nodeArray.get(i).getElement() != null
+									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+								if (wrkInt > oldSlideNumber) {
+									wrkInt = wrkInt + diff;
+									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+								}
+							}
+						}
+						for (int i = 0; i < lineArray.size(); i++) {
+							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+							if (wrkInt > oldSlideNumber) {
+								wrkInt = wrkInt + diff;
+								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+							}
+						}
+					}
+				}
+				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+			}
 			//
 			if (action.equals("Add")) {
 				frame_.currentMainTreeNode.getElement().appendChild(element);

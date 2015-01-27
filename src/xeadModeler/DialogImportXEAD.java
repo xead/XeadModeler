@@ -55,7 +55,7 @@ public class DialogImportXEAD extends JDialog {
 	private JRadioButton jRadioButtonTables = new JRadioButton();
 	private JRadioButton jRadioButtonFunctions = new JRadioButton();
 	private JRadioButton jRadioButtonTasks = new JRadioButton();
-	private JRadioButton jRadioButtonDataflows = new JRadioButton();
+	private JRadioButton jRadioButtonDataflow = new JRadioButton();
 	private ButtonGroup buttonGroup1 = new ButtonGroup();
 	private JLabel jLabel3 = new JLabel();
 	private JProgressBar jProgressBar = new JProgressBar();
@@ -141,19 +141,19 @@ public class DialogImportXEAD extends JDialog {
 		jRadioButtonTasks.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTasks.setText(res.getString("DialogImportXEAD06"));
 		jRadioButtonTasks.addItemListener(new DialogImportXEAD_jRadioButton_itemAdapter(this));
-		jRadioButtonDataflows.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jRadioButtonDataflows.setText(res.getString("S3385"));
-		jRadioButtonDataflows.addItemListener(new DialogImportXEAD_jRadioButton_itemAdapter(this));
+		jRadioButtonDataflow.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonDataflow.setText(res.getString("S3385"));
+		jRadioButtonDataflow.addItemListener(new DialogImportXEAD_jRadioButton_itemAdapter(this));
 		jPanel1.add(jRadioButtonFunctions, null);
 		jPanel1.add(jRadioButtonTables, null);
 		jPanel1.add(jRadioButtonTablesAndFunctions, null);
 		jPanel1.add(jRadioButtonTasks, null);
-		jPanel1.add(jRadioButtonDataflows, null);
+		jPanel1.add(jRadioButtonDataflow, null);
 		buttonGroup1.add(jRadioButtonFunctions);
 		buttonGroup1.add(jRadioButtonTables);
 		buttonGroup1.add(jRadioButtonTablesAndFunctions);
 		buttonGroup1.add(jRadioButtonTasks);
-		buttonGroup1.add(jRadioButtonDataflows);
+		buttonGroup1.add(jRadioButtonDataflow);
 
 		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -167,7 +167,7 @@ public class DialogImportXEAD extends JDialog {
 		jLabel2.setBounds(new Rectangle(5, 225, 170, 20));
 		jComboBoxBlockInto.setBounds(new Rectangle(180, 222, 350, 25));
 		jComboBoxBlockInto.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jComboBoxBlockInto.addActionListener(new DialogImportXEAD_jComboBoxBlockInto_actionAdapter(this));
+		//jComboBoxBlockInto.addActionListener(new DialogImportXEAD_jComboBoxBlockInto_actionAdapter(this));
 
 		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setForeground(Color.BLUE);
@@ -296,7 +296,8 @@ public class DialogImportXEAD extends JDialog {
 						comboBoxModelBlockInto.addElement((Object)node);
 					}
 					comboBoxModelBlockInto.sortElements();
-					comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					comboBoxModelBlockInto.insertElementAt("*New", 0);
 					comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
 				}
 
@@ -329,11 +330,12 @@ public class DialogImportXEAD extends JDialog {
 						comboBoxModelBlockInto.addElement((Object)node);
 					}
 					comboBoxModelBlockInto.sortElements();
-					comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					comboBoxModelBlockInto.insertElementAt("*New", 0);
 					comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
 				}
 
-				if (jRadioButtonDataflows.isSelected()) {
+				if (jRadioButtonDataflow.isSelected()) {
 
 					jLabel1.setText(res.getString("DialogImportXEAD52"));
 					jLabel2.setText(res.getString("DialogImportXEAD53"));
@@ -362,7 +364,8 @@ public class DialogImportXEAD extends JDialog {
 						comboBoxModelBlockInto.addElement((Object)node);
 					}
 					comboBoxModelBlockInto.sortElements();
-					comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+					comboBoxModelBlockInto.insertElementAt("*New", 0);
 					comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
 				}
 			}
@@ -380,21 +383,26 @@ public class DialogImportXEAD extends JDialog {
 					break;
 				}
 			}
-		}
-	}
-	
-	void jComboBoxBlockInto_actionPerformed(ActionEvent e) {
-		if (jComboBoxBlockFrom.getSelectedIndex() > 0 && jComboBoxBlockInto.getSelectedIndex() > 0) {
 			jButtonStart.setEnabled(true);
 		} else {
 			jButtonStart.setEnabled(false);
 		}
 	}
+	
+//	void jComboBoxBlockInto_actionPerformed(ActionEvent e) {
+//		if (jComboBoxBlockFrom.getSelectedIndex() > 0 && jComboBoxBlockInto.getSelectedIndex() > 0) {
+//			jButtonStart.setEnabled(true);
+//		} else {
+//			jButtonStart.setEnabled(false);
+//		}
+//	}
 
 	void jButtonStart_actionPerformed(ActionEvent e) {
 		XeadNode workNode;
 		NodeList workElementList;
 		String logFileName = "";
+		org.w3c.dom.Element lastElement;
+		int lastID = 0;
 
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -423,7 +431,7 @@ public class DialogImportXEAD extends JDialog {
 			if (jRadioButtonTasks.isSelected()) {
 				bufferedWriter.write(res.getString("DialogImportXEAD04") + ":" + res.getString("DialogImportXEAD06") + "\n");
 			}
-			if (jRadioButtonDataflows.isSelected()) {
+			if (jRadioButtonDataflow.isSelected()) {
 				bufferedWriter.write(res.getString("DialogImportXEAD04") + ":" + res.getString("S3385") + "\n");
 			}
 			bufferedWriter.write(res.getString("DialogImportXEAD03") + ":" + jTextFieldImportSystemName.getText() + "\n");
@@ -449,14 +457,55 @@ public class DialogImportXEAD extends JDialog {
 			blockIDFrom = blockElementFrom.getAttribute("ID");
 			bufferedWriter.write(jLabel1.getText() + ":" + blockElementFrom.getAttribute("Name") + "(" + blockElementFrom.getAttribute("SortKey") + ")" + "\n");
 
-			workNode = (XeadNode)comboBoxModelBlockInto.getSelectedItem();
-			blockElementInto = workNode.getElement();
-			blockIDInto = blockElementInto.getAttribute("ID");
-			bufferedWriter.write(jLabel2.getText() + ":" + blockElementInto.getAttribute("Name") + "(" + blockElementInto.getAttribute("SortKey") + ")" + "\n");
-
 			workElementList = frame_.domDocument.getElementsByTagName("System");
 			systemElement = (org.w3c.dom.Element)workElementList.item(0);
 
+			//////////////////////////////
+			// Setup the target element //
+			//////////////////////////////
+			if (jComboBoxBlockInto.getSelectedIndex() == 0) {
+				if (jRadioButtonTables.isSelected()
+						|| jRadioButtonFunctions.isSelected()
+						|| jRadioButtonTablesAndFunctions.isSelected()) {
+					blockElementInto = frame_.domDocument.createElement("Subsystem");
+					lastElement = getLastDomElementOfTheType("Subsystem");
+					if (lastElement == null) {
+						lastID = 0;
+					} else {
+						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					}
+				}
+				if (jRadioButtonTasks.isSelected()) {
+					blockElementInto = frame_.domDocument.createElement("Role");
+					lastElement = getLastDomElementOfTheType("Role");
+					if (lastElement == null) {
+						lastID = 0;
+					} else {
+						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					}
+				}
+				if (jRadioButtonDataflow.isSelected()) {
+					blockElementInto = frame_.domDocument.createElement("SubjectArea");
+					lastElement = getLastDomElementOfTheType("SubjectArea");
+					if (lastElement == null) {
+						lastID = 0;
+					} else {
+						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					}
+				}
+				blockElementInto.setAttribute("ID", Integer.toString(lastID + 1));
+				systemElement.appendChild(blockElementInto);
+				bufferedWriter.write(jLabel2.getText() + ":*New\n");
+			} else {
+				workNode = (XeadNode)comboBoxModelBlockInto.getSelectedItem();
+				blockElementInto = workNode.getElement();
+				bufferedWriter.write(jLabel2.getText() + ":" + blockElementInto.getAttribute("Name") + "(" + blockElementInto.getAttribute("SortKey") + ")" + "\n");
+			}
+			blockIDInto = blockElementInto.getAttribute("ID");
+
+			//////////////////////
+			// Importing tables //
+			//////////////////////
 			if (jRadioButtonTables.isSelected()) {
 				importSubsystem();
 				importTables();
@@ -469,6 +518,9 @@ public class DialogImportXEAD extends JDialog {
 				res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 			}
 
+			/////////////////////////
+			// Importing functions //
+			/////////////////////////
 			if (jRadioButtonFunctions.isSelected()) {
 				importSubsystem();
 				importFunctions();
@@ -480,6 +532,9 @@ public class DialogImportXEAD extends JDialog {
 				res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 			}
 
+			////////////////////////////////////
+			// Importing tables and functions //
+			////////////////////////////////////
 			if (jRadioButtonTablesAndFunctions.isSelected()) {
 				importSubsystem();
 				importTables();
@@ -502,6 +557,9 @@ public class DialogImportXEAD extends JDialog {
 				res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 			}
 
+			/////////////////////
+			// Importing tasks //
+			/////////////////////
 			if (jRadioButtonTasks.isSelected()) {
 				importRole();
 				importTasks();
@@ -514,13 +572,17 @@ public class DialogImportXEAD extends JDialog {
 				res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 			}
 
-			if (jRadioButtonDataflows.isSelected()) {
+			///////////////////////////
+			// Importing a data-flow //
+			///////////////////////////
+			if (jRadioButtonDataflow.isSelected()) {
 				importDataflow();
 				if (cancelTaskCounter == 0 && cancelRoleCounter == 0) {
-					importResult = res.getString("DialogImportXEAD55");
+					importResult = res.getString("DialogImportXEAD55") + "\n" +
+					res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 				} else {
-					JOptionPane.showMessageDialog(null, res.getString("DialogImportXEAD56") + "\n" +
-					res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30"));
+					importResult = res.getString("DialogImportXEAD56") + "\n" +
+					res.getString("DialogImportXEAD29") + logFileName + res.getString("DialogImportXEAD30") + "\n" + "\n";
 				}
 			}
 		}
@@ -583,7 +645,6 @@ public class DialogImportXEAD extends JDialog {
 		targetElementList = frame_.domDocument.getElementsByTagName("Table");
 		for (int i = 0; i < itemsOfElementListFrom; i++) {
 			jProgressBar.setValue(jProgressBar.getValue() + 1);
-			//jProgressBar.setString((i+1) + "/" + workElementList.getLength());
 			jProgressBar.setString((i+1) + "/" + itemsOfElementListFrom);
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 
@@ -776,6 +837,7 @@ public class DialogImportXEAD extends JDialog {
 		//Update attributes of target Role//
 		////////////////////////////////////
 		blockElementInto.setAttribute("Name", blockElementFrom.getAttribute("Name"));
+		blockElementInto.setAttribute("SortKey", blockElementFrom.getAttribute("SortKey"));
 		blockElementInto.setAttribute("Descriptions", blockElementFrom.getAttribute("Descriptions"));
 		blockElementInto.setAttribute("DepartmentID", convertInternalIDOfTheTypeTag(blockElementFrom.getAttribute("DepartmentID"), "Department"));
 	}
@@ -926,7 +988,6 @@ public class DialogImportXEAD extends JDialog {
 		workElementList = blockElementFrom.getElementsByTagName("DataflowNode");
 		for (int i = 0; i < workElementList.getLength(); i++) {
 			jProgressBar.setValue(jProgressBar.getValue() + 1);
-			jProgressBar.setString((i+1) + "/" + workElementList.getLength());
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 
 			workElement1 = (org.w3c.dom.Element)workElementList.item(i);
@@ -972,6 +1033,7 @@ public class DialogImportXEAD extends JDialog {
 		}
 		
 		if (cancelTaskCounter == 0 && cancelRoleCounter == 0) {
+			
 			////////////////////////////////////////
 			//Update attributes of target DataFlow//
 			////////////////////////////////////////
@@ -979,6 +1041,7 @@ public class DialogImportXEAD extends JDialog {
 			blockElementInto.setAttribute("Descriptions", blockElementFrom.getAttribute("Descriptions"));
 			blockElementInto.setAttribute("BoundaryPosition", blockElementFrom.getAttribute("BoundaryPosition"));
 			blockElementInto.setAttribute("BoundarySize", blockElementFrom.getAttribute("BoundarySize"));
+			blockElementInto.setAttribute("SortKey", blockElementFrom.getAttribute("SortKey"));
 
 			workElementList = blockElementInto.getChildNodes();
 			int countOfChild = workElementList.getLength();
@@ -1896,6 +1959,7 @@ public class DialogImportXEAD extends JDialog {
 		//Update attributes of target subsystem//
 		/////////////////////////////////////////
 		blockElementInto.setAttribute("Name", blockElementFrom.getAttribute("Name"));
+		blockElementInto.setAttribute("SortKey", blockElementFrom.getAttribute("SortKey"));
 		blockElementInto.setAttribute("Descriptions", blockElementFrom.getAttribute("Descriptions"));
 	}
 
@@ -2889,16 +2953,16 @@ class DialogImportXEAD_jComboBoxBlockFrom_actionAdapter implements java.awt.even
 	}
 }
 
-class DialogImportXEAD_jComboBoxBlockInto_actionAdapter implements java.awt.event.ActionListener {
-	DialogImportXEAD adaptee;
-
-	DialogImportXEAD_jComboBoxBlockInto_actionAdapter(DialogImportXEAD adaptee) {
-		this.adaptee = adaptee;
-	}
-	public void actionPerformed(ActionEvent e) {
-		adaptee.jComboBoxBlockInto_actionPerformed(e);
-	}
-}
+//class DialogImportXEAD_jComboBoxBlockInto_actionAdapter implements java.awt.event.ActionListener {
+//	DialogImportXEAD adaptee;
+//
+//	DialogImportXEAD_jComboBoxBlockInto_actionAdapter(DialogImportXEAD adaptee) {
+//		this.adaptee = adaptee;
+//	}
+//	public void actionPerformed(ActionEvent e) {
+//		adaptee.jComboBoxBlockInto_actionPerformed(e);
+//	}
+//}
 
 class DialogImportXEAD_jRadioButton_itemAdapter implements ItemListener {
 	DialogImportXEAD adaptee;

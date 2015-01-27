@@ -47,7 +47,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M13";
+	public static final String FULL_VERSION = "V1.R4.M14";
+	// 1.4.14での変更点
+	//・XEADファイルのインポート機能で、ターゲット要素を新規作成できるようにした
+	//・業務フローの変更ダイアログで、双方のプロセスを変更できるようにした
+	//・業務フローの変更ダイアログで、スライド順序の変更に後続要素が追随するようにした
+	//・用語とルールにHTMLファイルを指定できるようにした
+	//・ファイル更新時に他ユーザによる更新をチェックするようにした
+	//
 	// 1.4.13での変更点
 	//・データモデルのSVG出力について、配色設定を改善
 	//・業務フローの「プロセス」と「主体・システム」について表示設定を改善
