@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -1582,6 +1582,7 @@ public class DialogImportXEAD extends JDialog {
 					workElement2.setAttribute("DataTypeID", convertInternalIDOfTheTypeTag(workElement1.getAttribute("DataTypeID"), "DataType"));
 					workElement2.setAttribute("ShowOnModel", workElement1.getAttribute("ShowOnModel"));
 					workElement2.setAttribute("NotNull", workElement1.getAttribute("NotNull"));
+					workElement2.setAttribute("NoUpdate", workElement1.getAttribute("NoUpdate"));
 					workElement2.setAttribute("Default", workElement1.getAttribute("Default"));
 					checkCounter++;
 					break;
@@ -1605,6 +1606,7 @@ public class DialogImportXEAD extends JDialog {
 				newElement.setAttribute("DataTypeID", convertInternalIDOfTheTypeTag(workElement1.getAttribute("DataTypeID"), "DataType"));
 				newElement.setAttribute("ShowOnModel", workElement1.getAttribute("ShowOnModel"));
 				newElement.setAttribute("NotNull", workElement1.getAttribute("NotNull"));
+				newElement.setAttribute("NoUpdate", workElement1.getAttribute("NoUpdate"));
 				newElement.setAttribute("Default", workElement1.getAttribute("Default"));
 				elementInto.appendChild(newElement);
 
@@ -1742,6 +1744,7 @@ public class DialogImportXEAD extends JDialog {
 			childElement.setAttribute("DataTypeID", convertInternalIDOfTheTypeTag(workElement1.getAttribute("DataTypeID"), "DataType"));
 			childElement.setAttribute("ShowOnModel", workElement1.getAttribute("ShowOnModel"));
 			childElement.setAttribute("NotNull", workElement1.getAttribute("NotNull"));
+			childElement.setAttribute("NoUpdate", workElement1.getAttribute("NoUpdate"));
 			childElement.setAttribute("Default", workElement1.getAttribute("Default"));
 			newElement.appendChild(childElement);
 		}

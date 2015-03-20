@@ -778,6 +778,11 @@ public class DialogImportXEAF extends JDialog {
 			} else {
 				childElement.setAttribute("NotNull", "true");
 			}
+			if (workElement1.getAttribute("NoUpdate").equals("T")) {
+				childElement.setAttribute("NoUpdate", "true");
+			} else {
+				childElement.setAttribute("NoUpdate", "false");
+			}
 			childElement.setAttribute("Default", "");
 
 			newElement.appendChild(childElement);

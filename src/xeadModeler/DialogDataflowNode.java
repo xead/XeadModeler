@@ -135,7 +135,7 @@ public class DialogDataflowNode extends JDialog {
 		jLabel5.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel5.setText(res.getString("DialogDataflowNode20"));
 		jLabel5.setBounds(new Rectangle(5, 167, 130, 20));
-		jTextAreaDescriptions.setFont(new java.awt.Font("SansSerif", 0, 12));
+		jTextAreaDescriptions.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextAreaDescriptions.setLineWrap(true);
 		jScrollPaneDescriptions.getViewport().add(jTextAreaDescriptions, null);
 		jScrollPaneDescriptions.setBounds(new Rectangle(140, 164, 170, 90));

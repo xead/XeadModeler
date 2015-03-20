@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -47,7 +47,21 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M14";
+	public static final String FULL_VERSION = "V1.R4.M16";
+	// 1.4.16での変更点
+	//・DDL設定ロジックのバグを修正した
+	//・別名で保存した場合に「別のユーザによって更新された」のメッセージが示されてしまうバグを修正した
+	//・業務フローのフロー追加ダイアログでの、プロセスリストの選択に関するバグを修正した
+	//・SQLのインポート処理で、小文字の文字列を認識するようにした
+	//・データモデルにグリッドを示すとともに、整列処理でこれに沿うようにした
+	//・フィールド属性として「更新不可」のチェックボックスを追加した
+	//・データモデルと業務フローについて、２種類の配色パターンから選べるようにした
+	//
+	// 1.4.15での変更点
+	//・ツールメニュー「DDLの設定と出力」のダイアログに「追加パラメータ」と「参照制約の無視」を組み込むとともに、定義ファイルに設定を保存するようにした
+	//・排他的サブクラス関係の関連線の描画ロジックを改善した
+	//・データモデルのインスタンス編集機能を刷新するとともに、スライドショー機能を組み込んだ
+	//
 	// 1.4.14での変更点
 	//・XEADファイルのインポート機能で、ターゲット要素を新規作成できるようにした
 	//・業務フローの変更ダイアログで、双方のプロセスを変更できるようにした

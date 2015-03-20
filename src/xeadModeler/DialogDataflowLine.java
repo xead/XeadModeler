@@ -394,6 +394,7 @@ public class DialogDataflowLine extends JDialog {
 //				}
 //			}
 //		}
+
 		/////////////////////////////////////////
 		//Setup ComboBox1 of nodes to be linked//
 		/////////////////////////////////////////
@@ -408,7 +409,8 @@ public class DialogDataflowLine extends JDialog {
 					jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
 					numberOfStorageArray1 = numberOfStorageArray1 + 1;
 					storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-					if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+					//if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+					if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
 						selectedIndex1 = numberOfStorageArray1;
 					}
 				} else {
@@ -421,7 +423,8 @@ public class DialogDataflowLine extends JDialog {
 						}
 						numberOfStorageArray1 = numberOfStorageArray1 + 1;
 						storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-						if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+						//if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
+						if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
 							selectedIndex1 = numberOfStorageArray1;
 						}
 					}

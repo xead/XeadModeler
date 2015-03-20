@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -35,14 +35,16 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import org.w3c.dom.*;
 
 public class DialogImportSQL extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	//
+
 	private JPanel panelMain = new JPanel();
 	private JLabel jLabel1 = new JLabel();
 	private JLabel jLabel2 = new JLabel();
@@ -53,12 +55,13 @@ public class DialogImportSQL extends JDialog {
 	private JComboBox jComboBoxSubsystem = new JComboBox(comboBoxModelSubsystem);
 	private JTextArea jTextArea1 = new JTextArea();
 	private JTextField jTextFieldImportFileName = new JTextField();
+	private FontMetrics metrics = null;
 	private JCheckBox jCheckBoxDataTypeControl = new JCheckBox();
 	private JCheckBox jCheckBoxShowControl = new JCheckBox();
 	private JCheckBox jCheckBoxTableNameControl = new JCheckBox();
 	private JCheckBox jCheckBoxFieldNameControl = new JCheckBox();
 	private JCheckBox jCheckBoxCommentControl = new JCheckBox();
-	//
+
 	private int tableIDCounter = 0;
 	private String textFileName = "";
 	private String importResult = "";
@@ -71,7 +74,7 @@ public class DialogImportSQL extends JDialog {
 	private String defaultDataTypeID = "";
 	private String defaultTableTypeID = "";
 	private String primaryKeyFieldID = "";
-	//
+
 	private String[] sqlDataTypeArray = new String[76];
 	private String[] sqlDataTypeArray2 = new String[40];
 	private String[] nameArray = new String[1000];
@@ -100,7 +103,7 @@ public class DialogImportSQL extends JDialog {
 	private void jbInit() throws Exception {
 		this.setResizable(false);
 		this.setTitle(res.getString("DialogImportSQL01"));
-		//
+
 		sqlDataTypeArray[0] = " INTEGER ";
 		sqlDataTypeArray[1] = " INT ";
 		sqlDataTypeArray[2] = " TINYINT ";
@@ -177,7 +180,7 @@ public class DialogImportSQL extends JDialog {
 		sqlDataTypeArray[73] = " tinyint(";
 		sqlDataTypeArray[74] = " LONGTEXT ";
 		sqlDataTypeArray[75] = " longtext ";
-		//
+
 		sqlDataTypeArray2[0] = "INT";
 		sqlDataTypeArray2[1] = "REAL";
 		sqlDataTypeArray2[2] = "DOUBLE";
@@ -218,16 +221,16 @@ public class DialogImportSQL extends JDialog {
 		sqlDataTypeArray2[37] = "longblob";
 		sqlDataTypeArray2[38] = "LONGTEXT";
 		sqlDataTypeArray2[39] = "longtext";
-		//
+
 		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogImportSQL02"));
 		jLabel1.setBounds(new Rectangle(5, 12, 170, 20));
 		jTextFieldImportFileName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jTextFieldImportFileName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldImportFileName.setBounds(new Rectangle(180, 9, 280, 25));
 		jTextFieldImportFileName.setEditable(false);
-		//
+		metrics = jTextFieldImportFileName.getFontMetrics(jTextFieldImportFileName.getFont());
+
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogImportSQL03"));
@@ -235,40 +238,40 @@ public class DialogImportSQL extends JDialog {
 		jComboBoxSubsystem.setBounds(new Rectangle(180, 40, 280, 25));
 		jComboBoxSubsystem.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxSubsystem.addActionListener(new DialogImportSQL_jComboBoxSubsystem_actionAdapter(this));
-		//
+
 		jCheckBoxTableNameControl.setBounds(new Rectangle(9, 71, 460, 25));
 		jCheckBoxTableNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxTableNameControl.setText(res.getString("DialogImportSQL12"));
 		jCheckBoxTableNameControl.setSelected(true);
-		//
+
 		jCheckBoxCommentControl.setBounds(new Rectangle(9, 102, 460, 25));
 		jCheckBoxCommentControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxCommentControl.setText(res.getString("DialogImportSQL14"));
 		jCheckBoxCommentControl.setSelected(true);
-		//
+
 		jCheckBoxFieldNameControl.setBounds(new Rectangle(9, 133, 460, 25));
 		jCheckBoxFieldNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxFieldNameControl.setText(res.getString("DialogImportSQL13"));
 		jCheckBoxFieldNameControl.setSelected(true);
-		//
+
 		jCheckBoxDataTypeControl.setBounds(new Rectangle(9, 164, 460, 25));
 		jCheckBoxDataTypeControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxDataTypeControl.setText(res.getString("DialogImportSQL10"));
 		jCheckBoxDataTypeControl.setSelected(true);
-		//
+
 		jCheckBoxShowControl.setBounds(new Rectangle(9, 195, 460, 25));
 		jCheckBoxShowControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxShowControl.setText(res.getString("DialogImportSQL11"));
 		jCheckBoxShowControl.setSelected(true);
 		jCheckBoxShowControl.addChangeListener(new DialogImportSQL_jCheckBoxShowControl_changeAdapter(this));
-		//
+
 		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setEditable(true);
 		jTextArea1.setBounds(new Rectangle(9, 226, 455, 100));
 		jTextArea1.setText(res.getString("DialogImportSQL04"));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
-		//
+
 		jProgressBar.setBounds(new Rectangle(20, 335, 200, 27));
 		jButtonStart.setBounds(new Rectangle(20, 335, 200, 27));
 		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
@@ -279,7 +282,7 @@ public class DialogImportSQL extends JDialog {
 		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonClose.setText(res.getString("DialogImportSQL06"));
 		jButtonClose.addActionListener(new DialogImportSQL_jButtonClose_actionAdapter(this));
-		//
+
 		panelMain.setLayout(null);
 		panelMain.setPreferredSize(new Dimension(473, 373));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
@@ -296,9 +299,8 @@ public class DialogImportSQL extends JDialog {
 		panelMain.add(jProgressBar, null);
 		panelMain.add(jButtonStart, null);
 		panelMain.add(jButtonClose, null);
-		//
+
 		this.getContentPane().add(panelMain, BorderLayout.SOUTH);
-		//
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension dlgSize = this.getPreferredSize();
 		this.setLocation((scrSize.width - dlgSize.width)/2 , (scrSize.height - dlgSize.height)/2);
@@ -309,10 +311,15 @@ public class DialogImportSQL extends JDialog {
 		XeadNode node;
 		NodeList elementList;
 		importResult = "";
-		//
+
 		textFileName = name;
 		jTextFieldImportFileName.setText(textFileName);
-		//
+		if (metrics.stringWidth(jTextFieldImportFileName.getText()) > jTextFieldImportFileName.getBounds().width) {
+			jTextFieldImportFileName.setHorizontalAlignment(SwingConstants.RIGHT);
+		} else {
+			jTextFieldImportFileName.setHorizontalAlignment(SwingConstants.LEFT);
+		}
+
 		comboBoxModelSubsystem.removeAllElements();
 		elementList = frame_.domDocument.getElementsByTagName("Subsystem");
 		for (int i = 0; i < elementList.getLength(); i++) {
@@ -322,12 +329,11 @@ public class DialogImportSQL extends JDialog {
 		comboBoxModelSubsystem.sortElements();
 		comboBoxModelSubsystem.insertElementAt(res.getString("DialogImportSQL07"), 0);
 		comboBoxModelSubsystem.setSelectedItem(comboBoxModelSubsystem.getElementAt(0));
-		//
+
 		jProgressBar.setValue(0);
 		jProgressBar.setVisible(false);
-		//
 		super.setVisible(true);
-		//
+
 		return importResult;
 	}
 
@@ -345,26 +351,28 @@ public class DialogImportSQL extends JDialog {
 		NodeList elementList;
 		StringBuffer buffer = new StringBuffer();
 		String wrkStr = "";
-		//
+
 		numberOfTablesCreated = 0;
 		numberOfTableRelationshipsCreated = 0;
 		itemsOfArray = -1;
 		tableIDCounter = 0;
 		itemsOfHideFieldArray = -1;
-		//
+
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			jButtonStart.setVisible(false);
 			jProgressBar.setVisible(true);
-			//
+
 			elementList = frame_.domDocument.getElementsByTagName("System");
 			systemElement = (org.w3c.dom.Element)elementList.item(0);
+
 			///////////////////////////////////////////
 			// get ID of the subsystem imported into //
 			///////////////////////////////////////////
 			workNode = (XeadNode)comboBoxModelSubsystem.getSelectedItem();
 			subsystemElement = workNode.getElement();
 			subsystemID = subsystemElement.getAttribute("ID");
+
 			////////////////////////////////////////////////////////////////
 			// get ID of the TableType with the smallest value of SortKey //
 			////////////////////////////////////////////////////////////////
@@ -382,6 +390,7 @@ public class DialogImportSQL extends JDialog {
 					}
 				}
 			}
+
 			///////////////////////////////////////////////////////////////
 			// get ID of the DataType with the smallest value of SortKey //
 			///////////////////////////////////////////////////////////////
@@ -399,7 +408,7 @@ public class DialogImportSQL extends JDialog {
 					}
 				}
 			}
-			//
+
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(textFileName));
 				String line;
@@ -408,12 +417,12 @@ public class DialogImportSQL extends JDialog {
 				}
 				br.close();
 			} catch (IOException ex) {}
-			String statements = buffer.toString();
-			//
+			String statements = buffer.toString().toUpperCase();
+
 			if (jCheckBoxShowControl.isSelected()) {
 				setupHideFieldNameArray();
 			}
-			//
+
 			//////////////////////////////////////////////////////
 			//Substring table name and its attributes into array//
 			//////////////////////////////////////////////////////
@@ -454,26 +463,24 @@ public class DialogImportSQL extends JDialog {
 					scanStartFrom = statements.length();
 				}
 			}
-			//
+
 			jProgressBar.setValue(0);
 			jProgressBar.setMaximum(itemsOfArray + itemsOfArray);
-			//
+
 			for (int p = 0; p <= itemsOfArray; p++) {
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				//
 				tableElementArray[p] = createTableDefinition(nameArray[p], attrArray[p]);
 			}
-			//
+
 			for (int p = 0; p <= itemsOfArray; p++) {
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				//
 				createTableRelationship(tableElementArray[p], attrArray[p]);
 			}
-			//
+
 			importResult = numberOfTablesCreated + res.getString("DialogImportSQL08") +  numberOfTableRelationshipsCreated + res.getString("DialogImportSQL09") +"\n" + "\n";
-			//
+
 		} finally {
 			jProgressBar.setValue(0);
 			jButtonStart.setVisible(true);
@@ -515,7 +522,7 @@ public class DialogImportSQL extends JDialog {
 		org.w3c.dom.Element lastElement;
 		int lastID = 0;
 		String[] fieldArray = new String[1000];
-		//
+
 		///////////////////////////
 		//Create Table Definition//
 		///////////////////////////
@@ -528,7 +535,7 @@ public class DialogImportSQL extends JDialog {
 		}
 		tableElement.setAttribute("ID", Integer.toString(lastID + 1));
 		tableElement.setAttribute("Name", tableName);
-		//
+
 		if (jCheckBoxTableNameControl.isSelected()) {
 			tableIDCounter++;
 			tableElement.setAttribute("SortKey", "T" + getFormatted3ByteString(tableIDCounter) + "0");
@@ -539,7 +546,7 @@ public class DialogImportSQL extends JDialog {
 		tableElement.setAttribute("Descriptions", "");
 		tableElement.setAttribute("TableTypeID", defaultTableTypeID);
 		systemElement.appendChild(tableElement);
-		//
+
 		//////////////////////
 		//Create Primary Key//
 		//////////////////////
@@ -549,7 +556,7 @@ public class DialogImportSQL extends JDialog {
 		primaryKeyElement.setAttribute("Type", "PK");
 		tableElement.appendChild(primaryKeyElement);
 		primaryKeyFieldID = "";
-		//
+
 		/////////////////////////////////////
 		//Create Subsystem Table attributes//
 		/////////////////////////////////////
@@ -564,43 +571,13 @@ public class DialogImportSQL extends JDialog {
 		subsystemTableElement.setAttribute("ShowInstance", "false");
 		subsystemTableElement.setAttribute("Instance", "");
 		subsystemElement.appendChild(subsystemTableElement);
-		//
+
 		///////////////////////////////////
 		//Substring attributes into array//
 		///////////////////////////////////
 		int itemsOfArray = -1;
 		int i = 0;
 		int j = 0;
-		//    int bracketOpen = 0;
-		//    int bracketClose = 0;
-		//    while (j >= 0) {
-		//      j = tableAttributes.indexOf(",", i);
-		//      if (j >= 0) {
-		//        //wrkStr2 = wrkStr2 + tableAttributes.substring(i, j+1);
-		//        wrkStr2 = wrkStr2 + tableAttributes.substring(i, j);
-		//        //
-		//        bracketOpen = 0;
-		//        bracketClose = 0;
-		//        for (int p = 0; p < wrkStr2.length(); p++) {
-		//          wrkStr1 = wrkStr2.substring(p,p+1);
-		//          if (wrkStr1.equals("(")) {
-		//            bracketOpen++;
-		//          }
-		//          if (wrkStr1.equals(")")) {
-		//            bracketClose++;
-		//          }
-		//        }
-		//        if (bracketOpen == bracketClose) {
-		//          itemsOfArray++;
-		//          fieldArray[itemsOfArray] = wrkStr2 + " ";
-		//          wrkStr2 = "";
-		//        }
-		//        i = j+1;
-		//      } else {
-		//        itemsOfArray++;
-		//        fieldArray[itemsOfArray] = wrkStr2 + tableAttributes.substring(i, tableAttributes.length()) + " ";
-		//      }
-		//    }
 		int bracketOpen = 0;
 		int bracketClose = 0;
 		tableAttributes = tableAttributes.replaceAll("\n", "");
@@ -624,6 +601,7 @@ public class DialogImportSQL extends JDialog {
 				bracketClose++;
 			}
 		}
+
 		/////////////////////
 		//Create TableField//
 		/////////////////////
@@ -637,6 +615,7 @@ public class DialogImportSQL extends JDialog {
 				}
 			}
 		}
+
 		////////////////////////////
 		//Set Fields of PrimaryKey//
 		////////////////////////////
@@ -653,6 +632,7 @@ public class DialogImportSQL extends JDialog {
 			keyFieldElement.setAttribute("SortKey", "0010");
 			primaryKeyElement.appendChild(keyFieldElement);
 		}
+
 		/////////////////////
 		//Create SK and FK //
 		/////////////////////
@@ -661,9 +641,9 @@ public class DialogImportSQL extends JDialog {
 				createSecondaryKeyDefinition(tableElement, fieldArray[i]);
 			}
 		}
-		//
+
 		numberOfTablesCreated++;
-		//
+
 		return tableElement;
 	}
 
@@ -674,17 +654,19 @@ public class DialogImportSQL extends JDialog {
 		String commentValue = "";
 		org.w3c.dom.Element lastElement;
 		int lastID = 0;
-		//
+
 		fieldNameValue = trimBlankFromValue(fieldAttrString);
 		if (fieldNameValue.equals("")) {
 			return;
 		}
+
 		////////////////
 		//Get NOT NULL//
 		////////////////
 		if (fieldAttrString.indexOf("NOT NULL", 0) > 0) {
 			notNullValue = "true";
 		}
+
 		////////////////
 		//Get Default //
 		////////////////
@@ -706,6 +688,7 @@ public class DialogImportSQL extends JDialog {
 				defaultValue = fieldAttrString.substring(posStart, posEnd).replaceAll("'", "");
 			}
 		}
+
 		////////////////
 		//Get COMMENT //
 		////////////////
@@ -727,6 +710,7 @@ public class DialogImportSQL extends JDialog {
 				commentValue = fieldAttrString.substring(posStart, posEnd);
 			}
 		}
+
 		////////////////////////
 		//Set field attributes//
 		////////////////////////
@@ -765,7 +749,7 @@ public class DialogImportSQL extends JDialog {
 		fieldElement.setAttribute("NotNull", notNullValue);
 		fieldElement.setAttribute("Default", defaultValue);
 		tableElement.appendChild(fieldElement);
-		//
+
 		if (fieldAttrString.indexOf("PRIMARY KEY", 0) > 0) {
 			primaryKeyFieldID = fieldElement.getAttribute("ID");
 		}
@@ -789,7 +773,7 @@ public class DialogImportSQL extends JDialog {
 		int n =0;
 		int checkCounter = 0;
 		String dataTypeID = defaultDataTypeID;
-		//
+
 		if (jCheckBoxDataTypeControl.isSelected()) {
 			for (int i = 0; i < sqlDataTypeArray.length; i++) {
 				j = fieldAttrString.indexOf(sqlDataTypeArray[i], 0);
@@ -841,7 +825,7 @@ public class DialogImportSQL extends JDialog {
 									}
 								}
 							}
-							//
+
 							org.w3c.dom.Element newElement = frame_.domDocument.createElement("DataType");
 							lastElement = getLastDomElementOfTheType("DataType");
 							if (lastElement == null) {
@@ -879,26 +863,18 @@ public class DialogImportSQL extends JDialog {
 							dataTypeID = newElement.getAttribute("ID");
 						}
 					}
-					//
+
 					break;
 				}
 			}
 		}
-		//
+
 		return dataTypeID;
 	}
 
 	String getBasicTypeFromTypeName(String typeName) {
 		String basicType = "String";
 		for (int j = 0; j < sqlDataTypeArray2.length; j++) {
-			//if (typeName.indexOf(sqlDataTypeArray[j], 0) >= 0) {
-			//  if (j >= 0 &&  j <= 12) {basicType = "SignedNumber";}
-			//  if (j == 13) {basicType = "String";}
-			//  if (j >= 14 &&  j <= 15) {basicType = "Date";}
-			//  if (j == 16) {basicType = "Object";}
-			//  if (j == 19) {basicType = "Boolean";}
-			//  break;
-			//}
 			if (typeName.indexOf(sqlDataTypeArray2[j], 0) >= 0) {
 				if (j >= 0 &&  j <= 15) {basicType = "SignedNumber";}
 				if (j >= 20 &&  j <= 23) {basicType = "Date";}
@@ -907,10 +883,6 @@ public class DialogImportSQL extends JDialog {
 				break;
 			}
 		}
-		//if (typeName.indexOf("INT", 0) > 0) {
-		//  basicType = "SignedNumber";
-		//}
-		//
 		return basicType;
 	}
 
@@ -925,7 +897,7 @@ public class DialogImportSQL extends JDialog {
 
 	void setKeyFieldOfTheKey(org.w3c.dom.Element keyElement, org.w3c.dom.Element tableElement, String fieldNames) {
 		org.w3c.dom.Element element;
-		//
+
 		int i = fieldNames.indexOf("(", 0);
 		if (i >= 0) {
 			int j = fieldNames.indexOf(")", i);
@@ -935,7 +907,7 @@ public class DialogImportSQL extends JDialog {
 				fieldNames = fieldNames.substring(i+1, j);
 			}
 		}
-		//
+
 		NodeList fieldList = tableElement.getElementsByTagName("TableField");
 		StringTokenizer workTokenizer = new StringTokenizer(fieldNames, "," );
 		String fieldName = "";
@@ -963,7 +935,7 @@ public class DialogImportSQL extends JDialog {
 		int lastID = 0;
 		String wrkStr1 = "";
 		String wrkStr2 = "";
-		//
+
 		///////////////////////////////////
 		//Substring attributes into array//
 		///////////////////////////////////
@@ -999,6 +971,7 @@ public class DialogImportSQL extends JDialog {
 				fieldArray[itemsOfArray] = wrkStr2 + tableAttributes.substring(i, tableAttributes.length());
 			}
 		}
+
 		//////////////////////
 		//Create Foreign Key//
 		//////////////////////
@@ -1017,7 +990,7 @@ public class DialogImportSQL extends JDialog {
 		String tableKey2Type = "";
 		int numberOfFieldsOfKey2 = 0;
 		String relationshipType = "";
-		//
+
 		for (i = 0; i <= itemsOfArray; i++) {
 			try {
 				pos1 = fieldArray[i].indexOf("FOREIGN KEY", 0);
@@ -1026,28 +999,29 @@ public class DialogImportSQL extends JDialog {
 				pos4 = fieldArray[i].indexOf("REFERENCES", pos3 + 1);
 				pos5 = fieldArray[i].indexOf("(", pos4 + 10);
 				pos6 = fieldArray[i].indexOf(")", pos5 + 1);
-				//
+
 				if (pos1 >= 0 && pos2 >= 0 && pos3 >= 0 && pos4 >= 0 && pos5 >= 0 && pos6 >= 0) {
-					//
+
 					table2ID = tableElement.getAttribute("ID");
-					//
+
 					workElement = createForeignKeyDefinition(tableElement, fieldArray[i].substring(pos2+1, pos3));
 					if (workElement != null) {
 						tableKey2ID = workElement.getAttribute("ID");
 						tableKey2Type = workElement.getAttribute("Type");
 						numberOfFieldsOfKey2 = workElement.getElementsByTagName("TableKeyField").getLength();
-						//
+
 						workElement = getTableElementWithTableName(fieldArray[i].substring(pos4+10, pos5));
 						if (workElement != null) {
 							table1ID = workElement.getAttribute("ID");
-							//
+
 							workElement = getUniqueKeyElementWithFieldNames(workElement, fieldArray[i].substring(pos5+1, pos6));
 							if (workElement != null) {
 								tableKey1ID = workElement.getAttribute("ID");
 								tableKey1Type = workElement.getAttribute("Type");
 								numberOfFieldsOfKey1 = workElement.getElementsByTagName("TableKeyField").getLength();
-								//
+
 								if (tableKey1Type.equals("PK") || tableKey1Type.equals("SK")) {
+
 									///////////////////////////////
 									//Create Relationship Element//
 									///////////////////////////////
@@ -1065,7 +1039,7 @@ public class DialogImportSQL extends JDialog {
 											relationshipType = "REFFER";
 										}
 									}
-									//
+
 									if (!relationshipType.equals("")) {
 										org.w3c.dom.Element newElement1 = frame_.domDocument.createElement("Relationship");
 										org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Relationship");
@@ -1083,7 +1057,7 @@ public class DialogImportSQL extends JDialog {
 										newElement1.setAttribute("ExistWhen1", "");
 										newElement1.setAttribute("ExistWhen2", "");
 										systemElement.appendChild(newElement1);
-										//
+
 										////////////////////////////////////////
 										//Create SubsystemRelationship Element//
 										////////////////////////////////////////
@@ -1093,7 +1067,7 @@ public class DialogImportSQL extends JDialog {
 										newElement2.setAttribute("TerminalIndex2", "20");
 										newElement2.setAttribute("ShowOnModel", "true");
 										subsystemElement.appendChild(newElement2);
-										//
+
 										numberOfTableRelationshipsCreated++;
 									}
 								}
@@ -1113,6 +1087,7 @@ public class DialogImportSQL extends JDialog {
 		int index = 0;
 		String[] fieldIDArray = new String[50];
 		String wrkStr;
+
 		//////////////////////////
 		//trim brackets of string//
 		//////////////////////////
@@ -1121,6 +1096,7 @@ public class DialogImportSQL extends JDialog {
 			int j = fieldNames.indexOf(")", i);
 			fieldNames = fieldNames.substring(i+1, j);
 		}
+
 		///////////////////////////////////////////
 		//Setup fieldID array of this foreign key//
 		///////////////////////////////////////////
@@ -1139,6 +1115,7 @@ public class DialogImportSQL extends JDialog {
 				}
 			}
 		}
+
 		////////////////////////////////////////////////
 		//search corresponding PK(or SK) in this table//
 		////////////////////////////////////////////////
@@ -1165,7 +1142,7 @@ public class DialogImportSQL extends JDialog {
 				}
 			}
 		}
-		//
+
 		if (foreignKeyElement == null) {
 			foreignKeyElement = frame_.domDocument.createElement("TableKey");
 			foreignKeyElement.setAttribute("ID", getNextKeyIDOfTheTable(tableElement));
@@ -1174,7 +1151,7 @@ public class DialogImportSQL extends JDialog {
 			setKeyFieldOfTheKey(foreignKeyElement, tableElement, fieldNames);
 			tableElement.appendChild(foreignKeyElement);
 		}
-		//
+
 		return foreignKeyElement;
 	}
 
@@ -1184,6 +1161,7 @@ public class DialogImportSQL extends JDialog {
 		int index = 0;
 		String[] fieldIDArray = new String[50];
 		String wrkStr;
+
 		///////////////////////////////////
 		//trim brackets of fieldAttrString//
 		///////////////////////////////////
@@ -1192,6 +1170,7 @@ public class DialogImportSQL extends JDialog {
 			int j = fieldNames.indexOf(")", i);
 			fieldNames = fieldNames.substring(i+1, j);
 		}
+
 		///////////////////////////////////
 		//Setup fieldID array of this key//
 		///////////////////////////////////
@@ -1210,6 +1189,7 @@ public class DialogImportSQL extends JDialog {
 				}
 			}
 		}
+
 		////////////////////////////////////////////////
 		//search corresponding PK(or SK) in this table//
 		////////////////////////////////////////////////
@@ -1236,14 +1216,13 @@ public class DialogImportSQL extends JDialog {
 				}
 			}
 		}
-		//
+
 		return keyElement;
 	}
 
 	org.w3c.dom.Element getTableElementWithTableName(String name) {
 		org.w3c.dom.Element keyElement = null;
 		String trimmedName = trimBlankFromValue(name);
-		//
 		for (int i = 0; i <= itemsOfArray; i++) {
 			if (nameArray[i].equals(trimmedName)) {
 				keyElement = tableElementArray[i];
@@ -1257,7 +1236,7 @@ public class DialogImportSQL extends JDialog {
 		int namePosThru = -1;
 		String wrkStr;
 		String trimmedValue = "";
-		//
+
 		for (int i = 0; i < value.length(); i++) {
 			wrkStr = value.substring(i, i+1);
 			if (!wrkStr.equals(" ") && namePosFrom == -1) {
@@ -1271,11 +1250,11 @@ public class DialogImportSQL extends JDialog {
 		if (namePosThru == -1) {
 			namePosThru = value.length();
 		}
-		//
+
 		if (namePosFrom < namePosThru) {
 			trimmedValue = value.substring(namePosFrom, namePosThru);
 		}
-		//
+
 		return trimmedValue;
 	}
 
@@ -1334,8 +1313,6 @@ public class DialogImportSQL extends JDialog {
 	class XeadNode {
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
-		//
-		//Constructor//
 		public XeadNode(String type, org.w3c.dom.Element node) {
 			super();
 			nodeType_ = type;
