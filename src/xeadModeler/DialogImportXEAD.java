@@ -35,9 +35,7 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
-
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -1533,8 +1531,6 @@ public class DialogImportXEAD extends JDialog {
 		int lastID = 0;
 		int checkCounter = 0;
 		String workStr = "";
-		//org.w3c.dom.Element[] ioTableList = new org.w3c.dom.Element[300];
-		//int countOfIOTableList = 0;
 		ArrayList<org.w3c.dom.Element> ioTableList = new ArrayList<org.w3c.dom.Element>();
 		String fieldID = "";
 
@@ -1550,8 +1546,6 @@ public class DialogImportXEAD extends JDialog {
 		for (int i = 0; i < elementList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)elementList.item(i);
 			if (tableIDInto.equals(workElement1.getAttribute("TableID"))) {
-//				ioTableList[countOfIOTableList] = workElement1;
-//				countOfIOTableList++;
 				ioTableList.add(workElement1);
 			}
 		}
@@ -2575,24 +2569,22 @@ public class DialogImportXEAD extends JDialog {
 			}
 		}
 
-		if (!sortKey.equals("")) {
-			nodeList = frame_.domDocument.getElementsByTagName(tagName);
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				element = (org.w3c.dom.Element)nodeList.item(i);
+		nodeList = frame_.domDocument.getElementsByTagName(tagName);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			element = (org.w3c.dom.Element)nodeList.item(i);
 
-				if (defaultID.equals("")) {
+			if (defaultID.equals("")) {
+				defaultID = element.getAttribute("ID");
+				defaultSortKey = element.getAttribute("SortKey");
+			} else {
+				if (defaultSortKey.compareTo(element.getAttribute("SortKey")) > 0) {
 					defaultID = element.getAttribute("ID");
 					defaultSortKey = element.getAttribute("SortKey");
-				} else {
-					if (defaultSortKey.compareTo(element.getAttribute("SortKey")) > 0) {
-						defaultID = element.getAttribute("ID");
-						defaultSortKey = element.getAttribute("SortKey");
-					}
 				}
+			}
 
-				if (element.getAttribute("SortKey").equals(sortKey)) {
-					convertedInternalID = element.getAttribute("ID");
-				}
+			if (element.getAttribute("SortKey").equals(sortKey)) {
+				convertedInternalID = element.getAttribute("ID");
 			}
 		}
 

@@ -7670,6 +7670,7 @@ public class Modeler extends JFrame {
 				boolean isProcessed = false;
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
 					NodeList subsystemList = systemNode.getElement().getElementsByTagName("Subsystem");
 					NodeList relationshipList = systemNode.getElement().getElementsByTagName("Relationship");
 					for (int i = 0; i < relationshipList.getLength(); i++) {
@@ -7683,6 +7684,30 @@ public class Modeler extends JFrame {
 							count++;
 						}
 					}
+
+					String defaultDataTypeID = "";
+					org.w3c.dom.Element element;
+					sortableDomElementListModel.removeAllElements();
+					NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
+					for (int i = 0; i < dataTypeList.getLength(); i++) {
+						sortableDomElementListModel.addElement((Object)dataTypeList.item(i));
+					}
+					sortableDomElementListModel.sortElements();
+					if (sortableDomElementListModel.getSize() > 0) {
+						element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(0);
+						defaultDataTypeID = element.getAttribute("ID");
+
+						NodeList fieldList = systemNode.getElement().getElementsByTagName("TableField");
+						for (int i = 0; i < fieldList.getLength(); i++) {
+							element = (org.w3c.dom.Element)fieldList.item(i);
+							if (element.getAttribute("DataTypeID").equals("")) {
+								element.setAttribute("DataTypeID", defaultDataTypeID);
+								isProcessed = true;
+								count++;
+							}
+						}
+					}
+
 				} finally {
 					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
@@ -16103,6 +16128,10 @@ public class Modeler extends JFrame {
 			return nodeType_;
 		}
 
+		public String getElementName() {
+			return domNode_.getAttribute("Name");
+		}
+
 		public String getName() {
 			String str = "";
 
@@ -16459,12 +16488,16 @@ public class Modeler extends JFrame {
 		}
 
 		public void addChildNode(XeadTreeNode childNode, String typeOfNodeBeingAdded, String sortKey, String name) {
+			addChildNode(childNode, typeOfNodeBeingAdded, sortKey, name, "");
+		}
+
+		public void addChildNode(XeadTreeNode childNode, String typeOfNodeBeingAdded, String sortKey, String name, String descriptions) {
 			XeadTreeNode node;
 			NodeList nodeList;
 			org.w3c.dom.Element lastElement, newElementChild1, newElementChild2;
 			org.w3c.dom.Element newElement = null;
 			int lastID = 0;
-			//
+
 			//Add SubjectArea//
 			if (nodeType_.equals("SubjectAreaList")) {
 				if (childNode == null) {
@@ -16482,7 +16515,7 @@ public class Modeler extends JFrame {
 						newElement.setAttribute("Name", name);
 					}
 					newElement.setAttribute("SortKey", sortKey);
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("BoundaryPosition", "70,70");
 					newElement.setAttribute("BoundarySize", "700,500");
 					childNode = new XeadTreeNode("SubjectArea", newElement);
@@ -16492,7 +16525,7 @@ public class Modeler extends JFrame {
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
 			}
-			//
+
 			//Add Role//
 			if (nodeType_.equals("RoleList")) {
 				if (childNode == null) {
@@ -16509,7 +16542,7 @@ public class Modeler extends JFrame {
 					} else {
 						newElement.setAttribute("Name", name);
 					}
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("SortKey", sortKey);
 					sortableComboBoxModelDepartment.removeAllElements();
 					nodeList = domDocument.getElementsByTagName("Department");
@@ -16527,7 +16560,7 @@ public class Modeler extends JFrame {
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
 			}
-			//
+
 			//Add Task//
 			if (nodeType_.equals("Role")) {
 				if (childNode == null) {
@@ -16544,7 +16577,7 @@ public class Modeler extends JFrame {
 					} else {
 						newElement.setAttribute("Name", name);
 					}
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("SortKey", sortKey);
 					newElement.setAttribute("Event", res.getString("S3568"));
 					newElement.setAttribute("RoleID", domNode_.getAttribute("ID"));
@@ -16584,7 +16617,7 @@ public class Modeler extends JFrame {
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
 			}
-			//
+
 			//Add Subsystem//
 			if (nodeType_.equals("SubsystemList")) {
 				if (childNode == null) {
@@ -16601,7 +16634,7 @@ public class Modeler extends JFrame {
 					} else {
 						newElement.setAttribute("Name", name);
 					}
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("SortKey", sortKey);
 					childNode = new XeadTreeNode("Subsystem", newElement);
 					XeadTreeNode node1 = new XeadTreeNode("TableList", null);
@@ -16614,24 +16647,13 @@ public class Modeler extends JFrame {
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
 			}
-			//
+
 			//Add Table//
 			if (nodeType_.equals("TableList")) {
 				XeadTreeNode subsystemNode = (XeadTreeNode)this.getParent();
 				if (childNode == null) {
-					//
-					//Get Default TableTypeID//
-//					sortableComboBoxModelTableType.removeAllElements();
-//					nodeList = domDocument.getElementsByTagName("TableType");
-//					for (int i = 0; i < nodeList.getLength(); i++) {
-//						node = new XeadTreeNode("TableType",(org.w3c.dom.Element)nodeList.item(i));
-//						sortableComboBoxModelTableType.addElement((Object)node);
-//					}
-//					sortableComboBoxModelTableType.sortElements();
-//					node = (XeadTreeNode)sortableComboBoxModelTableType.getElementAt(0);
-//					String defaultTableTypeID = node.getElement().getAttribute("ID");
+
 					String defaultTableTypeID = getDefaultTableTypeID();
-					//
 					newElement = domDocument.createElement("Table");
 					lastID = getLastIDOfTable();
 					newElement.setAttribute("ID", Integer.toString(lastID + 1));
@@ -16640,7 +16662,7 @@ public class Modeler extends JFrame {
 					} else {
 						newElement.setAttribute("Name", name);
 					}
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("SortKey", sortKey);
 					newElement.setAttribute("SubsystemID", subsystemNode.getElement().getAttribute("ID"));
 					newElement.setAttribute("TableTypeID", defaultTableTypeID);
@@ -16673,13 +16695,13 @@ public class Modeler extends JFrame {
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
 			}
-			//
+
 			//Add TableField//
 			if (nodeType_.equals("TableFieldList")) {
 				addNodeToTheArrayOfFieldListNodeToBeRenumbered(this);
 				XeadTreeNode tableNode = (XeadTreeNode)this.getParent();
 				if (childNode == null) {
-					//
+
 					//Get Default DataTypeID//
 					sortableDomElementListModel.removeAllElements();
 					nodeList = domDocument.getElementsByTagName("DataType");
@@ -16689,7 +16711,7 @@ public class Modeler extends JFrame {
 					sortableDomElementListModel.sortElements();
 					org.w3c.dom.Element defaultDataTypeElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(0);
 					String defaultDataTypeID = defaultDataTypeElement.getAttribute("ID");
-					//
+
 					//Get biggest values of field ID and SortKey in the Table//
 					int intFieldID = 0;
 					org.w3c.dom.Element element1 = null;
@@ -16697,14 +16719,14 @@ public class Modeler extends JFrame {
 					NodeList nodeList1 = tableNode.getElement().getElementsByTagName("TableField");
 					for (int i = 0; i < nodeList1.getLength(); i++) {
 						element1 = (org.w3c.dom.Element)nodeList1.item(i);
-						//
+
 						//Save biggest value of Field ID//
 						intFieldID = Integer.parseInt(element1.getAttribute("ID"));
 						if (intFieldID > lastID) {
 							lastID = intFieldID;
 						}
 					}
-					//
+
 					newElement = domDocument.createElement("TableField");
 					newElement.setAttribute("ID", Integer.toString(lastID + 1));
 					if (name.equals("")) {
@@ -16717,14 +16739,14 @@ public class Modeler extends JFrame {
 					newElement.setAttribute("AttributeType", "NATIVE");
 					newElement.setAttribute("NotNull", "true");
 					newElement.setAttribute("Default", "");
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("ShowOnModel", "true");
 					newElement.setAttribute("SortKey", getNextSortKeyOfTableField(tableNode));
 					childNode = new XeadTreeNode("TableField", newElement);
 				} else {
 					newElement = childNode.getElement();
 				}
-				//
+
 				//Insert Dom Element before Key element//
 				NodeList nodeList1 = tableNode.getElement().getElementsByTagName("TableKey");
 				if (nodeList1.getLength() > 0) {
@@ -16733,10 +16755,10 @@ public class Modeler extends JFrame {
 				} else {
 					tableNode.getElement().appendChild(newElement);
 				}
-				//
+
 				//Add treeNode of TableField//
 				this.add(childNode);
-				//
+
 				//Add as a IOTable Field//
 				org.w3c.dom.Element element1;
 				String tableID = tableNode.getElement().getAttribute("ID");
@@ -16750,10 +16772,10 @@ public class Modeler extends JFrame {
 						element1.appendChild(newElementChild1);
 					}
 				}
-				//
+
 				isRequiredToSetupSortableFieldList = true;
 			}
-			//
+
 			//Add TableKey//
 			if (nodeType_.equals("TableKeyList") && typeOfNodeBeingAdded.equals("FK") ||
 					nodeType_.equals("TableKeyList") && typeOfNodeBeingAdded.equals("SK") ||
@@ -16790,12 +16812,12 @@ public class Modeler extends JFrame {
 				}
 				this.add(childNode);
 			}
-			//
+
 			//Add Function//
 			if (nodeType_.equals("FunctionList")) {
 				XeadTreeNode subsystemNode = (XeadTreeNode)this.getParent();
 				if (childNode == null) {
-					//
+
 					//Get Default FunctionTypeID//
 					sortableComboBoxModelFunctionType.removeAllElements();
 					nodeList = domDocument.getElementsByTagName("FunctionType");
@@ -16806,7 +16828,7 @@ public class Modeler extends JFrame {
 					sortableComboBoxModelFunctionType.sortElements();
 					node = (XeadTreeNode)sortableComboBoxModelFunctionType.getElementAt(0);
 					String defaultFunctionTypeID = node.getElement().getAttribute("ID");
-					//
+
 					newElement = domDocument.createElement("Function");
 					lastElement = getLastDomElementOfTheType("Function");
 					if (lastElement == null) {
@@ -16820,7 +16842,7 @@ public class Modeler extends JFrame {
 					} else {
 						newElement.setAttribute("Name", name);
 					}
-					newElement.setAttribute("Descriptions", "");
+					newElement.setAttribute("Descriptions", descriptions);
 					newElement.setAttribute("SortKey", sortKey);
 					newElement.setAttribute("Parameters", res.getString("S3707"));
 					newElement.setAttribute("Return", res.getString("S3709"));
@@ -16831,13 +16853,13 @@ public class Modeler extends JFrame {
 				} else {
 					newElement = childNode.getElement();
 				}
-				//
+
 				systemNode.getElement().appendChild(newElement);
 				this.add(childNode);
-				//
+
 				isRequiredToSetupFunctionsStructre = true;
 			}
-			//
+
 			//Add IOPanel, IOSpool, IOWebPage to Function node//
 			if (nodeType_.equals("Function")) {
 				if (childNode == null) {
@@ -16846,7 +16868,11 @@ public class Modeler extends JFrame {
 						lastID = getLastIDOfFunctionIO(domNode_);
 						newElement.setAttribute("ID", Integer.toString(lastID + 1));
 						newElement.setAttribute("Name", res.getString("S3721"));
-						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						if (descriptions.equals("")) {
+							newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						} else {
+							newElement.setAttribute("Descriptions", descriptions);
+						}
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WINDOW");
 						newElement.setAttribute("ImageText", "");
@@ -16865,7 +16891,11 @@ public class Modeler extends JFrame {
 						lastID = getLastIDOfFunctionIO(domNode_);
 						newElement.setAttribute("ID", Integer.toString(lastID + 1));
 						newElement.setAttribute("Name", res.getString("S3750"));
-						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						if (descriptions.equals("")) {
+							newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						} else {
+							newElement.setAttribute("Descriptions", descriptions);
+						}
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("Background", "WHITE");
 						newElement.setAttribute("ImageText", "");
@@ -16883,7 +16913,11 @@ public class Modeler extends JFrame {
 						lastID = getLastIDOfFunctionIO(domNode_);
 						newElement.setAttribute("ID", Integer.toString(lastID + 1));
 						newElement.setAttribute("Name", res.getString("S3777"));
-						newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						if (descriptions.equals("")) {
+							newElement.setAttribute("Descriptions", res.getString("S3722") + "\n" + "\n" + "@@TECHNICAL NOTES"  + "\n" + res.getString("S3723"));
+						} else {
+							newElement.setAttribute("Descriptions", descriptions);
+						}
 						newElement.setAttribute("SortKey", "");
 						newElement.setAttribute("FileName", "");
 						newElementChild1 = domDocument.createElement("IOWebPageField");
@@ -16903,18 +16937,31 @@ public class Modeler extends JFrame {
 				//
 				isRequiredToSetupFunctionsStructre = true;
 			}
-			//
+
 			//Add Log of Add//
 			if (childNode != null) {
 				xeadUndoManager.addLogOfAdd(childNode);
 			}
-			//
+
 			//Sort and refresh page//
 			this.sortChildNodes();
 			jTreeMain.updateUI();
 			activateContentsPane();
 		}
 
+		XeadTreeNode getChildNodeByName(String name) {
+			XeadTreeNode childNode = null;
+			XeadTreeNode node;
+			for (int i = 0; i < this.getChildCount(); i++) {
+				node = (XeadTreeNode)this.getChildAt(i);
+				if (node.getElementName().equals(name)) {
+					childNode = node;
+					break;
+				}
+			}
+			return childNode;
+		}
+		
 		String getNextSortKeyOfTableField(XeadTreeNode tableNode) {
 			org.w3c.dom.Element element;
 			int lastSortKeyInt = 0;
@@ -23007,6 +23054,36 @@ public class Modeler extends JFrame {
 			currentMainTreeNode = ownerNode;
 			ownerNode.activateContentsPane();
 		}
+		
+		public void updateIdOrDescriptions(String id, String descriptions) {
+			if (nodeType_.equals("SubjectArea") || nodeType_.equals("Role") || nodeType_.equals("Task")
+					|| nodeType_.equals("Subsystem") || nodeType_.equals("Table") || nodeType_.equals("TableField")
+					|| nodeType_.equals("Function") || nodeType_.equals("IOPanel") || nodeType_.equals("IOSpool")
+					|| nodeType_.equals("IOTable") || nodeType_.equals("IOWebPage")) {
+
+				xeadUndoManager.saveNodeBeforeModified(this);
+
+				if (nodeType_.equals("TableField")) {
+					if (!id.equals("")) {
+						domNode_.setAttribute("Alias", id);
+					}
+					if (!descriptions.equals("")) {
+						domNode_.setAttribute("Descriptions", descriptions);
+					}
+				} else {
+					if (!id.equals("")) {
+						domNode_.setAttribute("SortKey", id);
+					}
+					if (!descriptions.equals("")) {
+						domNode_.setAttribute("Descriptions", descriptions);
+					}
+					XeadTreeNode parentNode = (XeadTreeNode)this.getParent();
+					parentNode.sortChildNodes();
+				}
+
+				xeadUndoManager.addLogAfterModified(this);
+			}
+		}
 
 		public void updateFields() {
 			XeadTreeNode parentNode;
@@ -27290,37 +27367,86 @@ public class Modeler extends JFrame {
 		//
 		//Import List data from CSV file//
 		if (reply == 2) {
+//			int totalLineNumber = 0;
+//			int validLineNumber = 0;
+//			String csvFileName = specifyNameOfExistingFile(res.getString("S1735"), "csv");
+//			try {
+//				BufferedReader br = new BufferedReader(new FileReader(csvFileName));
+//				String line, firstColumn, secondColumn;
+//				while ((line = br.readLine()) != null) {
+//					totalLineNumber++;
+//					StringTokenizer workTokenizer = new StringTokenizer(line, "," );
+//					//
+//					try {
+//						firstColumn = workTokenizer.nextToken();
+//					}
+//					catch (Exception ex1) {
+//						firstColumn = "";
+//					}
+//					//
+//					try {
+//						secondColumn = workTokenizer.nextToken();
+//					}
+//					catch (Exception ex1) {
+//						secondColumn = "";
+//					}
+//					//
+//					if (!firstColumn.equals("") && secondColumn.equals("")) {
+//						validLineNumber++;
+//						currentMainTreeNode.addChildNode(null, "", "", firstColumn);
+//					}
+//					if (!firstColumn.equals("") && !secondColumn.equals("")) {
+//						validLineNumber++;
+//						currentMainTreeNode.addChildNode(null, "", firstColumn, secondColumn);
+//					}
+//				}
+//				br.close();
+//			}
+//			catch (IOException ex) {
+//			}
+//			if (validLineNumber == 0) {
+//				JOptionPane.showMessageDialog(this, res.getString("S1747"));
+//			} else {
+//				if (totalLineNumber > validLineNumber) {
+//					JOptionPane.showMessageDialog(this, res.getString("S1748"));
+//				}
+//			}
 			int totalLineNumber = 0;
 			int validLineNumber = 0;
-			String csvFileName = specifyNameOfExistingFile(res.getString("S1735"), "csv");
+			String csvFileName = specifyNameOfExistingFile(res.getString("S1735"), "txt");
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(csvFileName));
-				String line, firstColumn, secondColumn;
+				String line, idColumn, nameColumn, descriptionsColumn;
 				while ((line = br.readLine()) != null) {
 					totalLineNumber++;
-					StringTokenizer workTokenizer = new StringTokenizer(line, "," );
-					//
+					StringTokenizer workTokenizer = new StringTokenizer(line, "\t" );
+
 					try {
-						firstColumn = workTokenizer.nextToken();
+						idColumn = workTokenizer.nextToken();
+					} catch (Exception ex1) {
+						idColumn = "";
 					}
-					catch (Exception ex1) {
-						firstColumn = "";
-					}
-					//
+
 					try {
-						secondColumn = workTokenizer.nextToken();
+						nameColumn = workTokenizer.nextToken();
+					} catch (Exception ex1) {
+						nameColumn = "";
 					}
-					catch (Exception ex1) {
-						secondColumn = "";
+
+					try {
+						descriptionsColumn = workTokenizer.nextToken();
+					} catch (Exception ex1) {
+						descriptionsColumn = "";
 					}
-					//
-					if (!firstColumn.equals("") && secondColumn.equals("")) {
+
+					if (!nameColumn.equals("")) {
 						validLineNumber++;
-						currentMainTreeNode.addChildNode(null, "", "", firstColumn);
-					}
-					if (!firstColumn.equals("") && !secondColumn.equals("")) {
-						validLineNumber++;
-						currentMainTreeNode.addChildNode(null, "", firstColumn, secondColumn);
+						XeadTreeNode childNode = currentMainTreeNode.getChildNodeByName(nameColumn);
+						if (childNode == null) {
+							currentMainTreeNode.addChildNode(null, "", idColumn, nameColumn, descriptionsColumn);
+						} else {
+							childNode.updateIdOrDescriptions(idColumn, descriptionsColumn);
+						}
 					}
 				}
 				br.close();

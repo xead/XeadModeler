@@ -33,7 +33,7 @@ package xeadModeler;
 
 public class Res extends java.util.ListResourceBundle {
 	private static final Object[][] contents = new String[][]{
-		{ "DialogAddList01", "Import CSV" },
+		{ "DialogAddList01", "Import TXT" },
 		{ "DialogAddList02", "Cancel" },
 		{ "DialogAddList03", "Add Subject Areas" },
 		{ "DialogAddList04", "Name of Subject Area" },
@@ -439,7 +439,7 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S68", "Close" },
 		{ "S69", "Execute Recovery" },
 		{ "S70", "Old import process might has resulted in irregulars.\nIt will recover them." },
-		{ "S71", " of irregular relationships was found and recovered successfully." },
+		{ "S71", " of irregulars found and recovered successfully." },
 		{ "S72", "No irregulars found to be recovered." },
 		{ "S73", "Jump to bookmark" },
 		{ "S74", "Matrics List" },

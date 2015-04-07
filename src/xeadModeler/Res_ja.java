@@ -33,7 +33,7 @@ package xeadModeler;
 
 public class Res_ja extends java.util.ListResourceBundle {
 	private static final Object[][] contents = new String[][]{
-		{ "DialogAddList01", "CSV読込" },
+		{ "DialogAddList01", "TXT読込" },
 		{ "DialogAddList02", "取消" },
 		{ "DialogAddList03", "「サブジェクトエリア」を一覧形式で追加する" },
 		{ "DialogAddList04", "サブジェクトエリア名" },
@@ -437,8 +437,8 @@ public class Res_ja extends java.util.ListResourceBundle {
 		{ "S67", "インポートの修復処理" },
 		{ "S68", "閉じる" },
 		{ "S69", "修復する" },
-		{ "S70", "1.4.4以前のインポート処理によって生じ得た不整合を修復するための処理です。すなわち、イン\nポートされたテーブル関連定義が、一部のデータモデル上で反映されていない可能性があります。" },
-		{ "S71", "件のテーブル関連定義に関して、異状が修復されました。" },
+		{ "S70", "古いバージョンのインポート処理によって生じ得た不整合を修復するための処理です。すなわち、イン\nポートされたテーブル関連定義やデータタイプ定義に関して、不整合が生じている可能性があります。" },
+		{ "S71", "件について異状が修復されました。" },
 		{ "S72", "修復すべき異状は見つかりませんでした。" },
 		{ "S73", "しおりへジャンプ" },
 		{ "S74", "マトリックスリスト出力" },

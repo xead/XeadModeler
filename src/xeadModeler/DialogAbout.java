@@ -45,9 +45,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "XEAD Modeler 1.4";
 	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2014 DBC,Ltd.";
+	public static final String COPYRIGHT = "Copyright 2015 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M16";
+	public static final String FULL_VERSION = "V1.R4.M17";
+	// 1.4.17での変更点
+	//・IDがブランクであるようなデータタイプやテーブルタイプを含む場合に起こるxeadファイルのインポート処理のバグを修正した
+	//・一覧形式での追加でのファイル読込を、CSVからTXT(タブ区切り)に変更するとともに、摘要を取り込めるようにした
+	//・一覧形式での追加でのファイル読込で、名前で特定される既存要素のIDや摘要を更新するようにした
+	//
 	// 1.4.16での変更点
 	//・DDL設定ロジックのバグを修正した
 	//・別名で保存した場合に「別のユーザによって更新された」のメッセージが示されてしまうバグを修正した

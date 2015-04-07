@@ -33,7 +33,7 @@ package xeadModeler;
 
 public class Res_ko extends java.util.ListResourceBundle {
 	private static final Object[][] contents = new String[][]{
-		{"DialogAddList01","CSV읽어오기"},
+		{"DialogAddList01","TXT읽어오기"},
 		{"DialogAddList02", "취소"},
 		{"DialogAddList03","[서브젝트 영역]을 리스트 형식으로 추가"},
 		{"DialogAddList04","서브젝트 영역명"},
@@ -439,7 +439,7 @@ public class Res_ko extends java.util.ListResourceBundle {
 		{"S68","Close" },
 		{"S69","Execute Recovery" },
 		{"S70","Old import process might has resulted in irregulars.\nIt will recover them." },
-		{"S71"," of irregular relationships was found and recovered successfully." },
+		{"S71"," of irregulars found and recovered successfully." },
 		{"S72", "No irregulars found to be recovered." },
 		{"S73","북마크로 이동"},
 		{"S74","Matrics List" },
