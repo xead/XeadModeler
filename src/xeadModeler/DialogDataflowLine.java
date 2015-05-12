@@ -47,7 +47,6 @@ public class DialogDataflowLine extends JDialog {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	private JPanel panelMain = new JPanel();
 	private JLabel jLabel1 = new JLabel();
-	//private JTextField jTextFieldNode1Name = new JTextField();
 	private JComboBox jComboBoxNode1 = new JComboBox();
 	private ButtonGroup buttonGroupArrowStyle = new ButtonGroup();
 	private JLabel jLabel2 = new JLabel();
@@ -142,15 +141,9 @@ public class DialogDataflowLine extends JDialog {
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogDataflowLine01"));
 		jLabel1.setBounds(new Rectangle(5, 43, 130, 20));
-//		jTextFieldNode1Name.setBackground(SystemColor.control);
-//		jTextFieldNode1Name.setEnabled(true);
-//		jTextFieldNode1Name.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-//		jTextFieldNode1Name.setDoubleBuffered(false);
-//		jTextFieldNode1Name.setEditable(false);
-//		jTextFieldNode1Name.setBounds(new Rectangle(140, 40, 200, 25));
 		jComboBoxNode1.setBounds(new Rectangle(140, 40, 220, 25));
 		jComboBoxNode1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jComboBoxNode1.setMaximumRowCount(30);
+		jComboBoxNode1.setMaximumRowCount(50);
 
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -180,7 +173,7 @@ public class DialogDataflowLine extends JDialog {
 		jLabel5.setBounds(new Rectangle(5, 146, 130, 20));
 		jComboBoxNode2.setBounds(new Rectangle(140, 143, 220, 25));
 		jComboBoxNode2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jComboBoxNode2.setMaximumRowCount(30);
+		jComboBoxNode2.setMaximumRowCount(50);
 
 		jLabel4.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel4.setText(res.getString("DialogDataflowLine28"));
@@ -292,7 +285,6 @@ public class DialogDataflowLine extends JDialog {
 		panelMain.add(jLabel2, null);
 		panelMain.add(jLabel5, null);
 		panelMain.add(jLabel1, null);
-		//panelMain.add(jTextFieldNode1Name, null);
 		panelMain.add(jComboBoxNode1, null);
 		panelMain.add(jLabel6, null);
 		panelMain.add(jTextFieldName, null);
@@ -375,26 +367,6 @@ public class DialogDataflowLine extends JDialog {
 		jTextFieldName.setText(element.getAttribute("Name"));
 		jTextFieldNameExt.setText(element.getAttribute("NameExt"));
 
-//		jTextFieldNode1Name.setText("");
-//		NodeList nodeList = frame_.currentMainTreeNode.getElement().getElementsByTagName("DataflowNode");
-//		org.w3c.dom.Element nodeElement;
-//		for (int i = 0; i < nodeList.getLength(); i++) {
-//			nodeElement = (org.w3c.dom.Element)nodeList.item(i);
-//			if (nodeElement.getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
-//				if (nodeElement.getAttribute("Type").equals("Process")) {
-//					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeElement.getAttribute("TaskID"), null);
-//					jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
-//				} else {
-//					if (nodeElement.getAttribute("Type").equals("Subject") && !nodeElement.getAttribute("RoleID").equals("")) {
-//						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeElement.getAttribute("RoleID"), null);
-//						jTextFieldNode1Name.setText(node.getElement().getAttribute("Name"));
-//					} else {
-//						jTextFieldNode1Name.setText(nodeElement.getAttribute("Name") + nodeElement.getAttribute("NameExt"));
-//					}
-//				}
-//			}
-//		}
-
 		/////////////////////////////////////////
 		//Setup ComboBox1 of nodes to be linked//
 		/////////////////////////////////////////
@@ -409,7 +381,6 @@ public class DialogDataflowLine extends JDialog {
 					jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
 					numberOfStorageArray1 = numberOfStorageArray1 + 1;
 					storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-					//if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
 					if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
 						selectedIndex1 = numberOfStorageArray1;
 					}
@@ -423,7 +394,6 @@ public class DialogDataflowLine extends JDialog {
 						}
 						numberOfStorageArray1 = numberOfStorageArray1 + 1;
 						storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-						//if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1")) && !action.equals("Add")) {
 						if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
 							selectedIndex1 = numberOfStorageArray1;
 						}
@@ -464,7 +434,7 @@ public class DialogDataflowLine extends JDialog {
 						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeArray.get(i).getElement().getAttribute("RoleID"), null);
 						jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
 					} else {
-						jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
+						jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + " "+ nodeArray.get(i).getElement().getAttribute("NameExt"));
 					}
 				}
 				numberOfStorageArray2 = numberOfStorageArray2 + 1;

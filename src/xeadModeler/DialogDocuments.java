@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -35,7 +35,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -74,7 +73,6 @@ public class DialogDocuments extends JDialog {
 	private JButton jButtonStart = new JButton();
 	private JProgressBar jProgressBar = new JProgressBar();
 	private JButton jButtonCloseDialog = new JButton();
-	//private File xlsFile = null;
 	private NodeList taskList = null;
 	private NodeList roleList = null;
 	private NodeList subsystemList = null;
@@ -96,7 +94,7 @@ public class DialogDocuments extends JDialog {
 	private int countOfElementArray1 = -1;
 	private XeadNode[] elementArray2 = new XeadNode[1000];
 	private int countOfElementArray2 = -1;
-	//
+
 	private XSSFFont fontTitle = null;
 	private XSSFFont fontHeader1 = null;
 	private XSSFFont fontHeader2 = null;
@@ -111,8 +109,6 @@ public class DialogDocuments extends JDialog {
 	private XSSFCellStyle styleValue = null;
 	private XSSFCellStyle styleValueNumber = null;
 	private XSSFCellStyle styleImage = null;
-	//private XSSFPatriarch patriarch = null;
-	//private XSSFClientAnchor anchor = null;
 	protected XSSFPicture picture = null;
 
 	public DialogDocuments(Modeler frame, String title, boolean modal) {
@@ -181,7 +177,7 @@ public class DialogDocuments extends JDialog {
 		jTextArea1.setBackground(SystemColor.control);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 		jTextArea1.setText(res.getString("DialogDocuments05") + "\n" + "\n" + res.getString("DialogDocuments06"));
-		//
+
 		getContentPane().add(jPanelMain);
 		jPanelMain.add(jPanelSouth, BorderLayout.SOUTH);
 		jPanelMain.add(jPanelCenter, BorderLayout.CENTER);
@@ -194,7 +190,7 @@ public class DialogDocuments extends JDialog {
 		jPanelCenter.add(jComboBoxTables, null);
 		jPanelCenter.add(jComboBoxFunctions, null);
 		jPanelCenter.add(jTextArea1, null);
-		//
+
 		jButtonStart.setBounds(new Rectangle(30, 7, 200, 27));
 		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogDocuments07"));
@@ -209,7 +205,7 @@ public class DialogDocuments extends JDialog {
 		jPanelSouth.add(jButtonCloseDialog, null);
 		jPanelSouth.add(jButtonStart, null);
 		jPanelSouth.add(jProgressBar, null);
-		//
+
 		this.setResizable(false);
 		this.setTitle(res.getString("DialogDocuments09"));
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -222,7 +218,7 @@ public class DialogDocuments extends JDialog {
 		XeadNode node;
 		fileName_ = fileName;
 		xlsFileName = "";
-		//
+
 		comboBoxModelSubsystems.removeAllElements();
 		subsystemList = frame_.domDocument.getElementsByTagName("Subsystem");
 		for (int i = 0; i < subsystemList.getLength(); i++) {
@@ -232,7 +228,7 @@ public class DialogDocuments extends JDialog {
 		comboBoxModelSubsystems.sortElements();
 		comboBoxModelSubsystems.insertElementAt(res.getString("DialogDocuments10"), 0);
 		comboBoxModelSubsystems.setSelectedItem(comboBoxModelSubsystems.getElementAt(0));
-		//
+
 		taskList = frame_.domDocument.getElementsByTagName("Task");
 		roleList = frame_.domDocument.getElementsByTagName("Role");
 		tableList = frame_.domDocument.getElementsByTagName("Table");
@@ -242,9 +238,9 @@ public class DialogDocuments extends JDialog {
 		tableTypeList = frame_.domDocument.getElementsByTagName("TableType");
 		functionList = frame_.domDocument.getElementsByTagName("Function");
 		functionTypeList = frame_.domDocument.getElementsByTagName("FunctionType");
-		//
+
 		super.setVisible(true);
-		//
+
 		return xlsFileName;
 	}
 
@@ -252,28 +248,28 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement = null;
 		XeadNode workNode = null;
 		int countOfDefinitions = 0;
-		//
+
 		try{
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			jProgressBar.setVisible(true);
 			jButtonStart.setVisible(false);
 			subsystemID = "";
 			countOfErrors = 0;
-			//
+
 			if (jComboBoxSubsystems.getSelectedIndex() > 0) {
 				workNode = (XeadNode)comboBoxModelSubsystems.getSelectedItem();
 				subsystemElement = workNode.getElement();
 				subsystemID = subsystemElement.getAttribute("ID");
-				//
+
 				File file = new File(fileName_);
-				//
+
 				if (jRadioButtonTable.isSelected()) {
 					if (jComboBoxTables.getSelectedIndex() > 0) {
 						workNode = (XeadNode)comboBoxModelTables.getSelectedItem();
 						workElement = workNode.getElement();
 						tableID = workElement.getAttribute("ID");
 					}
-					//
+
 					countOfDefinitions = 0;
 					for (int m = 0; m < tableList.getLength(); m++) {
 						workElement = (org.w3c.dom.Element)tableList.item(m);
@@ -286,19 +282,18 @@ public class DialogDocuments extends JDialog {
 						}
 					}
 					if (countOfDefinitions > 1) {
-						Arrays.sort(definitionArray, 0, countOfDefinitions, new NodeComparator());
+						Arrays.sort(definitionArray, 0, countOfDefinitions);
 					}
 					xlsFileName = file.getParent() + File.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xlsx";
-					//xlsFileName = "C:" + file.separator + "Documents and Settings" + file.separator + "Administrator" + file.separator + "My Documents" + file.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xls";
 				}
-				//
+
 				if (jRadioButtonFunction.isSelected()) {
 					if (jComboBoxFunctions.getSelectedIndex() > 0) {
 						workNode = (XeadNode)comboBoxModelFunctions.getSelectedItem();
 						workElement = workNode.getElement();
 						functionID = workElement.getAttribute("ID");
 					}
-					//
+
 					countOfDefinitions = 0;
 					for (int m = 0; m < functionList.getLength(); m++) {
 						workElement = (org.w3c.dom.Element)functionList.item(m);
@@ -311,18 +306,17 @@ public class DialogDocuments extends JDialog {
 						}
 					}
 					if (countOfDefinitions > 1) {
-						Arrays.sort(definitionArray, 0, countOfDefinitions, new NodeComparator());
+						Arrays.sort(definitionArray, 0, countOfDefinitions);
 					}
 					xlsFileName = file.getParent() + File.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xlsx";
-					//xlsFileName = "C:" + file.separator + "Documents and Settings" + file.separator + "Administrator" + file.separator + "My Documents" + file.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xls";
 				}
-				//
+
 				jProgressBar.setValue(0);
 				jProgressBar.setMaximum(countOfDefinitions);
-				//
+
 				FileOutputStream fileOut = new FileOutputStream(xlsFileName);
 				createWorkBookAndStyles();
-				//
+
 				if (jRadioButtonTable.isSelected()) {
 					for (int m = 0; m < countOfDefinitions; m++) {
 						workElement = (org.w3c.dom.Element)definitionArray[m].getElement();
@@ -336,7 +330,7 @@ public class DialogDocuments extends JDialog {
 						}
 					}
 				}
-				//
+
 				if (jRadioButtonFunction.isSelected()) {
 					for (int m = 0; m < countOfDefinitions; m++) {
 						workElement = (org.w3c.dom.Element)definitionArray[m].getElement();
@@ -350,7 +344,7 @@ public class DialogDocuments extends JDialog {
 						}
 					}
 				}
-				//
+
 				workBook.write(fileOut);
 				fileOut.close();
 			}
@@ -360,9 +354,8 @@ public class DialogDocuments extends JDialog {
 			jProgressBar.setVisible(false);
 			jButtonStart.setVisible(true);
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			//
+
 			if (countOfErrors == 0) {
-				//JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName);
 				File workXlsFile = new File(xlsFileName);
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -380,36 +373,36 @@ public class DialogDocuments extends JDialog {
 
 	void createWorkBookAndStyles() {
 		workBook = new XSSFWorkbook();
-		//
+
 		fontTitle = workBook.createFont();
 		fontTitle.setFontName(res.getString("DialogDocuments13"));
 		fontTitle.setFontHeightInPoints((short)14);
 		fontTitle.setColor(new XSSFColor(Color.black)); //this turns to white :XSSFColor bug! 
 		fontTitle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
-		//
+
 		fontHeader1 = workBook.createFont();
 		fontHeader1.setFontName(res.getString("DialogDocuments13"));
 		fontHeader1.setFontHeightInPoints((short)10);
 		fontHeader1.setItalic(true);
 		fontHeader1.setColor(new XSSFColor(Color.black)); //this turns to white :XSSFColor bug!
-		//
+
 		fontHeader2 = workBook.createFont();
 		fontHeader2.setFontName(res.getString("DialogDocuments13"));
 		fontHeader2.setFontHeightInPoints((short)10);
-		//
+
 		fontValue = workBook.createFont();
 		fontValue.setFontName(res.getString("DialogDocuments14"));
 		fontValue.setFontHeightInPoints((short)10);
-		//
+
 		fontImage = workBook.createFont();
 		fontImage.setFontName(res.getString("DialogDocuments15"));
 		fontImage.setFontHeightInPoints((short)6);
-		//
+
 		fontImageUL = workBook.createFont();
 		fontImageUL.setFontName(res.getString("DialogDocuments15"));
 		fontImageUL.setFontHeightInPoints((short)6);
 		fontImageUL.setUnderline(XSSFFont.U_SINGLE);
-		//
+
 		styleTitle = workBook.createCellStyle();
 		styleTitle.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleTitle.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -420,7 +413,7 @@ public class DialogDocuments extends JDialog {
 		styleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
 		styleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleTitle.setFont(fontTitle);
-		//
+
 		styleHeader1 = workBook.createCellStyle();
 		styleHeader1.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleHeader1.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -431,7 +424,7 @@ public class DialogDocuments extends JDialog {
 		styleHeader1.setAlignment(XSSFCellStyle.ALIGN_LEFT);
 		styleHeader1.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader1.setFont(fontHeader1);
-		//
+
 		styleHeader2 = workBook.createCellStyle();
 		styleHeader2.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleHeader2.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -442,7 +435,7 @@ public class DialogDocuments extends JDialog {
 		styleHeader2.setAlignment(XSSFCellStyle.ALIGN_LEFT);
 		styleHeader2.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader2.setFont(fontHeader2);
-		//
+
 		styleHeader2Number = workBook.createCellStyle();
 		styleHeader2Number.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleHeader2Number.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -453,7 +446,7 @@ public class DialogDocuments extends JDialog {
 		styleHeader2Number.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
 		styleHeader2Number.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
 		styleHeader2Number.setFont(fontHeader2);
-		//
+
 		styleValue = workBook.createCellStyle();
 		styleValue.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleValue.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -463,7 +456,7 @@ public class DialogDocuments extends JDialog {
 		styleValue.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValue.setFont(fontValue);
 		styleValue.setWrapText(true);
-		//
+
 		styleValueNumber = workBook.createCellStyle();
 		styleValueNumber.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleValueNumber.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -472,7 +465,7 @@ public class DialogDocuments extends JDialog {
 		styleValueNumber.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
 		styleValueNumber.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
 		styleValueNumber.setFont(fontValue);
-		//
+
 		styleImage = workBook.createCellStyle();
 		styleImage.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleImage.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -485,7 +478,6 @@ public class DialogDocuments extends JDialog {
 	}
 
 	void generateTableDocument(org.w3c.dom.Element element) {
-		//
 		try {
 			XSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
 			sheet.setDefaultRowHeight( (short) 300);
@@ -494,7 +486,7 @@ public class DialogDocuments extends JDialog {
 			sheet.setColumnWidth(1, 4100);
 			Footer footer = sheet.getFooter();
 			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page &P / &N");
-			//
+
 			setupTableSummary(sheet, element);
 			setupTableFieldList(sheet, element);
 			setupTableKeyList(sheet, element);
@@ -507,7 +499,6 @@ public class DialogDocuments extends JDialog {
 	}
 
 	void generateFunctionDocument(org.w3c.dom.Element element) {
-		//
 		try {
 			XSSFSheet sheet = workBook.createSheet("(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name"));
 			sheet.setDefaultRowHeight( (short) 300);
@@ -516,8 +507,7 @@ public class DialogDocuments extends JDialog {
 			sheet.setColumnWidth(1, 4100);
 			Footer footer = sheet.getFooter();
 			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page &P / &N");
-			//patriarch = sheet.createDrawingPatriarch();
-			//
+
 			setupFunctionSummary(sheet, element);
 			setupFunctionIOList(sheet, element);
 			setupFunctionsCalledByThisFunction(sheet, element);
@@ -531,11 +521,9 @@ public class DialogDocuments extends JDialog {
 	}
 
 	void setupFunctionSummary(XSSFSheet sheet, org.w3c.dom.Element element) {
-		//NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
-		//org.w3c.dom.Element workElement2 = null;
 		String workString = "";
-		//
+
 		XSSFRow row0 = sheet.createRow(0);
 		XSSFRow row1 = sheet.createRow(1);
 		XSSFRow row2 = sheet.createRow(2);
@@ -546,7 +534,7 @@ public class DialogDocuments extends JDialog {
 		XSSFRow row7 = sheet.createRow(7);
 		XSSFRow row8 = sheet.createRow(8);
 		XSSFRow row9 = sheet.createRow(9);
-		//
+
 		//Title
 		XSSFRichTextString title = new XSSFRichTextString(res.getString("DialogDocuments16"));
 		XSSFCell cellA0 = row0.createCell(0);
@@ -559,7 +547,7 @@ public class DialogDocuments extends JDialog {
 		cellB1.setCellStyle(styleTitle);
 		cellA0.setCellValue(title);
 		sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 1));
-		//
+
 		//Label Subsystem
 		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader2);
@@ -577,7 +565,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader2);
 		cellC0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments17")));
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 8));
-		//
+
 		//Value Subsystem
 		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleValue);
@@ -595,7 +583,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleValue);
 		cellC1.setCellValue(new XSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 8));
-		//
+
 		//Label Function
 		XSSFCell cellA2 = row2.createCell(0);
 		cellA2.setCellStyle(styleHeader2);
@@ -609,7 +597,7 @@ public class DialogDocuments extends JDialog {
 		cellE2.setCellStyle(styleHeader2);
 		cellA2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments18")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 4));
-		//
+
 		//Value Function
 		XSSFCell cellA3 = row3.createCell(0);
 		cellA3.setCellStyle(styleValue);
@@ -623,7 +611,7 @@ public class DialogDocuments extends JDialog {
 		cellE3.setCellStyle(styleValue);
 		cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
-		//
+
 		//Label FunctionType
 		XSSFCell cellF2 = row2.createCell(5);
 		cellF2.setCellStyle(styleHeader2);
@@ -635,7 +623,7 @@ public class DialogDocuments extends JDialog {
 		cellI2.setCellStyle(styleHeader2);
 		cellF2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments19")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 8));
-		//
+
 		//Value FunctionType
 		XSSFCell cellF3 = row3.createCell(5);
 		cellF3.setCellStyle(styleValue);
@@ -654,7 +642,7 @@ public class DialogDocuments extends JDialog {
 		}
 		cellF3.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 5, 8));
-		//
+
 		//Label Summary
 		XSSFCell cellA4 = row4.createCell(0);
 		cellA4.setCellStyle(styleHeader2);
@@ -676,7 +664,7 @@ public class DialogDocuments extends JDialog {
 		cellI4.setCellStyle(styleHeader2);
 		cellA4.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments20")));
 		sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 8));
-		//
+
 		//Value Summary
 		XSSFCell cellA5 = row5.createCell(0);
 		cellA5.setCellStyle(styleValue);
@@ -698,7 +686,7 @@ public class DialogDocuments extends JDialog {
 		cellI5.setCellStyle(styleValue);
 		cellA5.setCellValue(new XSSFRichTextString(element.getAttribute("Summary")));
 		sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 8));
-		//
+
 		//Label Parameters
 		XSSFCell cellA6 = row6.createCell(0);
 		cellA6.setCellStyle(styleHeader2);
@@ -714,7 +702,7 @@ public class DialogDocuments extends JDialog {
 		cellF6.setCellStyle(styleHeader2);
 		cellA6.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments21")));
 		sheet.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
-		//
+
 		//Value Parameters
 		XSSFCell cellA7 = row7.createCell(0);
 		cellA7.setCellStyle(styleValue);
@@ -730,7 +718,7 @@ public class DialogDocuments extends JDialog {
 		cellF7.setCellStyle(styleValue);
 		cellA7.setCellValue(new XSSFRichTextString(element.getAttribute("Parameters")));
 		sheet.addMergedRegion(new CellRangeAddress(7, 7, 0, 5));
-		//
+
 		//Label Return
 		XSSFCell cellG6 = row6.createCell(6);
 		cellG6.setCellStyle(styleHeader2);
@@ -740,7 +728,7 @@ public class DialogDocuments extends JDialog {
 		cellI6.setCellStyle(styleHeader2);
 		cellG6.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments22")));
 		sheet.addMergedRegion(new CellRangeAddress(6, 6, 6, 8));
-		//
+
 		//Value Return
 		XSSFCell cellG7 = row7.createCell(6);
 		cellG7.setCellStyle(styleValue);
@@ -750,7 +738,7 @@ public class DialogDocuments extends JDialog {
 		cellI7.setCellStyle(styleValue);
 		cellG7.setCellValue(new XSSFRichTextString(element.getAttribute("Return")));
 		sheet.addMergedRegion(new CellRangeAddress(7, 7, 6, 8));
-		//
+
 		//Label Descriptions
 		XSSFCell cellA8 = row8.createCell(0);
 		cellA8.setCellStyle(styleHeader2);
@@ -772,7 +760,7 @@ public class DialogDocuments extends JDialog {
 		cellI8.setCellStyle(styleHeader2);
 		cellA8.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(8, 8, 0, 8));
-		//
+
 		//Value Descriptions
 		XSSFCell cellA9 = row9.createCell(0);
 		cellA9.setCellStyle(styleValue);
@@ -796,7 +784,7 @@ public class DialogDocuments extends JDialog {
 		cellA9.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(9, 9, 0, 8));
 		row9.setHeight((short)1000);
-		//
+
 		currentRowNumber = 9;
 	}
 
@@ -807,7 +795,7 @@ public class DialogDocuments extends JDialog {
 		String workString = "";
 		int rowSequence = 0;
 		XeadNode node = null;
-		//
+
 		//Label IOList
 		currentRowNumber++;
 		XSSFRow row0 = sheet.createRow(currentRowNumber);
@@ -831,7 +819,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments24")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header IOList
 		currentRowNumber++;
 		XSSFRow row1 = sheet.createRow(currentRowNumber);
@@ -859,7 +847,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
-		//
+
 		countOfElementArray1 = -1;
 		workList = element.getElementsByTagName("IOPanel");
 		for (int i = 0; i < workList.getLength(); i++) {
@@ -886,9 +874,9 @@ public class DialogDocuments extends JDialog {
 			elementArray1[countOfElementArray1] = node;
 		}
 		if (countOfElementArray1 > 0) {
-			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 		}
-		//
+
 		rowSequence = 0;
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			currentRowNumber++;
@@ -959,7 +947,7 @@ public class DialogDocuments extends JDialog {
 			cellF.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 		}
-		//
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -994,7 +982,7 @@ public class DialogDocuments extends JDialog {
 		String workString1 = "";
 		String workString2 = "";
 		int rowSequence = 0;
-		//
+
 		//Label FunctionsCalledByThis
 		currentRowNumber++;
 		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
@@ -1018,7 +1006,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments30")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header FunctionsCalledByThis
 		currentRowNumber++;
 		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
@@ -1047,7 +1035,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellG1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments31")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
-		//
+
 		//Rows of FunctionsCalledByThis
 		workList = element.getElementsByTagName("FunctionUsedByThis");
 		for (int i = 0; i < workList.getLength(); i++) {
@@ -1091,7 +1079,7 @@ public class DialogDocuments extends JDialog {
 			cellG.setCellValue(new XSSFRichTextString(workElement1.getAttribute("LaunchEvent")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
-		//
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -1125,7 +1113,7 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
 		int rowSequence = 0;
-		//
+
 		//Label FunctionsCallingThis
 		currentRowNumber++;
 		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
@@ -1149,7 +1137,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments32")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header FunctionsCallingThis
 		currentRowNumber++;
 		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
@@ -1176,7 +1164,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellE1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments31")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
-		//
+
 		for (int i = 0; i < functionList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)functionList.item(i);
 			workList = workElement1.getElementsByTagName("FunctionUsedByThis");
@@ -1212,7 +1200,7 @@ public class DialogDocuments extends JDialog {
 				}
 			}
 		}
-		//
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -1248,10 +1236,8 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement3 = null;
 		org.w3c.dom.Element workElement4 = null;
 		String workString1 = "";
-		//String workString2 = "";
 		int rowSequence = 0;
-		//XeadNode node = null;
-		//
+
 		//Label TasksUsingThisFunction
 		currentRowNumber++;
 		XSSFRow rowLabel = sheet.createRow(currentRowNumber);
@@ -1275,7 +1261,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments33")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header TasksUsingThisFunction
 		currentRowNumber++;
 		XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
@@ -1304,7 +1290,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments36")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
-		//
+
 		for (int i = 0; i < taskList.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)taskList.item(i);
 			workList1 = workElement1.getElementsByTagName("TaskAction");
@@ -1354,7 +1340,7 @@ public class DialogDocuments extends JDialog {
 				}
 			}
 		}
-		//
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -1400,12 +1386,11 @@ public class DialogDocuments extends JDialog {
 		XeadNode node = null;
 		int start = 0;
 		int end = 0;
-		//
+
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			workElement1 = (org.w3c.dom.Element)elementArray1[i].getElement();
-			//
 			sectionNumber++;
-			//
+
 			currentRowNumber++;
 			XSSFRow rowLabel = sheet.createRow(currentRowNumber);
 			XSSFCell cellA0 = rowLabel.createCell(0);
@@ -1428,7 +1413,7 @@ public class DialogDocuments extends JDialog {
 			cellI0.setCellStyle(styleHeader1);
 			cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments37") + "(" + sectionNumber + "/" + totalSectionNumber + ")"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-			//
+
 			currentRowNumber++;
 			XSSFRow rowHeading1 = sheet.createRow(currentRowNumber);
 			XSSFCell cellA1 = rowHeading1.createCell(0);
@@ -1453,7 +1438,7 @@ public class DialogDocuments extends JDialog {
 			cellI1.setCellStyle(styleHeader2);
 			cellH1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments38")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 7, 8));
-			//
+
 			currentRowNumber++;
 			XSSFRow rowValue1 = sheet.createRow(currentRowNumber);
 			XSSFCell cellA2 = rowValue1.createCell(0);
@@ -1516,7 +1501,7 @@ public class DialogDocuments extends JDialog {
 			}
 			cellH2.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 7, 8));
-			//
+
 			currentRowNumber++;
 			XSSFRow rowLabelHeading2 = sheet.createRow(currentRowNumber);
 			XSSFCell cellA3 = rowLabelHeading2.createCell(0);
@@ -1539,7 +1524,7 @@ public class DialogDocuments extends JDialog {
 			cellI3.setCellStyle(styleHeader2);
 			cellA3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-			//
+
 			currentRowNumber++;
 			XSSFRow rowValueDescriptions = sheet.createRow(currentRowNumber);
 			XSSFCell cellA4 = rowValueDescriptions.createCell(0);
@@ -1564,9 +1549,8 @@ public class DialogDocuments extends JDialog {
 			cellA4.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			rowValueDescriptions.setHeight((short)1000);
-			//
+
 			if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOSpool") || elementArray1[i].getType().equals("IOWebPage")) {
-				//
 				currentRowNumber++;
 				XSSFRow rowLabelImage = sheet.createRow(currentRowNumber);
 				XSSFCell cellA5 = rowLabelImage.createCell(0);
@@ -1589,7 +1573,7 @@ public class DialogDocuments extends JDialog {
 				cellI5.setCellStyle(styleHeader2);
 				cellA5.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments39")));
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-				//
+
 				currentRowNumber++;
 				XSSFRow rowValueImage = sheet.createRow(currentRowNumber);
 				XSSFCell cellA6 = rowValueImage.createCell(0);
@@ -1734,7 +1718,7 @@ public class DialogDocuments extends JDialog {
 				}
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 				rowValueImage.setHeight((short)3500);
-				//
+
 				if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOWebPage")) {
 					currentRowNumber++;
 					XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
@@ -1764,7 +1748,7 @@ public class DialogDocuments extends JDialog {
 					cellI7.setCellStyle(styleHeader2);
 					cellG7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
-					//
+
 					//Rows of Field
 					rowSequence = 0;
 					countOfElementArray2 = -1;
@@ -1785,7 +1769,7 @@ public class DialogDocuments extends JDialog {
 						}
 					}
 					if (countOfElementArray2 > 0) {
-						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new NodeComparator());
+						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
 					}
 					for (int j = 0; j <= countOfElementArray2; j++) {
 						workElement2 = (org.w3c.dom.Element)elementArray2[j].getElement();
@@ -1832,7 +1816,7 @@ public class DialogDocuments extends JDialog {
 						cellG.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Descriptions")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 					}
-					//
+
 					if (rowSequence == 0) {
 						currentRowNumber++;
 						XSSFRow rowBlank = sheet.createRow(currentRowNumber);
@@ -1887,7 +1871,7 @@ public class DialogDocuments extends JDialog {
 					cellI7.setCellStyle(styleHeader2);
 					cellE7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
-					//
+
 					//Rows of Field
 					rowSequence = 0;
 					countOfElementArray2 = -1;
@@ -1898,7 +1882,7 @@ public class DialogDocuments extends JDialog {
 						elementArray2[countOfElementArray2] = node;
 					}
 					if (countOfElementArray2 > 0) {
-						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new NodeComparator());
+						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
 					}
 					for (int j = 0; j <= countOfElementArray2; j++) {
 						workElement2 = (org.w3c.dom.Element)elementArray2[j].getElement();
@@ -1930,7 +1914,7 @@ public class DialogDocuments extends JDialog {
 						cellE.setCellValue(new XSSFRichTextString(workElement2.getAttribute("Descriptions")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 4, 8));
 					}
-					//
+
 					if (rowSequence == 0) {
 						currentRowNumber++;
 						XSSFRow rowBlank = sheet.createRow(currentRowNumber);
@@ -1963,7 +1947,7 @@ public class DialogDocuments extends JDialog {
 					workElement2 = (org.w3c.dom.Element)tableList.item(j);
 					if (workElement2.getAttribute("ID").equals(workElement1.getAttribute("TableID"))) {
 						NodeList ioFieldList = workElement1.getElementsByTagName("IOTableField");
-						//
+
 						currentRowNumber++;
 						XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
 						XSSFCell cellA7 = rowColumnHeading.createCell(0);
@@ -1991,7 +1975,7 @@ public class DialogDocuments extends JDialog {
 						cellI7.setCellStyle(styleHeader2);
 						cellF7.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments50")));
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
-						//
+
 						NodeList primaryKeyFieldList = null;
 						workList3 = workElement2.getElementsByTagName("TableKey");
 						for (int m = 0; m < workList3.getLength(); m++) {
@@ -2001,7 +1985,7 @@ public class DialogDocuments extends JDialog {
 								break;
 							}
 						}
-						//
+
 						rowSequence = 0;
 						countOfElementArray2 = -1;
 						workList2 = workElement2.getElementsByTagName("TableField");
@@ -2011,7 +1995,7 @@ public class DialogDocuments extends JDialog {
 							elementArray2[countOfElementArray2] = node;
 						}
 						if (countOfElementArray2 > 0) {
-							Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new NodeComparator());
+							Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
 						}
 						for (int k = 0; k <= countOfElementArray2; k++) {
 							workElement3 = (org.w3c.dom.Element)elementArray2[k].getElement();
@@ -2095,17 +2079,16 @@ public class DialogDocuments extends JDialog {
 	}
 
 	void setupTableSummary(XSSFSheet sheet, org.w3c.dom.Element element) {
-		//NodeList workList = null;
 		org.w3c.dom.Element workElement1 = null;
 		String workString = "";
-		//
+
 		XSSFRow row0 = sheet.createRow(0);
 		XSSFRow row1 = sheet.createRow(1);
 		XSSFRow row2 = sheet.createRow(2);
 		XSSFRow row3 = sheet.createRow(3);
 		XSSFRow row4 = sheet.createRow(4);
 		XSSFRow row5 = sheet.createRow(5);
-		//
+
 		//Title
 		XSSFRichTextString title = new XSSFRichTextString(res.getString("DialogDocuments51"));
 		XSSFCell cellA0 = row0.createCell(0);
@@ -2118,7 +2101,7 @@ public class DialogDocuments extends JDialog {
 		cellB1.setCellStyle(styleTitle);
 		cellA0.setCellValue(title);
 		sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 1));
-		//
+
 		//Label Subsystem
 		XSSFCell cellC0 = row0.createCell(2);
 		cellC0.setCellStyle(styleHeader2);
@@ -2136,7 +2119,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader2);
 		cellC0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments17")));
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 8));
-		//
+
 		//Value Subsystem
 		XSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellStyle(styleValue);
@@ -2154,7 +2137,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleValue);
 		cellC1.setCellValue(new XSSFRichTextString(subsystemElement.getAttribute("SortKey") + " / " + subsystemElement.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 8));
-		//
+
 		//Label Table Name
 		XSSFCell cellA2 = row2.createCell(0);
 		cellA2.setCellStyle(styleHeader2);
@@ -2168,7 +2151,7 @@ public class DialogDocuments extends JDialog {
 		cellE2.setCellStyle(styleHeader2);
 		cellA2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments52")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 4));
-		//
+
 		//Value Table Name
 		XSSFCell cellA3 = row3.createCell(0);
 		cellA3.setCellStyle(styleValue);
@@ -2182,7 +2165,7 @@ public class DialogDocuments extends JDialog {
 		cellE3.setCellStyle(styleValue);
 		cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
-		//
+
 		//Label TableType
 		XSSFCell cellF2 = row2.createCell(5);
 		cellF2.setCellStyle(styleHeader2);
@@ -2194,7 +2177,7 @@ public class DialogDocuments extends JDialog {
 		cellI2.setCellStyle(styleHeader2);
 		cellF2.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments53")));
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 5, 8));
-		//
+
 		//Value TableType
 		XSSFCell cellF3 = row3.createCell(5);
 		cellF3.setCellStyle(styleValue);
@@ -2213,7 +2196,7 @@ public class DialogDocuments extends JDialog {
 		}
 		cellF3.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 5, 8));
-		//
+
 		//Label Descriptions
 		XSSFCell cellA4 = row4.createCell(0);
 		cellA4.setCellStyle(styleHeader2);
@@ -2235,7 +2218,7 @@ public class DialogDocuments extends JDialog {
 		cellI4.setCellStyle(styleHeader2);
 		cellA4.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 8));
-		//
+
 		//Value Descriptions
 		XSSFCell cellA5 = row5.createCell(0);
 		cellA5.setCellStyle(styleValue);
@@ -2259,7 +2242,7 @@ public class DialogDocuments extends JDialog {
 		cellA5.setCellValue(new XSSFRichTextString(workString));
 		sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 8));
 		row5.setHeight((short)1000);
-		//
+
 		currentRowNumber = 5;
 	}
 
@@ -2268,10 +2251,9 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement1 = null;
 		org.w3c.dom.Element workElement2 = null;
 		String workString1 = "";
-		//String workString2 = "";
 		int rowSequence = 0;
 		XeadNode node = null;
-		//
+
 		//Label FieldList
 		currentRowNumber++;
 		XSSFRow row0 = sheet.createRow(currentRowNumber);
@@ -2295,7 +2277,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments54")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header FieldList
 		currentRowNumber++;
 		XSSFRow row1 = sheet.createRow(currentRowNumber);
@@ -2325,7 +2307,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellG1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
-		//
+
 		//Rows of TableField
 		countOfElementArray1 = -1;
 		workList = element.getElementsByTagName("TableField");
@@ -2335,7 +2317,7 @@ public class DialogDocuments extends JDialog {
 			elementArray1[countOfElementArray1] = node;
 		}
 		if (countOfElementArray1 > 0) {
-			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 		}
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			workElement1 = (org.w3c.dom.Element)elementArray1[i].getElement();
@@ -2401,7 +2383,7 @@ public class DialogDocuments extends JDialog {
 			cellG.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 		}
-		//
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -2437,10 +2419,9 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement2 = null;
 		org.w3c.dom.Element workElement3 = null;
 		String workString1 = "";
-		//String workString2 = "";
 		int rowSequence = 0;
 		XeadNode node = null;
-		//
+
 		//Label KeyList
 		currentRowNumber++;
 		XSSFRow row0 = sheet.createRow(currentRowNumber);
@@ -2464,7 +2445,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments60")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header KeyList
 		currentRowNumber++;
 		XSSFRow row1 = sheet.createRow(currentRowNumber);
@@ -2490,7 +2471,7 @@ public class DialogDocuments extends JDialog {
 		cellI1.setCellStyle(styleHeader2);
 		cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
-		//
+
 		//Rows of Key
 		fieldList = element.getElementsByTagName("TableField");
 		workList1 = element.getElementsByTagName("TableKey");
@@ -2537,7 +2518,7 @@ public class DialogDocuments extends JDialog {
 				elementArray1[countOfElementArray1] = node;
 			}
 			if (countOfElementArray1 > 0) {
-				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 			}
 			for (int j = 0; j <= countOfElementArray1; j++) {
 				workElement2 = (org.w3c.dom.Element)elementArray1[j].getElement();
@@ -2569,7 +2550,7 @@ public class DialogDocuments extends JDialog {
 		String workString1 = "";
 		int rowSequence = 0;
 		XeadNode node = null;
-		//
+
 		//Label FieldList
 		currentRowNumber++;
 		XSSFRow row0 = sheet.createRow(currentRowNumber);
@@ -2593,7 +2574,7 @@ public class DialogDocuments extends JDialog {
 		cellI0.setCellStyle(styleHeader1);
 		cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments66")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-		//
+
 		//Header FunctionList
 		currentRowNumber++;
 		XSSFRow row1 = sheet.createRow(currentRowNumber);
@@ -2621,7 +2602,7 @@ public class DialogDocuments extends JDialog {
 		XSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellStyle(styleHeader2);
 		cellI1.setCellValue(new XSSFRichTextString("CRUD"));
-		//
+
 		//Rows of Function
 		countOfElementArray1 = -1;
 		for (int i = 0; i < ioTableList.getLength(); i++) {
@@ -2633,7 +2614,7 @@ public class DialogDocuments extends JDialog {
 			}
 		}
 		if (countOfElementArray1 > 0) {
-			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 		}
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			workElement1 = (org.w3c.dom.Element)elementArray1[i].getElement();
@@ -2692,6 +2673,7 @@ public class DialogDocuments extends JDialog {
 				}
 			}
 		}
+
 		if (rowSequence == 0) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
@@ -2742,7 +2724,7 @@ public class DialogDocuments extends JDialog {
 		for (int i = 0; i < workList1.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)workList1.item(i);
 			rowSequence = 0;
-			//
+
 			//Label Key Definition
 			currentRowNumber++;
 			XSSFRow row0 = sheet.createRow(currentRowNumber);
@@ -2767,7 +2749,7 @@ public class DialogDocuments extends JDialog {
 			sectionNumber++;
 			cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments67") + "(" + sectionNumber + "/" + workList1.getLength() + ")"));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
-			//
+
 			//Header Key Definition
 			currentRowNumber++;
 			XSSFRow row1 = sheet.createRow(currentRowNumber);
@@ -2793,7 +2775,7 @@ public class DialogDocuments extends JDialog {
 			cellI1.setCellStyle(styleHeader2);
 			cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
-			//
+
 			currentRowNumber++;
 			XSSFRow next2 = sheet.createRow(currentRowNumber);
 			XSSFCell cellA2 = next2.createCell(0);
@@ -2834,7 +2816,7 @@ public class DialogDocuments extends JDialog {
 				elementArray1[countOfElementArray1] = node;
 			}
 			if (countOfElementArray1 > 0) {
-				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 			}
 			for (int j = 0; j <= countOfElementArray1; j++) {
 				workElement2 = (org.w3c.dom.Element)elementArray1[j].getElement();
@@ -2855,7 +2837,7 @@ public class DialogDocuments extends JDialog {
 			}
 			cellC2.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
-			//
+
 			//Header RelationshipList
 			currentRowNumber++;
 			XSSFRow row3 = sheet.createRow(currentRowNumber);
@@ -2883,7 +2865,7 @@ public class DialogDocuments extends JDialog {
 			cellI3.setCellStyle(styleHeader2);
 			cellF3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments70")));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
-			//
+
 			for (int j = 0; j < relationshipList.getLength(); j++) {
 				workElement2 = (org.w3c.dom.Element)relationshipList.item(j);
 				if ((workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID"))))
@@ -2962,7 +2944,7 @@ public class DialogDocuments extends JDialog {
 								elementArray1[countOfElementArray1] = node;
 							}
 							if (countOfElementArray1 > 0) {
-								Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new NodeComparator());
+								Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
 							}
 							for (int n = 0; n <= countOfElementArray1; n++) {
 								workElement4 = (org.w3c.dom.Element)elementArray1[n].getElement();
@@ -2985,6 +2967,7 @@ public class DialogDocuments extends JDialog {
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 				}
 			}
+
 			if (rowSequence == 0) {
 				currentRowNumber++;
 				XSSFRow row4 = sheet.createRow(currentRowNumber);
@@ -3039,9 +3022,7 @@ public class DialogDocuments extends JDialog {
 	String getStringValueOfDateAndTime() {
 		String returnValue = "";
 		GregorianCalendar calendar = new GregorianCalendar();
-		//
 		int year = calendar.get(Calendar.YEAR);
-		//
 		int month = calendar.get(Calendar.MONTH) + 1;
 		String monthStr = "";
 		if (month < 10) {
@@ -3049,7 +3030,6 @@ public class DialogDocuments extends JDialog {
 		} else {
 			monthStr = Integer.toString(month);
 		}
-		//
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		String dayStr = "";
 		if (day < 10) {
@@ -3057,7 +3037,6 @@ public class DialogDocuments extends JDialog {
 		} else {
 			dayStr = Integer.toString(day);
 		}
-		//
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		String hourStr = "";
 		if (hour < 10) {
@@ -3065,7 +3044,6 @@ public class DialogDocuments extends JDialog {
 		} else {
 			hourStr = Integer.toString(hour);
 		}
-		//
 		int minute = calendar.get(Calendar.MINUTE);
 		String minStr = "";
 		if (minute < 10) {
@@ -3073,7 +3051,6 @@ public class DialogDocuments extends JDialog {
 		} else {
 			minStr = Integer.toString(minute);
 		}
-		//
 		int second = calendar.get(Calendar.SECOND);
 		String secStr = "";
 		if (second < 10) {
@@ -3081,7 +3058,6 @@ public class DialogDocuments extends JDialog {
 		} else {
 			secStr = Integer.toString(second);
 		}
-		//
 		returnValue = Integer.toString(year) + monthStr + dayStr + hourStr + minStr + secStr;
 		return returnValue;
 	}
@@ -3090,15 +3066,15 @@ public class DialogDocuments extends JDialog {
 		org.w3c.dom.Element workElement = null;
 		XeadNode workNode = null;
 		String subsystemID = "";
-		//
+
 		comboBoxModelTables.removeAllElements();
 		comboBoxModelFunctions.removeAllElements();
-		//
+
 		if (jComboBoxSubsystems.getSelectedIndex() > 0) {
 			workNode = (XeadNode)comboBoxModelSubsystems.getSelectedItem();
 			workElement = workNode.getElement();
 			subsystemID = workElement.getAttribute("ID");
-			//
+
 			for (int m = 0; m < tableList.getLength(); m++) {
 				workElement = (org.w3c.dom.Element)tableList.item(m);
 				if (workElement.getAttribute("SubsystemID").equals(subsystemID)) {
@@ -3111,7 +3087,7 @@ public class DialogDocuments extends JDialog {
 				jComboBoxTables.setEnabled(true);
 				jComboBoxFunctions.setEnabled(false);
 			}
-			//
+
 			for (int m = 0; m < functionList.getLength(); m++) {
 				workElement = (org.w3c.dom.Element)functionList.item(m);
 				if (workElement.getAttribute("SubsystemID").equals(subsystemID)) {
@@ -3124,15 +3100,15 @@ public class DialogDocuments extends JDialog {
 				jComboBoxTables.setEnabled(false);
 				jComboBoxFunctions.setEnabled(true);
 			}
-			//
+
 			jButtonStart.setEnabled(true);
 		} else {
 			jButtonStart.setEnabled(false);
 		}
-		//
-		comboBoxModelTables.insertElementAt("（All Tables）", 0);
+
+		comboBoxModelTables.insertElementAt("(All Tables)", 0);
 		comboBoxModelTables.setSelectedItem(comboBoxModelTables.getElementAt(0));
-		comboBoxModelFunctions.insertElementAt("（All Functions）", 0);
+		comboBoxModelFunctions.insertElementAt("(All Functions)", 0);
 		comboBoxModelFunctions.setSelectedItem(comboBoxModelFunctions.getElementAt(0));
 	}
 
@@ -3153,45 +3129,22 @@ public class DialogDocuments extends JDialog {
 	class SortableXeadNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadNode)this.getElementAt(i);
-				treeSet.add(node);
+			ArrayList<XeadNode> list = new ArrayList<XeadNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
 
-	class NodeComparator implements java.util.Comparator<XeadNode> {
-		public int compare(XeadNode node1, XeadNode node2 ) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
-
-	class XeadNode {
+	class XeadNode implements Comparable {
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
-		//
-		//Constructor//
 		public XeadNode(String type, org.w3c.dom.Element node) {
 			super();
 			nodeType_ = type;
@@ -3212,6 +3165,10 @@ public class DialogDocuments extends JDialog {
 		public String getType() {
 			return nodeType_;
 		}
+        public int compareTo(Object other) {
+            XeadNode otherNode = (XeadNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
 	}
 }
 

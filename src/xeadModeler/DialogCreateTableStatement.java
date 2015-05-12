@@ -54,6 +54,7 @@ public class DialogCreateTableStatement extends JDialog {
 	private JTextField jTextFieldSectionMark = new JTextField();
 	private JCheckBox jCheckBoxWithComment = new JCheckBox();
 	private JCheckBox jCheckBoxIgnoreFKConstraints = new JCheckBox();
+	private JCheckBox jCheckBoxIgnoreWarnings = new JCheckBox();
 	private JLabel jLabelAdditionalParms = new JLabel();
 	private JTextArea jTextAreaAdditionalParms = new JTextArea();
 	private JScrollPane jScrollPaneAdditionalParms = new JScrollPane();
@@ -82,7 +83,7 @@ public class DialogCreateTableStatement extends JDialog {
 
 	private void jbInit() throws Exception {
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(410, 384));
+		panelMain.setPreferredSize(new Dimension(410, 412));
 		this.setResizable(false);
 		this.setTitle(res.getString("DialogCreateTableStatement01"));
 
@@ -122,18 +123,22 @@ public class DialogCreateTableStatement extends JDialog {
 		jCheckBoxIgnoreFKConstraints.setBounds(new Rectangle(12, 136, 390, 25));
 		jCheckBoxIgnoreFKConstraints.setText(res.getString("DialogCreateTableStatement13"));
 
+		jCheckBoxIgnoreWarnings.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jCheckBoxIgnoreWarnings.setBounds(new Rectangle(12, 164, 390, 25));
+		jCheckBoxIgnoreWarnings.setText(res.getString("DialogCreateTableStatement14"));
+
 		jLabelAdditionalParms.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelAdditionalParms.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabelAdditionalParms.setText(res.getString("DialogCreateTableStatement12"));
-		jLabelAdditionalParms.setBounds(new Rectangle(12, 164, 200, 20));
+		jLabelAdditionalParms.setBounds(new Rectangle(12, 192, 200, 20));
 		jTextAreaAdditionalParms.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jScrollPaneAdditionalParms.getViewport().add(jTextAreaAdditionalParms, null);
-		jScrollPaneAdditionalParms.setBounds(new Rectangle(9, 186, 392, 70));
+		jScrollPaneAdditionalParms.setBounds(new Rectangle(9, 214, 392, 70));
 
 		jTextAreaMessage.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextAreaMessage.setForeground(Color.BLUE);
 		jTextAreaMessage.setEditable(false);
-		jTextAreaMessage.setBounds(new Rectangle(9, 266, 392, 74));
+		jTextAreaMessage.setBounds(new Rectangle(9, 294, 392, 74));
 		jTextAreaMessage.setLineWrap(true);
 		jTextAreaMessage.setBackground(SystemColor.control);
 		jTextAreaMessage.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -141,11 +146,11 @@ public class DialogCreateTableStatement extends JDialog {
 
 		buttonGroup.add(jRadioButtonTableName);
 		buttonGroup.add(jRadioButtonTableID);
-		jButtonStart.setBounds(new Rectangle(50, 349, 100, 27));
+		jButtonStart.setBounds(new Rectangle(50, 377, 100, 27));
 		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogCreateTableStatement09"));
 		jButtonStart.addActionListener(new DialogCreateTableStatement_jButtonStart_actionAdapter(this));
-		jButtonSet.setBounds(new Rectangle(250, 349, 100, 27));
+		jButtonSet.setBounds(new Rectangle(250, 377, 100, 27));
 		jButtonSet.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonSet.setText(res.getString("DialogCreateTableStatement10"));
 		jButtonSet.addActionListener(new DialogCreateTableStatement_jButtonSet_actionAdapter(this));
@@ -162,6 +167,7 @@ public class DialogCreateTableStatement extends JDialog {
 		panelMain.add(jTextFieldSectionMark, null);
 		panelMain.add(jCheckBoxWithComment, null);
 		panelMain.add(jCheckBoxIgnoreFKConstraints, null);
+		panelMain.add(jCheckBoxIgnoreWarnings, null);
 		panelMain.add(jLabelAdditionalParms, null);
 		panelMain.add(jScrollPaneAdditionalParms, null);
 		panelMain.add(jTextAreaMessage, null);
@@ -192,6 +198,11 @@ public class DialogCreateTableStatement extends JDialog {
 			jCheckBoxIgnoreFKConstraints.setSelected(true);
 		} else {
 			jCheckBoxIgnoreFKConstraints.setSelected(false);
+		}
+		if (frame_.ignoreKeyDefinitionWarnings) {
+			jCheckBoxIgnoreWarnings.setSelected(true);
+		} else {
+			jCheckBoxIgnoreWarnings.setSelected(false);
 		}
 		jTextAreaAdditionalParms.setText(frame_.ddlAdditionalParms);
 
@@ -230,6 +241,11 @@ public class DialogCreateTableStatement extends JDialog {
 			frame_.ignoreForeignKeyConstraints = true;
 		} else {
 			frame_.ignoreForeignKeyConstraints = false;
+		}
+		if (jCheckBoxIgnoreWarnings.isSelected()) {
+			frame_.ignoreKeyDefinitionWarnings = true;
+		} else {
+			frame_.ignoreKeyDefinitionWarnings = false;
 		}
 		frame_.ddlAdditionalParms = jTextAreaAdditionalParms.getText();
 	}

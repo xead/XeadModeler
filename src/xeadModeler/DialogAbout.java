@@ -47,7 +47,19 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M17";
+	public static final String FULL_VERSION = "V1.R4.M19";
+	// 1.4.19での変更点
+	//・IOイメージのカーソル位置計算ルーチンの細かいバグを修正した
+	//・検索・置換ダイアログでのテキストフィールドにフォーカスした場合、文字列を全選択させるようにした
+	//・Java1.8でデータモデルの関連線の位置を変更できなくなっていた問題を修正した
+	//・CREATE TABLE文の生成ロジックを改善した
+	//
+	// 1.4.18での変更点
+	//・Java1.8に対応するために、sort処理をcomparatorからcomparableベースに修正した
+	//・Ctrl+Rで、IOパネルの書式設定を解除できるようにした
+	//・KEY定義の削除にともなうUndo関連処理と変更履歴テキストの出力ロジックのバグを修正した
+	//・検索・置換処理でテーブルのIDが処理対象からはずれていたバグを修正した
+	//
 	// 1.4.17での変更点
 	//・IDがブランクであるようなデータタイプやテーブルタイプを含む場合に起こるxeadファイルのインポート処理のバグを修正した
 	//・一覧形式での追加でのファイル読込を、CSVからTXT(タブ区切り)に変更するとともに、摘要を取り込めるようにした

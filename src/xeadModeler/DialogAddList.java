@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -148,7 +148,7 @@ public class DialogAddList extends JDialog {
 		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogAddList_jButtonOK_actionAdapter(this));
-		jButtonImport.setBounds(new Rectangle(170, 7, 120, 28));
+		jButtonImport.setBounds(new Rectangle(165, 7, 130, 28));
 		jButtonImport.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonImport.setText(res.getString("DialogAddList01"));
 		jButtonImport.addActionListener(new DialogAddList_jButtonImport_actionAdapter(this));

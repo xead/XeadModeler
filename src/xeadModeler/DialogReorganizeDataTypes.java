@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -32,13 +32,15 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.TreeSet;
 import org.w3c.dom.*;
 import xeadModeler.Modeler.XeadTreeNode;
 
@@ -125,11 +127,11 @@ public class DialogReorganizeDataTypes extends JDialog {
 		column5 = jTableDataTypeList.getColumnModel().getColumn(5);
 		column6 = jTableDataTypeList.getColumnModel().getColumn(6);
 		column0.setPreferredWidth(40);
-		column1.setPreferredWidth(130);
-		column2.setPreferredWidth(200);
+		column1.setPreferredWidth(160);
+		column2.setPreferredWidth(230);
 		column3.setPreferredWidth(150);
-		column4.setPreferredWidth(50);
-		column5.setPreferredWidth(65);
+		column4.setPreferredWidth(65);
+		column5.setPreferredWidth(75);
 		column6.setPreferredWidth(150);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
@@ -586,44 +588,53 @@ public class DialogReorganizeDataTypes extends JDialog {
 	class SortableXeadNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadNode> list = new ArrayList<XeadNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
 
-	class NodeComparator implements java.util.Comparator<XeadNode> {
-		public int compare(XeadNode node1, XeadNode node2) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	class NodeComparator implements java.util.Comparator<XeadNode> {
+//		public int compare(XeadNode node1, XeadNode node2) {
+//			String value1, value2;
+//			value1 = node1.getElement().getAttribute("SortKey");
+//			value2 = node2.getElement().getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = node1.getElement().getAttribute("ID");
+//				value2 = node2.getElement().getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	class XeadNode {
+	class XeadNode implements Comparable {
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
-		//
 		public XeadNode(String type, org.w3c.dom.Element node) {
 			super();
 			nodeType_ = type;
@@ -644,43 +655,80 @@ public class DialogReorganizeDataTypes extends JDialog {
 		public org.w3c.dom.Element getElement() {
 			return domNode_;
 		}
+        public int compareTo(Object other) {
+            XeadNode otherNode = (XeadNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
 	}
 
 	class SortableDomElementFieldListModel extends DefaultListModel {
 		private static final long serialVersionUID = 1L;
+		public void addElement(Object object) {
+			XeadFieldElement element = new XeadFieldElement((org.w3c.dom.Element)object);
+			super.addElement(element);
+		}
 		public void sortElements() {
-			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
-			int elementCount = this.getSize();
-			org.w3c.dom.Element domElement;
-			for (int i = 0; i < elementCount; i++) {
-				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-				treeSet.add(domElement);
+//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
+//			int elementCount = this.getSize();
+//			org.w3c.dom.Element domElement;
+//			for (int i = 0; i < elementCount; i++) {
+//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
+//				treeSet.add(domElement);
+//			}
+//			this.removeAllElements();
+//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				domElement = (org.w3c.dom.Element)it.next();
+//				this.addElement(domElement);
+//			}
+			ArrayList<XeadFieldElement> list = new ArrayList<XeadFieldElement>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadFieldElement)super.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-			while( it.hasNext() ){
-				domElement = (org.w3c.dom.Element)it.next();
-				this.addElement(domElement);
+			Collections.sort(list);
+			Iterator<XeadFieldElement> it = list.iterator();
+			while(it.hasNext()){
+				super.addElement((XeadFieldElement)it.next());
 			}
+		}
+		public Object getElementAt(int index) {
+			XeadFieldElement element = (XeadFieldElement)super.getElementAt(index);
+			return element.getElement();
 		}
 	}
 
-	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
-		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-			String value1, value2;
-			value1 = element1.getAttribute("Alias");
-			value2 = element2.getAttribute("Alias");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = element1.getAttribute("ID");
-				value2 = element2.getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
+//	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
+//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
+//			String value1, value2;
+//			value1 = element1.getAttribute("Alias");
+//			value2 = element2.getAttribute("Alias");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = element1.getAttribute("ID");
+//				value2 = element2.getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
+
+	class XeadFieldElement implements Comparable {
+		private org.w3c.dom.Element domNode_;
+		public XeadFieldElement(org.w3c.dom.Element node) {
+			super();
+			domNode_ = node;
 		}
+		public org.w3c.dom.Element getElement() {
+			return domNode_;
+		}
+        public int compareTo(Object other) {
+            XeadFieldElement otherNode = (XeadFieldElement)other;
+            return domNode_.getAttribute("Alias").compareTo(otherNode.getElement().getAttribute("Alias"));
+        }
 	}
 
 	class DataTypePopupMenu extends JPopupMenu {

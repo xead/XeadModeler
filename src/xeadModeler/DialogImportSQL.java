@@ -35,10 +35,8 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.event.*;
-
 import org.w3c.dom.*;
 
 public class DialogImportSQL extends JDialog {
@@ -1310,7 +1308,7 @@ public class DialogImportSQL extends JDialog {
 	/**
 	 * Class of Xead Tree Node
 	 */
-	class XeadNode {
+	class XeadNode implements Comparable {
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
 		public XeadNode(String type, org.w3c.dom.Element node) {
@@ -1333,6 +1331,10 @@ public class DialogImportSQL extends JDialog {
 		public org.w3c.dom.Element getElement() {
 			return domNode_;
 		}
+        public int compareTo(Object other) {
+            XeadNode otherNode = (XeadNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
 	}
 
 	/**
@@ -1341,42 +1343,52 @@ public class DialogImportSQL extends JDialog {
 	class SortableXeadNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadNode> list = new ArrayList<XeadNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
 
-	/**
-	 * Class of Node Comparator
-	 */
-	class NodeComparator implements java.util.Comparator<XeadNode> {
-		public int compare(XeadNode node1, XeadNode node2) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	/**
+//	 * Class of Node Comparator
+//	 */
+//	class NodeComparator implements java.util.Comparator<XeadNode> {
+//		public int compare(XeadNode node1, XeadNode node2) {
+//			String value1, value2;
+//			value1 = node1.getElement().getAttribute("SortKey");
+//			value2 = node2.getElement().getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = node1.getElement().getAttribute("ID");
+//				value2 = node2.getElement().getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 }
 
 class DialogImportSQL_jCheckBoxShowControl_changeAdapter implements ChangeListener {

@@ -32,6 +32,7 @@ package xeadModeler;
  */
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -39,8 +40,10 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
 import java.awt.event.*;
 import java.util.ResourceBundle;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -52,6 +55,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.w3c.dom.*;
+
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -155,6 +159,7 @@ public class DialogScan extends JDialog {
 		jTextFieldScan.setText("");
 		jTextFieldScan.setBounds(new Rectangle(140, 10, 240, 25));
 		jTextFieldScan.addKeyListener(new DialogScan_jTextFieldScan_keyAdapter(this));
+		jTextFieldScan.addFocusListener(new DialogScan_jTextField_focusListener());
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogScan03"));
@@ -163,6 +168,7 @@ public class DialogScan extends JDialog {
 		jTextFieldReplace.setText("");
 		jTextFieldReplace.setBounds(new Rectangle(525, 10, 240, 25));
 		jTextFieldReplace.addKeyListener(new DialogScan_jTextFieldReplace_keyAdapter(this));
+		jTextFieldReplace.addFocusListener(new DialogScan_jTextField_focusListener());
 		jCheckBoxCaseSensitive.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxCaseSensitive.setText(res.getString("DialogScan04"));
 		jCheckBoxCaseSensitive.setBounds(new Rectangle(770, 10, 220, 25));
@@ -244,7 +250,6 @@ public class DialogScan extends JDialog {
 		jProgressBar.setBounds(new Rectangle(840, 130, 140, 32));
 		jProgressBar.setVisible(false);
 		jPanelNorth.add(jTextFieldScan, null);
-		jPanelNorth.add(jCheckBoxTable, null);
 		jPanelNorth.add(jTextFieldReplace, null);
 		jPanelNorth.add(jLabel2, null);
 		jPanelNorth.add(jCheckBoxCaseSensitive, null);
@@ -784,6 +789,7 @@ public class DialogScan extends JDialog {
 						jProgressBar.setValue(jProgressBar.getValue() + 1);
 						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 						//
+						scanAttribute(element, "Table", "SortKey");
 						scanAttribute(element, "Table", "Name");
 						scanAttribute(element, "Table", "Descriptions");
 						//
@@ -2049,45 +2055,53 @@ public class DialogScan extends JDialog {
 	class SortableXeadNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadNode> list = new ArrayList<XeadNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
 
-	class NodeComparator implements java.util.Comparator<XeadNode> {
-		public int compare(XeadNode node1, XeadNode node2) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	class NodeComparator implements java.util.Comparator<XeadNode> {
+//		public int compare(XeadNode node1, XeadNode node2) {
+//			String value1, value2;
+//			value1 = node1.getElement().getAttribute("SortKey");
+//			value2 = node2.getElement().getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = node1.getElement().getAttribute("ID");
+//				value2 = node2.getElement().getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	class XeadNode {
+	class XeadNode implements Comparable {
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
-		//
-		//Constructor//
 		public XeadNode(String type, org.w3c.dom.Element node) {
 			super();
 			nodeType_ = type;
@@ -2100,19 +2114,30 @@ public class DialogScan extends JDialog {
 		}
 		public String getName() {
 			String str = "";
-			//
 			if (nodeType_.equals("Role")) {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
 			if (nodeType_.equals("Subsystem")) {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
-			//
 			return str;
 		}
 		public org.w3c.dom.Element getElement() {
 			return domNode_;
 		}
+        public int compareTo(Object other) {
+            XeadNode otherNode = (XeadNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
+	}
+}
+
+class DialogScan_jTextField_focusListener implements FocusListener{
+	public void focusLost(FocusEvent e){
+	}
+	public void focusGained(FocusEvent e){
+		JTextField field = (JTextField)e.getComponent();
+		field.selectAll();
 	}
 }
 

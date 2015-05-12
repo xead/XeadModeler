@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2014 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -35,9 +35,7 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
-
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -61,7 +59,7 @@ public class DialogImportXEAF extends JDialog {
 	private JTextField jTextFieldImportFileName = new JTextField();
 	private JLabel jLabel5 = new JLabel();
 	private JTextField jTextFieldImportSystemName = new JTextField();
-	private SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
+	//private SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
 
 	private String importResult = "";
 	private Modeler frame_;
@@ -733,13 +731,15 @@ public class DialogImportXEAF extends JDialog {
 		/////////////////////
 		HashMap<String, String> fieldIDMap = new HashMap<String, String>();
 		elementList1 = elementFrom.getElementsByTagName("Field");
-		sortableDomElementFieldListModel.removeAllElements();
-		for (int j = 0; j < elementList1.getLength(); j++) {
-			sortableDomElementFieldListModel.addElement((Object)elementList1.item(j));
-		}
-		sortableDomElementFieldListModel.sortElements();
-		for (int i = 0; i < sortableDomElementFieldListModel.getSize(); i++) {
-			workElement1 = (org.w3c.dom.Element)sortableDomElementFieldListModel.get(i);
+//		sortableDomElementFieldListModel.removeAllElements();
+//		for (int j = 0; j < elementList1.getLength(); j++) {
+//			sortableDomElementFieldListModel.addElement((Object)elementList1.item(j));
+//		}
+//		sortableDomElementFieldListModel.sortElements();
+//		for (int i = 0; i < sortableDomElementFieldListModel.getSize(); i++) {
+//			workElement1 = (org.w3c.dom.Element)sortableDomElementFieldListModel.get(i);
+		for (int i = 0; i < elementList1.getLength(); i++) {
+			workElement1 = (org.w3c.dom.Element)elementList1.item(i);
 			org.w3c.dom.Element childElement = frame_.domDocument.createElement("TableField");
 			lastElement = getLastDomElementOfTheType("TableField");
 			if (lastElement == null) {
@@ -749,7 +749,7 @@ public class DialogImportXEAF extends JDialog {
 			}
 			childElement.setAttribute("ID", Integer.toString(lastID + 1));
 			childElement.setAttribute("Name", workElement1.getAttribute("Name"));
-			childElement.setAttribute("SortKey", Modeler.getFormatted4ByteString(i * 10));
+			childElement.setAttribute("SortKey", workElement1.getAttribute("Order"));
 			childElement.setAttribute("Descriptions", workElement1.getAttribute("Remarks"));
 			childElement.setAttribute("Alias", workElement1.getAttribute("ID"));
 			if (workElement1.getAttribute("TypeOptions").contains("VIRTUAL")) {
@@ -1337,7 +1337,7 @@ public class DialogImportXEAF extends JDialog {
 		this.setVisible(false);
 	}
 
-	class XeadNode {
+	class XeadNode implements Comparable {
 		private org.w3c.dom.Element domNode_;
 		public XeadNode(org.w3c.dom.Element node) {
 			super();
@@ -1358,81 +1358,95 @@ public class DialogImportXEAF extends JDialog {
 		public org.w3c.dom.Element getElement() {
 			return domNode_;
 		}
+        public int compareTo(Object other) {
+            XeadNode otherNode = (XeadNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
 	}
 
 	class SortableXeadNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadNode> treeSet = new TreeSet<XeadNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadNode> list = new ArrayList<XeadNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
 
-	class NodeComparator implements java.util.Comparator<XeadNode> {
-		public int compare(XeadNode node1, XeadNode node2) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	class NodeComparator implements java.util.Comparator<XeadNode> {
+//		public int compare(XeadNode node1, XeadNode node2) {
+//			String value1, value2;
+//			value1 = node1.getElement().getAttribute("SortKey");
+//			value2 = node2.getElement().getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = node1.getElement().getAttribute("ID");
+//				value2 = node2.getElement().getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
-		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-			String value1, value2;
-			value1 = element1.getAttribute("Order");
-			value2 = element2.getAttribute("Order");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = element1.getAttribute("ID");
-				value2 = element2.getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
+//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
+//			String value1, value2;
+//			value1 = element1.getAttribute("Order");
+//			value2 = element2.getAttribute("Order");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = element1.getAttribute("ID");
+//				value2 = element2.getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	class SortableDomElementFieldListModel extends DefaultListModel {
-		private static final long serialVersionUID = 1L;
-		public void sortElements() {
-			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
-			int elementCount = this.getSize();
-			org.w3c.dom.Element domElement;
-			for (int i = 0; i < elementCount; i++) {
-				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-				treeSet.add(domElement);
-			}
-			this.removeAllElements();
-			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-			while( it.hasNext() ){
-				domElement = (org.w3c.dom.Element)it.next();
-				this.addElement(domElement);
-			}
-		}
-	}
+//	class SortableDomElementFieldListModel extends DefaultListModel {
+//		private static final long serialVersionUID = 1L;
+//		public void sortElements() {
+//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
+//			int elementCount = this.getSize();
+//			org.w3c.dom.Element domElement;
+//			for (int i = 0; i < elementCount; i++) {
+//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
+//				treeSet.add(domElement);
+//			}
+//			this.removeAllElements();
+//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				domElement = (org.w3c.dom.Element)it.next();
+//				this.addElement(domElement);
+//			}
+//		}
+//	}
 }
 
 class DialogImportXEAF_jComboBoxBlockFrom_actionAdapter implements java.awt.event.ActionListener {

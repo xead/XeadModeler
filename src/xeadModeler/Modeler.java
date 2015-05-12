@@ -233,6 +233,7 @@ public class Modeler extends JFrame {
 	public String ddlAdditionalParms = "";
 	public boolean setCommentToFieldsWithAlias = true;
 	public boolean ignoreForeignKeyConstraints = false;
+	public boolean ignoreKeyDefinitionWarnings = true;
 	private DialogMatrixList dialogMatrixList;
 	private DialogDocuments dialogDocuments;
 	private DialogImportXEAD dialogImportXEAD;
@@ -1181,6 +1182,12 @@ public class Modeler extends JFrame {
 			jMenuItemIOImageUnderlineSelectedChar_actionPerformed(null);
 		}
 	};
+	private Action actionResetAttrIOPanelImage = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			jMenuItemIOImageCancelSelectedCharStyle_actionPerformed(null);
+		}
+	};
 	/**
 	 * Definition components on jPanelIOSpool
 	 */
@@ -1376,7 +1383,7 @@ public class Modeler extends JFrame {
 			// Java Version Check //
 			////////////////////////
 			String version = System.getProperty("java.version");
-			if (!version.startsWith("1.6.") && !version.startsWith("1.7.")) {
+			if (!version.startsWith("1.7.") && !version.startsWith("1.8.")) {
 				JOptionPane.showMessageDialog(null, res.getString("S5") + version + res.getString("S6"));
 				System.exit(0);
 			}
@@ -2063,6 +2070,7 @@ public class Modeler extends JFrame {
 		jMenuItemIOImageCancelUnderline.setText(res.getString("S186"));
 		jMenuItemIOImageCancelUnderline.addActionListener(new Modeler_jMenuItemIOImageCancelUnderline_actionAdapter(this));
 		jMenuItemIOImageCancelSelectedCharStyle.setText(res.getString("S184"));
+		jMenuItemIOImageCancelSelectedCharStyle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageSearchImageFile.setText(res.getString("S190"));
 		jMenuItemIOImageSearchImageFile.addActionListener(new Modeler_jMenuItemIOImageSearchImageFile_actionAdapter(this));
 		jMenuItemIOImageCaptureImage.setText(res.getString("S185"));
@@ -3397,7 +3405,7 @@ public class Modeler extends JFrame {
 		jPanelTask23.setLayout(null);
 		jLabelTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIODescriptions.setText(res.getString("S403"));
-		jLabelTaskFunctionIODescriptions.setBounds(new Rectangle(5, 0, 180, 20));
+		jLabelTaskFunctionIODescriptions.setBounds(new Rectangle(5, 0, 200, 20));
 		jTextAreaTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTaskFunctionIODescriptions.setLineWrap(true);
 		jTextAreaTaskFunctionIODescriptions.setEditable(false);
@@ -3733,7 +3741,7 @@ public class Modeler extends JFrame {
 		jPanelSubsystem.setLayout(new BorderLayout());
 		jPanelSubsystem3.setLayout(null);
 		jTextFieldSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubsystemName.setBounds(new Rectangle(140, 6, 350, 25));
+		jTextFieldSubsystemName.setBounds(new Rectangle(150, 6, 350, 25));
 		jLabelSubsystemDescriptions1.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsystemDescriptions1.setMaximumSize(new Dimension(70, 15));
 		jLabelSubsystemDescriptions1.setMinimumSize(new Dimension(70, 15));
@@ -3744,7 +3752,7 @@ public class Modeler extends JFrame {
 		jLabelSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsystemName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubsystemName.setText(res.getString("S436"));
-		jLabelSubsystemName.setBounds(new Rectangle(5, 9, 130, 20));
+		jLabelSubsystemName.setBounds(new Rectangle(5, 9, 140, 20));
 		jPanelSubsystem3.setPreferredSize(new Dimension(10, 37));
 		jPanelSubsystem1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSubsystem1.setPreferredSize(new Dimension(10, 80));
@@ -3763,9 +3771,9 @@ public class Modeler extends JFrame {
 		jLabelSubsysytemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsysytemSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubsysytemSortKey.setText(res.getString("S201"));
-		jLabelSubsysytemSortKey.setBounds(new Rectangle(500, 9, 130, 20));
+		jLabelSubsysytemSortKey.setBounds(new Rectangle(510, 9, 130, 20));
 		jTextFieldSubsystemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubsystemSortKey.setBounds(new Rectangle(635, 6, 100, 25));
+		jTextFieldSubsystemSortKey.setBounds(new Rectangle(645, 6, 100, 25));
 		jTextAreaSubsystemDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSubsystemDescriptions.setLineWrap(true);
 		jPanelSubsystem1.add(jScrollPaneSubsystemDescriptions,  BorderLayout.CENTER);
@@ -3837,7 +3845,7 @@ public class Modeler extends JFrame {
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(250);
-		column3.setPreferredWidth(70);
+		column3.setPreferredWidth(75);
 		column4.setPreferredWidth(30);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
@@ -3900,7 +3908,7 @@ public class Modeler extends JFrame {
 		column1.setPreferredWidth(250);
 		column2.setPreferredWidth(150);
 		column3.setPreferredWidth(250);
-		column4.setPreferredWidth(70);
+		column4.setPreferredWidth(75);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
 		column7.setPreferredWidth(30);
@@ -4221,10 +4229,10 @@ public class Modeler extends JFrame {
 		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 100, 25));
 		jCheckBoxTableFieldNotNull.setText("Not Null");
 		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1040, 8, 120, 25));
+		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1040, 8, 130, 25));
 		jCheckBoxTableFieldNoUpdate.setText(res.getString("S582"));
 		jCheckBoxTableFieldNoUpdate.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1160, 8, 120, 25));
+		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1170, 8, 160, 25));
 		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
 		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
@@ -4307,7 +4315,7 @@ public class Modeler extends JFrame {
 		jScrollPaneTableField1.getViewport().add(jPanelTableField1);
 		jPanelTableField1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelTableField1.setMinimumSize(new Dimension(100, 38));
-		jPanelTableField1.setPreferredSize(new Dimension(1200, 130));
+		jPanelTableField1.setPreferredSize(new Dimension(1330, 130));
 		jPanelTableField1.setLayout(new BorderLayout());
 		jTabbedPaneTableField.addTab(res.getString("S519"), imageIconFunction, jScrollPaneTableFieldUsageList);
 		jTabbedPaneTableField.addTab(res.getString("S520"), imageIconForeignFunction, jScrollPaneTableFieldForeignUsageList);
@@ -4890,6 +4898,8 @@ public class Modeler extends JFrame {
 		actionMap.put("REDO", actionRedoIOPanelImage);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK), "UNDERLINE");
 		actionMap.put("UNDERLINE", actionUnderlineIOPanelImage);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "RESET");
+		actionMap.put("RESET", actionResetAttrIOPanelImage);
 		jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 		jTextPaneIOPanelImage.setBackground(SystemColor.control);
 		jTextPaneIOPanelImage.addKeyListener(new Modeler_jTextPaneIOPanelImage_keyAdapter(this));
@@ -9053,7 +9063,7 @@ public class Modeler extends JFrame {
 						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					}
 				}
-				if (warningHasOccured) {
+				if (warningHasOccured && !ignoreKeyDefinitionWarnings) {
 					JOptionPane.showMessageDialog(null, res.getString("S1366") + "\n" +
 							res.getString("S1368") + "\n" +
 							res.getString("S1370"));
@@ -9115,7 +9125,7 @@ public class Modeler extends JFrame {
 		NodeList keyFieldList, keyFieldList2;
 		boolean firstFieldStatement = true;
 		boolean firstKeyStatement = true;
-		int numberOfProbableFields;
+		int numberOfCandidateFields;
 		boolean warningHasOccured = false;
 		int indexOfSK = 0;
 		int indexOfFK = 0;
@@ -9161,12 +9171,6 @@ public class Modeler extends JFrame {
 			} else {
 				statement = statement + "     " + node3.getElement().getAttribute("Alias");
 			}
-//			XeadTreeNode dataTypeNode = getSpecificXeadTreeNode("DataType", node3.getElement().getAttribute("DataTypeID"), null);
-//			if (dataTypeNode.getElement().getAttribute("SQLExpression").equals("")) {
-//				statement = statement + " Invalid data type";
-//			} else {
-//				statement = statement + " " + dataTypeNode.getElement().getAttribute("SQLExpression");
-//			}
 			dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
 			if (dataTypeElement == null) {
 				statement = statement + " Invalid data type";
@@ -9275,24 +9279,45 @@ public class Modeler extends JFrame {
 							}
 							node4 = null;
 							node5 = null;
-							numberOfProbableFields = 0;
+							numberOfCandidateFields = 0;
 							for (int p = 0; p < keyFieldList2.getLength(); p++) {
 								keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
 								node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
 								if (node4.getElement().getAttribute("DataTypeID").equals(node3.getElement().getAttribute("DataTypeID"))) {
-									numberOfProbableFields++;
+									numberOfCandidateFields++;
 									node5 = node4;
 								}
 							}
-							if (numberOfProbableFields == 1) {
+							if (numberOfCandidateFields == 1) {
 								if (node5.getElement().getAttribute("Alias").equals("")) {
 									statement = statement + node5.getElement().getAttribute("Name");
 								} else {
 									statement = statement + node5.getElement().getAttribute("Alias");
 								}
 							} else {
-								statement = statement + "(?)";
-								warningHasOccured = true;
+								//statement = statement + "(?)";
+								//warningHasOccured = true;
+								node4 = null;
+								node5 = null;
+								numberOfCandidateFields = 0;
+								for (int p = 0; p < keyFieldList2.getLength(); p++) {
+									keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
+									node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
+									if (node4.getElement().getAttribute("Name").equals(node3.getElement().getAttribute("Name"))) {
+										numberOfCandidateFields++;
+										node5 = node4;
+									}
+								}
+								if (numberOfCandidateFields == 1) {
+									if (node5.getElement().getAttribute("Alias").equals("")) {
+										statement = statement + node5.getElement().getAttribute("Name");
+									} else {
+										statement = statement + node5.getElement().getAttribute("Alias");
+									}
+								} else {
+									statement = statement + "(?)";
+									warningHasOccured = true;
+								}
 							}
 						}
 						//
@@ -9350,24 +9375,45 @@ public class Modeler extends JFrame {
 							}
 							node4 = null;
 							node5 = null;
-							numberOfProbableFields = 0;
+							numberOfCandidateFields = 0;
 							for (int p = 0; p < keyFieldList2.getLength(); p++) {
 								keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
 								node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
 								if (node4.getElement().getAttribute("DataTypeID").equals(node3.getElement().getAttribute("DataTypeID"))) {
-									numberOfProbableFields++;
+									numberOfCandidateFields++;
 									node5 = node4;
 								}
 							}
-							if (numberOfProbableFields == 1) {
+							if (numberOfCandidateFields == 1) {
 								if (node5.getElement().getAttribute("Alias").equals("")) {
 									statement = statement + node5.getElement().getAttribute("Name");
 								} else {
 									statement = statement + node5.getElement().getAttribute("Alias");
 								}
 							} else {
-								statement = statement + "(?)";
-								warningHasOccured = true;
+								//statement = statement + "(?)";
+								//warningHasOccured = true;
+								node4 = null;
+								node5 = null;
+								numberOfCandidateFields = 0;
+								for (int p = 0; p < keyFieldList2.getLength(); p++) {
+									keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
+									node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
+									if (node4.getElement().getAttribute("Name").equals(node3.getElement().getAttribute("Name"))) {
+										numberOfCandidateFields++;
+										node5 = node4;
+									}
+								}
+								if (numberOfCandidateFields == 1) {
+									if (node5.getElement().getAttribute("Alias").equals("")) {
+										statement = statement + node5.getElement().getAttribute("Name");
+									} else {
+										statement = statement + node5.getElement().getAttribute("Alias");
+									}
+								} else {
+									statement = statement + "(?)";
+									warningHasOccured = true;
+								}
 							}
 						}
 						//
@@ -9439,24 +9485,45 @@ public class Modeler extends JFrame {
 							}
 							node4 = null;
 							node5 = null;
-							numberOfProbableFields = 0;
+							numberOfCandidateFields = 0;
 							for (int p = 0; p < keyFieldList2.getLength(); p++) {
 								keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
 								node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
 								if (node4.getElement().getAttribute("DataTypeID").equals(node3.getElement().getAttribute("DataTypeID"))) {
-									numberOfProbableFields++;
+									numberOfCandidateFields++;
 									node5 = node4;
 								}
 							}
-							if (numberOfProbableFields == 1) {
+							if (numberOfCandidateFields == 1 || ignoreKeyDefinitionWarnings) {
 								if (node5.getElement().getAttribute("Alias").equals("")) {
 									statement = statement + node5.getElement().getAttribute("Name");
 								} else {
 									statement = statement + node5.getElement().getAttribute("Alias");
 								}
 							} else {
-								statement = statement + "(?)";
-								warningHasOccured = true;
+								//statement = statement + "(?)";
+								//warningHasOccured = true;
+								node4 = null;
+								node5 = null;
+								numberOfCandidateFields = 0;
+								for (int p = 0; p < keyFieldList2.getLength(); p++) {
+									keyFieldElement2 = (org.w3c.dom.Element)keyFieldList2.item(p);
+									node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement2.getAttribute("FieldID"));
+									if (node4.getElement().getAttribute("Name").equals(node3.getElement().getAttribute("Name"))) {
+										numberOfCandidateFields++;
+										node5 = node4;
+									}
+								}
+								if (numberOfCandidateFields == 1) {
+									if (node5.getElement().getAttribute("Alias").equals("")) {
+										statement = statement + node5.getElement().getAttribute("Name");
+									} else {
+										statement = statement + node5.getElement().getAttribute("Alias");
+									}
+								} else {
+									statement = statement + "(?)";
+									warningHasOccured = true;
+								}
 							}
 						}
 						//
@@ -10214,18 +10281,28 @@ public class Modeler extends JFrame {
 	class SortableXeadTreeNodeComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadTreeNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadTreeNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadTreeNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadTreeNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadTreeNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadTreeNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadTreeNode> list = new ArrayList<XeadTreeNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadTreeNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadTreeNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadTreeNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadTreeNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
@@ -10235,18 +10312,28 @@ public class Modeler extends JFrame {
 	class SortableXeadTreeNodeListModel extends DefaultListModel {
 		private static final long serialVersionUID = 1L;
 		public void sortElements() {
-			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
-			int elementCount = this.getSize();
-			XeadTreeNode node;
-			for (int i = 0; i < elementCount; i++) {
-				node = (XeadTreeNode)this.getElementAt(i);
-				treeSet.add(node);
+//			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
+//			int elementCount = this.getSize();
+//			XeadTreeNode node;
+//			for (int i = 0; i < elementCount; i++) {
+//				node = (XeadTreeNode)this.getElementAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllElements();
+//			Iterator<XeadTreeNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadTreeNode)it.next();
+//				this.addElement(node);
+//			}
+			ArrayList<XeadTreeNode> list = new ArrayList<XeadTreeNode>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadTreeNode)this.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<XeadTreeNode> it = treeSet.iterator();
-			while( it.hasNext() ){
-				node = (XeadTreeNode)it.next();
-				this.addElement(node);
+			Collections.sort(list);
+			Iterator<XeadTreeNode> it = list.iterator();
+			while(it.hasNext()){
+				this.addElement(it.next());
 			}
 		}
 	}
@@ -10255,20 +10342,38 @@ public class Modeler extends JFrame {
 	 */
 	class SortableDomElementListModel extends DefaultListModel {
 		private static final long serialVersionUID = 1L;
+		public void addElement(Object object) {
+			XeadElement element = new XeadElement((org.w3c.dom.Element)object);
+			super.addElement(element);
+		}
 		public void sortElements() {
-			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementComparator());
-			int elementCount = this.getSize();
-			org.w3c.dom.Element domElement;
-			for (int i = 0; i < elementCount; i++) {
-				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-				treeSet.add(domElement);
+//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementComparator());
+//			int elementCount = this.getSize();
+//			org.w3c.dom.Element domElement;
+//			for (int i = 0; i < elementCount; i++) {
+//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
+//				treeSet.add(domElement);
+//			}
+//			this.removeAllElements();
+//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				domElement = (org.w3c.dom.Element)it.next();
+//				this.addElement(domElement);
+//			}
+			ArrayList<XeadElement> list = new ArrayList<XeadElement>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadElement)super.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-			while( it.hasNext() ){
-				domElement = (org.w3c.dom.Element)it.next();
-				this.addElement(domElement);
+			Collections.sort(list);
+			Iterator<XeadElement> it = list.iterator();
+			while(it.hasNext()){
+				super.addElement(it.next());
 			}
+		}
+		public Object getElementAt(int index) {
+			XeadElement element = (XeadElement)super.getElementAt(index);
+			return element.getElement();
 		}
 	}
 	/**
@@ -10276,20 +10381,38 @@ public class Modeler extends JFrame {
 	 */
 	class SortableDomElementFieldListModel extends DefaultListModel {
 		private static final long serialVersionUID = 1L;
+		public void addElement(Object object) {
+			XeadFieldElement element = new XeadFieldElement((org.w3c.dom.Element)object);
+			super.addElement((Object)element);
+		}
 		public void sortElements() {
-			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
-			int elementCount = this.getSize();
-			org.w3c.dom.Element domElement;
-			for (int i = 0; i < elementCount; i++) {
-				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-				treeSet.add(domElement);
+//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
+//			int elementCount = this.getSize();
+//			org.w3c.dom.Element domElement;
+//			for (int i = 0; i < elementCount; i++) {
+//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
+//				treeSet.add(domElement);
+//			}
+//			this.removeAllElements();
+//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				domElement = (org.w3c.dom.Element)it.next();
+//				this.addElement(domElement);
+//			}
+			ArrayList<XeadFieldElement> list = new ArrayList<XeadFieldElement>();
+			for (int i = 0; i < this.getSize(); i++) {
+				list.add((XeadFieldElement)super.getElementAt(i));
 			}
 			this.removeAllElements();
-			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-			while( it.hasNext() ){
-				domElement = (org.w3c.dom.Element)it.next();
-				this.addElement(domElement);
+			Collections.sort(list);
+			Iterator<XeadFieldElement> it = list.iterator();
+			while(it.hasNext()){
+				super.addElement(it.next());
 			}
+		}
+		public Object getElementAt(int index) {
+			XeadFieldElement element = (XeadFieldElement)super.getElementAt(index);
+			return element.getElement();
 		}
 	}
 	/**
@@ -10459,13 +10582,12 @@ public class Modeler extends JFrame {
 		private boolean clickable_;
 		private String eventPos = "";
 		private boolean isSelected_ = false;
-		//
-		//Constructor//
+
 		public DataflowNode(org.w3c.dom.Element element, JPanel jpanel1, JPanel jpanel2, boolean clickable) {
 			super();
 			dataflowNodeElement_ = element;
 			clickable_ = clickable;
-			//
+
 			//setup components//
 			nodeType = dataflowNodeElement_.getAttribute("Type");
 			jPanelCanvas2 = jpanel2;
@@ -10504,8 +10626,21 @@ public class Modeler extends JFrame {
 			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
 			jSpinnerSlideNumber.setModel(spinnerNumberModel);
 			boolean validNodeType = false;
-			//
-			//setup components by its type//
+			String strwork = dataflowNodeElement_.getAttribute("Descriptions");
+			if (strwork.equals("")) {
+				jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
+			} else {
+				if ((strwork.getBytes().length) == strwork.length()) {
+					strwork = getLayoutedString(strwork, 40, "<br>");
+				} else {
+					strwork = getLayoutedString(strwork, 20, "<br>");
+				}
+				jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
+			}
+
+			///////////////////////////////////////
+			// Setup components by its node-type //
+			///////////////////////////////////////
 			if (nodeType.equals("Process")) {
 				validNodeType = true;
 				NODE_WIDTH = 145;
@@ -10518,39 +10653,39 @@ public class Modeler extends JFrame {
 				if (eventPos.equals("")) {
 					eventPos = "L";
 				}
-				//
+
 				jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 				jLabelID.setForeground(Color.lightGray);
 				jLabelID.setText(taskNode.getElement().getAttribute("SortKey"));
 				if (eventPos.equals("L")) {
 					jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
-					jLabelID.setBounds(new Rectangle(63, 45, 50, 15));
+					jLabelID.setBounds(new Rectangle(63, 44, 50, 15));
 				}
 				if (eventPos.equals("R")) {
 					jLabelID.setHorizontalAlignment(SwingConstants.LEFT);
-					jLabelID.setBounds(new Rectangle(33, 45, 50, 15));
+					jLabelID.setBounds(new Rectangle(33, 44, 50, 15));
 				}
 				this.add(jLabelID,null);
-				//
+
 				jTextFieldNodeName.setText(taskNode.getElement().getAttribute("Name"));
-				jTextFieldNodeName.setBounds(new Rectangle(8, 80, 135, 17));
+				jTextFieldNodeName.setBounds(new Rectangle(8, 78, 135, 19));
 				adjustFontSizeOfTextField(jTextFieldNodeName);
 				this.add(jTextFieldNodeName,null);
-				//
+
 				jLabelRole.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 				jLabelRole.setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelRole.setForeground(Color.lightGray);
 				jLabelRole.setText(roleNode.getElement().getAttribute("Name"));
-				jLabelRole.setBounds(new Rectangle(8, 63, 135, 15));
+				jLabelRole.setBounds(new Rectangle(8, 59, 135, 19));
 				adjustFontSizeOfTextField(jLabelRole);
 				this.add(jLabelRole,null);
-				//
+
 				jLabelNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 				jLabelNumber.setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelNumber.setForeground(Color.lightGray);
 				jLabelNumber.setBounds(new Rectangle(8, 99, 135, 15));
 				this.add(jLabelNumber,null);
-				//
+
 				jLabelEvent[0] = new JLabel();
 				jLabelEvent[0].setFont(new java.awt.Font(mainFontName, 0, 11));
 				jLabelEvent[0].setForeground(Color.DARK_GRAY);
@@ -10601,41 +10736,34 @@ public class Modeler extends JFrame {
 				}
 				if (jLabelEvent[2].getText().equals("")) {
 					if (jLabelEvent[1].getText().equals("")) {
-						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 24, 56, 12));
+//						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 24, 56, 12));
+						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 22, 56, 15));
 						this.add(jLabelEvent[0], null);
 					} else {
-						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 17, 56, 12));
-						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 12));
+//						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 17, 56, 12));
+//						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 12));
+						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 14));
+						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 14));
 						this.add(jLabelEvent[0], null);
 						this.add(jLabelEvent[1], null);
 					}
 				} else {
-					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 11));
-					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 26, 56, 11));
-					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 11));
+//					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 11));
+//					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 26, 56, 11));
+//					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 11));
+					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 11, 56, 13));
+					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 24, 56, 13));
+					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 13));
 					this.add(jLabelEvent[0], null);
 					this.add(jLabelEvent[1], null);
 					this.add(jLabelEvent[2], null);
 				}
-				//
+
 				jSpinnerSlideNumber.setBounds(new Rectangle(55, 37, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(25, 53, 100, 50));
-				String strwork = taskNode.getElement().getAttribute("Descriptions");
-				if (strwork.equals("")) {
-					jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
-				} else {
-					if ((strwork.getBytes().length) == strwork.length()) {
-						strwork = getLayoutedString(strwork, 40, "<br>");
-					} else {
-						strwork = getLayoutedString(strwork, 20, "<br>");
-					}
-					jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
-				}
-			} else {
-				String strwork = dataflowNodeElement_.getAttribute("Descriptions");
-				if (strwork.equals("")) {
-					jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
-				} else {
+
+				strwork = taskNode.getElement().getAttribute("Descriptions");
+				if (!strwork.equals("")) {
 					if ((strwork.getBytes().length) == strwork.length()) {
 						strwork = getLayoutedString(strwork, 40, "<br>");
 					} else {
@@ -10653,7 +10781,7 @@ public class Modeler extends JFrame {
 					XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", dataflowNodeElement_.getAttribute("RoleID"), null);
 					if (roleNode != null) {
 						jTextFieldNodeName.setText(roleNode.getElement().getAttribute("Name"));
-						String strwork = roleNode.getElement().getAttribute("Descriptions");
+						strwork = roleNode.getElement().getAttribute("Descriptions");
 						if (strwork.equals("")) {
 							jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 						} else {
@@ -10667,14 +10795,14 @@ public class Modeler extends JFrame {
 					}
 				}
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 17));
+					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(1, 4, 170, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(1, 1, 170, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(1, 19, 170, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(1, 20, 170, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10688,14 +10816,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 95;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 31, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 29, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 46, 90, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10709,14 +10837,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 76;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 0, 27, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle( 0, 27, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName,null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 19, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 15, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10730,14 +10858,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 76;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 0, 32, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle( 0, 32, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName,null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 24, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 22, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 39, 100, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 41, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10751,14 +10879,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 145;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 10, 70, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle( 10, 70, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(10, 62, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 58, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10772,14 +10900,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 115;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(35, 49, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(35, 47, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 63, 100, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 66, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10793,14 +10921,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 33, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 31, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10814,14 +10942,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(5, 36, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(5, 32, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10835,14 +10963,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 80;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 70, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 49, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 36, 70, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 30, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 51, 70, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 49, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10856,14 +10984,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 85;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 27, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 25, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 42, 90, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 44, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10877,14 +11005,14 @@ public class Modeler extends JFrame {
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
 					this.add(jTextFieldNodeName, null);
 				} else {
 					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(10, 26, 77, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 24, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 41, 77, 15));
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 43, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
 					this.add(jTextFieldNodeName, null);
 					this.add(jTextFieldNodeNameExt, null);
@@ -10896,18 +11024,20 @@ public class Modeler extends JFrame {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
 				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 15));
+				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
 				this.add(jTextFieldNodeName, null);
 				jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
 				jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 50, 50));
 			}
-			//
+
+			///////////////////////////////////
+			// Setup listeners of components //
+			///////////////////////////////////
 			jMenuItemDataflowNodeChange.addActionListener(new jMenuItemDataflowNodeChange_actionAdapter(this));
 			jMenuItemDataflowNodeJump.addActionListener(new jMenuItemDataflowNodeJump_actionAdapter(this));
 			jMenuItemDataflowNodeCopy.addActionListener(new jMenuItemDataflowNodeCopy_actionAdapter(this));
 			jMenuItemDataflowNodeAddFlow.addActionListener(new jMenuItemDataflowNodeAddFlow_actionAdapter(this));
 			jMenuItemDataflowNodeRemove.addActionListener(new jMenuItemDataflowNodeRemove_actionAdapter(this));
-			//
 			if (nodeType.equals("Process")) {
 				jPopupMenuDataflowNode.add(jMenuItemDataflowNodeJump);
 				jPopupMenuDataflowNode.addSeparator();
@@ -10936,13 +11066,17 @@ public class Modeler extends JFrame {
 				jMenuItemDataflowNodeRemove.setText(res.getString("S2874"));
 				jPopupMenuDataflowNode.add(jMenuItemDataflowNodeRemove);
 			}
+
+			//////////////////////////////////////////
+			// Set colors according to color config //
+			//////////////////////////////////////////
 			updateColors();
 		}
-		//
+
 		public String getID() {
 			return dataflowNodeElement_.getAttribute("ID");
 		}
-		//
+
 		public String getType() {
 			return nodeType;
 		}
@@ -12744,15 +12878,15 @@ public class Modeler extends JFrame {
 			lineCordinates2 = this.getLineCordinates(arrowDirection2, arrowLabelPoint2, showArrow2);
 			if (jTextFieldFlowNameExt.getText().equals("")) {
 				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 23, 30, 30));
-				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 120, 15));
+				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 120, 19));
 				adjustFontSizeOfTextField(jTextFieldFlowName, 14);
 				jPanelCanvas_.add(jTextFieldFlowName, null);
 				jSpinnerSlideNumber.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 18, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 18, 40, 16));
 			} else {
 				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 30, 30, 30));
-				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 7, 120, 15));
+				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 9, 120, 19));
 				adjustFontSizeOfTextField(jTextFieldFlowName, 14);
-				jTextFieldFlowNameExt.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 + 8, 120, 15));
+				jTextFieldFlowNameExt.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 + 10, 120, 19));
 				adjustFontSizeOfTextField(jTextFieldFlowNameExt, 14);
 				jPanelCanvas_.add(jTextFieldFlowName, null);
 				jPanelCanvas_.add(jTextFieldFlowNameExt, null);
@@ -13646,7 +13780,6 @@ public class Modeler extends JFrame {
 			}
 		};
 		private JLabel jLabelPressed;
-		private JLabel jLabelIconMoveGuide = new JLabel();
 		private Point iconGuidePoint = new Point();
 		private boolean terminal1Optional = false;
 		private boolean terminal2Optional = false;
@@ -13749,11 +13882,6 @@ public class Modeler extends JFrame {
 				jLabelTerminal_2.addMouseListener(new jLabelTerminal_mouseAdapter(this));
 				jLabelTerminal_2.addMouseMotionListener(new jLabelTerminal_mouseMotionAdapter(this));
 			}
-			//
-			//Setup basic properties of IconMoveGuide//
-			jLabelIconMoveGuide.setLayout(null);
-			jLabelIconMoveGuide.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-			jLabelIconMoveGuide.setOpaque(false);
 			//
 			//Retrieve entityBox1&2 and their position//
 			if (jPanelCanvas == jPanelDatamodel) {
@@ -14529,12 +14657,12 @@ public class Modeler extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				adaptee.jLabelTerminal_mouseClicked(e);
 			}
-			public void mouseEntered(MouseEvent e) {
-				adaptee.jLabelTerminal_mouseEntered(e);
-			}
-			public void mouseExited(MouseEvent e) {
-				adaptee.jLabelTerminal_mouseExited(e);
-			}
+//			public void mouseEntered(MouseEvent e) {
+//				adaptee.jLabelTerminal_mouseEntered(e);
+//			}
+//			public void mouseExited(MouseEvent e) {
+//				adaptee.jLabelTerminal_mouseExited(e);
+//			}
 			public void mousePressed(MouseEvent e) {
 				adaptee.jLabelTerminal_mousePressed(e);
 			}
@@ -14569,10 +14697,23 @@ public class Modeler extends JFrame {
 			int powerredX = 0;
 			int powerredY = 0;
 			int minimumPowerredDistance = 2147483647;
+
+			jLabelPressed = (JLabel)e.getSource();
 			int mousePosX = jLabelPressed.getBounds().x + e.getX();
 			int mousePosY = jLabelPressed.getBounds().y + e.getY();
+
 			positionChanged = true;
-			//
+
+			//Get coordinates array and box position for calculations
+			if (jLabelPressed.equals(jLabelTerminal_1)) {
+				indexCordinates = entityBox1.getIndexCordinates();
+				boxPoint = entityBox1.getBoxPositionPoint();
+			}
+			if (jLabelPressed.equals(jLabelTerminal_2)) {
+				indexCordinates = entityBox2.getIndexCordinates();
+				boxPoint = entityBox2.getBoxPositionPoint();
+			}
+
 			//Search the nearest terminal-position-index(41 of all)//
 			//on EntityBox from mouse pointer                      //
 			for (int i = 0; i <= 40; i++) {
@@ -14583,7 +14724,7 @@ public class Modeler extends JFrame {
 					terminalIndex = i;
 				}
 			}
-			//
+
 			//Calculate pixel point of the terminal-position-index//
 			if (terminalIndex >= 23 && terminalIndex <= 40) {
 				iconGuidePoint = new Point(boxPoint.x + (terminalIndex - 23) * 8, boxPoint.y - 8);
@@ -14594,47 +14735,28 @@ public class Modeler extends JFrame {
 			if (terminalIndex >= 00 && terminalIndex <= 17) {
 				iconGuidePoint = new Point(boxPoint.x + (17 - terminalIndex) * 8, boxPoint.y + 40);
 			}
-			//
-			//Move IconMoveGuide to the pixel point//
-			jLabelIconMoveGuide.setBounds(new Rectangle(iconGuidePoint.x, iconGuidePoint.y, 8, 8));
-		}
 
-		private void jLabelTerminal_mouseEntered(MouseEvent e) {
-			jLabelPressed = (JLabel)e.getSource();
-			jLabelPressed.setBorder(BorderFactory.createLineBorder(SELECT_COLOR));
-		}
-
-		private void jLabelTerminal_mouseExited(MouseEvent e) {
-			jLabelPressed = (JLabel)e.getSource();
-			jLabelPressed.setBorder(null);
+			//Draw rectangle for dragging guide
+			Graphics2D g2 = (Graphics2D)jPanelCanvas.getGraphics();
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.drawRect(iconGuidePoint.x, iconGuidePoint.y, 8, 8);
 		}
 
 		private void jLabelTerminal_mousePressed(MouseEvent e) {
-			positionChanged = false;
 			jLabelPressed = (JLabel)e.getSource();
-			if (jLabelPressed.equals(jLabelTerminal_1)) {
-				indexCordinates = entityBox1.getIndexCordinates();
-				boxPoint = entityBox1.getBoxPositionPoint();
-			}
-			if (jLabelPressed.equals(jLabelTerminal_2)) {
-				indexCordinates = entityBox2.getIndexCordinates();
-				boxPoint = entityBox2.getBoxPositionPoint();
-			}
-			jLabelPressed.setBorder(null);
-			jLabelIconMoveGuide.setBounds(new Rectangle(jLabelPressed.getBounds().x, jLabelPressed.getBounds().y, 8, 8));
-			jPanelCanvas.add(jLabelIconMoveGuide, null);
+			Graphics2D g2 = (Graphics2D)jPanelCanvas.getGraphics();
+			g2.setColor(SELECT_COLOR);
+			g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 6, 6);
 		}
-		//
+
 		private void jLabelTerminal_mouseReleased(MouseEvent e) {
-			jPanelCanvas.remove(jLabelIconMoveGuide);
-			jLabelPressed.setBorder(null);
 			if (positionChanged) {
 				if (jLabelPressed.equals(jLabelTerminal_1)) {terminalIndex1 = terminalIndex;}
 				if (jLabelPressed.equals(jLabelTerminal_2)) {terminalIndex2 = terminalIndex;}
 				informationOnThisPageChanged = true;
+				this.setupTerminalIcons();
+				this.setupRelationLine();
 			}
-			this.setupTerminalIcons();
-			this.setupRelationLine();
 			jPanelCanvas.repaint();
 		}
 	} //End of Class DatamodelRelationshipLine//
@@ -14940,7 +15062,7 @@ public class Modeler extends JFrame {
 			jLabelName.setFont(new java.awt.Font(mainFontName, 0, 14));
 			jLabelName.setHorizontalAlignment(SwingConstants.CENTER);
 			jLabelName.setText(tableNode_.getElement().getAttribute("Name"));
-			jLabelName.setBounds(new Rectangle(0, 10, 184, 16));
+			jLabelName.setBounds(new Rectangle(0, 10, 184, 18));
 			adjustFontSizeOfTextField(jLabelName, 14);
 			jLabelID.setFont(new java.awt.Font(mainFontName, 0, 11));
 			if (!tableNode_.getElement().getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("Name"))) {
@@ -16040,9 +16162,45 @@ public class Modeler extends JFrame {
 	} //End of Class XeadPagePrinter//
 
 	/**
+	 * Class of Comparable Element (sorted by "SortKey")
+	 */
+	class XeadElement implements Comparable {
+		private org.w3c.dom.Element domNode_;
+		public XeadElement(org.w3c.dom.Element node) {
+			super();
+			domNode_ = node;
+		}
+		public org.w3c.dom.Element getElement() {
+			return domNode_;
+		}
+        public int compareTo(Object other) {
+            XeadElement otherNode = (XeadElement)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
+	}
+
+	/**
+	 * Class of Comparable Field Element (sorted by "Alias")
+	 */
+	class XeadFieldElement implements Comparable {
+		private org.w3c.dom.Element domNode_;
+		public XeadFieldElement(org.w3c.dom.Element node) {
+			super();
+			domNode_ = node;
+		}
+		public org.w3c.dom.Element getElement() {
+			return domNode_;
+		}
+        public int compareTo(Object other) {
+            XeadFieldElement otherNode = (XeadFieldElement)other;
+            return domNode_.getAttribute("Alias").compareTo(otherNode.getElement().getAttribute("Alias"));
+        }
+	}
+	
+	/**
 	 * Class of XEAD Tree Node
 	 */
-	class XeadTreeNode extends DefaultMutableTreeNode {
+	class XeadTreeNode extends DefaultMutableTreeNode implements Comparable {
 		private static final long serialVersionUID = 1L;
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
@@ -16054,6 +16212,11 @@ public class Modeler extends JFrame {
 			nodeType_ = type;
 			domNode_ = node;
 		}
+
+		public int compareTo(Object other) {
+            XeadTreeNode otherNode = (XeadTreeNode)other;
+            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+        }
 
 		public void setSearchImageFileValid() {
 			searchImageFile_ = true;
@@ -18123,18 +18286,30 @@ public class Modeler extends JFrame {
 //		}
 
 		public void sortChildNodes() {
-			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
-			int childCount = this.getChildCount();
+//			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
+//			int childCount = this.getChildCount();
+//			XeadTreeNode node;
+//			for (int i = 0; i < childCount; i++) {
+//				node = (XeadTreeNode)this.getChildAt(i);
+//				treeSet.add(node);
+//			}
+//			this.removeAllChildren();
+//			Iterator<XeadTreeNode> it = treeSet.iterator();
+//			while( it.hasNext() ){
+//				node = (XeadTreeNode)it.next();
+//				this.add(node);
+//			}
+			ArrayList<XeadTreeNode> list = new ArrayList<XeadTreeNode>();
 			XeadTreeNode node;
-			for (int i = 0; i < childCount; i++) {
+			for (int i = 0; i < this.getChildCount(); i++) {
 				node = (XeadTreeNode)this.getChildAt(i);
-				treeSet.add(node);
+				list.add(node);
 			}
 			this.removeAllChildren();
-			Iterator<XeadTreeNode> it = treeSet.iterator();
+			Collections.sort(list);
+			Iterator<XeadTreeNode> it = list.iterator();
 			while( it.hasNext() ){
-				node = (XeadTreeNode)it.next();
-				this.add(node);
+				this.add((XeadTreeNode)it.next());
 			}
 		}
 
@@ -19768,7 +19943,7 @@ public class Modeler extends JFrame {
 			XeadTreeNode subsystemNode = (XeadTreeNode)this.getParent().getParent();
 			createStatement = getCreateStatementByTable(subsystemNode, this, relationshipList);
 			statement = createStatement.toString();
-			if (createStatement.isWarned()) {
+			if (createStatement.isWarned() && !ignoreKeyDefinitionWarnings) {
 				statement = statement + "\n" + res.getString("S1366") + "\n" +
 				res.getString("S1368") + "\n" +
 				res.getString("S1370");
@@ -21222,25 +21397,29 @@ public class Modeler extends JFrame {
 			org.w3c.dom.Element keyFieldElement;
 			if (this.getType() == "TableKey") {
 				node1 = (XeadTreeNode)this.getParent(); //node1:Node of KeyList//
-				node2 = (XeadTreeNode)node1.getPreviousSibling(); //node2:Node of FieldList//
-				NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
-				sortableDomElementListModel.removeAllElements();
-				for (int i = 0; i < keyFieldList.getLength(); i++) {
-					sortableDomElementListModel.addElement((Object)keyFieldList.item(i));
-				}
-				sortableDomElementListModel.sortElements();
-				for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
-					keyFieldElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
-					for (int j = 0; j < node2.getChildCount(); j++) {
-						node3 = (XeadTreeNode) node2.getChildAt(j); //node3:Node of Field
-						if (node3.getElement().getAttribute("ID").equals(keyFieldElement.getAttribute("FieldID"))) {
-							if (keyName.toString().equals("")) {
-								keyName.append(node3.getElement().getAttribute("Name"));
-							} else {
-								keyName.append(" + ");
-								keyName.append(node3.getElement().getAttribute("Name"));
+				if (node1 == null) {
+					keyName.append("N/A");
+				} else {
+					node2 = (XeadTreeNode)node1.getPreviousSibling(); //node2:Node of FieldList//
+					NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
+					sortableDomElementListModel.removeAllElements();
+					for (int i = 0; i < keyFieldList.getLength(); i++) {
+						sortableDomElementListModel.addElement((Object)keyFieldList.item(i));
+					}
+					sortableDomElementListModel.sortElements();
+					for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
+						keyFieldElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
+						for (int j = 0; j < node2.getChildCount(); j++) {
+							node3 = (XeadTreeNode) node2.getChildAt(j); //node3:Node of Field
+							if (node3.getElement().getAttribute("ID").equals(keyFieldElement.getAttribute("FieldID"))) {
+								if (keyName.toString().equals("")) {
+									keyName.append(node3.getElement().getAttribute("Name"));
+								} else {
+									keyName.append(" + ");
+									keyName.append(node3.getElement().getAttribute("Name"));
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -21589,7 +21768,7 @@ public class Modeler extends JFrame {
 							refreshRequired = false;
 						} else {
 							//
-							if (dataTypeDuplicated && (currentMainTreeNode.getElement().getAttribute("Type").equals("PK") || currentMainTreeNode.getElement().getAttribute("Type").equals("SK"))) {
+							if (!ignoreKeyDefinitionWarnings && dataTypeDuplicated && (currentMainTreeNode.getElement().getAttribute("Type").equals("PK") || currentMainTreeNode.getElement().getAttribute("Type").equals("SK"))) {
 								JOptionPane.showMessageDialog(dropTarget, res.getString("S5600") + "\n" +
 										res.getString("S5602") + "\n" +
 										res.getString("S5604"));
@@ -25151,11 +25330,15 @@ public class Modeler extends JFrame {
 			}
 
 			bf = new StringBuffer();
-			bf.append(stringBufferForAmendment.toString());
+			//bf.append(stringBufferForAmendment.toString());
 			for (int i = 0; i < logList.size(); i++) {
 				bf.append(logList.get(i));
 			}
 			return bf.toString();
+		}
+
+		String getTextForAmendment() {
+			return stringBufferForAmendment.toString();
 		}
 	}
 
@@ -25236,68 +25419,68 @@ public class Modeler extends JFrame {
 		}
 	}
 
-	/**
-	 * Class of Node Comparator
-	 */
-	class NodeComparator implements java.util.Comparator<XeadTreeNode> {
-		public int compare(XeadTreeNode node1, XeadTreeNode node2) {
-			String value1, value2;
-			value1 = node1.getElement().getAttribute("SortKey");
-			value2 = node2.getElement().getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = node1.getElement().getAttribute("ID");
-				value2 = node2.getElement().getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	/**
+//	 * Class of Node Comparator
+//	 */
+//	class NodeComparator implements java.util.Comparator<XeadTreeNode> {
+//		public int compare(XeadTreeNode node1, XeadTreeNode node2) {
+//			String value1, value2;
+//			value1 = node1.getElement().getAttribute("SortKey");
+//			value2 = node2.getElement().getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = node1.getElement().getAttribute("ID");
+//				value2 = node2.getElement().getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	/**
-	 * Class of Element Comparator
-	 */
-	class ElementComparator implements java.util.Comparator<org.w3c.dom.Element> {
-		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-			String value1, value2;
-			value1 = element1.getAttribute("SortKey");
-			value2 = element2.getAttribute("SortKey");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = element1.getAttribute("ID");
-				value2 = element2.getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	/**
+//	 * Class of Element Comparator
+//	 */
+//	class ElementComparator implements java.util.Comparator<org.w3c.dom.Element> {
+//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
+//			String value1, value2;
+//			value1 = element1.getAttribute("SortKey");
+//			value2 = element2.getAttribute("SortKey");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = element1.getAttribute("ID");
+//				value2 = element2.getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 
-	/**
-	 * Class of Field Element Comparator
-	 */
-	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
-		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-			String value1, value2;
-			value1 = element1.getAttribute("Alias");
-			value2 = element2.getAttribute("Alias");
-			int compareResult = value1.compareTo(value2);
-			if (compareResult == 0) {
-				value1 = element1.getAttribute("ID");
-				value2 = element2.getAttribute("ID");
-				compareResult = value1.compareTo(value2);
-				if (compareResult == 0) {
-					compareResult = 1;
-				}
-			}
-			return(compareResult);
-		}
-	}
+//	/**
+//	 * Class of Field Element Comparator
+//	 */
+//	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
+//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
+//			String value1, value2;
+//			value1 = element1.getAttribute("Alias");
+//			value2 = element2.getAttribute("Alias");
+//			int compareResult = value1.compareTo(value2);
+//			if (compareResult == 0) {
+//				value1 = element1.getAttribute("ID");
+//				value2 = element2.getAttribute("ID");
+//				compareResult = value1.compareTo(value2);
+//				if (compareResult == 0) {
+//					compareResult = 1;
+//				}
+//			}
+//			return(compareResult);
+//		}
+//	}
 	
 	/**
 	 * Method to adjust font size in text-field
@@ -25540,7 +25723,12 @@ public class Modeler extends JFrame {
 		for (int i = 0; i < textpane.getSelectionEnd(); i++) {
 			if (text.substring(i,i+1).equals("\n")) {
 				rowNumber++;
-				lastLine = text.substring(charPosOfLine + rowNumber-1, textpane.getSelectionEnd() + rowNumber-1);
+				if (textpane.getSelectionEnd() + rowNumber-1 >= text.length()) {
+					rowNumber--;
+					break;
+				} else {
+					lastLine = text.substring(charPosOfLine + rowNumber-1, textpane.getSelectionEnd() + rowNumber-1);
+				}
 			} else {
 				charPosOfLine++;
 			}
@@ -29836,7 +30024,7 @@ public class Modeler extends JFrame {
 			}
 			newElement.setAttribute("ID", Integer.toString(id + 1));
 			newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
-			newElement.setAttribute("Descriptions", xeadUndoManager.getText());
+			newElement.setAttribute("Descriptions", xeadUndoManager.getTextForAmendment());
 			newElement.setAttribute("SortKey", getStringValueOfDateTime("withUnderbarAndTime"));
 			if (lastElement == null) {
 				systemNode.getElement().appendChild(newElement);
