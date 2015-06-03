@@ -142,17 +142,17 @@ public class DialogMatrixList extends JDialog {
 		jPanelCenter.add(jCheckBoxTaskAndTable, null);
 		jPanelCenter.add(jCheckBoxTableAndFunction, null);
 
-		jButtonStart.setBounds(new Rectangle(13, 8, 120, 27));
-		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jButtonStart.setText(res.getString("DialogDocuments07"));
-		jButtonStart.addActionListener(new DialogMatrixList_jButtonStart_actionAdapter(this));
-		jProgressBar.setBounds(new Rectangle(13, 8, 120, 27));
-		jProgressBar.setVisible(false);
-		jProgressBar.setStringPainted(true);
-		jButtonCloseDialog.setBounds(new Rectangle(170, 8, 110, 27));
+		jButtonCloseDialog.setBounds(new Rectangle(13, 8, 110, 27));
 		jButtonCloseDialog.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCloseDialog.setText(res.getString("DialogDocuments08"));
 		jButtonCloseDialog.addActionListener(new DialogMatrixList_jButtonCloseDialog_actionAdapter(this));
+		jButtonStart.setBounds(new Rectangle(170, 8, 120, 27));
+		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jButtonStart.setText(res.getString("DialogDocuments07"));
+		jButtonStart.addActionListener(new DialogMatrixList_jButtonStart_actionAdapter(this));
+		jProgressBar.setBounds(new Rectangle(170, 8, 120, 27));
+		jProgressBar.setVisible(false);
+		jProgressBar.setStringPainted(true);
 		jPanelSouth.add(jButtonCloseDialog, null);
 		jPanelSouth.add(jButtonStart, null);
 		jPanelSouth.add(jProgressBar, null);

@@ -59,7 +59,7 @@ public class DialogCreateTableStatement extends JDialog {
 	private JTextArea jTextAreaAdditionalParms = new JTextArea();
 	private JScrollPane jScrollPaneAdditionalParms = new JScrollPane();
 	private JTextArea jTextAreaMessage = new JTextArea();
-	private JButton jButtonStart = new JButton();
+	private JButton jButtonClose = new JButton();
 	private JButton jButtonSet = new JButton();
 	private Modeler frame_;
 	//private boolean startRequested = false;
@@ -146,10 +146,10 @@ public class DialogCreateTableStatement extends JDialog {
 
 		buttonGroup.add(jRadioButtonTableName);
 		buttonGroup.add(jRadioButtonTableID);
-		jButtonStart.setBounds(new Rectangle(50, 377, 100, 27));
-		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jButtonStart.setText(res.getString("DialogCreateTableStatement09"));
-		jButtonStart.addActionListener(new DialogCreateTableStatement_jButtonStart_actionAdapter(this));
+		jButtonClose.setBounds(new Rectangle(50, 377, 100, 27));
+		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jButtonClose.setText(res.getString("DialogCreateTableStatement09"));
+		jButtonClose.addActionListener(new DialogCreateTableStatement_jButtonClose_actionAdapter(this));
 		jButtonSet.setBounds(new Rectangle(250, 377, 100, 27));
 		jButtonSet.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonSet.setText(res.getString("DialogCreateTableStatement10"));
@@ -171,7 +171,7 @@ public class DialogCreateTableStatement extends JDialog {
 		panelMain.add(jLabelAdditionalParms, null);
 		panelMain.add(jScrollPaneAdditionalParms, null);
 		panelMain.add(jTextAreaMessage, null);
-		panelMain.add(jButtonStart, null);
+		panelMain.add(jButtonClose, null);
 		panelMain.add(jButtonSet, null);
 
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -206,19 +206,17 @@ public class DialogCreateTableStatement extends JDialog {
 		}
 		jTextAreaAdditionalParms.setText(frame_.ddlAdditionalParms);
 
-		panelMain.getRootPane().setDefaultButton(jButtonStart);
+		panelMain.getRootPane().setDefaultButton(jButtonSet);
 		super.setVisible(true);
 		return reply;
 	}
 
-	void jButtonStart_actionPerformed(ActionEvent e) {
-		reply = 0;
-		setVariants();
+	void jButtonClose_actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 	}
 
 	void jButtonSet_actionPerformed(ActionEvent e) {
-		reply = 1;
+		reply = 0;
 		setVariants();
 		this.setVisible(false);
 	}
@@ -251,14 +249,14 @@ public class DialogCreateTableStatement extends JDialog {
 	}
 }
 
-class DialogCreateTableStatement_jButtonStart_actionAdapter implements java.awt.event.ActionListener {
+class DialogCreateTableStatement_jButtonClose_actionAdapter implements java.awt.event.ActionListener {
 	DialogCreateTableStatement adaptee;
 
-	DialogCreateTableStatement_jButtonStart_actionAdapter(DialogCreateTableStatement adaptee) {
+	DialogCreateTableStatement_jButtonClose_actionAdapter(DialogCreateTableStatement adaptee) {
 		this.adaptee = adaptee;
 	}
 	public void actionPerformed(ActionEvent e) {
-		adaptee.jButtonStart_actionPerformed(e);
+		adaptee.jButtonClose_actionPerformed(e);
 	}
 }
 

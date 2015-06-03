@@ -47,7 +47,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC,Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M19";
+	public static final String FULL_VERSION = "V1.R4.M20";
+	// 1.4.20での変更点
+	//・スライドショーの最後に最終ページであることを示すパネルを示すようにした
+	//・DDLの一覧処理をDDLの設定ダイアログから独立させた
+	//・テーブル定義の同期処理を盛り込んだ
+	//・テーブル一覧出力に同期先ファイルの欄を組み込んだ
+	//・走査用ダイアログに「全体」のチェックボックスを置いた
+	//
 	// 1.4.19での変更点
 	//・IOイメージのカーソル位置計算ルーチンの細かいバグを修正した
 	//・検索・置換ダイアログでのテキストフィールドにフォーカスした場合、文字列を全選択させるようにした

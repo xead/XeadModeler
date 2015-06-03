@@ -91,6 +91,7 @@ public class DialogScan extends JDialog {
 	private JCheckBox jCheckBoxSubsystem = new JCheckBox();
 	private JCheckBox jCheckBoxTable = new JCheckBox();
 	private JCheckBox jCheckBoxFunction = new JCheckBox();
+	private JCheckBox jCheckBoxAll = new JCheckBox();
 	private SortableXeadNodeComboBoxModel comboBoxModelRoles = new SortableXeadNodeComboBoxModel();
 	private JComboBox jComboBoxRoles = new JComboBox(comboBoxModelRoles);
 	private SortableXeadNodeComboBoxModel comboBoxModelSubsystems = new SortableXeadNodeComboBoxModel();
@@ -241,6 +242,11 @@ public class DialogScan extends JDialog {
 		jCheckBoxFunction.setSelected(true);
 		jComboBoxSubsystems.setBounds(new Rectangle(594, 134, 220, 25));
 		jComboBoxSubsystems.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jCheckBoxAll.setBounds(new Rectangle(840, 103, 140, 25));
+		jCheckBoxAll.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jCheckBoxAll.setText(res.getString("DialogScan85"));
+		jCheckBoxAll.setSelected(true);
+		jCheckBoxAll.addActionListener(new DialogScan_jCheckBoxAll_actionAdapter(this));
 		jButtonStartScan.setBounds(new Rectangle(840, 130, 140, 32));
 		jButtonStartScan.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStartScan.setText(res.getString("DialogScan18"));
@@ -271,6 +277,7 @@ public class DialogScan extends JDialog {
 		jPanelNorth.add(jLabel3, null);
 		jPanelNorth.add(jComboBoxSubsystems, null);
 		jPanelNorth.add(jComboBoxRoles, null);
+		jPanelNorth.add(jCheckBoxAll, null);
 		jPanelNorth.add(jButtonStartScan, null);
 		jPanelNorth.add(jProgressBar, null);
 		//
@@ -424,6 +431,23 @@ public class DialogScan extends JDialog {
 		} else {
 			jComboBoxSubsystems.setEnabled(false);
 		}
+	}
+
+	void jCheckBoxAll_actionPerformed(ActionEvent e) {
+		jCheckBoxSystem.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxDepartment.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxTaskType.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxTableType.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxDataType.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxFunctionType.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxTerms.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxMaintenanceLog.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxSubjectArea.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxRole.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxTask.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxSubsystem.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxTable.setSelected((jCheckBoxAll.isSelected()));
+		jCheckBoxFunction.setSelected((jCheckBoxAll.isSelected()));
 	}
 
 	void jButtonStartScan_actionPerformed(ActionEvent e) {
@@ -2138,6 +2162,17 @@ class DialogScan_jTextField_focusListener implements FocusListener{
 	public void focusGained(FocusEvent e){
 		JTextField field = (JTextField)e.getComponent();
 		field.selectAll();
+	}
+}
+
+class DialogScan_jCheckBoxAll_actionAdapter implements java.awt.event.ActionListener {
+	DialogScan adaptee;
+
+	DialogScan_jCheckBoxAll_actionAdapter(DialogScan adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jCheckBoxAll_actionPerformed(e);
 	}
 }
 
