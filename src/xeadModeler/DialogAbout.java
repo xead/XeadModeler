@@ -42,17 +42,28 @@ public class DialogAbout extends JDialog implements ActionListener {
 	/**
 	 * Application Information
 	 */
-	public static final String APPLICATION_NAME = "XEAD Modeler 1.4";
-	public static final String PRODUCT_NAME = "XEAD[zi:d] Modeler";
+	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
+	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2015 DBC,Ltd.";
+	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M20";
+	public static final String FULL_VERSION = "V1.R4.M21";
+	// 1.4.21での変更点
+	//・ツール名をX-TEA　Modelerに変更した
+	//・テーブル属性として「エイリアス」を追加した
+	//・検索・置換対象項目として、テーブルの「エイリアス」と「参照先ファイル」を組み込んだ
+	//・テーブルの関連線がいくつも重なった場合ににじんだ印象になる問題を修正した
+	//・データモデルの見かけの細かい部分を改善した
+	//・テーブル定義毎に「参照元ファイル」を一覧するようにした
+	//・業務フロー上でシステム境界が消える可能性がある問題を修正した
+	//・「用語とルール」と「保守履歴」のUNDO操作のバグを修正した
+	//・説明文の末尾に改行データがあった場合の更新操作のバグを修正した
+	//
 	// 1.4.20での変更点
 	//・スライドショーの最後に最終ページであることを示すパネルを示すようにした
 	//・DDLの一覧処理をDDLの設定ダイアログから独立させた
 	//・テーブル定義の同期処理を盛り込んだ
-	//・テーブル一覧出力に同期先ファイルの欄を組み込んだ
+	//・テーブル一覧出力に「参照先ファイル」の欄を組み込んだ
 	//・走査用ダイアログに「全体」のチェックボックスを置いた
 	//
 	// 1.4.19での変更点
@@ -320,7 +331,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 		panel2.add(insetsPanel2, BorderLayout.CENTER);
 		panel2.add(insetsPanel3, BorderLayout.EAST);
 
-		this.setTitle("About XEAD Modeler");
+		this.setTitle("About X-TEA Modeler");
 		this.getContentPane().add(panel1, null);
 		this.setResizable(false);
 	}

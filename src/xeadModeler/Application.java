@@ -32,9 +32,11 @@ package xeadModeler;
  */
 
 import javax.swing.UIManager;
+
 import java.awt.*;
 
 import javax.swing.*;
+
 import java.util.ResourceBundle;
 
 public class Application {
@@ -50,9 +52,8 @@ public class Application {
 		splashIcon.setLayout(null);
 		splashLabel = new JLabel();
 		splashLabel.setFont(new java.awt.Font("Dialog", 0, 16));
-		splashLabel.setForeground(Color.cyan);
 		splashLabel.setOpaque(false);
-		splashLabel.setBounds(0, 89, 500, 18);
+		splashLabel.setBounds(240, 203, 250, 20);
 		splashLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		splashLabel.setText(res.getString("SplashMessage0"));
 		splashIcon.add(splashLabel);

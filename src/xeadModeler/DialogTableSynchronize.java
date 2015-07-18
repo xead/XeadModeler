@@ -52,7 +52,7 @@ public class DialogTableSynchronize extends JDialog {
 	private boolean isSynchError_ = false;
 	private boolean isImported_ = false;
 	private String errorMessage_ = "";
-	private org.w3c.dom.Document synchFileDomDocument = null;
+	private org.w3c.dom.Document synchFileDomDocument_ = null;
 	private org.w3c.dom.Element synchFileTableElement_ = null;
 	private org.w3c.dom.Element targetTableElement_ = null;
 	private int countOfErrors = 0;
@@ -114,7 +114,7 @@ public class DialogTableSynchronize extends JDialog {
 			try {
 				setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-				isSynchError_ = isSynchError(tableNode);
+				isSynchError_ = isSynchError(tableNode.getElement(), null);
 				if (isSynchError_) {
 					jTextAreaMessage.setText(errorMessage_);
 				} else {
@@ -135,7 +135,7 @@ public class DialogTableSynchronize extends JDialog {
 		return isSynchError_;
 	}
 
-	public boolean isSynchError(XeadTreeNode tableNode) {
+	public boolean isSynchError(org.w3c.dom.Element tableElement, org.w3c.dom.Document domDocumentComparedTo) {
 		isSynchError_ = false;
 		errorMessage_ = "";
 		org.w3c.dom.Element workElement = null;
@@ -143,19 +143,23 @@ public class DialogTableSynchronize extends JDialog {
 		jButtonImport.setEnabled(false);
 
 		synchFileTableElement_ = null;
-		targetTableElement_ = tableNode.getElement();
+		targetTableElement_ = tableElement;
 		if (!targetTableElement_.getAttribute("SynchFile").equals("")) {
 			if (targetTableElement_.getAttribute("SortKey").equals("")) {
 				isSynchError_ = true;
 				errorMessage_ = res.getString("DialogTableSynchronize06");
 			} else {
-				synchFileDomDocument = frame_.getSynchFileDocument(targetTableElement_.getAttribute("SynchFile"));
-				if (synchFileDomDocument == null) {
+				if (domDocumentComparedTo == null) {
+					synchFileDomDocument_ = frame_.getSynchFileDocument(targetTableElement_.getAttribute("SynchFile"));
+				} else {
+					synchFileDomDocument_ = domDocumentComparedTo;
+				}
+				if (synchFileDomDocument_ == null) {
 					isSynchError_ = true;
 					errorMessage_ = res.getString("DialogTableSynchronize07");
 				} else {
 					boolean isFound = false;
-					NodeList tableList = synchFileDomDocument.getElementsByTagName("Table");
+					NodeList tableList = synchFileDomDocument_.getElementsByTagName("Table");
 					for (int i = 0; i < tableList.getLength(); i++) {
 						workElement = (org.w3c.dom.Element)tableList.item(i);
 						if (workElement.getAttribute("SortKey").equals(targetTableElement_.getAttribute("SortKey"))) {
@@ -194,6 +198,14 @@ public class DialogTableSynchronize extends JDialog {
 		if (!targetElement.getAttribute("Name").equals(synchFileElement.getAttribute("Name"))) {
 			countOfErrors++;
 			bf.append("\n" + countOfErrors+ res.getString("DialogTableSynchronize09"));
+		}
+		if (!targetElement.getAttribute("Alias").equals(synchFileElement.getAttribute("Alias"))) {
+			countOfErrors++;
+			bf.append("\n" + countOfErrors+ res.getString("DialogTableSynchronize30"));
+		}
+		if (isDifferentTableType(targetElement, synchFileElement)) {
+			countOfErrors++;
+			bf.append("\n" + countOfErrors+ res.getString("DialogTableSynchronize31"));
 		}
 		if (!targetElement.getAttribute("Descriptions").equals(synchFileElement.getAttribute("Descriptions"))) {
 			countOfErrors++;
@@ -327,12 +339,46 @@ public class DialogTableSynchronize extends JDialog {
 		}
 	}
 
+	boolean isDifferentTableType(org.w3c.dom.Element targetTableElement, org.w3c.dom.Element synchFileTableElement) {
+		boolean isDifferent = false;
+		org.w3c.dom.Element element;
+
+		org.w3c.dom.Element targetTableTypeElement = null;
+		NodeList targetTableTypeList = targetTableElement.getOwnerDocument().getElementsByTagName("TableType");
+		for (int i = 0; i < targetTableTypeList.getLength(); i++) {
+			element = (org.w3c.dom.Element)targetTableTypeList.item(i);
+			if (element.getAttribute("ID").equals(targetTableElement.getAttribute("TableTypeID"))) {
+				targetTableTypeElement = element;
+			}
+		}
+
+		org.w3c.dom.Element synchFileTableTypeElement = null;
+		NodeList synchFileTableTypeList = synchFileDomDocument_.getElementsByTagName("TableType");
+		for (int i = 0; i < synchFileTableTypeList.getLength(); i++) {
+			element = (org.w3c.dom.Element)synchFileTableTypeList.item(i);
+			if (element.getAttribute("ID").equals(synchFileTableElement.getAttribute("TableTypeID"))) {
+				synchFileTableTypeElement = element;
+			}
+		}
+		
+		if (targetTableTypeElement != null && synchFileTableTypeElement != null) {
+			if (!targetTableTypeElement.getAttribute("SortKey").equals(synchFileTableTypeElement.getAttribute("SortKey"))
+					|| !targetTableTypeElement.getAttribute("Name").equals(synchFileTableTypeElement.getAttribute("Name"))) {
+				isDifferent = true;
+			}
+		} else {
+			isDifferent = true;
+		}
+		
+		return isDifferent;
+	}
+
 	boolean isDifferentDataType(org.w3c.dom.Element targetFieldElement, org.w3c.dom.Element synchFileFieldElement) {
 		boolean isDifferent = false;
 		org.w3c.dom.Element element;
 
 		org.w3c.dom.Element targetDataTypeElement = null;
-		NodeList targetDataTypeList = frame_.domDocument.getElementsByTagName("DataType");
+		NodeList targetDataTypeList = targetFieldElement.getOwnerDocument().getElementsByTagName("DataType");
 		for (int i = 0; i < targetDataTypeList.getLength(); i++) {
 			element = (org.w3c.dom.Element)targetDataTypeList.item(i);
 			if (element.getAttribute("ID").equals(targetFieldElement.getAttribute("DataTypeID"))) {
@@ -341,7 +387,7 @@ public class DialogTableSynchronize extends JDialog {
 		}
 
 		org.w3c.dom.Element synchFileDataTypeElement = null;
-		NodeList synchFileDataTypeList = synchFileDomDocument.getElementsByTagName("DataType");
+		NodeList synchFileDataTypeList = synchFileDomDocument_.getElementsByTagName("DataType");
 		for (int i = 0; i < synchFileDataTypeList.getLength(); i++) {
 			element = (org.w3c.dom.Element)synchFileDataTypeList.item(i);
 			if (element.getAttribute("ID").equals(synchFileFieldElement.getAttribute("DataTypeID"))) {
@@ -441,7 +487,12 @@ public class DialogTableSynchronize extends JDialog {
 
 	void importIntoTarget(org.w3c.dom.Element targetTableElement, org.w3c.dom.Element synchFileTableElement) {
 		targetTableElement.setAttribute("Name", synchFileTableElement.getAttribute("Name"));
+		targetTableElement.setAttribute("Alias", synchFileTableElement.getAttribute("Alias"));
 		targetTableElement.setAttribute("Descriptions", synchFileTableElement.getAttribute("Descriptions"));
+		if (isDifferentTableType(targetTableElement, synchFileTableElement)) {
+			String tableTypeID = getEquivalentTableTypeIDFromTargetDocument(targetTableElement, synchFileTableElement.getAttribute("TableTypeID"));
+			targetTableElement.setAttribute("TableTypeID", tableTypeID);
+		}
 
 		String dataTypeID;
 		org.w3c.dom.Element targetFieldElement = null;
@@ -471,7 +522,7 @@ public class DialogTableSynchronize extends JDialog {
 				targetFieldElement.setAttribute("NoUpdate", synchFileFieldElement.getAttribute("NoUpdate"));
 				targetFieldElement.setAttribute("SortKey", synchFileFieldElement.getAttribute("SortKey"));
 			} else {
-				targetFieldElement = frame_.domDocument.createElement("TableField");
+				targetFieldElement = targetTableElement.getOwnerDocument().createElement("TableField");
 				targetFieldElement.setAttribute("ID", getNextIDOfNodeType("TableField"));
 				targetFieldElement.setAttribute("Name", synchFileFieldElement.getAttribute("Name"));
 				targetFieldElement.setAttribute("Alias", synchFileFieldElement.getAttribute("Alias"));
@@ -482,6 +533,7 @@ public class DialogTableSynchronize extends JDialog {
 				targetFieldElement.setAttribute("NotNull", synchFileFieldElement.getAttribute("NotNull"));
 				targetFieldElement.setAttribute("Default", synchFileFieldElement.getAttribute("Default"));
 				targetFieldElement.setAttribute("NoUpdate", synchFileFieldElement.getAttribute("NoUpdate"));
+				targetFieldElement.setAttribute("ShowOnModel", synchFileFieldElement.getAttribute("ShowOnModel"));
 				targetFieldElement.setAttribute("SortKey", synchFileFieldElement.getAttribute("SortKey"));
 				targetTableElement.appendChild(targetFieldElement);
 			}
@@ -536,7 +588,7 @@ public class DialogTableSynchronize extends JDialog {
 								synchFileKeyFieldList = synchFileKeyElement.getElementsByTagName("TableKeyField");
 								for (int k = 0; k < synchFileKeyFieldList.getLength(); k++) {
 									synchFileKeyFieldElement = (org.w3c.dom.Element)synchFileKeyFieldList.item(k);
-									targetKeyFieldElement = frame_.domDocument.createElement("TableKeyField");
+									targetKeyFieldElement = targetTableElement.getOwnerDocument().createElement("TableKeyField");
 									targetKeyFieldElement.setAttribute("FieldID",
 											getEquivalentFieldIDFromTargetTable(synchFileKeyFieldElement.getAttribute("FieldID"), synchFileTableElement, targetTableElement));
 									targetKeyFieldElement.setAttribute("SortKey", synchFileKeyFieldElement.getAttribute("SortKey"));
@@ -560,7 +612,7 @@ public class DialogTableSynchronize extends JDialog {
 				}
 				if (!isFound) {
 					biggestKeyID++;
-					targetKeyElement = frame_.domDocument.createElement("TableKey");
+					targetKeyElement = targetTableElement.getOwnerDocument().createElement("TableKey");
 					targetKeyElement.setAttribute("ID", Integer.toString(biggestKeyID));
 					targetKeyElement.setAttribute("Type", synchFileKeyElement.getAttribute("Type"));
 					targetKeyElement.setAttribute("SortKey", synchFileKeyElement.getAttribute("SortKey"));
@@ -568,7 +620,7 @@ public class DialogTableSynchronize extends JDialog {
 					synchFileKeyFieldList = synchFileKeyElement.getElementsByTagName("TableKeyField");
 					for (int j = 0; j < synchFileKeyFieldList.getLength(); j++) {
 						synchFileKeyFieldElement = (org.w3c.dom.Element)synchFileKeyFieldList.item(j);
-						targetKeyFieldElement = frame_.domDocument.createElement("TableKeyField");
+						targetKeyFieldElement = targetTableElement.getOwnerDocument().createElement("TableKeyField");
 						targetKeyFieldElement.setAttribute("FieldID", 
 								getEquivalentFieldIDFromTargetTable(synchFileKeyFieldElement.getAttribute("FieldID"), synchFileTableElement, targetTableElement));
 						targetKeyFieldElement.setAttribute("SortKey", synchFileKeyFieldElement.getAttribute("SortKey"));
@@ -579,11 +631,50 @@ public class DialogTableSynchronize extends JDialog {
 		}
 	}
 
+	private String getEquivalentTableTypeIDFromTargetDocument(org.w3c.dom.Element targetTableElement, String synchFileTableTypeID) {
+		org.w3c.dom.Element element;
+
+		org.w3c.dom.Element synchFileTableTypeElement = null;
+		NodeList synchFileTableTypeList = synchFileDomDocument_.getElementsByTagName("TableType");
+		for (int i = 0; i < synchFileTableTypeList.getLength(); i++) {
+			element = (org.w3c.dom.Element)synchFileTableTypeList.item(i);
+			if (element.getAttribute("ID").equals(synchFileTableTypeID)) {
+				synchFileTableTypeElement = element;
+				break;
+			}
+		}
+
+		String targetTableTypeID = "";
+		org.w3c.dom.Element targetTableTypeElement = null;
+		NodeList targetTableTypeList = targetTableElement.getOwnerDocument().getElementsByTagName("TableType");
+		for (int i = 0; i < targetTableTypeList.getLength(); i++) {
+			element = (org.w3c.dom.Element)targetTableTypeList.item(i);
+			if (element.getAttribute("SortKey").equals(synchFileTableTypeElement.getAttribute("SortKey"))
+					&& element.getAttribute("Name").equals(synchFileTableTypeElement.getAttribute("Name"))) {
+				targetTableTypeID = element.getAttribute("ID");
+				break;
+			}
+		}
+		if (targetTableTypeID.equals("")) {
+			NodeList workElementList = targetTableElement.getOwnerDocument().getElementsByTagName("System");
+			org.w3c.dom.Element systemElement = (org.w3c.dom.Element)workElementList.item(0);
+			targetTableTypeElement = frame_.domDocument.createElement("TableType");
+			targetTableTypeID = getNextIDOfNodeType("TableType");
+			targetTableTypeElement.setAttribute("ID", targetTableTypeID);
+			targetTableTypeElement.setAttribute("Name", synchFileTableTypeElement.getAttribute("Name"));
+			targetTableTypeElement.setAttribute("SortKey", synchFileTableTypeElement.getAttribute("SortKey"));
+			targetTableTypeElement.setAttribute("Descriptions", synchFileTableTypeElement.getAttribute("Descriptions"));
+			systemElement.appendChild(targetTableTypeElement);
+		}
+
+		return targetTableTypeID;
+	}
+
 	private String getEquivalentDataTypeIDFromTargetDocument(String synchFileDataTypeID) {
 		org.w3c.dom.Element element;
 
 		org.w3c.dom.Element synchFileDataTypeElement = null;
-		NodeList synchFileDataTypeList = synchFileDomDocument.getElementsByTagName("DataType");
+		NodeList synchFileDataTypeList = synchFileDomDocument_.getElementsByTagName("DataType");
 		for (int i = 0; i < synchFileDataTypeList.getLength(); i++) {
 			element = (org.w3c.dom.Element)synchFileDataTypeList.item(i);
 			if (element.getAttribute("ID").equals(synchFileDataTypeID)) {

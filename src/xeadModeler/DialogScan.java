@@ -813,8 +813,10 @@ public class DialogScan extends JDialog {
 						jProgressBar.setValue(jProgressBar.getValue() + 1);
 						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 						//
-						scanAttribute(element, "Table", "SortKey");
 						scanAttribute(element, "Table", "Name");
+						scanAttribute(element, "Table", "SortKey");
+						scanAttribute(element, "Table", "Alias");
+						scanAttribute(element, "Table", "SynchFile");
 						scanAttribute(element, "Table", "Descriptions");
 						//
 						workList1 = element.getElementsByTagName("TableField");
@@ -1101,6 +1103,9 @@ public class DialogScan extends JDialog {
 		if (attributeType.equals("SortKey")) {
 			result = res.getString("DialogScan62");
 		}
+		if (attributeType.equals("Alias")) {
+			result = res.getString("DialogScan62");
+		}
 		if (attributeType.equals("Name")) {
 			result = res.getString("DialogScan63");
 		}
@@ -1154,6 +1159,9 @@ public class DialogScan extends JDialog {
 		}
 		if (attributeType.equals("ImageText")) {
 			result = res.getString("DialogScan79");
+		}
+		if (attributeType.equals("SynchFile")) {
+			result = res.getString("DialogScan86");
 		}
 		//
 		return result;

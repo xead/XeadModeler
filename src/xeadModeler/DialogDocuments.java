@@ -99,6 +99,7 @@ public class DialogDocuments extends JDialog {
 	private XSSFFont fontHeader1 = null;
 	private XSSFFont fontHeader2 = null;
 	private XSSFFont fontValue = null;
+	private XSSFFont fontValueStrong = null;
 	private XSSFFont fontImage = null;
 	private XSSFFont fontImageUL = null;
 	private XSSFWorkbook workBook = null;
@@ -107,6 +108,7 @@ public class DialogDocuments extends JDialog {
 	private XSSFCellStyle styleHeader2 = null;
 	private XSSFCellStyle styleHeader2Number = null;
 	private XSSFCellStyle styleValue = null;
+	private XSSFCellStyle styleValueStrong = null;
 	private XSSFCellStyle styleValueNumber = null;
 	private XSSFCellStyle styleImage = null;
 	protected XSSFPicture picture = null;
@@ -394,6 +396,11 @@ public class DialogDocuments extends JDialog {
 		fontValue.setFontName(res.getString("DialogDocuments14"));
 		fontValue.setFontHeightInPoints((short)10);
 
+		fontValueStrong = workBook.createFont();
+		fontValueStrong.setFontName(res.getString("DialogDocuments14"));
+		fontValueStrong.setFontHeightInPoints((short)10);
+		fontValueStrong.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+
 		fontImage = workBook.createFont();
 		fontImage.setFontName(res.getString("DialogDocuments15"));
 		fontImage.setFontHeightInPoints((short)6);
@@ -457,6 +464,16 @@ public class DialogDocuments extends JDialog {
 		styleValue.setFont(fontValue);
 		styleValue.setWrapText(true);
 
+		styleValueStrong = workBook.createCellStyle();
+		styleValueStrong.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+		styleValueStrong.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+		styleValueStrong.setBorderRight(XSSFCellStyle.BORDER_THIN);
+		styleValueStrong.setBorderTop(XSSFCellStyle.BORDER_THIN);
+		styleValueStrong.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+		styleValueStrong.setVerticalAlignment(XSSFCellStyle.VERTICAL_TOP);
+		styleValueStrong.setFont(fontValueStrong);
+		styleValueStrong.setWrapText(true);
+
 		styleValueNumber = workBook.createCellStyle();
 		styleValueNumber.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 		styleValueNumber.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -484,6 +501,7 @@ public class DialogDocuments extends JDialog {
 			sheet.setDefaultColumnWidth(9);
 			sheet.setColumnWidth(0, 1100);
 			sheet.setColumnWidth(1, 4100);
+			sheet.setColumnWidth(3, 4100);
 			Footer footer = sheet.getFooter();
 			footer.setRight("(" + subsystemElement.getAttribute("SortKey") + ")" + subsystemElement.getAttribute("Name") + " - (" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "  Page &P / &N");
 
@@ -2163,7 +2181,15 @@ public class DialogDocuments extends JDialog {
 		cellD3.setCellStyle(styleValue);
 		XSSFCell cellE3 = row3.createCell(4);
 		cellE3.setCellStyle(styleValue);
-		cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
+		if (element.getAttribute("SortKey").equals("")) {
+			cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("Name")));
+		} else {
+			if (element.getAttribute("Alias").equals("")) {
+				cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name")));
+			} else {
+				cellA3.setCellValue(new XSSFRichTextString(element.getAttribute("SortKey") + " / " + element.getAttribute("Name") + "(" + element.getAttribute("Alias") + ")"));
+			}
+		}
 		sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 4));
 
 		//Label TableType
@@ -2328,7 +2354,11 @@ public class DialogDocuments extends JDialog {
 			rowSequence++;
 			cellA.setCellValue(rowSequence);
 			XSSFCell cellB = nextRow.createCell(1);
-			cellB.setCellStyle(styleValue);
+			if (isPrimaryKeyField(element, workElement1)) {
+				cellB.setCellStyle(styleValueStrong);
+			} else {
+				cellB.setCellStyle(styleValue);
+			}
 			if (workElement1.getAttribute("Alias").equals("")) {
 				if (workElement1.getAttribute("AttributeType").equals("NATIVE")) {
 					workString1 = workElement1.getAttribute("Name");
@@ -2352,12 +2382,13 @@ public class DialogDocuments extends JDialog {
 			for (int m = 0; m < dataTypeList.getLength(); m++) {
 				workElement2 = (org.w3c.dom.Element)dataTypeList.item(m);
 				if (workElement2.getAttribute("ID").equals(workElement1.getAttribute("DataTypeID"))) {
-					if (workElement2.getAttribute("Decimal").equals("") || workElement2.getAttribute("Decimal").equals("0")) {
-						workString1 = workElement2.getAttribute("Name") + "("  + workElement2.getAttribute("Length") + ")";
-					} else {
-						workString1 = workElement2.getAttribute("Name") + "(" + workElement2.getAttribute("Length") + "."
-						+ workElement2.getAttribute("Decimal") + ")";
-					}
+//					if (workElement2.getAttribute("Decimal").equals("") || workElement2.getAttribute("Decimal").equals("0")) {
+//						workString1 = workElement2.getAttribute("Name") + "("  + workElement2.getAttribute("Length") + ")";
+//					} else {
+//						workString1 = workElement2.getAttribute("Name") + "(" + workElement2.getAttribute("Length") + "."
+//						+ workElement2.getAttribute("Decimal") + ")";
+//					}
+					workString1 = workElement2.getAttribute("Name") + " "  + workElement2.getAttribute("SQLExpression");
 					break;
 				}
 			}
@@ -2411,6 +2442,29 @@ public class DialogDocuments extends JDialog {
 		}
 	}
 
+	boolean isPrimaryKeyField(org.w3c.dom.Element tableElement, org.w3c.dom.Element fieldElement) {
+		org.w3c.dom.Element workElement1, workElement2;
+		NodeList workList1, workList2;
+		boolean isKey = false;
+
+		workList1 = tableElement.getElementsByTagName("TableKey");
+		for (int i = 0; i < workList1.getLength(); i++) {
+			workElement1 = (org.w3c.dom.Element)workList1.item(i);
+			if (workElement1.getAttribute("Type").equals("PK")) {
+				workList2 = workElement1.getElementsByTagName("TableKeyField");
+				for (int j = 0; j < workList2.getLength(); j++) {
+					workElement2 = (org.w3c.dom.Element)workList2.item(j);
+					if (workElement2.getAttribute("FieldID").equals(fieldElement.getAttribute("ID"))) {
+						isKey = true;
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		return isKey;
+	}
 	void setupTableKeyList(XSSFSheet sheet, org.w3c.dom.Element element) {
 		NodeList workList1 = null;
 		NodeList workList2 = null;

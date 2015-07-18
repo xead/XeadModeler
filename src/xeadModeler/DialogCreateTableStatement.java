@@ -46,7 +46,7 @@ public class DialogCreateTableStatement extends JDialog {
 	private JPanel jPanel1 = new JPanel();
 	private GridLayout gridLayout1 = new GridLayout();
 	private JRadioButton jRadioButtonTableName = new JRadioButton();
-	private JRadioButton jRadioButtonTableID = new JRadioButton();
+	private JRadioButton jRadioButtonTableAlias = new JRadioButton();
 	private ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel jLabelCommentMark = new JLabel();
 	private JTextField jTextFieldCommentMark = new JTextField();
@@ -98,8 +98,8 @@ public class DialogCreateTableStatement extends JDialog {
 		gridLayout1.setRows(2);
 		jRadioButtonTableName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonTableName.setText(res.getString("DialogCreateTableStatement04"));
-		jRadioButtonTableID.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jRadioButtonTableID.setText(res.getString("DialogCreateTableStatement05"));
+		jRadioButtonTableAlias.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonTableAlias.setText(res.getString("DialogCreateTableStatement05"));
 
 		jLabelCommentMark.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelCommentMark.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -145,7 +145,7 @@ public class DialogCreateTableStatement extends JDialog {
 		jTextAreaMessage.setText(res.getString("DialogCreateTableStatement08"));
 
 		buttonGroup.add(jRadioButtonTableName);
-		buttonGroup.add(jRadioButtonTableID);
+		buttonGroup.add(jRadioButtonTableAlias);
 		jButtonClose.setBounds(new Rectangle(50, 377, 100, 27));
 		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonClose.setText(res.getString("DialogCreateTableStatement09"));
@@ -157,7 +157,7 @@ public class DialogCreateTableStatement extends JDialog {
 
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		getContentPane().add(panelMain);
-		jPanel1.add(jRadioButtonTableID, null);
+		jPanel1.add(jRadioButtonTableAlias, null);
 		jPanel1.add(jRadioButtonTableName, null);
 		panelMain.add(jLabelTableNameOption, null);
 		panelMain.add(jPanel1, null);
@@ -185,7 +185,7 @@ public class DialogCreateTableStatement extends JDialog {
 		if (frame_.useTableNameAsTableNameInCreateTableStatement) {
 			jRadioButtonTableName.setSelected(true);
 		} else {
-			jRadioButtonTableID.setSelected(true);
+			jRadioButtonTableAlias.setSelected(true);
 		}
 		jTextFieldCommentMark.setText(frame_.ddlCommentMark);
 		jTextFieldSectionMark.setText(frame_.ddlSectionMark);
@@ -225,7 +225,7 @@ public class DialogCreateTableStatement extends JDialog {
 		if (jRadioButtonTableName.isSelected()) {
 			frame_.useTableNameAsTableNameInCreateTableStatement = true;
 		}
-		if (jRadioButtonTableID.isSelected()) {
+		if (jRadioButtonTableAlias.isSelected()) {
 			frame_.useTableNameAsTableNameInCreateTableStatement = false;
 		}
 		frame_.ddlCommentMark =jTextFieldCommentMark.getText();
