@@ -783,8 +783,11 @@ public class DialogImportSQL extends JDialog {
 					for (int k = j+1; k < fieldAttrString.length(); k++) {
 						wrkStr = fieldAttrString.substring(k, k+1);
 						if (wrkStr.equals(" ")) {
-							validPosThru = k;
-							break;
+							wrkStr = fieldAttrString.substring(k-1, k);
+							if (!wrkStr.equals(",")) {
+								validPosThru = k;
+								break;
+							}
 						}
 						if (wrkStr.equals(")")) {
 							validPosThru = k+1;
@@ -794,7 +797,7 @@ public class DialogImportSQL extends JDialog {
 					}
 					//
 					if (validPosFrom < validPosThru) {
-						sqlExpression = fieldAttrString.substring(validPosFrom, validPosThru);
+						sqlExpression = fieldAttrString.substring(validPosFrom, validPosThru).replaceAll(" ", "");
 						elementList = frame_.domDocument.getElementsByTagName("DataType");
 						checkCounter = 0;
 						for (int k = 0; k < elementList.getLength(); k++) {

@@ -164,7 +164,7 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 		jTabbedPane.remove(jTabbedPane.getSelectedIndex());
 		isEdited = true;
 		if (jTabbedPane.getTabCount() == 0) {
-			updateAndClose();
+			frame_.informationOnThisPageChanged = updateAndClose();
 		}
 	}
 
@@ -193,6 +193,7 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 			}
 		}
 		this.setVisible(false);
+
 		return isEdited;
 	}
 }

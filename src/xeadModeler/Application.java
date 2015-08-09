@@ -53,8 +53,8 @@ public class Application {
 		splashLabel = new JLabel();
 		splashLabel.setFont(new java.awt.Font("Dialog", 0, 16));
 		splashLabel.setOpaque(false);
-		splashLabel.setBounds(240, 203, 250, 20);
-		splashLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		splashLabel.setBounds(300, 203, 200, 20);
+		//splashLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		splashLabel.setText(res.getString("SplashMessage0"));
 		splashIcon.add(splashLabel);
 		splashScreen = new JWindow();

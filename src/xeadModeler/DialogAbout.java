@@ -47,7 +47,14 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M21";
+	public static final String FULL_VERSION = "V1.R4.M22";
+	// 1.4.22での変更点
+	//・MacOSで操作援助を表示できない問題を修正した
+	//・一部のアイコンの背景が透明でなかった問題を修正した
+	//・業務フロー上のシステム名の表示形式を改善した
+	//・テーブル入出力定義を業務アクションに関連付けすればその概要が入出力イメージとして示されるようにした
+	//・テーブルインスタンスの更新ロジックを改善した
+	//
 	// 1.4.21での変更点
 	//・ツール名をX-TEA　Modelerに変更した
 	//・テーブル属性として「エイリアス」を追加した

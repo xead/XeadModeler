@@ -605,7 +605,7 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S392", "If neccessary, specify condition to execute this action." },
 		{ "S394", "Action" },
 		{ "S400", "Operations" },
-		{ "S403", "Descriptions of IO Image" },
+		{ "S403", "Descriptions of IO" },
 		{ "S407", "Subsystem List" },
 		{ "S408", "Functions Structure View" },
 		{ "S411", "Event to Run" },
