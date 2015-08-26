@@ -47,7 +47,12 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M22";
+	public static final String FULL_VERSION = "V1.R4.M23";
+	// 1.4.23での変更点
+	//・「一覧形式で追加」での「TXT読み込み」のロジックを改善した
+	//・スプラッシュの形式を改善した
+	//・機能定義に「外部資料」の項目を設けた
+	//
 	// 1.4.22での変更点
 	//・MacOSで操作援助を表示できない問題を修正した
 	//・一部のアイコンの背景が透明でなかった問題を修正した

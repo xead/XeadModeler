@@ -862,6 +862,7 @@ public class DialogScan extends JDialog {
 						scanAttribute(element, "Function", "Summary");
 						scanAttribute(element, "Function", "Parameters");
 						scanAttribute(element, "Function", "Return");
+						scanAttribute(element, "Function", "DocFile");
 						scanAttribute(element, "Function", "Descriptions");
 						//
 						workList1 = element.getElementsByTagName("FunctionUsedByThis");
@@ -1156,6 +1157,9 @@ public class DialogScan extends JDialog {
 		}
 		if (attributeType.equals("Return")) {
 			result = res.getString("DialogScan78");
+		}
+		if (attributeType.equals("DocFile")) {
+			result = res.getString("DialogScan87");
 		}
 		if (attributeType.equals("ImageText")) {
 			result = res.getString("DialogScan79");

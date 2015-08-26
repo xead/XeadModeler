@@ -1180,6 +1180,8 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldFunctionParameters = new KanjiTextField();
 	private KanjiTextField jTextFieldFunctionReturn = new KanjiTextField();
 	private JTextField jTextFieldFunctionSortKey = new JTextField();
+	private JTextField jTextFieldFunctionDocFile = new JTextField();
+	private JButton jButtonFunctionDocFile = new JButton();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
 	private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
 	private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
@@ -1188,6 +1190,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelFunctionName = new JLabel();
 	private JLabel jLabelFunctionParameters = new JLabel();
 	private JLabel jLabelFunctionSummary = new JLabel();
+	private JLabel jLabelFunctionDocFile = new JLabel();
 	private JLabel jLabelFunctionDescriptions = new JLabel();
 	/**
 	 * Definition components on jPanelIOPanel
@@ -4777,6 +4780,7 @@ public class Modeler extends JFrame {
 		tableModelFunctionList.addColumn(res.getString("S640"));
 		tableModelFunctionList.addColumn(res.getString("S641"));
 		tableModelFunctionList.addColumn(res.getString("S642"));
+		tableModelFunctionList.addColumn(res.getString("S667"));
 		column0 = jTableFunctionList.getColumnModel().getColumn(0);
 		column1 = jTableFunctionList.getColumnModel().getColumn(1);
 		column2 = jTableFunctionList.getColumnModel().getColumn(2);
@@ -4784,6 +4788,7 @@ public class Modeler extends JFrame {
 		column4 = jTableFunctionList.getColumnModel().getColumn(4);
 		column5 = jTableFunctionList.getColumnModel().getColumn(5);
 		column6 = jTableFunctionList.getColumnModel().getColumn(6);
+		column7 = jTableFunctionList.getColumnModel().getColumn(7);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(250);
@@ -4791,6 +4796,7 @@ public class Modeler extends JFrame {
 		column4.setPreferredWidth(600);
 		column5.setPreferredWidth(250);
 		column6.setPreferredWidth(150);
+		column7.setPreferredWidth(150);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
@@ -4798,6 +4804,7 @@ public class Modeler extends JFrame {
 		column4.setCellRenderer(rendererAlignmentLeft);
 		column5.setCellRenderer(rendererAlignmentLeft);
 		column6.setCellRenderer(rendererAlignmentLeft);
+		column7.setCellRenderer(rendererAlignmentLeft);
 		jTableFunctionList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableFunctionList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4856,31 +4863,41 @@ public class Modeler extends JFrame {
 		jLabelFunctionSortKey.setText(res.getString("S201"));
 		jLabelFunctionSortKey.setBounds(new Rectangle(310, 8, 130, 20));
 		jTextFieldFunctionSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionSortKey.setBounds(new Rectangle(445, 5, 120, 25));
+		jTextFieldFunctionSortKey.setBounds(new Rectangle(445, 5, 200, 25));
 		jLabelFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionType.setRequestFocusEnabled(true);
 		jLabelFunctionType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionType.setText(res.getString("S662"));
-		jLabelFunctionType.setBounds(new Rectangle(575, 8, 110, 20));
+		jLabelFunctionType.setBounds(new Rectangle(650, 8, 110, 20));
 		jComboBoxFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxFunctionType.setActionCommand("comboBoxChanged");
 		jComboBoxFunctionType.setModel(sortableComboBoxModelFunctionType);
-		jComboBoxFunctionType.setBounds(new Rectangle(695, 6, 220, 25));
+		jComboBoxFunctionType.setBounds(new Rectangle(765, 6, 250, 25));
 		jComboBoxFunctionType.setMaximumRowCount(40);
 		jLabelFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionSummary.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionSummary.setText(res.getString("S668"));
 		jLabelFunctionSummary.setBounds(new Rectangle(5, 39, 130, 20));
 		jTextFieldFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionSummary.setBounds(new Rectangle(0, 36, 915, 25));
+		jTextFieldFunctionSummary.setBounds(new Rectangle(0, 36, 1015, 25));
 		jLabelFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionParameters.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionParameters.setText(res.getString("S666"));
 		jLabelFunctionParameters.setBounds(new Rectangle(5, 70, 130, 20));
 		jTextFieldFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionParameters.setBounds(new Rectangle(0, 67, 600, 25));
+		jTextFieldFunctionParameters.setBounds(new Rectangle(0, 67, 360, 25));
 		jTextFieldFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionReturn.setBounds(new Rectangle(605, 67, 310, 25));
+		jTextFieldFunctionReturn.setBounds(new Rectangle(365, 67, 280, 25));
+		jLabelFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelFunctionDocFile.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelFunctionDocFile.setText(res.getString("S667"));
+		jLabelFunctionDocFile.setBounds(new Rectangle(650, 70, 110, 20));
+		jTextFieldFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldFunctionDocFile.setBounds(new Rectangle(765, 67, 330, 25));
+		jButtonFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jButtonFunctionDocFile.setBounds(new Rectangle(1095, 66, 80, 27));
+		jButtonFunctionDocFile.setText("Open");
+		jButtonFunctionDocFile.addActionListener(new Modeler_jButtonFunctionDocFile_actionAdapter(this));
 		jPanelFunction3.setLayout(null);
 		jPanelFunction3.setMinimumSize(new Dimension(100, 99));
 		jPanelFunction3.setPreferredSize(new Dimension(10, 99));
@@ -4912,9 +4929,12 @@ public class Modeler extends JFrame {
 		jPanelFunction3.add(jTextFieldFunctionSummary, null);
 		jPanelFunction3.add(jTextFieldFunctionParameters, null);
 		jPanelFunction3.add(jTextFieldFunctionReturn, null);
+		jPanelFunction3.add(jTextFieldFunctionDocFile, null);
+		jPanelFunction3.add(jButtonFunctionDocFile, null);
 		jPanelFunction3.add(jTextFieldFunctionName, null);
 		jPanelFunction3.add(jLabelFunctionSortKey, null);
 		jPanelFunction3.add(jTextFieldFunctionSortKey, null);
+		jPanelFunction3.add(jLabelFunctionDocFile, null);
 		jPanelFunction4.add(jLabelFunctionName, null);
 		jPanelFunction4.add(jLabelFunctionParameters, null);
 		jPanelFunction4.add(jLabelFunctionSummary, null);
@@ -15482,7 +15502,7 @@ public class Modeler extends JFrame {
 			if (!tableNode_.getElement().getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("Name"))) {
 				jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
 			}
-			jLabelID.setBounds(new Rectangle(40, -1, 142, 13));
+			jLabelID.setBounds(new Rectangle(20, -1, 162, 13));
 			jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
 			jLabelSynchFile.setFont(new java.awt.Font(mainFontName, 0, 10));
 			jLabelSynchFile.setBounds(new Rectangle(40, 24, 142, 12));
@@ -15531,7 +15551,7 @@ public class Modeler extends JFrame {
 			}
 			jLabelNo.setFont(new java.awt.Font(mainFontName, 0, 11));
 			jLabelNo.setText(tableNode_.getElement().getAttribute("SortKey"));
-			jLabelNo.setBounds(new Rectangle(3, 0, 20, 11));
+			jLabelNo.setBounds(new Rectangle(3, 0, 15, 11));
 			jPanelElements.setBackground(Color.white);
 			boolean isC = false;
 			boolean isR = false;
@@ -19895,6 +19915,7 @@ public class Modeler extends JFrame {
 						jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
 						jPanelTaskFunctionIOImage.removeAll();
 						jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
+						jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jTextPaneTaskFunctionIOImage.getWidth()+20, jTextPaneTaskFunctionIOImage.getHeight()+20));
 						setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
 						
 					} else {
@@ -21141,12 +21162,10 @@ public class Modeler extends JFrame {
 			for (int i = 0; i < this.getChildCount(); i++) {
 				node = (XeadTreeNode)this.getChildAt(i);
 				element = (org.w3c.dom.Element)node.getElement();
-				Object[] Cell = new Object[7];
+				Object[] Cell = new Object[8];
 				Cell[0] =  new TableRowNumber(i+1, element);
 				Cell[1] = element.getAttribute("SortKey");
 				Cell[2] = element.getAttribute("Name");
-				//XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", element.getAttribute("FunctionTypeID"), null);
-				//org.w3c.dom.Element functionTypeElement = functionTypeNode.getElement();
 				functionTypeElement = functionTypeElementMap.get(element.getAttribute("FunctionTypeID"));
 				if (functionTypeElement == null) {
 					Cell[3] = "N/A";
@@ -21156,6 +21175,7 @@ public class Modeler extends JFrame {
 				Cell[4] = element.getAttribute("Summary");
 				Cell[5] = element.getAttribute("Parameters");
 				Cell[6] = element.getAttribute("Return");
+				Cell[7] = element.getAttribute("DocFile");
 
 				tableModelFunctionList.addRow(Cell);
 
@@ -21247,6 +21267,12 @@ public class Modeler extends JFrame {
 			jTextFieldFunctionSummary.setText(domNode_.getAttribute("Summary"));
 			jTextFieldFunctionParameters.setText(domNode_.getAttribute("Parameters"));
 			jTextFieldFunctionReturn.setText(domNode_.getAttribute("Return"));
+			if (domNode_.getAttribute("DocFile").equals("")) {
+				jTextFieldFunctionDocFile.setText("*None");
+			} else {
+				//jTextFieldFunctionDocFile.setText("<html><u><font color='blue'>" + domNode_.getAttribute("DocFile"));
+				jTextFieldFunctionDocFile.setText(domNode_.getAttribute("DocFile"));
+			}
 			jTextAreaFunctionDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaFunctionDescriptions.setCaretPosition(0);
 			//
@@ -24994,6 +25020,15 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("Return").equals(jTextFieldFunctionReturn.getText())) {
 				valueOfFieldsChanged = true;
 			}
+			if (jTextFieldFunctionDocFile.getText().toUpperCase().equals("*NONE") || jTextFieldFunctionDocFile.getText().equals("")) {
+				if (!domNode_.getAttribute("DocFile").equals("")) {
+					valueOfFieldsChanged = true;
+				}
+			} else {
+				if (!domNode_.getAttribute("DocFile").equals(jTextFieldFunctionDocFile.getText())) {
+					valueOfFieldsChanged = true;
+				}
+			}
 			if (!domNode_.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaFunctionDescriptions.getText()))) {
 				valueOfFieldsChanged = true;
 			}
@@ -25010,6 +25045,11 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("Return", jTextFieldFunctionReturn.getText());
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaFunctionDescriptions.getText()));
 				domNode_.setAttribute("FunctionTypeID", node.getElement().getAttribute("ID"));
+				if (jTextFieldFunctionDocFile.getText().toUpperCase().equals("*NONE") || jTextFieldFunctionDocFile.getText().equals("")) {
+					domNode_.setAttribute("DocFile", "");
+				} else {
+					domNode_.setAttribute("DocFile", jTextFieldFunctionDocFile.getText());
+				}
 			}
 			//
 			//Update FunctionsUsedByThis
@@ -26883,10 +26923,31 @@ public class Modeler extends JFrame {
 			drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
 		}
 	}
-	/**
-	 * Caret Event Handler for jTextPaneIOSpoolImage
-	 * @param e :Caret Event
-	 */
+
+	void jButtonFunctionDocFile_actionPerformed(ActionEvent e) {
+		String fileName = jTextFieldFunctionDocFile.getText();
+		try {
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			if (!fileName.equals("") && !fileName.toUpperCase().equals("*NONE")) {
+				if (fileName.startsWith("http:") || fileName.startsWith("https:") || fileName.startsWith("file:")) {
+					desktop.browse(new URI(fileName));
+				} else {
+					File currentFile = new File(currentFileName);
+					if (fileName.contains(File.separator) || fileName.contains("<CURRENT>")) {
+						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
+					} else {
+						fileName = currentFile.getParent() + File.separator + fileName;
+					}
+					desktop.open(new File(fileName));
+				}
+			}
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, "File name is invalid.\n" + fileName);
+		} finally {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+
 	void jTextPaneIOSpoolImage_caretUpdate(CaretEvent e) {
 		drawRectangleOfBlockSelect(jTextPaneIOSpoolImage);
 		
@@ -26898,10 +26959,7 @@ public class Modeler extends JFrame {
 			jTextPaneIOSpoolImage.setCaretColor(Color.black);
 		}
 	}
-	/**
-	 * Mouse Event Handler for jTextPaneIOSpoolImage
-	 * @param e :Mouse Event
-	 */
+
 	void jTextPaneIOSpoolImage_mousePressed(MouseEvent e) {
 	}
 	void jTextPaneIOSpoolImage_mouseClicked(MouseEvent e) {
@@ -26923,19 +26981,13 @@ public class Modeler extends JFrame {
 			drawRectangleOfBlockSelect(jTextPaneIOSpoolImage);
 		}
 	}
-	/**
-	 * Mouse Event Handler for jEditorPaneIOWebPageImage
-	 * @param e :Mouse Event
-	 */
+
 	void jEditorPaneIOWebPageImage_mouseReleased(MouseEvent e) {
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
 			showPopupMenuComponent(e);
 		}
 	}
-	/**
-	 * Mouse Event Handler for jPanelIOPanelImage
-	 * @param e :Mouse Event
-	 */
+
 	void jPanelIOPanelImage_mousePressed(MouseEvent e) {
 		if (!boundaryResizeMode.equals("")) {
 			boundaryResizeGuideRec = setCursorForIOBoundaryResize(e, jScrollPaneIOPanelImage1);
@@ -36864,6 +36916,15 @@ class Modeler_jTableFunctionIOList_mouseAdapter extends java.awt.event.MouseAdap
 	}
 	public void mouseClicked(MouseEvent e) {
 		adaptee.jTableFunctionIOList_mouseClicked(e);
+	}
+}
+class Modeler_jButtonFunctionDocFile_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jButtonFunctionDocFile_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jButtonFunctionDocFile_actionPerformed(e);
 	}
 }
 class Modeler_jPanelDatamodel_mouseAdapter extends java.awt.event.MouseAdapter {
