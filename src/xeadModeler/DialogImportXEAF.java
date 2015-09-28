@@ -731,13 +731,6 @@ public class DialogImportXEAF extends JDialog {
 		/////////////////////
 		HashMap<String, String> fieldIDMap = new HashMap<String, String>();
 		elementList1 = elementFrom.getElementsByTagName("Field");
-//		sortableDomElementFieldListModel.removeAllElements();
-//		for (int j = 0; j < elementList1.getLength(); j++) {
-//			sortableDomElementFieldListModel.addElement((Object)elementList1.item(j));
-//		}
-//		sortableDomElementFieldListModel.sortElements();
-//		for (int i = 0; i < sortableDomElementFieldListModel.getSize(); i++) {
-//			workElement1 = (org.w3c.dom.Element)sortableDomElementFieldListModel.get(i);
 		for (int i = 0; i < elementList1.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)elementList1.item(i);
 			org.w3c.dom.Element childElement = frame_.domDocument.createElement("TableField");
@@ -799,7 +792,8 @@ public class DialogImportXEAF extends JDialog {
 		for (int i = 0; i < elementList1.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)elementList1.item(i);
 			if (workElement1.getAttribute("Type").equals("PK")
-					|| workElement1.getAttribute("Type").equals("SK")) {
+					|| workElement1.getAttribute("Type").equals("SK")
+					|| workElement1.getAttribute("Type").equals("XK")) {
 				org.w3c.dom.Element childElement = frame_.domDocument.createElement("TableKey");
 				childElement.setAttribute("ID", Integer.toString(i));
 				childElement.setAttribute("Type", workElement1.getAttribute("Type"));
@@ -812,6 +806,14 @@ public class DialogImportXEAF extends JDialog {
 				while (workTokenizer.hasMoreTokens()) {
 					fieldID = workTokenizer.nextToken();
 					org.w3c.dom.Element grandChildElement = frame_.domDocument.createElement("TableKeyField");
+					if (workElement1.getAttribute("Type").equals("XK")) {
+						if (fieldID.contains("(D)")) {
+							fieldID = fieldID.replace("(D)", "");
+							grandChildElement.setAttribute("AscDesc", "D");
+						} else {
+							grandChildElement.setAttribute("AscDesc", "A");
+						}
+					}
 					grandChildElement.setAttribute("FieldID", fieldIDMap.get(fieldID));
 					grandChildElement.setAttribute("SortKey", Modeler.getFormatted4ByteString(i * 10));
 					childElement.appendChild(grandChildElement);

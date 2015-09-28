@@ -2548,6 +2548,9 @@ public class DialogDocuments extends JDialog {
 			if (workElement1.getAttribute("Type").equals("SK")) {
 				workString1 = res.getString("DialogDocuments65");
 			}
+			if (workElement1.getAttribute("Type").equals("XK")) {
+				workString1 = res.getString("DialogDocuments74");
+			}
 			cellB.setCellValue(new XSSFRichTextString(workString1));
 			XSSFCell cellC = nextRow.createCell(2);
 			cellC.setCellStyle(styleValue);
@@ -2582,7 +2585,14 @@ public class DialogDocuments extends JDialog {
 						if (workString1.equals("")) {
 							workString1 = workElement3.getAttribute("Name");
 						} else {
-							workString1 = workString1 + " + " + workElement3.getAttribute("Name");
+							if (workElement1.getAttribute("Type").equals("XK")) {
+								workString1 = workString1 + " > " + workElement3.getAttribute("Name");
+								if (workElement2.getAttribute("AscDesc").equals("D")) {
+									workString1 = workString1 + "(D)";
+								}
+							} else {
+								workString1 = workString1 + " + " + workElement3.getAttribute("Name");
+							}
 						}
 						break;
 					}
@@ -2775,250 +2785,259 @@ public class DialogDocuments extends JDialog {
 		//
 		fieldList1 = element.getElementsByTagName("TableField");
 		workList1 = element.getElementsByTagName("TableKey");
+		int countOfKeys = 0;
 		for (int i = 0; i < workList1.getLength(); i++) {
 			workElement1 = (org.w3c.dom.Element)workList1.item(i);
-			rowSequence = 0;
+			if (!workElement1.getAttribute("Type").equals("XK")) {
+				countOfKeys++;
+			}
+		}
+		for (int i = 0; i < workList1.getLength(); i++) {
+			workElement1 = (org.w3c.dom.Element)workList1.item(i);
+			if (!workElement1.getAttribute("Type").equals("XK")) {
+				rowSequence = 0;
 
-			//Label Key Definition
-			currentRowNumber++;
-			XSSFRow row0 = sheet.createRow(currentRowNumber);
-			XSSFCell cellA0 = row0.createCell(0);
-			cellA0.setCellStyle(styleHeader1);
-			XSSFCell cellB0 = row0.createCell(1);
-			cellB0.setCellStyle(styleHeader1);
-			XSSFCell cellC0 = row0.createCell(2);
-			cellC0.setCellStyle(styleHeader1);
-			XSSFCell cellD0 = row0.createCell(3);
-			cellD0.setCellStyle(styleHeader1);
-			XSSFCell cellE0 = row0.createCell(4);
-			cellE0.setCellStyle(styleHeader1);
-			XSSFCell cellF0 = row0.createCell(5);
-			cellF0.setCellStyle(styleHeader1);
-			XSSFCell cellG0 = row0.createCell(6);
-			cellG0.setCellStyle(styleHeader1);
-			XSSFCell cellH0 = row0.createCell(7);
-			cellH0.setCellStyle(styleHeader1);
-			XSSFCell cellI0 = row0.createCell(8);
-			cellI0.setCellStyle(styleHeader1);
-			sectionNumber++;
-			cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments67") + "(" + sectionNumber + "/" + workList1.getLength() + ")"));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
+				//Label Key Definition
+				currentRowNumber++;
+				XSSFRow row0 = sheet.createRow(currentRowNumber);
+				XSSFCell cellA0 = row0.createCell(0);
+				cellA0.setCellStyle(styleHeader1);
+				XSSFCell cellB0 = row0.createCell(1);
+				cellB0.setCellStyle(styleHeader1);
+				XSSFCell cellC0 = row0.createCell(2);
+				cellC0.setCellStyle(styleHeader1);
+				XSSFCell cellD0 = row0.createCell(3);
+				cellD0.setCellStyle(styleHeader1);
+				XSSFCell cellE0 = row0.createCell(4);
+				cellE0.setCellStyle(styleHeader1);
+				XSSFCell cellF0 = row0.createCell(5);
+				cellF0.setCellStyle(styleHeader1);
+				XSSFCell cellG0 = row0.createCell(6);
+				cellG0.setCellStyle(styleHeader1);
+				XSSFCell cellH0 = row0.createCell(7);
+				cellH0.setCellStyle(styleHeader1);
+				XSSFCell cellI0 = row0.createCell(8);
+				cellI0.setCellStyle(styleHeader1);
+				sectionNumber++;
+				cellA0.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments67") + "(" + sectionNumber + "/" + countOfKeys + ")"));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 
-			//Header Key Definition
-			currentRowNumber++;
-			XSSFRow row1 = sheet.createRow(currentRowNumber);
-			XSSFCell cellA1 = row1.createCell(0);
-			cellA1.setCellStyle(styleHeader2);
-			XSSFCell cellB1 = row1.createCell(1);
-			cellB1.setCellStyle(styleHeader2);
-			cellA1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments61")));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
-			XSSFCell cellC1 = row1.createCell(2);
-			cellC1.setCellStyle(styleHeader2);
-			XSSFCell cellD1 = row1.createCell(3);
-			cellD1.setCellStyle(styleHeader2);
-			XSSFCell cellE1 = row1.createCell(4);
-			cellE1.setCellStyle(styleHeader2);
-			XSSFCell cellF1 = row1.createCell(5);
-			cellF1.setCellStyle(styleHeader2);
-			XSSFCell cellG1 = row1.createCell(6);
-			cellG1.setCellStyle(styleHeader2);
-			XSSFCell cellH1 = row1.createCell(7);
-			cellH1.setCellStyle(styleHeader2);
-			XSSFCell cellI1 = row1.createCell(8);
-			cellI1.setCellStyle(styleHeader2);
-			cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
+				//Header Key Definition
+				currentRowNumber++;
+				XSSFRow row1 = sheet.createRow(currentRowNumber);
+				XSSFCell cellA1 = row1.createCell(0);
+				cellA1.setCellStyle(styleHeader2);
+				XSSFCell cellB1 = row1.createCell(1);
+				cellB1.setCellStyle(styleHeader2);
+				cellA1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments61")));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
+				XSSFCell cellC1 = row1.createCell(2);
+				cellC1.setCellStyle(styleHeader2);
+				XSSFCell cellD1 = row1.createCell(3);
+				cellD1.setCellStyle(styleHeader2);
+				XSSFCell cellE1 = row1.createCell(4);
+				cellE1.setCellStyle(styleHeader2);
+				XSSFCell cellF1 = row1.createCell(5);
+				cellF1.setCellStyle(styleHeader2);
+				XSSFCell cellG1 = row1.createCell(6);
+				cellG1.setCellStyle(styleHeader2);
+				XSSFCell cellH1 = row1.createCell(7);
+				cellH1.setCellStyle(styleHeader2);
+				XSSFCell cellI1 = row1.createCell(8);
+				cellI1.setCellStyle(styleHeader2);
+				cellC1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments62")));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
 
-			currentRowNumber++;
-			XSSFRow next2 = sheet.createRow(currentRowNumber);
-			XSSFCell cellA2 = next2.createCell(0);
-			cellA2.setCellStyle(styleValue);
-			XSSFCell cellB2 = next2.createCell(1);
-			cellB2.setCellStyle(styleValue);
-			if (workElement1.getAttribute("Type").equals("PK")) {
-				workString = res.getString("DialogDocuments63");
-			}
-			if (workElement1.getAttribute("Type").equals("FK")) {
-				workString = res.getString("DialogDocuments64");
-			}
-			if (workElement1.getAttribute("Type").equals("SK")) {
-				workString = res.getString("DialogDocuments65");
-			}
-			cellA2.setCellValue(new XSSFRichTextString(workString));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
-			XSSFCell cellC2 = next2.createCell(2);
-			cellC2.setCellStyle(styleValue);
-			XSSFCell cellD2 = next2.createCell(3);
-			cellD2.setCellStyle(styleValue);
-			XSSFCell cellE2 = next2.createCell(4);
-			cellE2.setCellStyle(styleValue);
-			XSSFCell cellF2 = next2.createCell(5);
-			cellF2.setCellStyle(styleValue);
-			XSSFCell cellG2 = next2.createCell(6);
-			cellG2.setCellStyle(styleValue);
-			XSSFCell cellH2 = next2.createCell(7);
-			cellH2.setCellStyle(styleValue);
-			XSSFCell cellI2 = next2.createCell(8);
-			cellI2.setCellStyle(styleValue);
-			workString = "";
-			countOfElementArray1 = -1;
-			workList2 = workElement1.getElementsByTagName("TableKeyField");
-			for (int j = 0; j < workList2.getLength(); j++) {
-				countOfElementArray1++;
-				node = new XeadNode("TableKeyField",(org.w3c.dom.Element)workList2.item(j));
-				elementArray1[countOfElementArray1] = node;
-			}
-			if (countOfElementArray1 > 0) {
-				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
-			}
-			for (int j = 0; j <= countOfElementArray1; j++) {
-				workElement2 = (org.w3c.dom.Element)elementArray1[j].getElement();
-				for (int k = 0; k < fieldList1.getLength(); k++) {
-					workElement3 = (org.w3c.dom.Element)fieldList1.item(k);
-					if (workElement2.getAttribute("FieldID").equals(workElement3.getAttribute("ID"))) {
-						if (workString.equals("")) {
-							workString = workElement3.getAttribute("Name");
-						} else {
-							workString = workString + " + " + workElement3.getAttribute("Name");
-						}
-						break;
-					}
+				currentRowNumber++;
+				XSSFRow next2 = sheet.createRow(currentRowNumber);
+				XSSFCell cellA2 = next2.createCell(0);
+				cellA2.setCellStyle(styleValue);
+				XSSFCell cellB2 = next2.createCell(1);
+				cellB2.setCellStyle(styleValue);
+				if (workElement1.getAttribute("Type").equals("PK")) {
+					workString = res.getString("DialogDocuments63");
 				}
-			}
-			if (workString.equals("")) {
-				workString = "*None";
-			}
-			cellC2.setCellValue(new XSSFRichTextString(workString));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
-
-			//Header RelationshipList
-			currentRowNumber++;
-			XSSFRow row3 = sheet.createRow(currentRowNumber);
-			XSSFCell cellA3 = row3.createCell(0);
-			cellA3.setCellStyle(styleHeader2Number);
-			cellA3.setCellValue(new XSSFRichTextString("No."));
-			XSSFCell cellB3 = row3.createCell(1);
-			cellB3.setCellStyle(styleHeader2);
-			cellB3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments68")));
-			XSSFCell cellC3 = row3.createCell(2);
-			cellC3.setCellStyle(styleHeader2);
-			XSSFCell cellD3 = row3.createCell(3);
-			cellD3.setCellStyle(styleHeader2);
-			XSSFCell cellE3 = row3.createCell(4);
-			cellE3.setCellStyle(styleHeader2);
-			cellC3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments69")));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
-			XSSFCell cellF3 = row3.createCell(5);
-			cellF3.setCellStyle(styleHeader2);
-			XSSFCell cellG3 = row3.createCell(6);
-			cellG3.setCellStyle(styleHeader2);
-			XSSFCell cellH3 = row3.createCell(7);
-			cellH3.setCellStyle(styleHeader2);
-			XSSFCell cellI3 = row3.createCell(8);
-			cellI3.setCellStyle(styleHeader2);
-			cellF3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments70")));
-			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
-
-			for (int j = 0; j < relationshipList.getLength(); j++) {
-				workElement2 = (org.w3c.dom.Element)relationshipList.item(j);
-				if ((workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID"))))
-						|| (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) ) {
-					currentRowNumber++;
-					XSSFRow nextRow = sheet.createRow(currentRowNumber);
-					XSSFCell cellA = nextRow.createCell(0);
-					cellA.setCellStyle(styleValueNumber);
-					rowSequence++;
-					cellA.setCellValue(rowSequence);
-					XSSFCell cellB = nextRow.createCell(1);
-					cellB.setCellStyle(styleValue);
-					workString = "";
-					if (workElement2.getAttribute("Type").equals("FAMILY")) {
-						workString = res.getString("DialogDocuments71");
-					}
-					if (workElement2.getAttribute("Type").equals("REFFER")) {
-						workString = res.getString("DialogDocuments72");
-					}
-					if (workElement2.getAttribute("Type").equals("SUBTYPE")) {
-						workString = res.getString("DialogDocuments73");
-					}
-					cellB.setCellValue(new XSSFRichTextString(workString));
-					XSSFCell cellC = nextRow.createCell(2);
-					cellC.setCellStyle(styleValue);
-					XSSFCell cellD = nextRow.createCell(3);
-					cellD.setCellStyle(styleValue);
-					XSSFCell cellE = nextRow.createCell(4);
-					cellE.setCellStyle(styleValue);
-					workString = "";
-					for (int m = 0; m < tableList.getLength(); m++) {
-						workElement3 = (org.w3c.dom.Element)tableList.item(m);
-						if (workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID")))) {
-							if (workElement3.getAttribute("ID").equals(workElement2.getAttribute("Table2ID"))) {
-								workString = workElement3.getAttribute("SortKey") + " / " + workElement3.getAttribute("Name");
-								relationshipTableElement = workElement3;
-								break;
-							}
-						}
-						if (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) {
-							if (workElement3.getAttribute("ID").equals(workElement2.getAttribute("Table1ID"))) {
-								workString = workElement3.getAttribute("SortKey") + " / " + workElement3.getAttribute("Name");
-								relationshipTableElement = workElement3;
-								break;
-							}
-						}
-					}
-					cellC.setCellValue(new XSSFRichTextString(workString));
-					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
-					XSSFCell cellF = nextRow.createCell(5);
-					cellF.setCellStyle(styleValue);
-					XSSFCell cellG = nextRow.createCell(6);
-					cellG.setCellStyle(styleValue);
-					XSSFCell cellH = nextRow.createCell(7);
-					cellH.setCellStyle(styleValue);
-					XSSFCell cellI = nextRow.createCell(8);
-					cellI.setCellStyle(styleValue);
-					workString = "";
-					if (workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID")))) {
-						relationshipKeyID = workElement2.getAttribute("TableKey2ID");
-					}
-					if (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) {
-						relationshipKeyID = workElement2.getAttribute("TableKey1ID");
-					}
-					countOfElementArray1 = -1;
-					fieldList2 = relationshipTableElement.getElementsByTagName("TableField");
-					workList2 = relationshipTableElement.getElementsByTagName("TableKey");
-					for (int m = 0; m < workList2.getLength(); m++) {
-						workElement3 = (org.w3c.dom.Element)workList2.item(m);
-						if (workElement3.getAttribute("ID").equals(relationshipKeyID)) {
-							workList3 = workElement3.getElementsByTagName("TableKeyField");
-							countOfElementArray1 = -1;
-							for (int n = 0; n < workList3.getLength(); n++) {
-								countOfElementArray1++;
-								node = new XeadNode("TableKeyField",(org.w3c.dom.Element)workList3.item(n));
-								elementArray1[countOfElementArray1] = node;
-							}
-							if (countOfElementArray1 > 0) {
-								Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
-							}
-							for (int n = 0; n <= countOfElementArray1; n++) {
-								workElement4 = (org.w3c.dom.Element)elementArray1[n].getElement();
-								for (int p = 0; p < fieldList2.getLength(); p++) {
-									workElement5 = (org.w3c.dom.Element)fieldList2.item(p);
-									if (workElement4.getAttribute("FieldID").equals(workElement5.getAttribute("ID"))) {
-										if (workString.equals("")) {
-											workString = "[" + workElement3.getAttribute("Type") + "] " + workElement5.getAttribute("Name");
-										} else {
-											workString = workString + " + " + workElement5.getAttribute("Name");
-										}
-										break;
-									}
-								}
+				if (workElement1.getAttribute("Type").equals("FK")) {
+					workString = res.getString("DialogDocuments64");
+				}
+				if (workElement1.getAttribute("Type").equals("SK")) {
+					workString = res.getString("DialogDocuments65");
+				}
+				cellA2.setCellValue(new XSSFRichTextString(workString));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 1));
+				XSSFCell cellC2 = next2.createCell(2);
+				cellC2.setCellStyle(styleValue);
+				XSSFCell cellD2 = next2.createCell(3);
+				cellD2.setCellStyle(styleValue);
+				XSSFCell cellE2 = next2.createCell(4);
+				cellE2.setCellStyle(styleValue);
+				XSSFCell cellF2 = next2.createCell(5);
+				cellF2.setCellStyle(styleValue);
+				XSSFCell cellG2 = next2.createCell(6);
+				cellG2.setCellStyle(styleValue);
+				XSSFCell cellH2 = next2.createCell(7);
+				cellH2.setCellStyle(styleValue);
+				XSSFCell cellI2 = next2.createCell(8);
+				cellI2.setCellStyle(styleValue);
+				workString = "";
+				countOfElementArray1 = -1;
+				workList2 = workElement1.getElementsByTagName("TableKeyField");
+				for (int j = 0; j < workList2.getLength(); j++) {
+					countOfElementArray1++;
+					node = new XeadNode("TableKeyField",(org.w3c.dom.Element)workList2.item(j));
+					elementArray1[countOfElementArray1] = node;
+				}
+				if (countOfElementArray1 > 0) {
+					Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
+				}
+				for (int j = 0; j <= countOfElementArray1; j++) {
+					workElement2 = (org.w3c.dom.Element)elementArray1[j].getElement();
+					for (int k = 0; k < fieldList1.getLength(); k++) {
+						workElement3 = (org.w3c.dom.Element)fieldList1.item(k);
+						if (workElement2.getAttribute("FieldID").equals(workElement3.getAttribute("ID"))) {
+							if (workString.equals("")) {
+								workString = workElement3.getAttribute("Name");
+							} else {
+								workString = workString + " + " + workElement3.getAttribute("Name");
 							}
 							break;
 						}
 					}
-					cellF.setCellValue(new XSSFRichTextString(workString));
-					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
+				}
+				if (workString.equals("")) {
+					workString = "*None";
+				}
+				cellC2.setCellValue(new XSSFRichTextString(workString));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 8));
+
+				//Header RelationshipList
+				currentRowNumber++;
+				XSSFRow row3 = sheet.createRow(currentRowNumber);
+				XSSFCell cellA3 = row3.createCell(0);
+				cellA3.setCellStyle(styleHeader2Number);
+				cellA3.setCellValue(new XSSFRichTextString("No."));
+				XSSFCell cellB3 = row3.createCell(1);
+				cellB3.setCellStyle(styleHeader2);
+				cellB3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments68")));
+				XSSFCell cellC3 = row3.createCell(2);
+				cellC3.setCellStyle(styleHeader2);
+				XSSFCell cellD3 = row3.createCell(3);
+				cellD3.setCellStyle(styleHeader2);
+				XSSFCell cellE3 = row3.createCell(4);
+				cellE3.setCellStyle(styleHeader2);
+				cellC3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments69")));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
+				XSSFCell cellF3 = row3.createCell(5);
+				cellF3.setCellStyle(styleHeader2);
+				XSSFCell cellG3 = row3.createCell(6);
+				cellG3.setCellStyle(styleHeader2);
+				XSSFCell cellH3 = row3.createCell(7);
+				cellH3.setCellStyle(styleHeader2);
+				XSSFCell cellI3 = row3.createCell(8);
+				cellI3.setCellStyle(styleHeader2);
+				cellF3.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments70")));
+				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
+
+				for (int j = 0; j < relationshipList.getLength(); j++) {
+					workElement2 = (org.w3c.dom.Element)relationshipList.item(j);
+					if ((workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID"))))
+							|| (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) ) {
+						currentRowNumber++;
+						XSSFRow nextRow = sheet.createRow(currentRowNumber);
+						XSSFCell cellA = nextRow.createCell(0);
+						cellA.setCellStyle(styleValueNumber);
+						rowSequence++;
+						cellA.setCellValue(rowSequence);
+						XSSFCell cellB = nextRow.createCell(1);
+						cellB.setCellStyle(styleValue);
+						workString = "";
+						if (workElement2.getAttribute("Type").equals("FAMILY")) {
+							workString = res.getString("DialogDocuments71");
+						}
+						if (workElement2.getAttribute("Type").equals("REFFER")) {
+							workString = res.getString("DialogDocuments72");
+						}
+						if (workElement2.getAttribute("Type").equals("SUBTYPE")) {
+							workString = res.getString("DialogDocuments73");
+						}
+						cellB.setCellValue(new XSSFRichTextString(workString));
+						XSSFCell cellC = nextRow.createCell(2);
+						cellC.setCellStyle(styleValue);
+						XSSFCell cellD = nextRow.createCell(3);
+						cellD.setCellStyle(styleValue);
+						XSSFCell cellE = nextRow.createCell(4);
+						cellE.setCellStyle(styleValue);
+						workString = "";
+						for (int m = 0; m < tableList.getLength(); m++) {
+							workElement3 = (org.w3c.dom.Element)tableList.item(m);
+							if (workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID")))) {
+								if (workElement3.getAttribute("ID").equals(workElement2.getAttribute("Table2ID"))) {
+									workString = workElement3.getAttribute("SortKey") + " / " + workElement3.getAttribute("Name");
+									relationshipTableElement = workElement3;
+									break;
+								}
+							}
+							if (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) {
+								if (workElement3.getAttribute("ID").equals(workElement2.getAttribute("Table1ID"))) {
+									workString = workElement3.getAttribute("SortKey") + " / " + workElement3.getAttribute("Name");
+									relationshipTableElement = workElement3;
+									break;
+								}
+							}
+						}
+						cellC.setCellValue(new XSSFRichTextString(workString));
+						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 2, 4));
+						XSSFCell cellF = nextRow.createCell(5);
+						cellF.setCellStyle(styleValue);
+						XSSFCell cellG = nextRow.createCell(6);
+						cellG.setCellStyle(styleValue);
+						XSSFCell cellH = nextRow.createCell(7);
+						cellH.setCellStyle(styleValue);
+						XSSFCell cellI = nextRow.createCell(8);
+						cellI.setCellStyle(styleValue);
+						workString = "";
+						if (workElement2.getAttribute("Table1ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey1ID").equals(workElement1.getAttribute("ID")))) {
+							relationshipKeyID = workElement2.getAttribute("TableKey2ID");
+						}
+						if (workElement2.getAttribute("Table2ID").equals(element.getAttribute("ID")) && (workElement2.getAttribute("TableKey2ID").equals(workElement1.getAttribute("ID")))) {
+							relationshipKeyID = workElement2.getAttribute("TableKey1ID");
+						}
+						countOfElementArray1 = -1;
+						fieldList2 = relationshipTableElement.getElementsByTagName("TableField");
+						workList2 = relationshipTableElement.getElementsByTagName("TableKey");
+						for (int m = 0; m < workList2.getLength(); m++) {
+							workElement3 = (org.w3c.dom.Element)workList2.item(m);
+							if (workElement3.getAttribute("ID").equals(relationshipKeyID)) {
+								workList3 = workElement3.getElementsByTagName("TableKeyField");
+								countOfElementArray1 = -1;
+								for (int n = 0; n < workList3.getLength(); n++) {
+									countOfElementArray1++;
+									node = new XeadNode("TableKeyField",(org.w3c.dom.Element)workList3.item(n));
+									elementArray1[countOfElementArray1] = node;
+								}
+								if (countOfElementArray1 > 0) {
+									Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
+								}
+								for (int n = 0; n <= countOfElementArray1; n++) {
+									workElement4 = (org.w3c.dom.Element)elementArray1[n].getElement();
+									for (int p = 0; p < fieldList2.getLength(); p++) {
+										workElement5 = (org.w3c.dom.Element)fieldList2.item(p);
+										if (workElement4.getAttribute("FieldID").equals(workElement5.getAttribute("ID"))) {
+											if (workString.equals("")) {
+												workString = "[" + workElement3.getAttribute("Type") + "] " + workElement5.getAttribute("Name");
+											} else {
+												workString = workString + " + " + workElement5.getAttribute("Name");
+											}
+											break;
+										}
+									}
+								}
+								break;
+							}
+						}
+						cellF.setCellValue(new XSSFRichTextString(workString));
+						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
+					}
 				}
 			}
 

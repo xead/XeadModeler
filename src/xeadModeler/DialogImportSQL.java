@@ -73,7 +73,7 @@ public class DialogImportSQL extends JDialog {
 	private String defaultTableTypeID = "";
 	private String primaryKeyFieldID = "";
 
-	private String[] sqlDataTypeArray = new String[76];
+	private String[] sqlDataTypeArray = new String[84];
 	private String[] sqlDataTypeArray2 = new String[40];
 	private String[] nameArray = new String[1000];
 	private String[] attrArray = new String[1000];
@@ -178,6 +178,14 @@ public class DialogImportSQL extends JDialog {
 		sqlDataTypeArray[73] = " tinyint(";
 		sqlDataTypeArray[74] = " LONGTEXT ";
 		sqlDataTypeArray[75] = " longtext ";
+		sqlDataTypeArray[76] = " TIMESTAMP(";
+		sqlDataTypeArray[77] = " timestamp(";
+		sqlDataTypeArray[78] = " VARCHAR2 ";
+		sqlDataTypeArray[79] = " VARCHAR2(";
+		sqlDataTypeArray[80] = " varchar2 ";
+		sqlDataTypeArray[81] = " varchar2(";
+		sqlDataTypeArray[82] = " RAW(";
+		sqlDataTypeArray[83] = " raw(";
 
 		sqlDataTypeArray2[0] = "INT";
 		sqlDataTypeArray2[1] = "REAL";

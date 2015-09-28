@@ -445,10 +445,13 @@ public class DialogTableSynchronize extends JDialog {
 						}
 					}
 					if (targetKeyFieldAlias.equals(synchFileKeyFieldAlias)) {
-						isFound = true;
+						if (targetKeyFieldElement.getAttribute("AscDesc").equals(synchFileKeyFieldElement.getAttribute("AscDesc"))) {
+							isFound = true;
+						}
 						break;
 					}
 				}
+
 				if (!isFound) {
 					isEquivalent = false;
 				}
@@ -591,6 +594,7 @@ public class DialogTableSynchronize extends JDialog {
 									targetKeyFieldElement = targetTableElement.getOwnerDocument().createElement("TableKeyField");
 									targetKeyFieldElement.setAttribute("FieldID",
 											getEquivalentFieldIDFromTargetTable(synchFileKeyFieldElement.getAttribute("FieldID"), synchFileTableElement, targetTableElement));
+									targetKeyFieldElement.setAttribute("AscDesc", synchFileKeyFieldElement.getAttribute("AscDesc"));
 									targetKeyFieldElement.setAttribute("SortKey", synchFileKeyFieldElement.getAttribute("SortKey"));
 									targetKeyElement.appendChild(targetKeyFieldElement);
 								}
@@ -623,6 +627,7 @@ public class DialogTableSynchronize extends JDialog {
 						targetKeyFieldElement = targetTableElement.getOwnerDocument().createElement("TableKeyField");
 						targetKeyFieldElement.setAttribute("FieldID", 
 								getEquivalentFieldIDFromTargetTable(synchFileKeyFieldElement.getAttribute("FieldID"), synchFileTableElement, targetTableElement));
+						targetKeyFieldElement.setAttribute("AscDesc", synchFileKeyFieldElement.getAttribute("AscDesc"));
 						targetKeyFieldElement.setAttribute("SortKey", synchFileKeyFieldElement.getAttribute("SortKey"));
 						targetKeyElement.appendChild(targetKeyFieldElement);
 					}

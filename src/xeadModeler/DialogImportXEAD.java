@@ -1758,6 +1758,7 @@ public class DialogImportXEAD extends JDialog {
 				workElement2 = (org.w3c.dom.Element)elementList2.item(m);
 				org.w3c.dom.Element grandChildElement = frame_.domDocument.createElement("TableKeyField");
 				grandChildElement.setAttribute("FieldID", convertInternalIDOfTableField(elementFrom.getAttribute("ID"), workElement2.getAttribute("FieldID"), domDocumentFrom, frame_.domDocument));
+				grandChildElement.setAttribute("AscDesc", workElement2.getAttribute("AscDesc"));
 				grandChildElement.setAttribute("SortKey", workElement2.getAttribute("SortKey"));
 				childElement.appendChild(grandChildElement);
 			}

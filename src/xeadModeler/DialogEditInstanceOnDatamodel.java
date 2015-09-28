@@ -60,7 +60,8 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	private boolean isEdited = false;
 
 	public DialogEditInstanceOnDatamodel(Modeler frame) {
-		super(frame, res.getString("DialogEditInstanceOnDatamodel1"), false);
+		//super(frame, res.getString("DialogEditInstanceOnDatamodel1"), false);
+		super(frame, "", true);
 		try {
 			frame_ = frame;
 			jbInit();
@@ -78,11 +79,12 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 		jMenuItemSetSequence.addActionListener(new DialogEditInstanceOnDatamodel_jMenuItemSetSequenceActionAdapter(this));
 		jMenuItemAddSlide.addActionListener(new DialogEditInstanceOnDatamodel_jMenuItemAddSlideActionAdapter(this));
 		jMenuItemRemoveSlide.addActionListener(new DialogEditInstanceOnDatamodel_jMenuItemRemoveSlideActionAdapter(this));
-		this.setUndecorated(true);
+		this.setResizable(true);
+		//this.setUndecorated(true);
 		this.getContentPane().add(jTabbedPane);
 	}
 
-	public void request(DatamodelEntityBox entityBox) {
+	public boolean request(DatamodelEntityBox entityBox) {
 		subsystemTableElement_ = entityBox.getSubsystemTableElement();
 		jTabbedPane.removeAll();
 		textAreaList.clear();
@@ -109,10 +111,15 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 		}
 
 		textAreaList.get(0).requestFocus();
+		this.setTitle("Instance - " + entityBox.getTableNode().getElement().getAttribute("Name"));
 		this.setPreferredSize(new Dimension(entityBox.getWidth()-150, 200));
-		this.setLocation((int)entityBox.getLocationOnScreen().getX()+184, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight()));
+		//this.setLocation((int)entityBox.getLocationOnScreen().getX()+184, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight()));
+		this.setLocation((int)entityBox.getLocationOnScreen().getX()+175, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 8));
 		this.pack();
 		this.setVisible(true);
+		updateAndClose();
+
+		return isEdited;
 	}
 	
 	int setupTextAreaForInstance(String text, String sortKey) {

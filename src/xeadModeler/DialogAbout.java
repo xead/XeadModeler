@@ -47,7 +47,19 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M23";
+	public static final String FULL_VERSION = "V1.R4.M25";
+	// 1.4.25での変更点
+	//・フィールドリストのテーブルに全選択用チェックボックスを設けた
+	//・テーブル定義と機能定義のペインにスクロールペインを組み込んだ
+	//・データモデルの編集中でもインスタンスを表示できるようにした
+	//・一覧入力でのテキストファイルからのインポートのメッセージを改善した
+	//
+	// 1.4.24での変更点
+	//・テーブル定義にインデックスを登録できるようにした
+	//・インデックス定義にもとづいてDDLが示されるようにした
+	//・インポート処理やテーブル定義出力をインデックス定義に対応させた
+	//・機能定義の「外部資料」の使い勝手を改善した
+	//
 	// 1.4.23での変更点
 	//・「一覧形式で追加」での「TXT読み込み」のロジックを改善した
 	//・スプラッシュの形式を改善した

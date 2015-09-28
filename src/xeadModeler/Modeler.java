@@ -331,6 +331,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemXeadTreeNodeAddIOWebPage = new JMenuItem();
 	private JMenuItem jMenuItemXeadTreeNodeAddFK = new JMenuItem();
 	private JMenuItem jMenuItemXeadTreeNodeAddSK = new JMenuItem();
+	private JMenuItem jMenuItemXeadTreeNodeAddIndex = new JMenuItem();
 	/**
 	 * PopupMenu for Contents Pane Components
 	 */
@@ -341,6 +342,8 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemComponentToAddIOWebPage = new JMenuItem();
 	private JMenuItem jMenuItemComponentToAddFK = new JMenuItem();
 	private JMenuItem jMenuItemComponentToAddSK = new JMenuItem();
+	private JMenuItem jMenuItemComponentToAddIndex = new JMenuItem();
+	private JMenuItem jMenuItemComponentToSetAscDesc = new JMenuItem();
 	private JMenuItem jMenuItemComponentToCopy = new JMenuItem();
 	private JMenuItem jMenuItemComponentToPaste = new JMenuItem();
 	private JMenuItem jMenuItemComponentToDelete = new JMenuItem();
@@ -351,6 +354,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemComponentToMoveRight = new JMenuItem();
 	private JMenuItem jMenuItemComponentToJump = new JMenuItem();
 	private JMenuItem jMenuItemComponentToStartSlideShow = new JMenuItem();
+	private JMenuItem jMenuItemComponentToShowInstance = new JMenuItem();
 	private JMenuItem jMenuItemComponentToShowSlideNumber = new JMenuItem();
 	private JMenuItem jMenuItemComponentToAlignTables = new JMenuItem();
 	private JMenuItem jMenuItemComponentToConfigColors = new JMenuItem();
@@ -962,6 +966,7 @@ public class Modeler extends JFrame {
 	private JDialog jDialogDatamodelSlideShow = new JDialog(this, true);
 	private int datamodelSlideNumber = 0;
 	private int datamodelSlideTotalNumber = 0;
+	private boolean isShowingInstance = false;
 	private JPanel jPanelDatamodelSlideShow1 = new JPanel();
 	private JPanel jPanelDatamodelSlideShow2 = new JPanel() {
 		private static final long serialVersionUID = 1L;
@@ -999,6 +1004,7 @@ public class Modeler extends JFrame {
 	/**
 	 * Definition components on jPanelTable
 	 */
+	private JScrollPane jScrollPaneTable1 = new JScrollPane();
 	private JPanel jPanelTable = new JPanel();
 	private JSplitPane jSplitPaneTable = new JSplitPane();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new SortableXeadTreeNodeComboBoxModel();
@@ -1148,6 +1154,7 @@ public class Modeler extends JFrame {
 	/**
 	 * Definition components on jPanelFunction
 	 */
+	private JScrollPane jScrollPaneFunction1 = new JScrollPane();
 	private JPanel jPanelFunction = new JPanel();
 	private JPanel jPanelFunction1 = new JPanel();
 	private JPanel jPanelFunction2 = new JPanel();
@@ -1180,7 +1187,9 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldFunctionParameters = new KanjiTextField();
 	private KanjiTextField jTextFieldFunctionReturn = new KanjiTextField();
 	private JTextField jTextFieldFunctionSortKey = new JTextField();
-	private JTextField jTextFieldFunctionDocFile = new JTextField();
+	private JComboBox jComboBoxFunctionDocFile = new JComboBox();
+	private String functionDocFile = "";
+	private ArrayList<String> functionDocFileList = new ArrayList<String>();
 	private JButton jButtonFunctionDocFile = new JButton();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
 	private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
@@ -1847,6 +1856,8 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToAddIOWebPage.setText(res.getString("S863"));
 		jMenuItemComponentToAddFK.setText(res.getString("S864"));
 		jMenuItemComponentToAddSK.setText(res.getString("S865"));
+		jMenuItemComponentToAddIndex.setText(res.getString("S883"));
+		jMenuItemComponentToSetAscDesc.setText(res.getString("S884"));
 		jMenuItemComponentToCopy.setText(res.getString("S866"));
 		jMenuItemComponentToPaste.setText(res.getString("S867"));
 		jMenuItemComponentToDelete.setText(res.getString("S868"));
@@ -1857,6 +1868,7 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToMoveRight.setText(res.getString("S873"));
 		jMenuItemComponentToJump.setText(res.getString("S874"));
 		jMenuItemComponentToStartSlideShow.setText(res.getString("S875"));
+		jMenuItemComponentToShowInstance.setText(res.getString("S885"));
 		jMenuItemComponentToShowSlideNumber.setText(res.getString("S876"));
 		jMenuItemComponentToAlignTables.setText(res.getString("S877"));
 		jMenuItemComponentToConfigColors.setText(res.getString("S882"));
@@ -1930,6 +1942,8 @@ public class Modeler extends JFrame {
 		jMenuItemXeadTreeNodeAddFK.addActionListener(new Modeler_jMenuItemXeadTreeNodeAddFK_actionAdapter(this));
 		jMenuItemXeadTreeNodeAddSK.setText(res.getString("S111"));
 		jMenuItemXeadTreeNodeAddSK.addActionListener(new Modeler_jMenuItemXeadTreeNodeAddSK_actionAdapter(this));
+		jMenuItemXeadTreeNodeAddIndex.setText(res.getString("S112"));
+		jMenuItemXeadTreeNodeAddIndex.addActionListener(new Modeler_jMenuItemXeadTreeNodeAddIndex_actionAdapter(this));
 
 		/**
 		 * PopupMenu for Contents Pane Processing
@@ -1940,6 +1954,8 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToAddIOWebPage.addActionListener(new Modeler_jMenuItemComponentToAddIOWebPage_actionAdapter(this));
 		jMenuItemComponentToAddFK.addActionListener(new Modeler_jMenuItemComponentToAddFK_actionAdapter(this));
 		jMenuItemComponentToAddSK.addActionListener(new Modeler_jMenuItemComponentToAddSK_actionAdapter(this));
+		jMenuItemComponentToAddIndex.addActionListener(new Modeler_jMenuItemComponentToAddIndex_actionAdapter(this));
+		jMenuItemComponentToSetAscDesc.addActionListener(new Modeler_jMenuItemComponentToSetAscDesc_actionAdapter(this));
 		jMenuItemComponentToCopy.addActionListener(new Modeler_jMenuItemComponentToCopy_actionAdapter(this));
 		jMenuItemComponentToPaste.addActionListener(new Modeler_jMenuItemComponentToPaste_actionAdapter(this));
 		jMenuItemComponentToDelete.addActionListener(new Modeler_jMenuItemComponentToDelete_actionAdapter(this));
@@ -1950,6 +1966,7 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToMoveRight.addActionListener(new Modeler_jMenuItemComponentToMoveRight_actionAdapter(this));
 		jMenuItemComponentToJump.addActionListener(new Modeler_jMenuItemComponentToJump_actionAdapter(this));
 		jMenuItemComponentToStartSlideShow.addActionListener(new Modeler_jMenuItemComponentToStartSlideShow_actionAdapter(this));
+		jMenuItemComponentToShowInstance.addActionListener(new Modeler_jMenuItemComponentToShowInstance_actionAdapter(this));
 		jMenuItemComponentToShowSlideNumber.addActionListener(new Modeler_jMenuItemComponentToShowSlideNumber_actionAdapter(this));
 		jMenuItemComponentToConfigColors.addActionListener(new Modeler_jMenuItemComponentToConfigColors_actionAdapter(this));
 		jMenuItemComponentToAlignTables.addActionListener(new Modeler_jMenuItemComponentToAlignTables_actionAdapter(this));
@@ -4158,9 +4175,11 @@ public class Modeler extends JFrame {
 		jTextAreaTableCreateStatement.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTableCreateStatement.setEditable(false);
 		jTextAreaTableCreateStatement.setBackground(SystemColor.control);
+		jScrollPaneTable1.setBorder(null);
+		jScrollPaneTable1.getViewport().add(jPanelTable1);
 		jPanelTable1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelTable1.setMinimumSize(new Dimension(100, 38));
-		jPanelTable1.setPreferredSize(new Dimension(10, 140));
+		jPanelTable1.setPreferredSize(new Dimension(1200, 140));
 		jPanelTable1.setLayout(new BorderLayout());
 		jPanelTable3.setLayout(new BorderLayout());
 		jTableTableUsageList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -4185,7 +4204,7 @@ public class Modeler extends JFrame {
 		jTableTableReferringFileList.setRowHeight(TABLE_ROW_HEIGHT);
 		jPanelTable.add(jSplitPaneTable,  BorderLayout.CENTER);
 		jSplitPaneTable.add(jTabbedPaneTable,  JSplitPane.BOTTOM);
-		jSplitPaneTable.add(jPanelTable1,  JSplitPane.TOP);
+		jSplitPaneTable.add(jScrollPaneTable1,  JSplitPane.TOP);
 		jPanelTable1.add(jPanelTable2, BorderLayout.WEST);
 		jPanelTable1.add(jPanelTable3, BorderLayout.CENTER);
 		jPanelTable2.add(jLabelTableName);
@@ -4363,6 +4382,8 @@ public class Modeler extends JFrame {
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
+		CheckBoxHeaderRenderer checkBoxHeaderRenderer = new CheckBoxHeaderRenderer(new CheckBoxHeaderListener());
+		column3.setHeaderRenderer(checkBoxHeaderRenderer);
 		CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
 		column3.setCellRenderer(checkBoxRenderer);
 		DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(new JCheckBox(res.getString("S483")));
@@ -4384,8 +4405,8 @@ public class Modeler extends JFrame {
 		jSplitPaneTableField1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneTableField1.setBorder(null);
 		jSplitPaneTableField1.setDividerLocation(190);
-		jScrollPaneTask1.setBorder(null);
-		jScrollPaneTask1.getViewport().add(jPanelTask1);
+		//jScrollPaneTask1.setBorder(null);
+		//jScrollPaneTask1.getViewport().add(jPanelTask1);
 		jLabelTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldName.setText(res.getString("S577"));
@@ -4720,18 +4741,22 @@ public class Modeler extends JFrame {
 		tableModelTableKeyFieldList.addColumn(res.getString("S297"));
 		tableModelTableKeyFieldList.addColumn(res.getString("S542"));
 		tableModelTableKeyFieldList.addColumn(res.getString("S544"));
+		tableModelTableKeyFieldList.addColumn("A/D");
 		column0 = jTableTableKeyFieldList.getColumnModel().getColumn(0);
 		column1 = jTableTableKeyFieldList.getColumnModel().getColumn(1);
 		column2 = jTableTableKeyFieldList.getColumnModel().getColumn(2);
 		column3 = jTableTableKeyFieldList.getColumnModel().getColumn(3);
+		column4 = jTableTableKeyFieldList.getColumnModel().getColumn(4);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(200);
 		column2.setPreferredWidth(250);
 		column3.setPreferredWidth(150);
+		column4.setPreferredWidth(50);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
 		column3.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentCenter);
 		jTableTableKeyFieldList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableKeyFieldList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4892,11 +4917,12 @@ public class Modeler extends JFrame {
 		jLabelFunctionDocFile.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionDocFile.setText(res.getString("S667"));
 		jLabelFunctionDocFile.setBounds(new Rectangle(650, 70, 110, 20));
-		jTextFieldFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionDocFile.setBounds(new Rectangle(765, 67, 330, 25));
+		jComboBoxFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jComboBoxFunctionDocFile.setBounds(new Rectangle(765, 67, 330, 25));
+		jComboBoxFunctionDocFile.addMouseListener(new Modeler_jComboBoxFunctionDocFile_mouseAdapter(this));
 		jButtonFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jButtonFunctionDocFile.setBounds(new Rectangle(1095, 66, 80, 27));
-		jButtonFunctionDocFile.setText("Open");
+		jButtonFunctionDocFile.setText("Edit");
 		jButtonFunctionDocFile.addActionListener(new Modeler_jButtonFunctionDocFile_actionAdapter(this));
 		jPanelFunction3.setLayout(null);
 		jPanelFunction3.setMinimumSize(new Dimension(100, 99));
@@ -4912,15 +4938,17 @@ public class Modeler extends JFrame {
 		jPanelFunction2.setLayout(new BorderLayout());
 		jPanelFunction2.setMinimumSize(new Dimension(100, 20));
 		jPanelFunction2.setPreferredSize(new Dimension(100, 80));
+		jScrollPaneFunction1.setBorder(null);
+		jScrollPaneFunction1.getViewport().add(jPanelFunction1);
 		jPanelFunction1.setLayout(new BorderLayout());
 		jPanelFunction1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelFunction1.setMinimumSize(new Dimension(100, 30));
-		jPanelFunction1.setPreferredSize(new Dimension(10, 80));
+		jPanelFunction1.setPreferredSize(new Dimension(1330, 80));
 		jPanelFunction.setLayout(new BorderLayout());
 		jPanelFunction.add(jSplitPaneFunction,  BorderLayout.CENTER);
 		jPanelFunction1.add(jPanelFunction4,  BorderLayout.WEST);
 		jPanelFunction1.add(jPanelFunction2,  BorderLayout.CENTER);
-		jSplitPaneFunction.add(jPanelFunction1, JSplitPane.TOP);
+		jSplitPaneFunction.add(jScrollPaneFunction1, JSplitPane.TOP);
 		jSplitPaneFunction.add(jTabbedPaneFunction, JSplitPane.BOTTOM);
 		jPanelFunction2.add(jPanelFunction3, BorderLayout.NORTH);
 		jPanelFunction2.add(jScrollPaneFunctionDescriptions,  BorderLayout.CENTER);
@@ -4929,7 +4957,7 @@ public class Modeler extends JFrame {
 		jPanelFunction3.add(jTextFieldFunctionSummary, null);
 		jPanelFunction3.add(jTextFieldFunctionParameters, null);
 		jPanelFunction3.add(jTextFieldFunctionReturn, null);
-		jPanelFunction3.add(jTextFieldFunctionDocFile, null);
+		jPanelFunction3.add(jComboBoxFunctionDocFile, null);
 		jPanelFunction3.add(jButtonFunctionDocFile, null);
 		jPanelFunction3.add(jTextFieldFunctionName, null);
 		jPanelFunction3.add(jLabelFunctionSortKey, null);
@@ -6949,7 +6977,10 @@ public class Modeler extends JFrame {
 		if (e.getComponent().equals(jPanelDatamodel)) {
 			componentType_jPopupMenuComponent = "Datamodel";
 			jPopupMenuComponent.add(jMenuItemComponentToAlignTables);
+			jPopupMenuComponent.addSeparator();
+			jPopupMenuComponent.add(jMenuItemComponentToShowInstance);
 			jPopupMenuComponent.add(jMenuItemComponentToStartSlideShow);
+			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToConfigColors);
 			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToCaptureImage);
@@ -7288,6 +7319,7 @@ public class Modeler extends JFrame {
 			componentType_jPopupMenuComponent = "TableKeyList";
 			jPopupMenuComponent.add(jMenuItemComponentToAddFK);
 			jPopupMenuComponent.add(jMenuItemComponentToAddSK);
+			jPopupMenuComponent.add(jMenuItemComponentToAddIndex);
 			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToWriteCSV);
 			jPopupMenuComponent.addSeparator();
@@ -7298,6 +7330,7 @@ public class Modeler extends JFrame {
 			componentType_jPopupMenuComponent = "TableKeyList";
 			jPopupMenuComponent.add(jMenuItemComponentToAddFK);
 			jPopupMenuComponent.add(jMenuItemComponentToAddSK);
+			jPopupMenuComponent.add(jMenuItemComponentToAddIndex);
 			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToDelete);
 			jPopupMenuComponent.addSeparator();
@@ -7317,6 +7350,8 @@ public class Modeler extends JFrame {
 		}
 		if (e.getComponent().equals(jTableTableKeyFieldList)) {
 			componentType_jPopupMenuComponent = "TableKeyFieldList";
+			jPopupMenuComponent.add(jMenuItemComponentToSetAscDesc);
+			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToRemove);
 			jPopupMenuComponent.addSeparator();
 			jPopupMenuComponent.add(jMenuItemComponentToJump);
@@ -9921,8 +9956,45 @@ public class Modeler extends JFrame {
 				statement = statement + ddlAdditionalParms + "\n";
 			}
 		}
+		statement = statement + ")" + ddlSectionMark + "\n";
 		//
-		statement = statement + ")" + ddlSectionMark + "\n" + "\n";
+		//Create Index//
+		int indexCount = 0;
+		for (int k = 0; k < node2.getChildAt(1).getChildCount(); k++) {
+			node3 = (XeadTreeNode)node2.getChildAt(1).getChildAt(k);
+			if (node3.getElement().getAttribute("Type").equals("XK")) {
+
+				indexCount++;
+				statement = statement + "CREATE INDEX " + tableName + "_XK" + indexCount + " ON " + tableName + "(";
+				
+				keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
+				sortableDomElementListModel.removeAllElements();
+				for (int m = 0; m < keyFieldList.getLength(); m++) {
+					sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+				}
+				if (sortableDomElementListModel.getSize() > 0) {
+					sortableDomElementListModel.sortElements();
+					for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
+						keyFieldElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(m);
+						node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"), keyFieldElement.getAttribute("FieldID"));
+						if (m > 0) {
+							statement = statement + ", ";
+						}
+						if (node4.getElement().getAttribute("Alias").equals("")) {
+							statement = statement + node4.getElement().getAttribute("Name");
+						} else {
+							statement = statement + node4.getElement().getAttribute("Alias");
+						}
+						if (keyFieldElement.getAttribute("AscDesc").equals("D")) {
+							statement = statement + " DESC ";
+						}
+					}
+				}
+				statement = statement + ")"+ ddlSectionMark + "\n";
+			}
+		}
+		//
+		statement = statement + "\n";
 		createStatement = new CreateStatement(statement,warningHasOccured);
 		return createStatement;
 	}
@@ -14360,7 +14432,7 @@ public class Modeler extends JFrame {
 				if (showOnModel) {
 					for (int i = 0; i < index; i++) {
 						line = lineList.get(i);
-						if (line.isShowOnModel()) {
+						if (line.isShowOnModel() && line.entityBox1 != entityBox1 && line.entityBox2 != entityBox2) {
 							if (line.arc2D_A.equals(arc2D_A) || line.arc2D_B.equals(arc2D_A)) {
 								isToDrawArc2D_A = false;
 							}
@@ -15193,25 +15265,6 @@ public class Modeler extends JFrame {
 		private Border printBorder;
 		private JPanel jPanel1 = new JPanel();
 		private DropAcceptablePanel jPanel2 = null;
-//		private JPanel jPanelElements = new JPanel() {
-//			private static final long serialVersionUID = 1L;
-//			public void paintComponent(Graphics g) {
-//				super.paintComponent(g);
-//				Graphics2D g2 = (Graphics2D)g;
-//				if (isNormalColorConfigOnDataModel) {
-//					g2.setPaint(Color.WHITE);
-//					g2.fillRect(0,0,3000,40);
-//				} else {
-//					if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
-//						g2.setPaint(new GradientPaint(92, 0, Color.WHITE, 92, 40, new Color(233, 255, 255)));
-//						g2.fillRect(0,0,3000,40);
-//					} else {
-//						g2.setPaint(new GradientPaint(92, 0, Color.WHITE, 92, 40, new Color(243, 243, 243)));
-//						g2.fillRect(0,0,3000,40);
-//					}
-//				}
-//			}
-//		};
 		private JPanel jPanelElements = new JPanel();
 		private JLabel jLabelName = new JLabel();
 		private JLabel jLabelSynchFile = new JLabel();
@@ -15233,7 +15286,7 @@ public class Modeler extends JFrame {
 		private JTextArea jTextAreaShowInstance = new JTextArea();
 		private boolean isVisibleOnModel = false;
 		private boolean isSelected_ = false;
-		private int jTextAreaShowInstanceHeight;
+		private int heightOfInstanceArea;
 		private ArrayList<ElementLabel> elementLabelArray = new ArrayList<ElementLabel>();
 		public int widthOfShownFields = 0;
 		private ArrayList<String> slideInstanceArray = new ArrayList<String>();
@@ -15600,7 +15653,7 @@ public class Modeler extends JFrame {
 			jPanelMoveGuide.setOpaque(false);
 			jMenuItemEntityBoxJump.addActionListener(new jMenuItemEntityBoxJump_actionAdapter(this));
 			jPopupMenuEntityBox.add(jMenuItemEntityBoxJump);
-			jMenuItemEntityBoxEditInstance.addActionListener(new jMenuItemEntityBoxShowInstance_actionAdapter(this));
+			jMenuItemEntityBoxEditInstance.addActionListener(new jMenuItemEntityBoxEditInstance_actionAdapter(this));
 			jPopupMenuEntityBox.add(jMenuItemEntityBoxEditInstance);
 			jMenuItemEntityBoxShowAllLines.addActionListener(new jMenuItemEntityBoxShowAllLines_actionAdapter(this));
 			jPopupMenuEntityBox.add(jMenuItemEntityBoxShowAllLines);
@@ -15612,6 +15665,23 @@ public class Modeler extends JFrame {
 			jTextAreaShowInstance.setForeground(Color.white);
 			jTextAreaShowInstance.setFont(new java.awt.Font(ioImageFontName, 0, 14));
 			jTextAreaShowInstance.setEditable(false);
+			setupSlideInstanceArray();
+
+			updateColors();
+
+			if (subsystemTableElement_.getAttribute("ShowOnModel").equals("true")) {
+				isVisibleOnModel = true;
+			} else {
+				isVisibleOnModel = false;
+			}
+		}
+
+		public void setupSlideInstanceArray() {
+			org.w3c.dom.Element element;
+
+			slideInstanceArray.clear();
+			slideNumberArray.clear();
+			
 			NodeList nodeList = subsystemTableElement_.getElementsByTagName("Instance");
 			if (nodeList.getLength() == 0) {
 				if (subsystemTableElement_.getAttribute("ShowInstance").equals("true")
@@ -15631,16 +15701,8 @@ public class Modeler extends JFrame {
 					slideNumberArray.add(Integer.parseInt(element.getAttribute("SortKey")));
 				}
 			}
-
-			updateColors();
-
-			if (subsystemTableElement_.getAttribute("ShowOnModel").equals("true")) {
-				isVisibleOnModel = true;
-			} else {
-				isVisibleOnModel = false;
-			}
 		}
-			
+
 		public void setInstanceBySlideNumber(int number, boolean isAscent) {
 			for (int i = 0; i < slideNumberArray.size(); i++) {
 				if (slideNumberArray.get(i) <= number) {
@@ -15665,7 +15727,7 @@ public class Modeler extends JFrame {
 			}
 		}
 		
-		public int setInstanceToGetHeight() {
+		public int calculateInstanceHeightToShowOnPanel(JPanel jPanel) {
 			String wrkStr = "";
 			int maxHeight = 0;
 			int width = this.getWidth() - jPanel2.getWidth();
@@ -15675,26 +15737,26 @@ public class Modeler extends JFrame {
 					wrkStr = wrkStr.substring(0, wrkStr.length()-1);
 				}
 				jTextAreaShowInstance.setText(wrkStr);
-				
+
 				int rowCount = jTextAreaShowInstance.getLineCount();
 				FontMetrics metrics = jTextAreaShowInstance.getFontMetrics(jTextAreaShowInstance.getFont());
 				if (rowCount * metrics.getHeight() > maxHeight) {
 					maxHeight = rowCount * metrics.getHeight();
 				}
 			}
-			jTextAreaShowInstanceHeight = maxHeight;
-			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, jTextAreaShowInstanceHeight));
+			heightOfInstanceArea = maxHeight;
+			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, heightOfInstanceArea));
 			jTextAreaShowInstance.setText("");
-			jPanelDatamodelSlideShow2.add(jTextAreaShowInstance);
+			jPanel.add(jTextAreaShowInstance);
 			return maxHeight;
 		}
 		
 		public int getInstanceHeight() {
-			return jTextAreaShowInstanceHeight;
+			return heightOfInstanceArea;
 		}
 		
 		public int getLastSlideNumber() {
-			int lastNumber = 0;
+			int lastNumber = -1;
 			for (int i = 0; i < slideNumberArray.size(); i++) {
 				if (slideNumberArray.get(i) > lastNumber) {
 					lastNumber = slideNumberArray.get(i);
@@ -15777,8 +15839,10 @@ public class Modeler extends JFrame {
 			isVisibleOnModel = setShow;
 		}
 
-		public void updateElement() {
-			subsystemTableElement_.setAttribute("BoxPosition", this.getLocation().x + "," + this.getLocation().y);
+		public void updateElement(boolean isWithInstanceShown) {
+			if (!isWithInstanceShown) {
+				subsystemTableElement_.setAttribute("BoxPosition", this.getLocation().x + "," + this.getLocation().y);
+			}
 			subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth()));
 			if (isVisibleOnModel) {
 				subsystemTableElement_.setAttribute("ShowOnModel", "true");
@@ -16129,13 +16193,13 @@ public class Modeler extends JFrame {
 			}
 		}
 
-		class jMenuItemEntityBoxShowInstance_actionAdapter implements java.awt.event.ActionListener {
+		class jMenuItemEntityBoxEditInstance_actionAdapter implements java.awt.event.ActionListener {
 			DatamodelEntityBox adaptee;
-			jMenuItemEntityBoxShowInstance_actionAdapter(DatamodelEntityBox adaptee) {
+			jMenuItemEntityBoxEditInstance_actionAdapter(DatamodelEntityBox adaptee) {
 				this.adaptee = adaptee;
 			}
 			public void actionPerformed(ActionEvent e) {
-				adaptee.jMenuItemEntityBoxShowInstance_actionPerformed(e);
+				adaptee.jMenuItemEntityBoxEditInstance_actionPerformed(e);
 			}
 		}
 
@@ -16172,12 +16236,12 @@ public class Modeler extends JFrame {
 		}
 
 		private void jPanel2_mousePressed(MouseEvent e) {
-			if (dialogEditInstanceOnDatamodel.isVisible()) {
-				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
-				if (isEdited) {
-					informationOnThisPageChanged = true;
-				}
-			}
+//			if (dialogEditInstanceOnDatamodel.isVisible()) {
+//				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
+//				if (isEdited) {
+//					informationOnThisPageChanged = true;
+//				}
+//			}
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				mousePosX = e.getX();
 				mousePosY = e.getY();
@@ -16295,7 +16359,7 @@ public class Modeler extends JFrame {
 
 			//Resize jTextAreaShowInstance//
 			int width = this.getWidth() - jPanel2.getWidth();
-			jTextAreaShowInstance.setBounds(new Rectangle(posX + 186, posY + BOX_HEIGHT, width, jTextAreaShowInstanceHeight));
+			jTextAreaShowInstance.setBounds(new Rectangle(posX + 186, posY + BOX_HEIGHT, width, heightOfInstanceArea));
 
 			//Resize jPanelDatamodel//
 			int boxRightEdgeLocation = getRightEdgeLocationOfArea();
@@ -16340,12 +16404,12 @@ public class Modeler extends JFrame {
 		}
 
 		private void jPanel1_mousePressed(MouseEvent e) {
-			if (dialogEditInstanceOnDatamodel.isVisible()) {
-				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
-				if (isEdited) {
-					informationOnThisPageChanged = true;
-				}
-			}
+//			if (dialogEditInstanceOnDatamodel.isVisible()) {
+//				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
+//				if (isEdited) {
+//					informationOnThisPageChanged = true;
+//				}
+//			}
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				int rangeX = jPanel1.getWidth() - 5;
 				if (e.getX() > rangeX) {
@@ -16405,6 +16469,7 @@ public class Modeler extends JFrame {
 		void jMenuItemEntityBoxHide_actionPerformed(ActionEvent e) {
 			informationOnThisPageChanged = true;
 			jPanelCanvas.remove(this);
+			jPanelCanvas.remove(jTextAreaShowInstance);
 			isVisibleOnModel = false;
 			jPanelCanvas.updateUI();
 		}
@@ -16419,8 +16484,58 @@ public class Modeler extends JFrame {
 			setupContentsPaneForTreeNodeSelected(tableNode_, false);
 		}
 
-		void jMenuItemEntityBoxShowInstance_actionPerformed(ActionEvent e) {
-			dialogEditInstanceOnDatamodel.request(this);
+		void jMenuItemEntityBoxEditInstance_actionPerformed(ActionEvent e) {
+			boolean isEdited = dialogEditInstanceOnDatamodel.request(this);
+			if (isEdited) {
+				informationOnThisPageChanged = true;
+
+				if (isShowingInstance) {
+					int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation, panelWidth, panelHeight;
+					Point point;
+					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+						moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
+						if (moveDistance != 0) {
+							for (int j = 0; j < datamodelEntityBoxArray.size(); j++) {
+								point = datamodelEntityBoxArray.get(j).getBoxPositionPoint();
+								if (point.y > datamodelEntityBoxArray.get(i).getBoxPositionPoint().y) {
+									datamodelEntityBoxArray.get(j).changePositionTo(point.x, point.y - moveDistance);
+								}
+							}
+						}
+					}
+
+					setupSlideInstanceArray();
+					jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
+					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+						moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
+						if (moveDistance != 0) {
+							for (int j = 0; j < datamodelEntityBoxArray.size(); j++) {
+								point = datamodelEntityBoxArray.get(j).getBoxPositionPoint();
+								if (point.y > datamodelEntityBoxArray.get(i).getBoxPositionPoint().y) {
+									datamodelEntityBoxArray.get(j).changePositionTo(point.x, point.y + moveDistance);
+								}
+							}
+							datamodelEntityBoxArray.get(i).setInstanceBySlideNumber(datamodelEntityBoxArray.get(i).getLastSlideNumber(), true);
+						}
+
+						//Set preferred size of jPanelDatamodel//
+						boxRightEdgeLocation = datamodelEntityBoxArray.get(i).getRightEdgeLocationOfArea();
+						boxBottomEdgeLocation = datamodelEntityBoxArray.get(i).getBottomEdgeLocationOfArea();
+						panelWidth = jPanelDatamodel.getPreferredSize().width;
+						panelHeight = jPanelDatamodel.getPreferredSize().height;
+						if (boxRightEdgeLocation > panelWidth) {
+							panelWidth = boxRightEdgeLocation;
+						}
+						if (boxBottomEdgeLocation > panelHeight) {
+							panelHeight = boxBottomEdgeLocation;
+						}
+						jPanelDatamodel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+					}
+					jPanelDatamodel.updateUI();
+				} else {
+					setupSlideInstanceArray();
+				}
+			}
 		}
 
 		void jMenuItemEntityBoxShowAllLines_actionPerformed(ActionEvent e) {
@@ -16511,7 +16626,7 @@ public class Modeler extends JFrame {
 
 			//Resize jTextAreaShowInstance//
 			int width = this.getWidth() - jPanel2.getWidth();
-			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, jTextAreaShowInstanceHeight));
+			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, heightOfInstanceArea));
 
 			//Resize jPanelDatamodel//
 			int boxRightEdgeLocation = getRightEdgeLocationOfArea();
@@ -17009,6 +17124,7 @@ public class Modeler extends JFrame {
 				if (nodeType_.equals("TableKeyList")) {
 					jMenuXeadTreeNodeAdd.add(jMenuItemXeadTreeNodeAddFK);
 					jMenuXeadTreeNodeAdd.add(jMenuItemXeadTreeNodeAddSK);
+					jMenuXeadTreeNodeAdd.add(jMenuItemXeadTreeNodeAddIndex);
 					jMenuXeadTreeNodeAdd.add(jMenuItemComponentToShowTips);
 					jMenuItemComponentToShowTips.setText(res.getString("S993"));
 					componentType_jPopupMenuComponent = "TableKeyList";
@@ -17452,6 +17568,7 @@ public class Modeler extends JFrame {
 			//Add TableKey//
 			if (nodeType_.equals("TableKeyList") && typeOfNodeBeingAdded.equals("FK") ||
 					nodeType_.equals("TableKeyList") && typeOfNodeBeingAdded.equals("SK") ||
+					nodeType_.equals("TableKeyList") && typeOfNodeBeingAdded.equals("XK") ||
 					nodeType_.equals("TableKeyList") && (childNode != null)) {
 				XeadTreeNode tableNode = (XeadTreeNode)this.getParent();
 				if (childNode == null) {
@@ -17476,7 +17593,11 @@ public class Modeler extends JFrame {
 					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
 					newElement.setAttribute("ID", Integer.toString(lastID + 1));
 					newElement.setAttribute("Type", typeOfNodeBeingAdded);
-					newElement.setAttribute("SortKey", "010");
+					if (typeOfNodeBeingAdded.equals("XK")) {
+						newElement.setAttribute("SortKey", "900");
+					} else {
+						newElement.setAttribute("SortKey", "010");
+					}
 					tableNode.getElement().appendChild(newElement);
 					childNode = new XeadTreeNode("TableKey", newElement);
 				} else {
@@ -18338,6 +18459,9 @@ public class Modeler extends JFrame {
 						org.w3c.dom.Element element2 = (org.w3c.dom.Element)nodeList2.item(j);
 						newElementChild2 = domDocument.createElement("TableKeyField");
 						newElementChild2.setAttribute("FieldID", element2.getAttribute("FieldID"));
+						if (pastingElement.getAttribute("Type").equals("XK")) {
+							newElementChild2.setAttribute("AscDesc", "A");
+						}
 						newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
 						newElementChild1.appendChild(newElementChild2);
 					}
@@ -20183,14 +20307,14 @@ public class Modeler extends JFrame {
 			XeadTreeNode parentNode = (XeadTreeNode)this.getParent(); //parent subsystem node//
 			org.w3c.dom.Element parentElement = parentNode.getElement();
 			datamodelPageTitle = parentNode.getName();
-			//
+
 			NodeList subsystemTableList = parentElement.getElementsByTagName("SubsystemTable");
 			NodeList subsystemRelationshipList = parentElement.getElementsByTagName("SubsystemRelationship");
 			NodeList functionList = domDocument.getElementsByTagName("Function");
 			NodeList ioTableList;
 			org.w3c.dom.Element functionElement, ioTableElement;
 			String opC,opR,opU,opD,opExC,opExR,opExU,opExD;
-			//
+
 			//Setup NativeTableList//
 			if (jTabbedPaneTableList.getSelectedIndex() == 0) {
 				previousSelectedIndex_jTabbedPaneTableList = 0;
@@ -20281,7 +20405,7 @@ public class Modeler extends JFrame {
 					tableModelNativeTableList.addRow(Cell);
 				}
 			}
-			//
+
 			//Setup ForeignTableList//
 			if (jTabbedPaneTableList.getSelectedIndex() == 1) {
 				previousSelectedIndex_jTabbedPaneTableList = 1;
@@ -20353,12 +20477,13 @@ public class Modeler extends JFrame {
 					}
 				}
 			}
-			//
+
 			//Setup jPanelDatamodel//
 			if (jTabbedPaneTableList.getSelectedIndex() == 2) {
 				previousSelectedIndex_jTabbedPaneTableList = 2;
 				org.w3c.dom.Element subsystemTableElement, relationshipElement, subsystemRelationshipElement;
 				XeadTreeNode tableNode;
+				isShowingInstance = false;
 				//
 				jProgressBar.setMaximum(subsystemTableList.getLength() + 2);
 				//
@@ -20966,6 +21091,9 @@ public class Modeler extends JFrame {
 				if (domNode_.getAttribute("Type").equals("SK")) {
 					jTextFieldTableKeyType.setText(res.getString("S5014"));
 				}
+				if (domNode_.getAttribute("Type").equals("XK")) {
+					jTextFieldTableKeyType.setText(res.getString("S5015"));
+				}
 				jTextFieldTableKeySortKey.setText(domNode_.getAttribute("SortKey"));
 				jTextFieldTableKeySortKey.setEditable(true);
 			}
@@ -20985,7 +21113,7 @@ public class Modeler extends JFrame {
 			for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
 				keyFieldElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
 				tableFieldNode = getSpecificXeadTreeNode("TableField", tableNode.getElement().getAttribute("ID"), keyFieldElement.getAttribute("FieldID"));
-				Object[] Cell = new Object[4];
+				Object[] Cell = new Object[5];
 				Cell[0] =  new TableRowNumber(i+1, keyFieldElement);
 				Cell[1] = tableFieldNode.getElement().getAttribute("Alias");
 				if (tableFieldNode.getElement().getAttribute("AttributeType").equals("NATIVE")) {
@@ -20996,6 +21124,11 @@ public class Modeler extends JFrame {
 				dataTypeElement = dataTypeElementMap.get(tableFieldNode.getElement().getAttribute("DataTypeID"));
 				if (dataTypeElement != null) {
 					Cell[3] = dataTypeElement.getAttribute("Name");
+				}
+				if (domNode_.getAttribute("Type").equals("XK")) {
+					Cell[4] = keyFieldElement.getAttribute("AscDesc");
+				} else {
+					Cell[4] = "-";
 				}
 				tableModelTableKeyFieldList.addRow(Cell);
 			}
@@ -21246,19 +21379,19 @@ public class Modeler extends JFrame {
 			org.w3c.dom.Element element1, element2, element3;
 			org.w3c.dom.Element elementFunctionUsedByThis, functionElement, subsystemElement;
 			int j = 0;
-			//
+
 			functionUsedByThis = this.getElement().getElementsByTagName("FunctionUsedByThis");
 			functionList = domDocument.getElementsByTagName("Function");
 			taskList = domDocument.getElementsByTagName("Task");
-			//
+
 			jProgressBar.setMaximum(this.getChildCount() + functionUsedByThis.getLength() + functionList.getLength() + taskList.getLength());
-			//
+
 			//Setup cell editor//
 			JTextField editField = new JTextField();
 			editField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			DefaultCellEditor defaultCellEditor = new DefaultCellEditor(editField);
 			defaultCellEditor.setClickCountToStart(1);
-			//
+
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent().getParent()).getName() + " - "
 					+ ((XeadTreeNode)this.getParent().getParent()).getName() + " - " + this.getName());
@@ -21267,15 +21400,37 @@ public class Modeler extends JFrame {
 			jTextFieldFunctionSummary.setText(domNode_.getAttribute("Summary"));
 			jTextFieldFunctionParameters.setText(domNode_.getAttribute("Parameters"));
 			jTextFieldFunctionReturn.setText(domNode_.getAttribute("Return"));
-			if (domNode_.getAttribute("DocFile").equals("")) {
-				jTextFieldFunctionDocFile.setText("*None");
-			} else {
-				//jTextFieldFunctionDocFile.setText("<html><u><font color='blue'>" + domNode_.getAttribute("DocFile"));
-				jTextFieldFunctionDocFile.setText(domNode_.getAttribute("DocFile"));
-			}
 			jTextAreaFunctionDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaFunctionDescriptions.setCaretPosition(0);
-			//
+
+			//Setup ComboBox of "DocFile"//
+			jComboBoxFunctionDocFile.removeAllItems();
+			functionDocFileList.clear();
+			functionDocFile = domNode_.getAttribute("DocFile");
+			if (functionDocFile.equals("")) {
+				jComboBoxFunctionDocFile.addItem("*None");
+			} else {
+				String work;
+				int posOfSeparator;
+				StringTokenizer workTokenizer = new StringTokenizer(functionDocFile, ";" );
+				while (workTokenizer.hasMoreTokens()) {
+					work = workTokenizer.nextToken();
+					functionDocFileList.add(work);
+					posOfSeparator = work.lastIndexOf(File.separator);
+					if (posOfSeparator > 0) {
+						work = work.substring(posOfSeparator, work.length());
+						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>..." + work);
+					} else {
+						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>" + work);
+					}
+				}
+			}
+			if (jComboBoxFunctionDocFile.getItemCount() <= 1) {
+				jComboBoxFunctionDocFile.setEnabled(false);
+			} else {
+				jComboBoxFunctionDocFile.setEnabled(true);
+			}
+
 			//Setup ComboBox of "FunctionType"//
 			sortableComboBoxModelFunctionType.removeAllElements();
 			NodeList functionTypeList = domDocument.getElementsByTagName("FunctionType");
@@ -21290,7 +21445,7 @@ public class Modeler extends JFrame {
 					sortableComboBoxModelFunctionType.setSelectedItem(sortableComboBoxModelFunctionType.getElementAt(i));
 				}
 			}
-			//
+
 			//Setup FunctionIOList//
 			if (tableModelFunctionIOList.getRowCount() > 0) {
 				int rowCount = tableModelFunctionIOList.getRowCount();
@@ -22073,12 +22228,19 @@ public class Modeler extends JFrame {
 							node3 = (XeadTreeNode) node2.getChildAt(j); //node3:Node of Field
 							if (node3.getElement().getAttribute("ID").equals(keyFieldElement.getAttribute("FieldID"))) {
 								if (!keyName.toString().equals("")) {
-									keyName.append(" + ");
+									if (this.getElement().getAttribute("Type").equals("XK")) {
+										keyName.append(" > ");
+									} else {
+										keyName.append(" + ");
+									}
 								}
 								if (node3.getElement().getAttribute("Name").equals("")) {
 									keyName.append(node3.getElement().getAttribute("Alias"));
 								} else {
 									keyName.append(node3.getElement().getAttribute("Name"));
+								}
+								if (this.getElement().getAttribute("Type").equals("XK") && keyFieldElement.getAttribute("AscDesc").equals("D")) {
+									keyName.append("(D)");
 								}
 								break;
 							}
@@ -22439,6 +22601,9 @@ public class Modeler extends JFrame {
 							//Update DOM element//
 							newElement = domDocument.createElement("TableKeyField");
 							newElement.setAttribute("FieldID", domNode_.getAttribute("ID"));
+							if (currentMainTreeNode.getElement().getAttribute("Type").equals("XK")) {
+								newElement.setAttribute("AscDesc", "A");
+							}
 							newElement.setAttribute("SortKey", getFormatted4ByteString(lastSortKey + 10));
 							currentMainTreeNode.getElement().appendChild(newElement);
 							jTreeMain.updateUI();
@@ -24719,7 +24884,7 @@ public class Modeler extends JFrame {
 				if (informationOnThisPageChanged) {
 					parentElement.setAttribute("DatamodelDescriptions", concatLinesWithTokenOfEOL(jTextAreaDatamodelDescriptions.getText()));
 					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
-						datamodelEntityBoxArray.get(i).updateElement();
+						datamodelEntityBoxArray.get(i).updateElement(isShowingInstance);
 					}
 					for (int i = 0; i < datamodelRelationshipLineArray.size(); i++) {
 						datamodelRelationshipLineArray.get(i).updateElement();
@@ -25020,14 +25185,8 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("Return").equals(jTextFieldFunctionReturn.getText())) {
 				valueOfFieldsChanged = true;
 			}
-			if (jTextFieldFunctionDocFile.getText().toUpperCase().equals("*NONE") || jTextFieldFunctionDocFile.getText().equals("")) {
-				if (!domNode_.getAttribute("DocFile").equals("")) {
-					valueOfFieldsChanged = true;
-				}
-			} else {
-				if (!domNode_.getAttribute("DocFile").equals(jTextFieldFunctionDocFile.getText())) {
-					valueOfFieldsChanged = true;
-				}
+			if (!domNode_.getAttribute("DocFile").equals(functionDocFile)) {
+				valueOfFieldsChanged = true;
 			}
 			if (!domNode_.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaFunctionDescriptions.getText()))) {
 				valueOfFieldsChanged = true;
@@ -25043,13 +25202,9 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("Summary", jTextFieldFunctionSummary.getText());
 				domNode_.setAttribute("Parameters", jTextFieldFunctionParameters.getText());
 				domNode_.setAttribute("Return", jTextFieldFunctionReturn.getText());
+				domNode_.setAttribute("DocFile", functionDocFile);
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaFunctionDescriptions.getText()));
 				domNode_.setAttribute("FunctionTypeID", node.getElement().getAttribute("ID"));
-				if (jTextFieldFunctionDocFile.getText().toUpperCase().equals("*NONE") || jTextFieldFunctionDocFile.getText().equals("")) {
-					domNode_.setAttribute("DocFile", "");
-				} else {
-					domNode_.setAttribute("DocFile", jTextFieldFunctionDocFile.getText());
-				}
 			}
 			//
 			//Update FunctionsUsedByThis
@@ -25869,6 +26024,83 @@ public class Modeler extends JFrame {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
+	}
+
+	/**
+	 * Class for Header Renderer for CheckBox
+	 */
+	class CheckBoxHeaderListener implements ItemListener {
+		private CheckBoxHeaderRenderer rendererComponent_ = null;   
+		public void setRenderer(CheckBoxHeaderRenderer rendererComponent) {
+			rendererComponent_ = rendererComponent;
+		}
+		public void itemStateChanged(ItemEvent e) {   
+			if (rendererComponent_ != null) {
+				for (int i = 0; i < jTableTableFieldList.getRowCount(); i++) {
+					if (rendererComponent_.isSelected()) {
+						jTableTableFieldList.setValueAt(Boolean.TRUE, i, 3);
+					} else {
+						jTableTableFieldList.setValueAt(Boolean.FALSE, i, 3);
+					}
+				}
+			}
+		}   
+	}   
+	class CheckBoxHeaderRenderer extends JCheckBox implements TableCellRenderer, MouseListener {   
+		private static final long serialVersionUID = 1L;
+		protected CheckBoxHeaderRenderer rendererComponent;   
+		protected int column;   
+		protected boolean mousePressed = false;   
+		public CheckBoxHeaderRenderer(CheckBoxHeaderListener itemListener) {
+			rendererComponent = this;   
+			rendererComponent.addItemListener(itemListener);  
+			itemListener.setRenderer(this);
+		}   
+		public Component getTableCellRendererComponent(	JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {  
+			if (table != null) {   
+				JTableHeader header = table.getTableHeader();   
+				if (header != null) {   
+					header.addMouseListener(rendererComponent);   
+				}   
+			}   
+			setColumn(column);   
+			rendererComponent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			rendererComponent.setText(res.getString("S472"));   
+			setBorder(UIManager.getBorder("TableHeader.cellBorder"));   
+			return rendererComponent;   
+		}   
+		protected void setColumn(int column) {   
+			this.column = column;   
+		}   
+		public int getColumn() {   
+			return column;   
+		}   
+		protected void handleClickEvent(MouseEvent e) {   
+			if (mousePressed) {   
+				mousePressed=false;   
+				JTableHeader header = (JTableHeader)(e.getSource());   
+				JTable tableView = header.getTable();   
+				TableColumnModel columnModel = tableView.getColumnModel();   
+				int viewColumn = columnModel.getColumnIndexAtX(e.getX());   
+				int column = tableView.convertColumnIndexToModel(viewColumn);   
+				if (viewColumn == this.column && e.getClickCount() == 1 && column != -1) {   
+					doClick();   
+				}   
+			}   
+		}   
+		public void mouseClicked(MouseEvent e) {   
+			handleClickEvent(e);   
+			((JTableHeader)e.getSource()).repaint();   
+		}   
+		public void mousePressed(MouseEvent e) {   
+			mousePressed = true;   
+		}   
+		public void mouseReleased(MouseEvent e) {   
+		}   
+		public void mouseEntered(MouseEvent e) {   
+		}   
+		public void mouseExited(MouseEvent e) {   
+		}   
 	}
 
 	/**
@@ -26925,7 +27157,39 @@ public class Modeler extends JFrame {
 	}
 
 	void jButtonFunctionDocFile_actionPerformed(ActionEvent e) {
-		String fileName = jTextFieldFunctionDocFile.getText();
+		String answer = JOptionPane.showInputDialog(jButtonFunctionDocFile, res.getString("S669"), functionDocFile);
+		if (answer != null) {
+			functionDocFile = answer;
+			jComboBoxFunctionDocFile.removeAllItems();
+			functionDocFileList.clear();
+			if (functionDocFile.equals("")) {
+				jComboBoxFunctionDocFile.addItem("*None");
+			} else {
+				String work;
+				int posOfSeparator;
+				StringTokenizer workTokenizer = new StringTokenizer(functionDocFile, ";" );
+				while (workTokenizer.hasMoreTokens()) {
+					work = workTokenizer.nextToken();
+					functionDocFileList.add(work);
+					posOfSeparator = work.lastIndexOf(File.separator);
+					if (posOfSeparator > 0) {
+						work = work.substring(posOfSeparator, work.length());
+						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>..." + work);
+					} else {
+						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>" + work);
+					}
+				}
+			}
+			if (jComboBoxFunctionDocFile.getItemCount() <= 1) {
+				jComboBoxFunctionDocFile.setEnabled(false);
+			} else {
+				jComboBoxFunctionDocFile.setEnabled(true);
+			}
+		}
+	}
+
+	void jComboBoxFunctionDocFile_mouseClicked(MouseEvent e) {
+		String fileName = functionDocFileList.get(jComboBoxFunctionDocFile.getSelectedIndex());
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			if (!fileName.equals("") && !fileName.toUpperCase().equals("*NONE")) {
@@ -26933,19 +27197,23 @@ public class Modeler extends JFrame {
 					desktop.browse(new URI(fileName));
 				} else {
 					File currentFile = new File(currentFileName);
-					if (fileName.contains(File.separator) || fileName.contains("<CURRENT>")) {
-						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
-					} else {
-						fileName = currentFile.getParent() + File.separator + fileName;
-					}
+					fileName = fileName.replace("<CURRENT>", currentFile.getParent());
 					desktop.open(new File(fileName));
 				}
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "File name is invalid.\n" + fileName);
+			JOptionPane.showMessageDialog(jComboBoxFunctionDocFile, "Invalid File Name:\n" + fileName);
 		} finally {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
+	}
+
+	public void jComboBoxFunctionDocFile_mouseEntered(MouseEvent e) {
+		setCursor(htmlEditorKit.getLinkCursor());
+	}
+
+	public void jComboBoxFunctionDocFile_mouseExited(MouseEvent e) {
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	void jTextPaneIOSpoolImage_caretUpdate(CaretEvent e) {
@@ -28350,6 +28618,7 @@ public class Modeler extends JFrame {
 
 		//Import text file of field list//
 		if (reply == 2) {
+			boolean isDuplicatedNames = false;
 			int totalLineNumber = 0;
 			int validLineNumber = 0;
 			String csvFileName = specifyNameOfExistingFile(res.getString("S1735"), "txt");
@@ -28386,6 +28655,7 @@ public class Modeler extends JFrame {
 							if (childNode == null) {
 								currentMainTreeNode.addChildNode(null, "", idColumn, nameColumn, descriptionsColumn);
 							} else {
+								isDuplicatedNames = true;
 								childNode.updateIdOrDescriptions(idColumn, descriptionsColumn);
 							}
 						} else {
@@ -28401,6 +28671,9 @@ public class Modeler extends JFrame {
 			} else {
 				if (totalLineNumber > validLineNumber) {
 					JOptionPane.showMessageDialog(this, res.getString("S1748"));
+				}
+				if (isDuplicatedNames) {
+					JOptionPane.showMessageDialog(this, res.getString("S1749"));
 				}
 			}
 		}
@@ -28433,6 +28706,13 @@ public class Modeler extends JFrame {
 	 */
 	void jMenuItemXeadTreeNodeAddSK_actionPerformed(ActionEvent e) {
 		currentMainTreeNode.addChildNode(null, "SK", "", "");
+	}
+	/**
+	 * Select Event Handler for jMenuItemXeadTreeNodeAddIndex
+	 * @param e :Action Event
+	 */
+	void jMenuItemXeadTreeNodeAddIndex_actionPerformed(ActionEvent e) {
+		currentMainTreeNode.addChildNode(null, "XK", "", "");
 	}
 	/**
 	 * Select Event Handler for jMenuItemXeadTreeNodePaste
@@ -30996,11 +31276,42 @@ public class Modeler extends JFrame {
 		currentMainTreeNode.addChildNode(null, "SK", "", "");
 	}
 	/**
+	 * Event Handler for jMenuItemComponentToAddIndex in case item selected
+	 * @param e :Action Event
+	 */
+	void jMenuItemComponentToAddIndex_actionPerformed(ActionEvent e) {
+		currentMainTreeNode.addChildNode(null, "XK", "", "");
+	}
+	/**
+	 * Event Handler for jMenuItemComponentToSetAscDesc in case item selected
+	 * @param e :Action Event
+	 */
+	void jMenuItemComponentToSetAscDesc_actionPerformed(ActionEvent e) {
+		if (componentType_jPopupMenuComponent.equals("TableKeyFieldList")) {
+
+			informationOnThisPageChanged = true;
+
+			//Update DomElement of TableKeyField//
+			TableRowNumber tableRowNumber = (TableRowNumber)tableModelTableKeyFieldList.getValueAt(selectedRow_jTableTableKeyFieldList, 0);
+			if (tableRowNumber.getElement().getAttribute("AscDesc").equals("A")) {
+				tableRowNumber.getElement().setAttribute("AscDesc", "D");
+			} else {
+				if (tableRowNumber.getElement().getAttribute("AscDesc").equals("D")) {
+					tableRowNumber.getElement().setAttribute("AscDesc", "A");
+				}
+			}
+
+			//Log node after modified//
+			xeadUndoManager.addLogAfterModified(currentMainTreeNode);
+
+			currentMainTreeNode.activateContentsPane();
+		}
+	}
+	/**
 	 * Event Handler for jMenuItemComponentToPaste in case item selected
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToPaste_actionPerformed(ActionEvent e) {
-		//XeadTreeNode node;
 		org.w3c.dom.Node nextSiblingNode;
 		org.w3c.dom.Element element, lastElement, newElement, newElementChild1;
 		int id = 0;
@@ -32048,10 +32359,6 @@ public class Modeler extends JFrame {
 		}
 	}
 
-	/**
-	 * Event Handler for jMenuItemComponentToStartSlideShow in case item selected
-	 * @param e :Action Event
-	 */
 	void jMenuItemComponentToStartSlideShow_actionPerformed(ActionEvent e) {
 		if (currentMainTreeNode.getType().equals("SubjectArea")) {
 			currentMainTreeNode.updateFieldsForSubjectArea();
@@ -32060,6 +32367,62 @@ public class Modeler extends JFrame {
 		if (currentMainTreeNode.getType().equals("TableList")) {
 			currentMainTreeNode.updateFieldsForTableList();
 			startSlideShowOfDataModel();
+		}
+	}
+
+	void jMenuItemComponentToShowInstance_actionPerformed(ActionEvent e) {
+		currentMainTreeNode.updateFieldsForTableList();
+
+		int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation, panelWidth, panelHeight;
+		Point point;
+		isShowingInstance = !isShowingInstance;
+		boolean hasNoInstance = true; 
+		jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
+
+		for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+			if (datamodelEntityBoxArray.get(i).isVisibleOnModel) {
+				moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
+				if (moveDistance != 0) {
+
+					for (int j = 0; j < datamodelEntityBoxArray.size(); j++) {
+						point = datamodelEntityBoxArray.get(j).getBoxPositionPoint();
+						if (point.y > datamodelEntityBoxArray.get(i).getBoxPositionPoint().y) {
+							if (isShowingInstance) {
+								datamodelEntityBoxArray.get(j).changePositionTo(point.x, point.y + moveDistance);
+							} else {
+								datamodelEntityBoxArray.get(j).changePositionTo(point.x, point.y - moveDistance);
+							}
+						}
+					}
+					if (isShowingInstance) {
+						datamodelEntityBoxArray.get(i).setInstanceBySlideNumber(datamodelEntityBoxArray.get(i).getLastSlideNumber(), true);
+					} else {
+						datamodelEntityBoxArray.get(i).setInstanceBySlideNumber(-1, true);
+					}
+					if (isShowingInstance && hasNoInstance) {
+						hasNoInstance = false;
+					}
+				}
+
+				//Set preferred size of jPanelDatamodel//
+				boxRightEdgeLocation = datamodelEntityBoxArray.get(i).getRightEdgeLocationOfArea();
+				boxBottomEdgeLocation = datamodelEntityBoxArray.get(i).getBottomEdgeLocationOfArea();
+				panelWidth = jPanelDatamodel.getPreferredSize().width;
+				panelHeight = jPanelDatamodel.getPreferredSize().height;
+				if (boxRightEdgeLocation > panelWidth) {
+					panelWidth = boxRightEdgeLocation;
+				}
+				if (boxBottomEdgeLocation > panelHeight) {
+					panelHeight = boxBottomEdgeLocation;
+				}
+				jPanelDatamodel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+			}
+		}
+		if (isShowingInstance && hasNoInstance) {
+			JOptionPane.showMessageDialog(null, res.getString("S900"));
+			isShowingInstance = false;
+		} else {
+			jPanelDatamodel.updateUI();
 		}
 	}
 	
@@ -32181,7 +32544,7 @@ public class Modeler extends JFrame {
 		
 		//Prepare for instance to show//
 		for (int i = 0; i < datamodelEntityBoxSlideShowArray.size(); i++) {
-			moveDistance = datamodelEntityBoxSlideShowArray.get(i).setInstanceToGetHeight();
+			moveDistance = datamodelEntityBoxSlideShowArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodelSlideShow2);
 			if (moveDistance != 0) {
 				for (int j = 0; j < datamodelEntityBoxSlideShowArray.size(); j++) {
 					point = datamodelEntityBoxSlideShowArray.get(j).getBoxPositionPoint();
@@ -35955,6 +36318,24 @@ class Modeler_jMenuItemComponentToAddSK_actionAdapter implements java.awt.event.
 		adaptee.jMenuItemComponentToAddSK_actionPerformed(e);
 	}
 }
+class Modeler_jMenuItemComponentToSetAscDesc_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemComponentToSetAscDesc_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemComponentToSetAscDesc_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemComponentToAddIndex_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemComponentToAddIndex_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemComponentToAddIndex_actionPerformed(e);
+	}
+}
 class Modeler_jMenuItemComponentToPaste_actionAdapter implements java.awt.event.ActionListener {
 	Modeler adaptee;
 	Modeler_jMenuItemComponentToPaste_actionAdapter(Modeler adaptee) {
@@ -36007,6 +36388,15 @@ class Modeler_jMenuItemComponentToStartSlideShow_actionAdapter implements java.a
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemComponentToStartSlideShow_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemComponentToShowInstance_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemComponentToShowInstance_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemComponentToShowInstance_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemComponentToAlignTables_actionAdapter implements java.awt.event.ActionListener {
@@ -36169,6 +36559,15 @@ class Modeler_jMenuItemXeadTreeNodeAddSK_actionAdapter implements java.awt.event
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemXeadTreeNodeAddSK_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemXeadTreeNodeAddIndex_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemXeadTreeNodeAddIndex_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemXeadTreeNodeAddIndex_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemXeadTreeNodePaste_actionAdapter implements java.awt.event.ActionListener {
@@ -36925,6 +37324,21 @@ class Modeler_jButtonFunctionDocFile_actionAdapter implements java.awt.event.Act
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jButtonFunctionDocFile_actionPerformed(e);
+	}
+}
+class Modeler_jComboBoxFunctionDocFile_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jComboBoxFunctionDocFile_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jComboBoxFunctionDocFile_mouseClicked(e);
+	}
+	public void mouseEntered(MouseEvent e) {
+		adaptee.jComboBoxFunctionDocFile_mouseEntered(e);
+	}
+	public void mouseExited(MouseEvent e) {
+		adaptee.jComboBoxFunctionDocFile_mouseExited(e);
 	}
 }
 class Modeler_jPanelDatamodel_mouseAdapter extends java.awt.event.MouseAdapter {
