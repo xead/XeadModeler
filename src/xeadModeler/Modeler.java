@@ -98,7 +98,7 @@ public class Modeler extends JFrame {
 	private Border borderOriginal1;
 	private JPanel jPanelContentsPane = new JPanel();
 	private CardLayout cardLayoutContentsPane = new CardLayout();
-	public String currentFileName, systemName;
+	public String currentFileName, currentFileFolder, systemName;
 	private long lastModifyTime = 0;
 	private String applicationFolder;
 	private String urlString = "";
@@ -115,6 +115,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemFileSave = new JMenuItem();
 	private JMenuItem jMenuItemFileSaveAs = new JMenuItem();
 	private JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
+	private JMenuItem jMenuItemFileDiff = new JMenuItem();
 	private JMenu jMenuImport = new JMenu();
 	private JMenuItem jMenuItemImportXEAD = new JMenuItem();
 	private JMenuItem jMenuItemImportRecover = new JMenuItem();
@@ -175,6 +176,8 @@ public class Modeler extends JFrame {
 	public String ioImageFontName = "Monospaced";
 	public int ioImageFontSize = 16;
 	public String ioImageFolder = "";
+	public String backupFolder = "";
+	public boolean isNeedToBackup = false;
 	/**
 	 * Main undo manager
 	 */
@@ -246,6 +249,7 @@ public class Modeler extends JFrame {
 	private DialogImportSQL dialogImportSQL;
 	private DialogConfigColors dialogConfigColors;
 	private DialogTableSynchronize dialogTableSynchronize;
+	private DialogToListChangesOfFiles dialogToListChangesOfFiles;
 	/**
 	 * Print Controller
 	 */
@@ -1535,6 +1539,10 @@ public class Modeler extends JFrame {
 				if (wrkStr != null && !wrkStr.equals("")) {
 					ioImageFolder = wrkStr;
 				}
+				wrkStr = properties.getProperty("BackupFolder");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					backupFolder = wrkStr;
+				}
 			}
 		} catch (Exception e) {
 		}
@@ -1554,6 +1562,7 @@ public class Modeler extends JFrame {
 		dialogImportSQL = new DialogImportSQL(this);
 		dialogConfigColors = new DialogConfigColors(this);
 		dialogTableSynchronize = new DialogTableSynchronize(this);
+		dialogToListChangesOfFiles = new DialogToListChangesOfFiles(this);
 
 		/**
 		 * table-cell property controller
@@ -1674,6 +1683,8 @@ public class Modeler extends JFrame {
 		jMenuItemFileSave.addActionListener(new Modeler_jMenuItemFileSave_ActionAdapter(this));
 		jMenuItemFileSaveAs.setText(res.getString("S57"));
 		jMenuItemFileSaveAs.addActionListener(new Modeler_jMenuItemFileSaveAs_ActionAdapter(this));
+		jMenuItemFileDiff.setText(res.getString("S120"));
+		jMenuItemFileDiff.addActionListener(new Modeler_jMenuItemFileDiff_ActionAdapter(this));
 		jMenuImport.setText(res.getString("S64"));
 		jMenuItemImportXEAD.setText(res.getString("S65"));
 		jMenuItemImportXEAD.addActionListener(new Modeler_jMenuItemImportXEAD_ActionAdapter(this));
@@ -1792,6 +1803,7 @@ public class Modeler extends JFrame {
 		jMenuImport.add(jMenuItemImportXEAF);
 		jMenuImport.add(jMenuItemImportSQL);
 		jMenuImport.add(jMenuItemImportRecover);
+		jMenuFile.add(jMenuItemFileDiff);
 		jMenuFile.addSeparator();
 		jMenuFile.add(jMenuItemFileSave);
 		jMenuFile.add(jMenuItemFileSaveAs);
@@ -5546,6 +5558,10 @@ public class Modeler extends JFrame {
 		int pos = applicationFolder.lastIndexOf(System.getProperty("file.separator"));
 		applicationFolder = applicationFolder.substring(0,pos);
 		//
+		if (!backupFolder.equals("")) {
+			isNeedToBackup = true;
+		}
+		//
 		//Request fileName if it is null//
 		if (currentFileName.equals("")) {
 			do {
@@ -5799,6 +5815,7 @@ public class Modeler extends JFrame {
 				JOptionPane.showMessageDialog(this, res.getString("S811") + "\n" +
 						res.getString("S813"));
 			}
+			currentFileFolder = file.getParent();
 			lastModifyTime = file.lastModified();
 
 			//Parse file in XML Format and setup Document//
@@ -8122,6 +8139,33 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemFileSave_actionPerformed(ActionEvent e) {
+		if (isNeedToBackup) {
+			isNeedToBackup = false;
+			String backupFileName = "";
+			Object[] bts = {"Yes", "No"} ;
+			int rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1152"),
+					res.getString("S1151"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn1 == 0) {
+				try{
+					arrangeOrderOfDomElement();
+					OutputFormat outputFormat = new OutputFormat(domDocument);
+					outputFormat.setEncoding("UTF-8");
+					String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
+					backupFileName = currentFileName.replace(".xead", getStringValueOfDateTime("withTime") + ".xead");
+					backupFileName = backupFileName.replace(currentFileFolder, newFolder);
+					FileOutputStream fileOutputStream = new FileOutputStream(backupFileName);
+					OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+					Writer writer = new BufferedWriter(outputStreamWriter);
+					XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
+					xmlSerializer.serialize(domDocument.getDocumentElement());
+					writer.close();
+				} catch(Exception ex){
+					JOptionPane.showMessageDialog(this, res.getString("S1149") + "\n" + backupFileName);
+					ex.printStackTrace();
+				}
+			}
+			
+		}
 		currentMainTreeNode.updateFields();
 		saveFileWithCurrentFileName(true);
 		changeState.setChanged(false);
@@ -8140,6 +8184,30 @@ public class Modeler extends JFrame {
 			saveFileWithCurrentFileName(false);
 			changeState.setChanged(false);
 			xeadUndoManager.resetLog();
+		}
+	}
+	/**
+	 * [File|Diff]
+	 * @param e :Action Event
+	 */
+	void jMenuItemFileDiff_actionPerformed(ActionEvent e) {
+		int rtn1 = 0;
+		currentMainTreeNode.updateFields();
+		if (changeState.isChanged()) {
+			Object[] bts = {res.getString("S1111"), res.getString("S1100")} ;
+			rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1126"),
+					res.getString("S1118"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+			if (rtn1 == 0) {
+				saveFileWithCurrentFileName(true);
+				xeadUndoManager.resetLog();
+				changeState.setChanged(false);
+			}
+		}
+		if (rtn1 == 0) {
+			String name = specifyNameOfExistingFile(res.getString("S121"), "xead");
+			if (!name.equals("")) {
+				dialogToListChangesOfFiles.request(name);
+			}
 		}
 	}
 	/**
@@ -27189,22 +27257,26 @@ public class Modeler extends JFrame {
 	}
 
 	void jComboBoxFunctionDocFile_mouseClicked(MouseEvent e) {
-		String fileName = functionDocFileList.get(jComboBoxFunctionDocFile.getSelectedIndex());
-		try {
-			setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			if (!fileName.equals("") && !fileName.toUpperCase().equals("*NONE")) {
-				if (fileName.startsWith("http:") || fileName.startsWith("https:") || fileName.startsWith("file:")) {
-					desktop.browse(new URI(fileName));
-				} else {
-					File currentFile = new File(currentFileName);
-					fileName = fileName.replace("<CURRENT>", currentFile.getParent());
-					desktop.open(new File(fileName));
+		if (jComboBoxFunctionDocFile.getItemAt(0).equals("*None")) {
+			jButtonFunctionDocFile_actionPerformed(null);
+		} else {
+			String fileName = functionDocFileList.get(jComboBoxFunctionDocFile.getSelectedIndex());
+			if (!fileName.equals("") && !fileName.equals("*None")) {
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					if (fileName.startsWith("http:") || fileName.startsWith("https:") || fileName.startsWith("file:")) {
+						desktop.browse(new URI(fileName));
+					} else {
+						File currentFile = new File(currentFileName);
+						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
+						desktop.open(new File(fileName));
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(jComboBoxFunctionDocFile, "Invalid File Name:\n" + fileName);
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(jComboBoxFunctionDocFile, "Invalid File Name:\n" + fileName);
-		} finally {
-			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
 
@@ -35442,6 +35514,15 @@ class Modeler_jMenuItemFileSaveAs_ActionAdapter implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		adaptee.jMenuItemFileSaveAs_actionPerformed(e);
+	}
+}
+class Modeler_jMenuItemFileDiff_ActionAdapter implements ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemFileDiff_ActionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemFileDiff_actionPerformed(e);
 	}
 }
 class Modeler_jMenuItemEditUndo_ActionAdapter implements ActionListener {

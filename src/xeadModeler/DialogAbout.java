@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M25";
+	public static final String FULL_VERSION = "V1.R4.M26";
+	// 1.4.26での変更点
+	//・ファイル間の差異表示のためのオプションをファイルメニューに設けた
+	//・propertiesの設定による更新前の自動バックアップ機能を設けた
+	//
 	// 1.4.25での変更点
 	//・フィールドリストのテーブルに全選択用チェックボックスを設けた
 	//・テーブル定義と機能定義のペインにスクロールペインを組み込んだ
