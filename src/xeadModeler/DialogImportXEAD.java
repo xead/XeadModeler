@@ -2286,7 +2286,7 @@ public class DialogImportXEAD extends JDialog {
 	}
 
 	void createTaskActions(org.w3c.dom.Element elementFrom, org.w3c.dom.Element elementInto) {
-		org.w3c.dom.Element workElement1, workElement2, workElement3,workElement4;
+		org.w3c.dom.Element workElement1, workElement2, workElement3,workElement4, workElement5;
 		NodeList elementList1, elementList2, elementList3;
 		String functionSortKey = "";
 		String functionName = "";
@@ -2297,6 +2297,7 @@ public class DialogImportXEAD extends JDialog {
 
 		NodeList functionListFrom = domDocumentFrom.getElementsByTagName("Function");
 		NodeList functionListInto = frame_.domDocument.getElementsByTagName("Function");
+		NodeList tableListFrom = domDocumentFrom.getElementsByTagName("Table");
 
 		//////////////////////
 		//Create TaskActions//
@@ -2328,17 +2329,8 @@ public class DialogImportXEAD extends JDialog {
 						ioSortKey = "";
 						ioName = "";
 
-						elementList3 = workElement3.getElementsByTagName("IOPanel");
-						for (int n = 0; n < elementList3.getLength(); n++) {
-							workElement4 = (org.w3c.dom.Element)elementList3.item(n);
-							if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
-								ioSortKey = workElement4.getAttribute("SortKey");
-								ioName = workElement4.getAttribute("Name");
-								break;
-							}
-						}
-						if (ioSortKey.equals("") && ioName.equals("")) {
-							elementList3 = workElement3.getElementsByTagName("IOSpool");
+						if (!workElement2.getAttribute("IOID").equals("0")) {
+							elementList3 = workElement3.getElementsByTagName("IOPanel");
 							for (int n = 0; n < elementList3.getLength(); n++) {
 								workElement4 = (org.w3c.dom.Element)elementList3.item(n);
 								if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
@@ -2347,15 +2339,43 @@ public class DialogImportXEAD extends JDialog {
 									break;
 								}
 							}
-						}
-						if (ioSortKey.equals("") && ioName.equals("")) {
-							elementList3 = workElement3.getElementsByTagName("IOWebPage");
-							for (int n = 0; n < elementList3.getLength(); n++) {
-								workElement4 = (org.w3c.dom.Element)elementList3.item(n);
-								if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
-									ioSortKey = workElement4.getAttribute("SortKey");
-									ioName = workElement4.getAttribute("Name");
-									break;
+							if (ioSortKey.equals("") && ioName.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOSpool");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
+										ioSortKey = workElement4.getAttribute("SortKey");
+										ioName = workElement4.getAttribute("Name");
+										break;
+									}
+								}
+							}
+							if (ioSortKey.equals("") && ioName.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOTable");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
+										for (int p = 0; p < tableListFrom.getLength(); p++) {
+											workElement5 = (org.w3c.dom.Element)tableListFrom.item(p);
+											if (workElement5.getAttribute("ID").equals(workElement4.getAttribute("TableID"))) {
+												ioSortKey = workElement5.getAttribute("SortKey");
+												ioName = workElement5.getAttribute("Name");
+												break;
+											}
+										}
+										break;
+									}
+								}
+							}
+							if (ioSortKey.equals("") && ioName.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOWebPage");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("ID").equals(workElement2.getAttribute("IOID"))) {
+										ioSortKey = workElement4.getAttribute("SortKey");
+										ioName = workElement4.getAttribute("Name");
+										break;
+									}
 								}
 							}
 						}
@@ -2368,16 +2388,10 @@ public class DialogImportXEAD extends JDialog {
 					if (workElement3.getAttribute("SortKey").equals(functionSortKey)) {
 						targetFunctionID = workElement3.getAttribute("ID");
 
-						elementList3 = workElement3.getElementsByTagName("IOPanel");
-						for (int n = 0; n < elementList3.getLength(); n++) {
-							workElement4 = (org.w3c.dom.Element)elementList3.item(n);
-							if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
-								targetFunctionIOID = workElement4.getAttribute("ID");
-								break;
-							}
-						}
-						if (targetFunctionIOID.equals("")) {
-							elementList3 = workElement3.getElementsByTagName("IOSpool");
+						if (workElement2.getAttribute("IOID").equals("0")) {
+							targetFunctionIOID = "0";
+						} else {
+							elementList3 = workElement3.getElementsByTagName("IOPanel");
 							for (int n = 0; n < elementList3.getLength(); n++) {
 								workElement4 = (org.w3c.dom.Element)elementList3.item(n);
 								if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
@@ -2385,14 +2399,34 @@ public class DialogImportXEAD extends JDialog {
 									break;
 								}
 							}
-						}
-						if (targetFunctionIOID.equals("")) {
-							elementList3 = workElement3.getElementsByTagName("IOWebPage");
-							for (int n = 0; n < elementList3.getLength(); n++) {
-								workElement4 = (org.w3c.dom.Element)elementList3.item(n);
-								if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
-									targetFunctionIOID = workElement4.getAttribute("ID");
-									break;
+							if (targetFunctionIOID.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOSpool");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
+										targetFunctionIOID = workElement4.getAttribute("ID");
+										break;
+									}
+								}
+							}
+							if (targetFunctionIOID.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOTable");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
+										targetFunctionIOID = workElement4.getAttribute("ID");
+										break;
+									}
+								}
+							}
+							if (targetFunctionIOID.equals("")) {
+								elementList3 = workElement3.getElementsByTagName("IOWebPage");
+								for (int n = 0; n < elementList3.getLength(); n++) {
+									workElement4 = (org.w3c.dom.Element)elementList3.item(n);
+									if (workElement4.getAttribute("SortKey").equals(ioSortKey)) {
+										targetFunctionIOID = workElement4.getAttribute("ID");
+										break;
+									}
 								}
 							}
 						}

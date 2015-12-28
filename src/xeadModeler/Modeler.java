@@ -775,6 +775,13 @@ public class Modeler extends JFrame {
 	private JLabel jLabelTaskFunctionIOImageTableRemarks = new JLabel();
 	private JScrollPane jScrollPaneTaskFunctionIOImageTableRemarks = new JScrollPane();
 	private JTextArea jTextAreaTaskFunctionIOImageTableRemarks = new JTextArea();
+	private JLabel jLabelTaskFunctionIOImageFunctionParms = new JLabel();
+	private JTextField jTextFieldTaskFunctionIOImageFunctionParms = new JTextField();
+	private JLabel jLabelTaskFunctionIOImageFunctionReturn = new JLabel();
+	private JTextField jTextFieldTaskFunctionIOImageFunctionReturn = new JTextField();
+	private JScrollPane jScrollPaneFunctionIOImageIOList = new JScrollPane();
+	private TableModelReadOnlyList tableModelFunctionIOImageIOList = new TableModelReadOnlyList();
+	private JTable jTableFunctionIOImageIOList = new JTable(tableModelFunctionIOImageIOList);
 
 	/**
 	 * Definition components on jPanelSubsystemList
@@ -3584,35 +3591,94 @@ public class Modeler extends JFrame {
 		//
 		jLabelTaskFunctionIOImageFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIOImageFunction.setBounds(new Rectangle(5, 6, 130, 20));
-		jLabelTaskFunctionIOImageFunction.setText("支援機能");
+		jLabelTaskFunctionIOImageFunction.setText(res.getString("S643"));
 		jLabelTaskFunctionIOImageFunction.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunction.setBounds(new Rectangle(140, 6, 700, 25));
+		jTextFieldTaskFunctionIOImageFunction.setBounds(new Rectangle(140, 6, 720, 25));
 		jTextFieldTaskFunctionIOImageFunction.setOpaque(false);
+		jTextFieldTaskFunctionIOImageFunction.setEditable(false);
+		jTextFieldTaskFunctionIOImageFunction.setFocusable(false);
+		jTextFieldTaskFunctionIOImageFunction.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageFunctionRemarks.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIOImageFunctionRemarks.setBounds(new Rectangle(5, 37, 130, 20));
-		jLabelTaskFunctionIOImageFunctionRemarks.setText("機能概要");
+		jLabelTaskFunctionIOImageFunctionRemarks.setText(res.getString("S644"));
 		jLabelTaskFunctionIOImageFunctionRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunctionSummary.setBounds(new Rectangle(140, 37, 700, 25));
+		jTextFieldTaskFunctionIOImageFunctionSummary.setBounds(new Rectangle(140, 37, 720, 25));
 		jTextFieldTaskFunctionIOImageFunctionSummary.setOpaque(false);
+		jTextFieldTaskFunctionIOImageFunctionSummary.setEditable(false);
+		jTextFieldTaskFunctionIOImageFunctionSummary.setFocusable(false);
+		jTextFieldTaskFunctionIOImageFunctionSummary.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIOImageTable.setBounds(new Rectangle(5, 68, 130, 20));
-		jLabelTaskFunctionIOImageTable.setText("テーブル操作");
+		jLabelTaskFunctionIOImageTable.setText(res.getString("S645"));
 		jLabelTaskFunctionIOImageTable.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageTable.setBounds(new Rectangle(140, 68, 700, 25));
+		jTextFieldTaskFunctionIOImageTable.setBounds(new Rectangle(140, 68, 720, 25));
 		jTextFieldTaskFunctionIOImageTable.setOpaque(false);
+		jTextFieldTaskFunctionIOImageTable.setEditable(false);
+		jTextFieldTaskFunctionIOImageTable.setFocusable(false);
+		jTextFieldTaskFunctionIOImageTable.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageTableRemarks.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(5, 99, 130, 20));
-		jLabelTaskFunctionIOImageTableRemarks.setText("テーブルの説明");
+		jLabelTaskFunctionIOImageTableRemarks.setText(res.getString("S646"));
 		jLabelTaskFunctionIOImageTableRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
-		jScrollPaneTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(140, 99, 700, 150));
+		jScrollPaneTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(140, 99, 720, 150));
 		jScrollPaneTaskFunctionIOImageTableRemarks.getViewport().add(jTextAreaTaskFunctionIOImageTableRemarks, null);
 		jScrollPaneTaskFunctionIOImageTableRemarks.setOpaque(false);
 		jTextAreaTaskFunctionIOImageTableRemarks.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTaskFunctionIOImageTableRemarks.setOpaque(false);
 		jTextAreaTaskFunctionIOImageTableRemarks.setLineWrap(true);
+		jTextAreaTaskFunctionIOImageTableRemarks.setEditable(false);
+		jTextAreaTaskFunctionIOImageTableRemarks.setFocusable(false);
+		jTextAreaTaskFunctionIOImageTableRemarks.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
+		//
+		jLabelTaskFunctionIOImageFunctionParms.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(5, 68, 130, 20));
+		jLabelTaskFunctionIOImageFunctionParms.setText(res.getString("S313"));
+		jLabelTaskFunctionIOImageFunctionParms.setHorizontalAlignment(SwingConstants.RIGHT);
+		jTextFieldTaskFunctionIOImageFunctionParms.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(140, 68, 720, 25));
+		jTextFieldTaskFunctionIOImageFunctionParms.setOpaque(false);
+		jTextFieldTaskFunctionIOImageFunctionParms.setEditable(false);
+		jTextFieldTaskFunctionIOImageFunctionParms.setFocusable(false);
+		jTextFieldTaskFunctionIOImageFunctionParms.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
+		jLabelTaskFunctionIOImageFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(5, 99, 130, 20));
+		jLabelTaskFunctionIOImageFunctionReturn.setText(res.getString("S642"));
+		jLabelTaskFunctionIOImageFunctionReturn.setHorizontalAlignment(SwingConstants.RIGHT);
+		jTextFieldTaskFunctionIOImageFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTextFieldTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(140, 99, 720, 25));
+		jTextFieldTaskFunctionIOImageFunctionReturn.setOpaque(false);
+		jTextFieldTaskFunctionIOImageFunctionReturn.setEditable(false);
+		jTextFieldTaskFunctionIOImageFunctionReturn.setFocusable(false);
+		jTextFieldTaskFunctionIOImageFunctionReturn.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
+		//
+		jTableFunctionIOImageIOList.setBackground(SystemColor.control);
+		jTableFunctionIOImageIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jTableFunctionIOImageIOList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jTableFunctionIOImageIOList.setRowHeight(TABLE_ROW_HEIGHT);
+		jTableFunctionIOImageIOList.setRowSelectionAllowed(false);
+		jTableFunctionIOImageIOList.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
+		tableModelFunctionIOImageIOList.addColumn("NO.");
+		tableModelFunctionIOImageIOList.addColumn(res.getString("S680"));
+		tableModelFunctionIOImageIOList.addColumn(res.getString("S204"));
+		column0 = jTableFunctionIOImageIOList.getColumnModel().getColumn(0);
+		column1 = jTableFunctionIOImageIOList.getColumnModel().getColumn(1);
+		column2 = jTableFunctionIOImageIOList.getColumnModel().getColumn(2);
+		column0.setPreferredWidth(40);
+		column1.setPreferredWidth(285);
+		column2.setPreferredWidth(497);
+		column0.setCellRenderer(rendererAlignmentCenter);
+		column1.setCellRenderer(rendererAlignmentLeft);
+		column2.setCellRenderer(rendererAlignmentLeft);
+		jTableFunctionIOImageIOList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		rendererTableHeader = (DefaultTableCellRenderer)jTableFunctionIOImageIOList.getTableHeader().getDefaultRenderer();
+		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		jScrollPaneFunctionIOImageIOList.setBorder(null);
+		jScrollPaneFunctionIOImageIOList.getViewport().add(jTableFunctionIOImageIOList);
+		jScrollPaneFunctionIOImageIOList.setBounds(5, 130, 855, 200);
+		jScrollPaneFunctionIOImageIOList.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 	}
 	/**
 	 * Initialize component for node of SubsystemList
@@ -20048,36 +20114,46 @@ public class Modeler extends JFrame {
 					elementToShow = taskFunctionIOElement;
 				}
 				functionNode = getSpecificXeadTreeNode("Function", taskFunctionIOElement.getAttribute("FunctionID"), null);
-				functionIONode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"), taskFunctionIOElement.getAttribute("IOID"));
-				functionIOList = functionNode.getElement().getElementsByTagName("IOPanel");
-				numberOfIO = functionIOList.getLength();
-				functionIOList = functionNode.getElement().getElementsByTagName("IOSpool");
-				numberOfIO = numberOfIO + functionIOList.getLength();
-				functionIOList = functionNode.getElement().getElementsByTagName("IOWebPage");
-				numberOfIO = numberOfIO + functionIOList.getLength();
-				tabTitle = functionNode.getElement().getAttribute("Name");
-				if (numberOfIO > 1) {
-					if (functionIONode.getType().equals("IOTable")) {
-						tableNode = getSpecificXeadTreeNode("Table", functionIONode.getElement().getAttribute("TableID"), null);
-						if (tableNode != null) {
-							tabTitle = functionNode.getElement().getAttribute("Name") + "/" + tableNode.getElement().getAttribute("Name");
-						}
+				if (taskFunctionIOElement.getAttribute("IOID").equals("0")) {
+					jTabbedPaneTaskFunctionIO.addTab(functionNode.getElement().getAttribute("Name"), imageIconFunction, null);
+				} else {
+					functionIONode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"), taskFunctionIOElement.getAttribute("IOID"));
+					if (functionIONode == null) {
+						JOptionPane.showMessageDialog(null, "Node of Function IO not founed with ID of '" + taskFunctionIOElement.getAttribute("IOID") + "' for function " + functionNode.getElement().getAttribute("Name"));
 					} else {
-						tabTitle = functionNode.getElement().getAttribute("Name") + "(" + functionIONode.getName() + ")";
+						functionIOList = functionNode.getElement().getElementsByTagName("IOPanel");
+						numberOfIO = functionIOList.getLength();
+						functionIOList = functionNode.getElement().getElementsByTagName("IOSpool");
+						numberOfIO = numberOfIO + functionIOList.getLength();
+						functionIOList = functionNode.getElement().getElementsByTagName("IOWebPage");
+						numberOfIO = numberOfIO + functionIOList.getLength();
+						functionIOList = functionNode.getElement().getElementsByTagName("IOTable");
+						numberOfIO = numberOfIO + functionIOList.getLength();
+						tabTitle = functionNode.getElement().getAttribute("Name");
+						if (numberOfIO > 1) {
+							if (functionIONode.getType().equals("IOTable")) {
+								tableNode = getSpecificXeadTreeNode("Table", functionIONode.getElement().getAttribute("TableID"), null);
+								if (tableNode != null) {
+									tabTitle = functionNode.getElement().getAttribute("Name") + "/" + tableNode.getElement().getAttribute("Name");
+								}
+							} else {
+								tabTitle = functionNode.getElement().getAttribute("Name") + "(" + functionIONode.getName() + ")";
+							}
+						}
+						//
+						if (functionIONode.getType().equals("IOPanel")) {
+							jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOPanel, null);
+						}
+						if (functionIONode.getType().equals("IOSpool")) {
+							jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOSpool, null);
+						}
+						if (functionIONode.getType().equals("IOWebPage")) {
+							jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOWebPage, null);
+						}
+						if (functionIONode.getType().equals("IOTable")) {
+							jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOTable, null);
+						}
 					}
-				}
-				//
-				if (functionIONode.getType().equals("IOTable")) {
-					jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOTable, null);
-				}
-				if (functionIONode.getType().equals("IOPanel")) {
-					jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOPanel, null);
-				}
-				if (functionIONode.getType().equals("IOSpool")) {
-					jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOSpool, null);
-				}
-				if (functionIONode.getType().equals("IOWebPage")) {
-					jTabbedPaneTaskFunctionIO.addTab(tabTitle, imageIconIOWebPage, null);
 				}
 			}
 			//
@@ -20099,96 +20175,113 @@ public class Modeler extends JFrame {
 			if (taskFunctionIOElement != null) {
 
 				XeadTreeNode functionNode = getSpecificXeadTreeNode("Function", taskFunctionIOElement.getAttribute("FunctionID"), null);
-				XeadTreeNode functionIONode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"), taskFunctionIOElement.getAttribute("IOID"));
-				if (functionIONode != null) {
-					if (functionIONode.getType().equals("IOTable")) {
-						jPanelTaskFunctionIOImage.setBackground(DESKTOP_COLOR);
-						jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
-						jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
-						jPanelTaskFunctionIOImage.removeAll();
-						jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
-						jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jTextPaneTaskFunctionIOImage.getWidth()+20, jTextPaneTaskFunctionIOImage.getHeight()+20));
-						setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
-						
-					} else {
-						if (functionIONode.getType().equals("IOWebPage")) {
-							jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
-							jScrollPaneTaskFunctionIOImage.getViewport().add(jEditorPaneTaskFunctionIOImage, null);
-							if (!functionIONode.getElement().getAttribute("FileName").equals(htmlFileNameForFunctionIO)) {
-								htmlFileNameForFunctionIO = functionIONode.getElement().getAttribute("FileName");
-								String fileName = "";
-								jEditorPaneTaskFunctionIOImage.setText(res.getString("S1829"));
-								if (!functionIONode.getElement().getAttribute("FileName").equals("")) {
-									try {
-										File file = new File(currentFileName);
-										String wrkStr = functionIONode.getElement().getAttribute("FileName").substring(0,7);
-										if (wrkStr.equals("http://")) {
-											fileName = functionIONode.getElement().getAttribute("FileName");
-										} else {
-											fileName = "file:///" + file.getParent() + File.separator + functionIONode.getElement().getAttribute("FileName");
-										}
-										jEditorPaneTaskFunctionIOImage.setText(res.getString("S1829") + fileName);
-										jEditorPaneTaskFunctionIOImage.setPage(fileName);
-									} catch (Exception ex) {}
-								}
-							}
-
-							jLabelTaskFunctionIOSortKey.setText("");
-							jLabelTaskFunctionIOSortKey.setBounds(0, 0, 0, 0);
-
-						} else {
-							jPanelTaskFunctionIOImage.setBackground(DESKTOP_COLOR);
-							jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
-							jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
-
-							if (functionIONode.isSearchImageFileValid()) {
-								imageFunctionIO = getImageFunctionIO(functionNode.getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
-							} else {
-								imageFunctionIO = null;
-							}
-							if (imageFunctionIO != null) {
-								jPanelTaskFunctionIOImage.removeAll();
-								jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOImage, null);
-								jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOSortKey, null);
-
-								jLabelTaskFunctionIOImage.setIcon(imageFunctionIO);
-								jLabelTaskFunctionIOImage.setBounds(10, 10, imageFunctionIO.getIconWidth(), imageFunctionIO.getIconHeight());
-								jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jLabelTaskFunctionIOImage.getWidth()+30, jLabelTaskFunctionIOImage.getHeight()+40));
-
-								Rectangle rec = jLabelTaskFunctionIOImage.getBounds();
-								XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
-								jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-								jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 500, 15);
-
-							} else {
-								jPanelTaskFunctionIOImage.removeAll();
-								jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
-								jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOSortKey, null);
-
-								setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
-
-								Rectangle rec = jTextPaneTaskFunctionIOImage.getBounds();
-								XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
-								jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
-								FontMetrics metrics = jLabelTaskFunctionIOSortKey.getFontMetrics(jLabelTaskFunctionIOSortKey.getFont());
-								jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, metrics.stringWidth(jLabelTaskFunctionIOSortKey.getText()), 15);
-							}
-						}
-					}
-
-					strWrk = substringLinesWithTokenOfEOL(functionIONode.getElement().getAttribute("Descriptions"), "\n");
-					position = strWrk.indexOf("@@TECHNICAL NOTES");
-					if (position == -1) {
-						jTextAreaTaskFunctionIODescriptions.setText(strWrk);
-					} else {
-						jTextAreaTaskFunctionIODescriptions.setText(strWrk.substring(0, position));
-					}
+				if (taskFunctionIOElement.getAttribute("IOID").equals("0")) {
+					jPanelTaskFunctionIOImage.setBackground(DESKTOP_COLOR);
+					jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
+					jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
+					jPanelTaskFunctionIOImage.removeAll();
+					jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
+					jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jTextPaneTaskFunctionIOImage.getWidth()+20, jTextPaneTaskFunctionIOImage.getHeight()+20));
+					setupTextPaneForFunctionIOImage(functionNode, jTextPaneTaskFunctionIOImage);
+					jTextAreaTaskFunctionIODescriptions.setText(substringLinesWithTokenOfEOL(functionNode.getElement().getAttribute("Descriptions"), "\n"));
 					jTextAreaTaskFunctionIODescriptions.setCaretPosition(0);
-
 					jTextAreaTaskFunctionIOOperations.setBackground(SystemColor.window);
 					jTextAreaTaskFunctionIOOperations.setEditable(true);
 					jTextAreaTaskFunctionIOOperations.setText(substringLinesWithTokenOfEOL(taskFunctionIOElement.getAttribute("Operations"), "\n"));
 					jTextAreaTaskFunctionIOOperations.setCaretPosition(0);
+
+				} else {
+					XeadTreeNode functionIONode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"), taskFunctionIOElement.getAttribute("IOID"));
+					if (functionIONode != null) {
+						if (functionIONode.getType().equals("IOTable")) {
+							jPanelTaskFunctionIOImage.setBackground(DESKTOP_COLOR);
+							jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
+							jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
+							jPanelTaskFunctionIOImage.removeAll();
+							jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
+							jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jTextPaneTaskFunctionIOImage.getWidth()+20, jTextPaneTaskFunctionIOImage.getHeight()+20));
+							setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
+
+						} else {
+							if (functionIONode.getType().equals("IOWebPage")) {
+								jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
+								jScrollPaneTaskFunctionIOImage.getViewport().add(jEditorPaneTaskFunctionIOImage, null);
+								if (!functionIONode.getElement().getAttribute("FileName").equals(htmlFileNameForFunctionIO)) {
+									htmlFileNameForFunctionIO = functionIONode.getElement().getAttribute("FileName");
+									String fileName = "";
+									jEditorPaneTaskFunctionIOImage.setText(res.getString("S1829"));
+									if (!functionIONode.getElement().getAttribute("FileName").equals("")) {
+										try {
+											File file = new File(currentFileName);
+											String wrkStr = functionIONode.getElement().getAttribute("FileName").substring(0,7);
+											if (wrkStr.equals("http://")) {
+												fileName = functionIONode.getElement().getAttribute("FileName");
+											} else {
+												fileName = "file:///" + file.getParent() + File.separator + functionIONode.getElement().getAttribute("FileName");
+											}
+											jEditorPaneTaskFunctionIOImage.setText(res.getString("S1829") + fileName);
+											jEditorPaneTaskFunctionIOImage.setPage(fileName);
+										} catch (Exception ex) {}
+									}
+								}
+
+								jLabelTaskFunctionIOSortKey.setText("");
+								jLabelTaskFunctionIOSortKey.setBounds(0, 0, 0, 0);
+
+							} else {
+								jPanelTaskFunctionIOImage.setBackground(DESKTOP_COLOR);
+								jScrollPaneTaskFunctionIOImage.getViewport().removeAll();
+								jScrollPaneTaskFunctionIOImage.getViewport().add(jPanelTaskFunctionIOImage, null);
+
+								if (functionIONode.isSearchImageFileValid()) {
+									imageFunctionIO = getImageFunctionIO(functionNode.getElement().getAttribute("SortKey"), functionIONode.getElement().getAttribute("SortKey"));
+								} else {
+									imageFunctionIO = null;
+								}
+								if (imageFunctionIO != null) {
+									jPanelTaskFunctionIOImage.removeAll();
+									jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOImage, null);
+									jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOSortKey, null);
+
+									jLabelTaskFunctionIOImage.setIcon(imageFunctionIO);
+									jLabelTaskFunctionIOImage.setBounds(10, 10, imageFunctionIO.getIconWidth(), imageFunctionIO.getIconHeight());
+									jPanelTaskFunctionIOImage.setPreferredSize(new Dimension(jLabelTaskFunctionIOImage.getWidth()+30, jLabelTaskFunctionIOImage.getHeight()+40));
+
+									Rectangle rec = jLabelTaskFunctionIOImage.getBounds();
+									XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
+									jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+									jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, 500, 15);
+
+								} else {
+									jPanelTaskFunctionIOImage.removeAll();
+									jPanelTaskFunctionIOImage.add(jTextPaneTaskFunctionIOImage, null);
+									jPanelTaskFunctionIOImage.add(jLabelTaskFunctionIOSortKey, null);
+
+									setupTextPaneForFunctionIOImage(functionIONode, jTextPaneTaskFunctionIOImage);
+
+									Rectangle rec = jTextPaneTaskFunctionIOImage.getBounds();
+									XeadTreeNode functionTypeNode = getSpecificXeadTreeNode("FunctionType", functionNode.getElement().getAttribute("FunctionTypeID"), null);
+									jLabelTaskFunctionIOSortKey.setText(functionTypeNode.getElement().getAttribute("SortKey") + " " + functionTypeNode.getElement().getAttribute("Name") + " - " + functionNode.getElement().getAttribute("SortKey") + " " + functionIONode.getElement().getAttribute("Name") + "(" + functionIONode.getElement().getAttribute("SortKey") + ")");
+									FontMetrics metrics = jLabelTaskFunctionIOSortKey.getFontMetrics(jLabelTaskFunctionIOSortKey.getFont());
+									jLabelTaskFunctionIOSortKey.setBounds(rec.x, rec.y + rec.height, metrics.stringWidth(jLabelTaskFunctionIOSortKey.getText()), 15);
+								}
+							}
+						}
+
+						strWrk = substringLinesWithTokenOfEOL(functionIONode.getElement().getAttribute("Descriptions"), "\n");
+						position = strWrk.indexOf("@@TECHNICAL NOTES");
+						if (position == -1) {
+							jTextAreaTaskFunctionIODescriptions.setText(strWrk);
+						} else {
+							jTextAreaTaskFunctionIODescriptions.setText(strWrk.substring(0, position));
+						}
+						jTextAreaTaskFunctionIODescriptions.setCaretPosition(0);
+
+						jTextAreaTaskFunctionIOOperations.setBackground(SystemColor.window);
+						jTextAreaTaskFunctionIOOperations.setEditable(true);
+						jTextAreaTaskFunctionIOOperations.setText(substringLinesWithTokenOfEOL(taskFunctionIOElement.getAttribute("Operations"), "\n"));
+						jTextAreaTaskFunctionIOOperations.setCaretPosition(0);
+					}
 				}
 			}
 		}
@@ -21635,20 +21728,34 @@ public class Modeler extends JFrame {
 					nodeList2 = element2.getElementsByTagName("TaskFunctionIO");
 					for (int m = 0; m < nodeList2.getLength(); m++) {
 						element3 = (org.w3c.dom.Element)nodeList2.item(m);
-						for (int i = 0; i < this.getChildCount(); i++) {
-							node = (XeadTreeNode)this.getChildAt(i);
-							element = (org.w3c.dom.Element)node.getElement();
-							if (element3.getAttribute("FunctionID").equals(domNode_.getAttribute("ID")) && element3.getAttribute("IOID").equals(element.getAttribute("ID"))) {
-								XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", element1.getAttribute("RoleID"), null);
-								j = j + 1;
-								Object[] Cell = new Object[6];
-								Cell[0] =  new TableRowNumber(j, element1, element2, element3);
-								Cell[1] = node.getName();
-								Cell[2] = roleNode.getElement().getAttribute("Name");
-								Cell[3] = element1.getAttribute("SortKey");
-								Cell[4] = element1.getAttribute("Name");
-								Cell[5] = element2.getAttribute("Label");
-								tableModelTasksUsingThis.addRow(Cell);
+						if (element3.getAttribute("FunctionID").equals(domNode_.getAttribute("ID"))
+								&& element3.getAttribute("IOID").equals("0")) {
+							XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", element1.getAttribute("RoleID"), null);
+							j = j + 1;
+							Object[] Cell = new Object[6];
+							Cell[0] =  new TableRowNumber(j, element1, element2, element3);
+							Cell[1] = "機能定義レベル";
+							Cell[2] = roleNode.getElement().getAttribute("Name");
+							Cell[3] = element1.getAttribute("SortKey");
+							Cell[4] = element1.getAttribute("Name");
+							Cell[5] = element2.getAttribute("Label");
+							tableModelTasksUsingThis.addRow(Cell);
+						} else {
+							for (int i = 0; i < this.getChildCount(); i++) {
+								node = (XeadTreeNode)this.getChildAt(i);
+								element = (org.w3c.dom.Element)node.getElement();
+								if (element3.getAttribute("FunctionID").equals(domNode_.getAttribute("ID")) && element3.getAttribute("IOID").equals(element.getAttribute("ID"))) {
+									XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", element1.getAttribute("RoleID"), null);
+									j = j + 1;
+									Object[] Cell = new Object[6];
+									Cell[0] =  new TableRowNumber(j, element1, element2, element3);
+									Cell[1] = node.getName();
+									Cell[2] = roleNode.getElement().getAttribute("Name");
+									Cell[3] = element1.getAttribute("SortKey");
+									Cell[4] = element1.getAttribute("Name");
+									Cell[5] = element2.getAttribute("Label");
+									tableModelTasksUsingThis.addRow(Cell);
+								}
 							}
 						}
 					}
@@ -22862,39 +22969,65 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Add a tab to jTabbedPaneTaskFunctionIO//
-			if ((this.getType().equals("IOTable")
+			if ((this.getType().equals("Function")
+					|| this.getType().equals("IOTable")
 					|| this.getType().equals("IOPanel")
 					|| this.getType().equals("IOSpool")
 					|| this.getType().equals("IOWebPage")) && cursor.equals(DragSource.DefaultLinkDrop)) {
 				if ((dropTarget.equals(jTabbedPaneTaskFunctionIO)) || (dropTarget.equals(jPanelTaskFunctionIOImage)) ||
 						(dropTarget.equals(jEditorPaneTaskFunctionIOImage)) || (dropTarget.equals(jTextPaneTaskFunctionIOImage)) ||
-						(dropTarget.equals(jPanelTaskFunctionIODummy)) || (dropTarget.equals(jLabelTaskFunctionIOImage)) ) {
+						(dropTarget.equals(jPanelTaskFunctionIODummy)) || (dropTarget.equals(jLabelTaskFunctionIOImage)) ||
+						(dropTarget.equals(jTableFunctionIOImageIOList)) || (dropTarget.equals(jScrollPaneFunctionIOImageIOList))) {
 					//
-					jTextPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					jEditorPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					//jTextPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					//jEditorPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					//
 					boolean ioIdDuplicated = false;
 					int wrkInt, ioIdSeq = 0;
+					XeadTreeNode functionNode = null;
 					TreePath tp = jTreeTaskActions.getSelectionPath();
 					XeadTreeNode currentTaskActionNode = (XeadTreeNode)tp.getLastPathComponent();
-					XeadTreeNode functionNode = (XeadTreeNode)this.getParent();
-					nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
-					for (int i = 0; i < nodeList.getLength(); i++) {
-						element = (org.w3c.dom.Element)nodeList.item(i);
-						if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
-							if (element.getAttribute("IOID").equals(domNode_.getAttribute("ID"))) {
-								ioIdDuplicated = true;
-								if (!element.getAttribute("IOIDSeq").equals("")) {
-									wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
-									if (wrkInt > ioIdSeq) {
-										ioIdSeq = wrkInt;
+					if (this.getType().equals("Function")) {
+						functionNode = this;
+						nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
+						for (int i = 0; i < nodeList.getLength(); i++) {
+							element = (org.w3c.dom.Element)nodeList.item(i);
+							if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
+								if (element.getAttribute("IOID").equals("0")) {
+									ioIdDuplicated = true;
+									if (!element.getAttribute("IOIDSeq").equals("")) {
+										wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
+										if (wrkInt > ioIdSeq) {
+											ioIdSeq = wrkInt;
+										}
 									}
 								}
 							}
+							sortKey = Integer.parseInt(element.getAttribute("SortKey"));
+							if (sortKey > lastSortKey) {
+								lastSortKey = sortKey;
+							}
 						}
-						sortKey = Integer.parseInt(element.getAttribute("SortKey"));
-						if (sortKey > lastSortKey) {
-							lastSortKey = sortKey;
+					} else {
+						functionNode = (XeadTreeNode)this.getParent();
+						nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
+						for (int i = 0; i < nodeList.getLength(); i++) {
+							element = (org.w3c.dom.Element)nodeList.item(i);
+							if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
+								if (element.getAttribute("IOID").equals(domNode_.getAttribute("ID"))) {
+									ioIdDuplicated = true;
+									if (!element.getAttribute("IOIDSeq").equals("")) {
+										wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
+										if (wrkInt > ioIdSeq) {
+											ioIdSeq = wrkInt;
+										}
+									}
+								}
+							}
+							sortKey = Integer.parseInt(element.getAttribute("SortKey"));
+							if (sortKey > lastSortKey) {
+								lastSortKey = sortKey;
+							}
 						}
 					}
 					informationOnThisPageChanged = true;
@@ -22902,7 +23035,11 @@ public class Modeler extends JFrame {
 					//Update DOM element//
 					newElement = domDocument.createElement("TaskFunctionIO");
 					newElement.setAttribute("FunctionID", functionNode.getElement().getAttribute("ID"));
-					newElement.setAttribute("IOID", domNode_.getAttribute("ID"));
+					if (this.getType().equals("Function")) {
+						newElement.setAttribute("IOID", "0");
+					} else {
+						newElement.setAttribute("IOID", domNode_.getAttribute("ID"));
+					}
 					if (ioIdDuplicated) {
 						newElement.setAttribute("IOIDSeq", Integer.toString(ioIdSeq + 1));
 					} else {
@@ -23317,7 +23454,8 @@ public class Modeler extends JFrame {
 					cursor = DragSource.DefaultLinkDrop;
 				}
 			}
-			if (this.getType().equals("IOTable")
+			if (this.getType().equals("Function")
+					|| this.getType().equals("IOTable")
 					|| this.getType().equals("IOPanel")
 					|| this.getType().equals("IOSpool")
 					|| this.getType().equals("IOWebPage")) {
@@ -23334,11 +23472,17 @@ public class Modeler extends JFrame {
 					cursor = DragSource.DefaultLinkDrop;
 				}
 				if (dropTarget.equals(jTextPaneTaskFunctionIOImage)) {
-					jTextPaneTaskFunctionIOImage.setCursor(DragSource.DefaultLinkDrop);
+					//jTextPaneTaskFunctionIOImage.setCursor(DragSource.DefaultLinkDrop);
 					cursor = DragSource.DefaultLinkDrop;
 				}
 				if (dropTarget.equals(jEditorPaneTaskFunctionIOImage)) {
-					jEditorPaneTaskFunctionIOImage.setCursor(DragSource.DefaultLinkDrop);
+					//jEditorPaneTaskFunctionIOImage.setCursor(DragSource.DefaultLinkDrop);
+					cursor = DragSource.DefaultLinkDrop;
+				}
+				if (dropTarget.equals(jTableFunctionIOImageIOList)) {
+					cursor = DragSource.DefaultLinkDrop;
+				}
+				if (dropTarget.equals(jScrollPaneFunctionIOImageIOList)) {
 					cursor = DragSource.DefaultLinkDrop;
 				}
 			}
@@ -33431,8 +33575,12 @@ public class Modeler extends JFrame {
 		}
 		if (componentType_jPopupMenuComponent.equals("TaskFunctionIO")) {
 			org.w3c.dom.Element taskFunctionIOElement = getElementOfCurrentTabTaskFunctionIO();
-			targetNode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"),
-					taskFunctionIOElement.getAttribute("IOID"));
+			if (taskFunctionIOElement.getAttribute("IOID").equals("0")) {
+				targetNode = getSpecificXeadTreeNode("Function", taskFunctionIOElement.getAttribute("FunctionID"), null);
+			} else {
+				targetNode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"),
+						taskFunctionIOElement.getAttribute("IOID"));
+			}
 		}
 		if (componentType_jPopupMenuComponent.equals("FunctionsStructureIO")) {
 			XeadTreeNode functionIONode;
@@ -33742,9 +33890,14 @@ public class Modeler extends JFrame {
 			if (e.getClickCount() >= 2) {
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					XeadTreeNode targetNode = null;
 					org.w3c.dom.Element taskFunctionIOElement = getElementOfCurrentTabTaskFunctionIO();
-					XeadTreeNode targetNode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"),
+					if (taskFunctionIOElement.getAttribute("IOID").equals("0")) {
+						targetNode = getSpecificXeadTreeNode("Function", taskFunctionIOElement.getAttribute("FunctionID"), null);
+					} else {
+						targetNode = getSpecificXeadTreeNode("FunctionIO", taskFunctionIOElement.getAttribute("FunctionID"),
 							taskFunctionIOElement.getAttribute("IOID"));
+					}
 					TreePath tp = new TreePath(targetNode.getPath());
 					jTreeMain.setSelectionPath(tp);
 					Rectangle nodePos = jTreeMain.getPathBounds(tp);
@@ -33914,8 +34067,47 @@ public class Modeler extends JFrame {
 	 * @param textPane :TextPane component to be setup
 	 */
 	void setupTextPaneForFunctionIOImage(XeadTreeNode functionIONode, JTextPane textPane) {
+		if (functionIONode.getType().equals("Function")) {
+			textPane.setBounds(10, 10, 867, 337);
+			JPanel panel = (JPanel)textPane.getParent();
+			panel.setPreferredSize(new Dimension(897, 377));
+			textPane.removeStyle("style1");
+			textPane.setText("");
+			textPane.updateUI();
+
+			org.w3c.dom.Element functionElement = functionIONode.getElement();
+			jTextFieldTaskFunctionIOImageFunction.setText(functionIONode.getName());
+			jTextFieldTaskFunctionIOImageFunctionSummary.setText(substringLinesWithTokenOfEOL(functionElement.getAttribute("Summary"), "\n"));
+			jTextFieldTaskFunctionIOImageFunctionParms.setText(functionElement.getAttribute("Parameters"));
+			jTextFieldTaskFunctionIOImageFunctionReturn.setText(functionElement.getAttribute("Return"));
+			textPane.add(jLabelTaskFunctionIOImageFunction);
+			textPane.add(jTextFieldTaskFunctionIOImageFunction);
+			textPane.add(jLabelTaskFunctionIOImageFunctionRemarks);
+			textPane.add(jTextFieldTaskFunctionIOImageFunctionSummary);
+			textPane.add(jLabelTaskFunctionIOImageFunctionParms);
+			textPane.add(jTextFieldTaskFunctionIOImageFunctionParms);
+			textPane.add(jLabelTaskFunctionIOImageFunctionReturn);
+			textPane.add(jTextFieldTaskFunctionIOImageFunctionReturn);
+			textPane.add(jScrollPaneFunctionIOImageIOList);
+			if (tableModelFunctionIOImageIOList.getRowCount() > 0) {
+				int rowCount = tableModelFunctionIOImageIOList.getRowCount();
+				for (int i = 0; i < rowCount; i++) {tableModelFunctionIOImageIOList.removeRow(0);}
+			}
+			for (int i = 0; i < functionIONode.getChildCount(); i++) {
+				XeadTreeNode node = (XeadTreeNode)functionIONode.getChildAt(i);
+				org.w3c.dom.Element element = (org.w3c.dom.Element)node.getElement();
+				Object[] Cell = new Object[3];
+				Cell[0] = i+1;
+				Cell[1] = node.getName();
+				Cell[2] = getFirstSentence(element.getAttribute("Descriptions"));
+				tableModelFunctionIOImageIOList.addRow(Cell);
+			}
+		}
+
 		if (functionIONode.getType().equals("IOTable")) {
-			textPane.setBounds(10, 10, 849, 259);
+			textPane.setBounds(10, 10, 867, 259);
+			JPanel panel = (JPanel)textPane.getParent();
+			panel.setPreferredSize(new Dimension(897, 299));
 			textPane.removeStyle("style1");
 			textPane.setText("");
 			textPane.updateUI();
