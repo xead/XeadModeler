@@ -45,9 +45,17 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2015 DBC Ltd.";
+	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M27";
+	public static final String FULL_VERSION = "V1.R4.M28";
+	// 1.4.28での変更点
+	//・テーブル一覧の欄にFLD(フィールド数)を加えた
+	//・テーブル入出力定義に「ポジション」の属性を追加した
+	//・パネル、スプールの表現をそれぞれフォーム、帳票に変更した
+	//・SVG出力の範囲設定のロジックを改善した
+	//・Undo/Redo用メニューアイテムの表記を改善した
+	//・バックアップ時に指定フォルダを作成するようにした
+	//
 	// 1.4.27での変更点
 	//・業務定義のアクションに機能定義をリンクできるようにした
 	//

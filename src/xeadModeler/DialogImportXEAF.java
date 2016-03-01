@@ -967,6 +967,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF13"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "PRIMARY");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "");
@@ -990,6 +991,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF13"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "PRIMARY");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "+");
@@ -1011,6 +1013,7 @@ public class DialogImportXEAF extends JDialog {
 				childElement.setAttribute("SortKey", "020");
 				childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF24"));
 				childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+				childElement.setAttribute("Position", "JOIN");
 				childElement.setAttribute("OpC", "+");
 				childElement.setAttribute("OpR", "");
 				childElement.setAttribute("OpU", "");
@@ -1035,6 +1038,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF13"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "PRIMARY");
 			childElement.setAttribute("OpC", "+");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "+");
@@ -1059,6 +1063,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF13"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "PRIMARY");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "");
@@ -1083,6 +1088,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF13"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "HEADER");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "");
@@ -1108,6 +1114,7 @@ public class DialogImportXEAF extends JDialog {
 				childElement.setAttribute("SortKey", "020");
 				childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF15"));
 				childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+				childElement.setAttribute("Position", "DETAIL");
 				childElement.setAttribute("OpC", "");
 				childElement.setAttribute("OpR", "+");
 				childElement.setAttribute("OpU", "");
@@ -1132,6 +1139,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF14"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "HEADER");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "+");
@@ -1153,6 +1161,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF15"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "DETAIL");
 			childElement.setAttribute("OpC", "+");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "+");
@@ -1176,6 +1185,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF14"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "HEADER");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "");
@@ -1197,6 +1207,7 @@ public class DialogImportXEAF extends JDialog {
 			childElement.setAttribute("SortKey", "020");
 			childElement.setAttribute("Descriptions", res.getString("DialogImportXEAF15"));
 			childElement.setAttribute("TableID", tableElementInto.getAttribute("ID"));
+			childElement.setAttribute("Position", "DETAIL");
 			childElement.setAttribute("OpC", "");
 			childElement.setAttribute("OpR", "+");
 			childElement.setAttribute("OpU", "");

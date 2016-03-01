@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2016 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -165,6 +165,7 @@ public class Modeler extends JFrame {
 	 */
 	public DOMParser domParser = new DOMParser();
 	public org.w3c.dom.Document domDocument;
+	public org.w3c.dom.Document domDocumentSaved = null;
 	private HashMap<String, org.w3c.dom.Document> synchFileMap = new HashMap<String, org.w3c.dom.Document>();
 	private ArrayList<String> referringFileNameList = new ArrayList<String>();
 	private ArrayList<org.w3c.dom.Document> referringFileDocList = new ArrayList<org.w3c.dom.Document>();
@@ -378,7 +379,7 @@ public class Modeler extends JFrame {
 	private DefaultTableCellRenderer rendererAlignmentRightControlColor = new DefaultTableCellRenderer();
 	private DefaultTableCellRenderer rendererAlignmentLeftControlColor = new DefaultTableCellRenderer();
 	private DefaultTableCellRenderer rendererTableHeader = null;
-	private TableColumn column0, column1, column2, column3, column4, column5, column6, column7, column8, column9, columnA, columnB, columnC, columnD;
+	private TableColumn column0, column1, column2, column3, column4, column5, column6, column7, column8, column9, columnA, columnB, columnC, columnD, columnE;
 	/**
 	 * customized key-map for text component
 	 */
@@ -916,10 +917,10 @@ public class Modeler extends JFrame {
 	private ArrayList<org.w3c.dom.Element> relationshipElementArray = new ArrayList<org.w3c.dom.Element>();
 	private JPanel jPanelDatamodel = new JPanel() {
 		private static final long serialVersionUID = 1L;
-		public void paintComponent(Graphics g) {
+		@Override protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D)g;
-
+			
 			if (isToShowGridsOnDataModel) {
 				if (isNormalColorConfigOnDataModel) {
 					g2.setColor(GRID_COLOR1);
@@ -1324,6 +1325,8 @@ public class Modeler extends JFrame {
 	private JTextField jTextFieldIOTableSortKey = new JTextField();
 	private JLabel jLabelIOTablePK = new JLabel();
 	private JTextField jTextFieldIOTablePK = new JTextField();
+	private JLabel jLabelIOTablePosition = new JLabel();
+	private JComboBox jComboBoxIOTablePosition = new JComboBox();
 	private JLabel jLabelIOTableDescriptions = new JLabel();
 	private KanjiTextArea jTextAreaIOTableDescriptions = new KanjiTextArea();
 	private JPanel jPanelIOTable3 = new JPanel();
@@ -3917,6 +3920,7 @@ public class Modeler extends JFrame {
 		tableModelFunctionsStructureTableIOList.addColumn("NO.");
 		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S448"));
 		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S449"));
+		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S750"));
 		tableModelFunctionsStructureTableIOList.addColumn("C");
 		tableModelFunctionsStructureTableIOList.addColumn("R");
 		tableModelFunctionsStructureTableIOList.addColumn("U");
@@ -3928,20 +3932,23 @@ public class Modeler extends JFrame {
 		column4 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(4);
 		column5 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(5);
 		column6 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(6);
+		column7 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(7);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(100);
 		column2.setPreferredWidth(300);
-		column3.setPreferredWidth(30);
+		column3.setPreferredWidth(130);
 		column4.setPreferredWidth(30);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
+		column7.setPreferredWidth(30);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
-		column3.setCellRenderer(rendererAlignmentCenter);
+		column3.setCellRenderer(rendererAlignmentLeft);
 		column4.setCellRenderer(rendererAlignmentCenter);
 		column5.setCellRenderer(rendererAlignmentCenter);
 		column6.setCellRenderer(rendererAlignmentCenter);
+		column7.setCellRenderer(rendererAlignmentCenter);
 		jTableFunctionsStructureTableIOList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableFunctionsStructureTableIOList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4037,6 +4044,7 @@ public class Modeler extends JFrame {
 		tableModelNativeTableList.addColumn("D");
 		tableModelNativeTableList.addColumn(res.getString("S477"));
 		tableModelNativeTableList.addColumn(res.getString("S478"));
+		tableModelNativeTableList.addColumn("FLD");
 		tableModelNativeTableList.addColumn(res.getString("S479"));
 		tableModelNativeTableList.addColumn(res.getString("S480"));
 		tableModelNativeTableList.addColumn(res.getString("S481"));
@@ -4055,6 +4063,7 @@ public class Modeler extends JFrame {
 		columnB = jTableNativeTableList.getColumnModel().getColumn(11);
 		columnC = jTableNativeTableList.getColumnModel().getColumn(12);
 		columnD = jTableNativeTableList.getColumnModel().getColumn(13);
+		columnE = jTableNativeTableList.getColumnModel().getColumn(14);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(250);
@@ -4065,10 +4074,11 @@ public class Modeler extends JFrame {
 		column7.setPreferredWidth(30);
 		column8.setPreferredWidth(150);
 		column9.setPreferredWidth(350);
-		columnA.setPreferredWidth(42);
+		columnA.setPreferredWidth(45);
 		columnB.setPreferredWidth(42);
 		columnC.setPreferredWidth(42);
 		columnD.setPreferredWidth(42);
+		columnE.setPreferredWidth(42);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
@@ -4086,6 +4096,7 @@ public class Modeler extends JFrame {
 		columnB.setCellRenderer(rendererAlignmentCenter);
 		columnC.setCellRenderer(rendererAlignmentCenter);
 		columnD.setCellRenderer(rendererAlignmentCenter);
+		columnE.setCellRenderer(rendererAlignmentCenter);
 		jTableNativeTableList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableNativeTableList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4106,6 +4117,7 @@ public class Modeler extends JFrame {
 		tableModelForeignTableList.addColumn("D");
 		tableModelForeignTableList.addColumn(res.getString("S495"));
 		tableModelForeignTableList.addColumn(res.getString("S496"));
+		tableModelForeignTableList.addColumn("FLD");
 		column0 = jTableForeignTableList.getColumnModel().getColumn(0);
 		column1 = jTableForeignTableList.getColumnModel().getColumn(1);
 		column2 = jTableForeignTableList.getColumnModel().getColumn(2);
@@ -4117,6 +4129,7 @@ public class Modeler extends JFrame {
 		column8 = jTableForeignTableList.getColumnModel().getColumn(8);
 		column9 = jTableForeignTableList.getColumnModel().getColumn(9);
 		columnA = jTableForeignTableList.getColumnModel().getColumn(10);
+		columnB = jTableForeignTableList.getColumnModel().getColumn(11);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(250);
 		column2.setPreferredWidth(150);
@@ -4128,6 +4141,7 @@ public class Modeler extends JFrame {
 		column8.setPreferredWidth(30);
 		column9.setPreferredWidth(150);
 		columnA.setPreferredWidth(350);
+		columnB.setPreferredWidth(45);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
@@ -4140,6 +4154,7 @@ public class Modeler extends JFrame {
 		column8.setCellRenderer(rendererAlignmentCenter);
 		column9.setCellRenderer(rendererAlignmentLeft);
 		columnA.setCellRenderer(rendererAlignmentLeft);
+		columnB.setCellRenderer(rendererAlignmentCenter);
 		jTableForeignTableList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableForeignTableList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4317,6 +4332,8 @@ public class Modeler extends JFrame {
 		tableModelTableUsageList.addColumn("NO.");
 		tableModelTableUsageList.addColumn("ID");
 		tableModelTableUsageList.addColumn(res.getString("S523"));
+		tableModelTableUsageList.addColumn(res.getString("S639"));
+		tableModelTableUsageList.addColumn(res.getString("S750"));
 		tableModelTableUsageList.addColumn("C");
 		tableModelTableUsageList.addColumn("R");
 		tableModelTableUsageList.addColumn("U");
@@ -4328,20 +4345,26 @@ public class Modeler extends JFrame {
 		column4 = jTableTableUsageList.getColumnModel().getColumn(4);
 		column5 = jTableTableUsageList.getColumnModel().getColumn(5);
 		column6 = jTableTableUsageList.getColumnModel().getColumn(6);
+		column7 = jTableTableUsageList.getColumnModel().getColumn(7);
+		column8 = jTableTableUsageList.getColumnModel().getColumn(8);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(350);
-		column3.setPreferredWidth(30);
-		column4.setPreferredWidth(30);
+		column3.setPreferredWidth(230);
+		column4.setPreferredWidth(130);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
+		column7.setPreferredWidth(30);
+		column8.setPreferredWidth(30);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
-		column3.setCellRenderer(rendererAlignmentCenter);
-		column4.setCellRenderer(rendererAlignmentCenter);
+		column3.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentLeft);
 		column5.setCellRenderer(rendererAlignmentCenter);
 		column6.setCellRenderer(rendererAlignmentCenter);
+		column7.setCellRenderer(rendererAlignmentCenter);
+		column8.setCellRenderer(rendererAlignmentCenter);
 		jTableTableUsageList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4350,6 +4373,8 @@ public class Modeler extends JFrame {
 		tableModelTableForeignUsageList.addColumn(res.getString("S436"));
 		tableModelTableForeignUsageList.addColumn("ID");
 		tableModelTableForeignUsageList.addColumn(res.getString("S532"));
+		tableModelTableForeignUsageList.addColumn(res.getString("S639"));
+		tableModelTableForeignUsageList.addColumn(res.getString("S750"));
 		tableModelTableForeignUsageList.addColumn("C");
 		tableModelTableForeignUsageList.addColumn("R");
 		tableModelTableForeignUsageList.addColumn("U");
@@ -4362,22 +4387,28 @@ public class Modeler extends JFrame {
 		column5 = jTableTableForeignUsageList.getColumnModel().getColumn(5);
 		column6 = jTableTableForeignUsageList.getColumnModel().getColumn(6);
 		column7 = jTableTableForeignUsageList.getColumnModel().getColumn(7);
+		column8 = jTableTableForeignUsageList.getColumnModel().getColumn(8);
+		column9 = jTableTableForeignUsageList.getColumnModel().getColumn(9);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(350);
 		column2.setPreferredWidth(150);
 		column3.setPreferredWidth(350);
-		column4.setPreferredWidth(30);
-		column5.setPreferredWidth(30);
+		column4.setPreferredWidth(230);
+		column5.setPreferredWidth(130);
 		column6.setPreferredWidth(30);
 		column7.setPreferredWidth(30);
+		column8.setPreferredWidth(30);
+		column9.setPreferredWidth(30);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
 		column3.setCellRenderer(rendererAlignmentLeft);
-		column4.setCellRenderer(rendererAlignmentCenter);
-		column5.setCellRenderer(rendererAlignmentCenter);
+		column4.setCellRenderer(rendererAlignmentLeft);
+		column5.setCellRenderer(rendererAlignmentLeft);
 		column6.setCellRenderer(rendererAlignmentCenter);
 		column7.setCellRenderer(rendererAlignmentCenter);
+		column8.setCellRenderer(rendererAlignmentCenter);
+		column9.setCellRenderer(rendererAlignmentCenter);
 		jTableTableForeignUsageList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableForeignUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4451,7 +4482,7 @@ public class Modeler extends JFrame {
 		column1.setPreferredWidth(200);
 		column2.setPreferredWidth(200);
 		column3.setPreferredWidth(80);
-		column4.setPreferredWidth(80);
+		column4.setPreferredWidth(93);
 		column5.setPreferredWidth(150);
 		column6.setPreferredWidth(45);
 		column7.setPreferredWidth(45);
@@ -4624,6 +4655,7 @@ public class Modeler extends JFrame {
 		tableModelTableFieldUsageList.addColumn("NO.");
 		tableModelTableFieldUsageList.addColumn("ID");
 		tableModelTableFieldUsageList.addColumn(res.getString("S592"));
+		tableModelTableFieldUsageList.addColumn(res.getString("S750"));
 		tableModelTableFieldUsageList.addColumn("C");
 		tableModelTableFieldUsageList.addColumn("R");
 		tableModelTableFieldUsageList.addColumn("U");
@@ -4637,48 +4669,11 @@ public class Modeler extends JFrame {
 		column5 = jTableTableFieldUsageList.getColumnModel().getColumn(5);
 		column6 = jTableTableFieldUsageList.getColumnModel().getColumn(6);
 		column7 = jTableTableFieldUsageList.getColumnModel().getColumn(7);
+		column8 = jTableTableFieldUsageList.getColumnModel().getColumn(8);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(400);
-		column3.setPreferredWidth(30);
-		column4.setPreferredWidth(30);
-		column5.setPreferredWidth(30);
-		column6.setPreferredWidth(30);
-		column7.setPreferredWidth(700);
-		column0.setCellRenderer(rendererAlignmentCenter);
-		column1.setCellRenderer(rendererAlignmentLeft);
-		column2.setCellRenderer(rendererAlignmentLeft);
-		column3.setCellRenderer(rendererAlignmentCenter);
-		column4.setCellRenderer(rendererAlignmentCenter);
-		column5.setCellRenderer(rendererAlignmentCenter);
-		column6.setCellRenderer(rendererAlignmentCenter);
-		column7.setCellRenderer(rendererAlignmentLeft);
-		jTableTableFieldUsageList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		rendererTableHeader = (DefaultTableCellRenderer)jTableTableFieldUsageList.getTableHeader().getDefaultRenderer();
-		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-		//(jTableTableFieldForeignUsageList)//
-		tableModelTableFieldForeignUsageList.addColumn("NO.");
-		tableModelTableFieldForeignUsageList.addColumn(res.getString("S436"));
-		tableModelTableFieldForeignUsageList.addColumn("ID");
-		tableModelTableFieldForeignUsageList.addColumn(res.getString("S602"));
-		tableModelTableFieldForeignUsageList.addColumn("C");
-		tableModelTableFieldForeignUsageList.addColumn("R");
-		tableModelTableFieldForeignUsageList.addColumn("U");
-		tableModelTableFieldForeignUsageList.addColumn("D");
-		tableModelTableFieldForeignUsageList.addColumn(res.getString("S607"));
-		column0 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(0);
-		column1 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(1);
-		column2 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(2);
-		column3 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(3);
-		column4 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(4);
-		column5 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(5);
-		column6 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(6);
-		column7 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(7);
-		column8 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(8);
-		column0.setPreferredWidth(40);
-		column1.setPreferredWidth(300);
-		column2.setPreferredWidth(150);
-		column3.setPreferredWidth(350);
+		column3.setPreferredWidth(130);
 		column4.setPreferredWidth(30);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
@@ -4693,6 +4688,50 @@ public class Modeler extends JFrame {
 		column6.setCellRenderer(rendererAlignmentCenter);
 		column7.setCellRenderer(rendererAlignmentCenter);
 		column8.setCellRenderer(rendererAlignmentLeft);
+		jTableTableFieldUsageList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		rendererTableHeader = (DefaultTableCellRenderer)jTableTableFieldUsageList.getTableHeader().getDefaultRenderer();
+		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+		//(jTableTableFieldForeignUsageList)//
+		tableModelTableFieldForeignUsageList.addColumn("NO.");
+		tableModelTableFieldForeignUsageList.addColumn(res.getString("S436"));
+		tableModelTableFieldForeignUsageList.addColumn("ID");
+		tableModelTableFieldForeignUsageList.addColumn(res.getString("S602"));
+		tableModelTableFieldForeignUsageList.addColumn(res.getString("S750"));
+		tableModelTableFieldForeignUsageList.addColumn("C");
+		tableModelTableFieldForeignUsageList.addColumn("R");
+		tableModelTableFieldForeignUsageList.addColumn("U");
+		tableModelTableFieldForeignUsageList.addColumn("D");
+		tableModelTableFieldForeignUsageList.addColumn(res.getString("S607"));
+		column0 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(0);
+		column1 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(1);
+		column2 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(2);
+		column3 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(3);
+		column4 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(4);
+		column5 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(5);
+		column6 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(6);
+		column7 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(7);
+		column8 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(8);
+		column9 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(9);
+		column0.setPreferredWidth(40);
+		column1.setPreferredWidth(300);
+		column2.setPreferredWidth(150);
+		column3.setPreferredWidth(350);
+		column4.setPreferredWidth(130);
+		column5.setPreferredWidth(30);
+		column6.setPreferredWidth(30);
+		column7.setPreferredWidth(30);
+		column8.setPreferredWidth(30);
+		column9.setPreferredWidth(700);
+		column0.setCellRenderer(rendererAlignmentCenter);
+		column1.setCellRenderer(rendererAlignmentLeft);
+		column2.setCellRenderer(rendererAlignmentLeft);
+		column3.setCellRenderer(rendererAlignmentLeft);
+		column4.setCellRenderer(rendererAlignmentLeft);
+		column5.setCellRenderer(rendererAlignmentCenter);
+		column6.setCellRenderer(rendererAlignmentCenter);
+		column7.setCellRenderer(rendererAlignmentCenter);
+		column8.setCellRenderer(rendererAlignmentCenter);
+		column9.setCellRenderer(rendererAlignmentLeft);
 		jTableTableFieldForeignUsageList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableFieldForeignUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -4895,7 +4934,7 @@ public class Modeler extends JFrame {
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(250);
-		column3.setPreferredWidth(250);
+		column3.setPreferredWidth(230);
 		column4.setPreferredWidth(600);
 		column5.setPreferredWidth(250);
 		column6.setPreferredWidth(150);
@@ -5080,8 +5119,8 @@ public class Modeler extends JFrame {
 		column3 = jTableFunctionIOList.getColumnModel().getColumn(3);
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(90);
-		column2.setPreferredWidth(300);
-		column3.setPreferredWidth(550);
+		column2.setPreferredWidth(400);
+		column3.setPreferredWidth(450);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
@@ -5409,15 +5448,15 @@ public class Modeler extends JFrame {
 		jLabelIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTableName.setEditable(false);
 		jTextFieldIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 250, 25));
+		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 300, 25));
 		jLabelIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableID.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableID.setText("ID");
-		jLabelIOTableID.setBounds(new Rectangle(260, 8, 80, 20));
+		jLabelIOTableID.setBounds(new Rectangle(310, 8, 70, 20));
 		jTextFieldIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTableID.setEditable(false);
-		jTextFieldIOTableID.setBounds(new Rectangle(345, 5, 180, 25));
-		jButtonIOTableJump.setBounds(new Rectangle(600, 5, 300, 25));
+		jTextFieldIOTableID.setBounds(new Rectangle(385, 5, 220, 25));
+		jButtonIOTableJump.setBounds(new Rectangle(610, 4, 291, 26));
 		jButtonIOTableJump.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jButtonIOTableJump.setText(res.getString("S761"));
 		jButtonIOTableJump.addActionListener(new Modeler_jButtonIOTableJump_actionAdapter(this));
@@ -5428,7 +5467,18 @@ public class Modeler extends JFrame {
 		jTextFieldIOTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTablePK.setPreferredSize(new Dimension(81, 22));
 		jTextFieldIOTablePK.setEditable(false);
-		jTextFieldIOTablePK.setBounds(new Rectangle(0, 36, 900, 25));
+		jTextFieldIOTablePK.setBounds(new Rectangle(0, 36, 605, 25));
+		jLabelIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelIOTablePosition.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelIOTablePosition.setText(res.getString("S750"));
+		jLabelIOTablePosition.setBounds(new Rectangle(615, 39, 130, 20));
+		jComboBoxIOTablePosition.setBounds(new Rectangle(750, 36, 150, 25));
+		jComboBoxIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jComboBoxIOTablePosition.addItem(res.getString("S751")); //0:Primary Table//
+		jComboBoxIOTablePosition.addItem(res.getString("S752")); //1:Header Table//
+		jComboBoxIOTablePosition.addItem(res.getString("S753")); //2:Detail Table//
+		jComboBoxIOTablePosition.addItem(res.getString("S754")); //3:Referred Table//
+		jComboBoxIOTablePosition.addItem(res.getString("S755")); //4: Other //
 		jLabelIOTableCRUD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableCRUD.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableCRUD.setText(res.getString("S745"));
@@ -5498,6 +5548,8 @@ public class Modeler extends JFrame {
 		jPanelIOTable3.add(jLabelIOTableID, null);
 		jPanelIOTable3.add(jTextFieldIOTableID, null);
 		jPanelIOTable3.add(jTextFieldIOTablePK, null);
+		jPanelIOTable3.add(jComboBoxIOTablePosition, null);
+		jPanelIOTable3.add(jLabelIOTablePosition, null);
 		jPanelIOTable3.add(jTextFieldIOTableNameExtension, null);
 		jPanelIOTable3.add(jLabelIOTableNameExtension, null);
 		jPanelIOTable3.add(jPanelIOTable4, null);
@@ -5617,29 +5669,28 @@ public class Modeler extends JFrame {
 	 * @throws Exception
 	 */
 	void processContentsFile(String nameOfFile) throws Exception  {
-		//
 		currentFileName = nameOfFile;
-		//
+
 		applicationFolder = System.getProperty("java.class.path");
 		int pos = applicationFolder.lastIndexOf(System.getProperty("file.separator"));
 		applicationFolder = applicationFolder.substring(0,pos);
-		//
+
 		if (!backupFolder.equals("")) {
 			isNeedToBackup = true;
 		}
-		//
+
 		//Request fileName if it is null//
 		if (currentFileName.equals("")) {
 			do {
 				Object[] bts = {res.getString("S781"), res.getString("S782"), res.getString("S783")};
 				int rtn = JOptionPane.showOptionDialog(this, res.getString("S784"),
 						res.getString("S785"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-				//
+
 				//Select existing file//
 				if (rtn == 0) {
 					currentFileName = specifyNameOfExistingFile(res.getString("S786"), "xead");
 				}
-				//
+
 				//Create new file//
 				if (rtn == 1) {
 					currentFileName = specifyNameOfNewFile(res.getString("S788"),res.getString("S789"), "project1.xead");
@@ -5647,14 +5698,14 @@ public class Modeler extends JFrame {
 						createtNewXeadFileWithCurrentFileName();
 					}
 				}
-				//
+
 				//Exit//
 				if (rtn == 2 || rtn == -1) {
 					System.exit(0);
 				}
 			} while(currentFileName.equals(""));
 		}
-		//
+
 		//Exit if fileName is null, otherwise, setup treeView//
 		if (currentFileName.equals("")) {
 			System.exit(0);
@@ -5856,8 +5907,8 @@ public class Modeler extends JFrame {
 		NodeList xmlnodelist1, xmlnodelist2;
 		org.w3c.dom.Element element1,element2;
 		XeadTreeNode xeadTreeNode1,xeadTreeNode2,xeadTreeNode3,xeadTreeNode4;
-		try {
 
+		try {
 			//Clear components//
 			jTreeMain.removeAll();
 			jPanelJumpButtons.removeAll();
@@ -5885,9 +5936,12 @@ public class Modeler extends JFrame {
 			lastModifyTime = file.lastModified();
 
 			//Parse file in XML Format and setup Document//
-			//DOMParser parser = new DOMParser();
 			domParser.parse(new InputSource(new FileInputStream(currentFileName)));
 			domDocument = domParser.getDocument();
+			if (!backupFolder.equals("")) {
+				domParser.parse(new InputSource(new FileInputStream(currentFileName)));
+				domDocumentSaved = domParser.getDocument();
+			}
 
 			// Check Format version//
 			xmlnodelist1 = domDocument.getElementsByTagName("System");
@@ -8205,38 +8259,16 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemFileSave_actionPerformed(ActionEvent e) {
-		if (isNeedToBackup) {
-			isNeedToBackup = false;
-			String backupFileName = "";
-			Object[] bts = {"Yes", "No"} ;
-			int rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1152"),
-					res.getString("S1151"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-			if (rtn1 == 0) {
-				try{
-					arrangeOrderOfDomElement();
-					OutputFormat outputFormat = new OutputFormat(domDocument);
-					outputFormat.setEncoding("UTF-8");
-					String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
-					backupFileName = currentFileName.replace(".xead", getStringValueOfDateTime("withTime") + ".xead");
-					backupFileName = backupFileName.replace(currentFileFolder, newFolder);
-					FileOutputStream fileOutputStream = new FileOutputStream(backupFileName);
-					OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
-					Writer writer = new BufferedWriter(outputStreamWriter);
-					XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
-					xmlSerializer.serialize(domDocument.getDocumentElement());
-					writer.close();
-				} catch(Exception ex){
-					JOptionPane.showMessageDialog(this, res.getString("S1149") + "\n" + backupFileName);
-					ex.printStackTrace();
-				}
-			}
-			
+		try{
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			currentMainTreeNode.updateFields();
+			saveFileWithCurrentFileName(true);
+			changeState.setChanged(false);
+			xeadUndoManager.resetLog();
+			informationOnThisPageChanged = false;
+		} finally {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
-		currentMainTreeNode.updateFields();
-		saveFileWithCurrentFileName(true);
-		changeState.setChanged(false);
-		xeadUndoManager.resetLog();
-		informationOnThisPageChanged = false;
 	}
 	/**
 	 * [File|SaveAs]
@@ -8353,7 +8385,6 @@ public class Modeler extends JFrame {
 	 */
 	void saveFileWithCurrentFileName(boolean isToCheckLastModifyTime) {
 		try {
-			//Check LastModify Time of the File//
 			int rtn = 0;
 			File file = new File(currentFileName);
 			if (isToCheckLastModifyTime && lastModifyTime != file.lastModified()) {
@@ -8369,12 +8400,41 @@ public class Modeler extends JFrame {
 				}
 			}
 			if (rtn == 0) {
+				if (isNeedToBackup) {
+					isNeedToBackup = false;
+					String backupFileName = "";
+					Object[] bts = {"Yes", "No"} ;
+					int rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1152"),
+							res.getString("S1151"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+					if (rtn1 == 0 && domDocumentSaved != null) {
+						try{
+							setCursor(new Cursor(Cursor.WAIT_CURSOR));
+							String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
+							File newFolderDir = new File(newFolder);
+							if (!newFolderDir.exists()) {
+								newFolderDir.mkdir();
+							}
+							backupFileName = currentFileName.replace(".xead", getStringValueOfDateTime("withTime") + ".xead");
+							backupFileName = backupFileName.replace(currentFileFolder, newFolder);
+							FileOutputStream fileOutputStream = new FileOutputStream(backupFileName);
+							OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+							Writer writer = new BufferedWriter(outputStreamWriter);
+							OutputFormat outputFormat = new OutputFormat(domDocumentSaved);
+							outputFormat.setEncoding("UTF-8");
+							XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
+							xmlSerializer.serialize(domDocumentSaved.getDocumentElement());
+							writer.close();
+						} catch(Exception ex){
+							JOptionPane.showMessageDialog(this, res.getString("S1149") + "\n" + backupFileName);
+							ex.printStackTrace();
+						}
+					}
+				}
+				
 				setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 				updateFieldSortKey();
-
 				reorganizeIOTable();
-
 				if (isRequiredToPurgeInvalidSubsystemTable) {
 					purgeInvalidSubsystemTable();
 					isRequiredToPurgeInvalidSubsystemTable = false;
@@ -8383,7 +8443,6 @@ public class Modeler extends JFrame {
 					purgeInvalidSubsystemRelationship();
 					isRequiredToPurgeInvalidSubsystemRelationship = false;
 				}
-
 				arrangeOrderOfDomElement();
 
 				OutputFormat outputFormat = new OutputFormat(domDocument);
@@ -8409,39 +8468,6 @@ public class Modeler extends JFrame {
 	 * update Field SortKey
 	 */
 	void reorganizeIOTable() {
-//		org.w3c.dom.Element tableElement, ioTableElement, fieldElement, ioTableFieldElement;
-//		NodeList tableList, fieldList, ioTableList, ioTableFieldList;
-//		boolean existing = false;
-//		//
-//		ioTableList = domDocument.getElementsByTagName("IOTable");
-//		tableList = domDocument.getElementsByTagName("Table");
-//		for (int i = 0; i < tableList.getLength(); i++) {
-//			tableElement = (org.w3c.dom.Element)tableList.item(i);
-//			fieldList = tableElement.getElementsByTagName("TableField");
-//			for (int j = 0; j < ioTableList.getLength(); j++) {
-//				ioTableElement = (org.w3c.dom.Element)ioTableList.item(j);
-//				if (ioTableElement.getAttribute("TableID").equals(tableElement.getAttribute("ID"))) {
-//					ioTableFieldList = ioTableElement.getElementsByTagName("IOTableField");
-//					for (int k = 0; k < fieldList.getLength(); k++) {
-//						fieldElement = (org.w3c.dom.Element)fieldList.item(k);
-//						existing = false;
-//						for (int m = 0; m < ioTableFieldList.getLength(); m++) {
-//							ioTableFieldElement = (org.w3c.dom.Element)ioTableFieldList.item(m);
-//							if (ioTableFieldElement.getAttribute("FieldID").equals(fieldElement.getAttribute("ID"))) {
-//								existing = true;
-//								break;
-//							}
-//						}
-//						if (!existing) {
-//							org.w3c.dom.Element newElement = domDocument.createElement("IOTableField");
-//							newElement.setAttribute("FieldID", fieldElement.getAttribute("ID"));
-//							newElement.setAttribute("Descriptions", "");
-//							ioTableElement.appendChild(newElement);
-//						}
-//					}
-//				}
-//			}
-//		}
 		org.w3c.dom.Element ioTableFieldElement;
 		NodeList ioTableFieldList;
 		ArrayList<org.w3c.dom.Element> elementListToBeRemoved = new ArrayList<org.w3c.dom.Element>();
@@ -9162,7 +9188,7 @@ public class Modeler extends JFrame {
 					dataLine = dataLine + "," + tableTypeElement.getAttribute("Name");
 					XeadTreeNode keyListNode = (XeadTreeNode)node2.getChildAt(1);
 					XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
-					dataLine = dataLine + "," + primaryKeyNode.getNameOfTableKey();
+					dataLine = dataLine + "," + primaryKeyNode.getNameOfTableKey() + "," + element2.getElementsByTagName("TableField").getLength();
 					dataLine = dataLine + "," + opExC + "," + opExR + "," + opExU + "," + opExD + "," +  "\n";
 					//
 					//Write header before each row//
@@ -16583,7 +16609,7 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
-
+		
 		private void jPanel1_mouseEntered(MouseEvent e) {
 			int rangeX = jPanel1.getWidth() - 4;
 			int rangeY = jPanel1.getHeight() - 2;
@@ -17168,6 +17194,18 @@ public class Modeler extends JFrame {
 					str = xeadTreeNode.getElement().getAttribute("Name") +  "[" + opC + opR + opU + opD + "]" + domNode_.getAttribute("NameExtension");
 				} else {
 					str = xeadTreeNode.getElement().getAttribute("Name") +  "(" + wrk + ")" + "[" + opC + opR + opU + opD + "]" + domNode_.getAttribute("NameExtension");
+				}
+				if (domNode_.getAttribute("Position").equals("PRIMARY")) {
+					str = str + " " + res.getString("S751");
+				}
+				if (domNode_.getAttribute("Position").equals("HEADER")) {
+					str = str + " " + res.getString("S752");
+				}
+				if (domNode_.getAttribute("Position").equals("DETAIL")) {
+					str = str + " " + res.getString("S753");
+				}
+				if (domNode_.getAttribute("Position").equals("JOIN")) {
+					str = str + " " + res.getString("S754");
 				}
 			}
 			if (nodeType_.equals("IOWebPage")) {
@@ -20452,8 +20490,6 @@ public class Modeler extends JFrame {
 			jTextFieldSubsystemSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaSubsystemDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaSubsystemDescriptions.setCaretPosition(0);
-			//
-			//Return name of the page to be shown//
 			String panelName = "jPanelSubsystem";
 			return panelName;
 		}
@@ -20468,6 +20504,7 @@ public class Modeler extends JFrame {
 			XeadTreeNode parentNode = (XeadTreeNode)this.getParent(); //parent subsystem node//
 			org.w3c.dom.Element parentElement = parentNode.getElement();
 			datamodelPageTitle = parentNode.getName();
+			int countOfFields = 0;
 
 			NodeList subsystemTableList = parentElement.getElementsByTagName("SubsystemTable");
 			NodeList subsystemRelationshipList = parentElement.getElementsByTagName("SubsystemRelationship");
@@ -20476,7 +20513,9 @@ public class Modeler extends JFrame {
 			org.w3c.dom.Element functionElement, ioTableElement;
 			String opC,opR,opU,opD,opExC,opExR,opExU,opExD;
 
+			/////////////////////////
 			//Setup NativeTableList//
+			/////////////////////////
 			if (jTabbedPaneTableList.getSelectedIndex() == 0) {
 				previousSelectedIndex_jTabbedPaneTableList = 0;
 				if (tableModelNativeTableList.getRowCount() > 0) {
@@ -20486,9 +20525,10 @@ public class Modeler extends JFrame {
 				for (int i = 0; i < this.getChildCount(); i++) {
 					node = (XeadTreeNode)this.getChildAt(i);
 					element = (org.w3c.dom.Element)node.getElement();
-					Object[] Cell = new Object[14];
+					Object[] Cell = new Object[15];
 					Cell[0] =  new TableRowNumber(i+1, element);
 					Cell[1] = node.getElement().getAttribute("SortKey");
+					countOfFields = element.getElementsByTagName("TableField").getLength();
 					if (node.getElement().getAttribute("Alias").equals("")) {
 						Cell[2] = node.getElement().getAttribute("Name");
 					} else {
@@ -20510,6 +20550,7 @@ public class Modeler extends JFrame {
 					XeadTreeNode keyListNode = (XeadTreeNode)node.getChildAt(1);
 					XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
 					Cell[9] = primaryKeyNode.getNameOfTableKey();
+					Cell[10] = countOfFields;
 					opC = "";
 					opR = "";
 					opU = "";
@@ -20559,15 +20600,17 @@ public class Modeler extends JFrame {
 					Cell[5] = opR;
 					Cell[6] = opU;
 					Cell[7] = opD;
-					Cell[10] = opExC;
-					Cell[11] = opExR;
-					Cell[12] = opExU;
-					Cell[13] = opExD;
+					Cell[11] = opExC;
+					Cell[12] = opExR;
+					Cell[13] = opExU;
+					Cell[14] = opExD;
 					tableModelNativeTableList.addRow(Cell);
 				}
 			}
 
+			//////////////////////////
 			//Setup ForeignTableList//
+			//////////////////////////
 			if (jTabbedPaneTableList.getSelectedIndex() == 1) {
 				previousSelectedIndex_jTabbedPaneTableList = 1;
 				if (tableModelForeignTableList.getRowCount() > 0) {
@@ -20579,7 +20622,7 @@ public class Modeler extends JFrame {
 					org.w3c.dom.Element subsystemElement = ((XeadTreeNode)subsystemListNode.getChildAt(m)).getElement();
 					if (!parentElement.getAttribute("ID").equals(subsystemElement.getAttribute("ID"))) {
 						for (int i = 0; i < subsystemTableList.getLength(); i++) {
-							Object[] Cell = new Object[11];
+							Object[] Cell = new Object[12];
 							element = (org.w3c.dom.Element)subsystemTableList.item(i);
 							XeadTreeNode tableNode = getSpecificXeadTreeNode("Table", element.getAttribute("TableID"), null);
 							if (tableNode != null) {
@@ -20609,6 +20652,7 @@ public class Modeler extends JFrame {
 									XeadTreeNode keyListNode = (XeadTreeNode)tableNode.getChildAt(1);
 									XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
 									Cell[10] = primaryKeyNode.getNameOfTableKey();
+									Cell[11] = tableElement.getElementsByTagName("TableField").getLength();
 									opC = "";
 									opR = "";
 									opU = "";
@@ -20639,15 +20683,17 @@ public class Modeler extends JFrame {
 				}
 			}
 
+			/////////////////////////
 			//Setup jPanelDatamodel//
+			/////////////////////////
 			if (jTabbedPaneTableList.getSelectedIndex() == 2) {
 				previousSelectedIndex_jTabbedPaneTableList = 2;
 				org.w3c.dom.Element subsystemTableElement, relationshipElement, subsystemRelationshipElement;
 				XeadTreeNode tableNode;
 				isShowingInstance = false;
-				//
+
 				jProgressBar.setMaximum(subsystemTableList.getLength() + 2);
-				//
+
 				NodeList dataTypeList = domDocument.getElementsByTagName("DataType");
 				dataTypeElementMap.clear();
 				for (int i = 0; i < dataTypeList.getLength(); i++) {
@@ -20656,30 +20702,34 @@ public class Modeler extends JFrame {
 				}
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				//
+
 				jTextAreaDatamodelDescriptions.setText(substringLinesWithTokenOfEOL(parentNode.getElement().getAttribute("DatamodelDescriptions"), "\n"));
 				jTextAreaDatamodelDescriptions.setCaretPosition(0);
-				//
+
+				/////////////////////////////////////////
 				//Setup EntityBoxes and jPanelDatamodel//
+				/////////////////////////////////////////
 				int boxRightEdgeLocation = 0;
 				int boxBottomEdgeLocation = 0;
 				int panelWidth = 0;
 				int panelHeight = 0;
 				jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
 				jPanelDatamodel.removeAll();
-				//
+
 				DatamodelEntityBox entityBox = null;
 				datamodelEntityBoxArray.clear();
 				for (int i = 0; i < subsystemTableList.getLength(); i++) {
 					subsystemTableElement = (org.w3c.dom.Element)subsystemTableList.item(i);
-					//
+
 					tableNode = getSpecificXeadTreeNode("Table", subsystemTableElement.getAttribute("TableID"), null);
 					if (tableNode != null) {
 						entityBox = new DatamodelEntityBox(subsystemTableElement, parentElement.getAttribute("ID"), jPanelDatamodel, tableNode);
 						if (entityBox.isShowOnModel()) {
 							jPanelDatamodel.add(entityBox);
-							//
+
+							/////////////////////////////////////////
 							//Set preferred size of jPanelDatamodel//
+							/////////////////////////////////////////
 							boxRightEdgeLocation = entityBox.getRightEdgeLocationOfArea();
 							boxBottomEdgeLocation = entityBox.getBottomEdgeLocationOfArea();
 							panelWidth = jPanelDatamodel.getPreferredSize().width;
@@ -20690,16 +20740,18 @@ public class Modeler extends JFrame {
 							if (boxBottomEdgeLocation > panelHeight) {
 								panelHeight = boxBottomEdgeLocation;
 							}
-							jPanelDatamodel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+							jPanelDatamodel.setPreferredSize(new Dimension(panelWidth*2, panelHeight*2));
 						}
 						datamodelEntityBoxArray.add(entityBox);
 					}
-					//
+
 					jProgressBar.setValue(jProgressBar.getValue()+1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 				}
-				//
+
+				///////////////////////////////////////////
 				//Set Table number according to positions//
+				///////////////////////////////////////////
 				int tableNumber = 0;
 				int edgeLocation = 0;
 				int pos = 0;
@@ -20715,8 +20767,10 @@ public class Modeler extends JFrame {
 					}
 					pos = pos + 10;
 				}
-				//
+
+				////////////////////////////////////////
 				//Setup RelationshipLines on DataModel//
+				////////////////////////////////////////
 				String relationshipID = "";
 				relationshipElementArray.clear();
 				NodeList relationshipList = domDocument.getElementsByTagName("Relationship");
@@ -20734,17 +20788,17 @@ public class Modeler extends JFrame {
 						break;
 					}
 				}
-				//
+
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				//
+
 				ArrayList<org.w3c.dom.Element> invalidSubsystemRelationshipList = new ArrayList<org.w3c.dom.Element>();
 				DatamodelRelationshipLine relationshipLine = null;
 				datamodelRelationshipLineArray.clear();
 				for (int i = 0; i < subsystemRelationshipList.getLength(); i++) {
 					subsystemRelationshipElement = (org.w3c.dom.Element)subsystemRelationshipList.item(i);
 					relationshipID = subsystemRelationshipElement.getAttribute("RelationshipID");
-					//
+
 					relationshipElement = null;
 					for (int j= 0; j < relationshipElementArray.size(); j++) {
 						if (relationshipElementArray.get(j).getAttribute("ID").equals(relationshipID)) {
@@ -20767,12 +20821,14 @@ public class Modeler extends JFrame {
 					org.w3c.dom.Node parentDomNode = subsystemRelationshipElement.getParentNode();
 					parentDomNode.removeChild(subsystemRelationshipElement);
 				}
-				//
+
 				jProgressBar.setValue(0);
 				jPanelDatamodel.updateUI();
 			}
-			//
+
+			///////////////////////////////////
 			//Return name of page to be shown//
+			///////////////////////////////////
 			String panelName = "jPanelTableList";
 			return panelName;
 		}
@@ -20781,6 +20837,7 @@ public class Modeler extends JFrame {
 			XeadTreeNode node1, node2, node3, node4;
 			String statement;
 			CreateStatement createStatement;
+			org.w3c.dom.Element functionTypeElement, element;
 
 			jLabelSubtitle.setText(
 					((XeadTreeNode)this.getParent().getParent().getParent()).getName() + " - "
@@ -20816,6 +20873,13 @@ public class Modeler extends JFrame {
 				XeadTreeNode node = (XeadTreeNode)sortableComboBoxModelTableType.getElementAt(i);
 				if (node.getElement().getAttribute("ID").equals(domNode_.getAttribute("TableTypeID"))) {
 					sortableComboBoxModelTableType.setSelectedItem(sortableComboBoxModelTableType.getElementAt(i));}
+			}
+
+			NodeList functionTypeList = domDocument.getElementsByTagName("FunctionType");
+			functionTypeElementMap.clear();
+			for (int i = 0; i < functionTypeList.getLength(); i++) {
+				element = (org.w3c.dom.Element)functionTypeList.item(i);
+				functionTypeElementMap.put(element.getAttribute("ID"), element);
 			}
 
 			//Setup Create Statement//
@@ -20854,25 +20918,63 @@ public class Modeler extends JFrame {
 							org.w3c.dom.Element functionIOElement = node4.getElement();
 							if (functionIOElement.getAttribute("TableID").equals(domNode_.getAttribute("ID"))) {
 								if (functionElement.getAttribute("SubsystemID").equals(domNode_.getAttribute("SubsystemID"))) {
-									Object[] Cell = new Object[10];
+									Object[] Cell = new Object[9];
 									Cell[0] =  new TableRowNumber(m++, functionIOElement);
 									Cell[1] = functionElement.getAttribute("SortKey");
 									Cell[2] = functionElement.getAttribute("Name");
-									Cell[3] = functionIOElement.getAttribute("OpC");
-									Cell[4] = functionIOElement.getAttribute("OpR");
-									Cell[5] = functionIOElement.getAttribute("OpU");
-									Cell[6] = functionIOElement.getAttribute("OpD");
+									functionTypeElement = functionTypeElementMap.get(functionElement.getAttribute("FunctionTypeID"));
+									if (functionTypeElement == null) {
+										Cell[3] = "N/A";
+									} else {
+										Cell[3] = functionTypeElement.getAttribute("SortKey") + " " + functionTypeElement.getAttribute("Name");
+									}
+									Cell[4] = res.getString("S755");
+									if (functionIOElement.getAttribute("Position").equals("PRIMARY")) {
+										Cell[4] = res.getString("S751");
+									}
+									if (functionIOElement.getAttribute("Position").equals("HEADER")) {
+										Cell[4] = res.getString("S752");
+									}
+									if (functionIOElement.getAttribute("Position").equals("DETAIL")) {
+										Cell[4] = res.getString("S753");
+									}
+									if (functionIOElement.getAttribute("Position").equals("JOIN")) {
+										Cell[4] = res.getString("S754");
+									}
+									Cell[5] = functionIOElement.getAttribute("OpC");
+									Cell[6] = functionIOElement.getAttribute("OpR");
+									Cell[7] = functionIOElement.getAttribute("OpU");
+									Cell[8] = functionIOElement.getAttribute("OpD");
 									tableModelTableUsageList.addRow(Cell);
 								}else{
-									Object[] Cell = new Object[8];
+									Object[] Cell = new Object[10];
 									Cell[0] =  new TableRowNumber(n++, functionIOElement);
 									Cell[1] = subsystemElement.getAttribute("Name");
 									Cell[2] = functionElement.getAttribute("SortKey");
 									Cell[3] = functionElement.getAttribute("Name");
-									Cell[4] = functionIOElement.getAttribute("OpC");
-									Cell[5] = functionIOElement.getAttribute("OpR");
-									Cell[6] = functionIOElement.getAttribute("OpU");
-									Cell[7] = functionIOElement.getAttribute("OpD");
+									functionTypeElement = functionTypeElementMap.get(functionElement.getAttribute("FunctionTypeID"));
+									if (functionTypeElement == null) {
+										Cell[4] = "N/A";
+									} else {
+										Cell[4] = functionTypeElement.getAttribute("SortKey") + " " + functionTypeElement.getAttribute("Name");
+									}
+									Cell[5] = res.getString("S755");
+									if (functionIOElement.getAttribute("Position").equals("PRIMARY")) {
+										Cell[5] = res.getString("S751");
+									}
+									if (functionIOElement.getAttribute("Position").equals("HEADER")) {
+										Cell[5] = res.getString("S752");
+									}
+									if (functionIOElement.getAttribute("Position").equals("DETAIL")) {
+										Cell[5] = res.getString("S753");
+									}
+									if (functionIOElement.getAttribute("Position").equals("JOIN")) {
+										Cell[5] = res.getString("S754");
+									}
+									Cell[6] = functionIOElement.getAttribute("OpC");
+									Cell[7] = functionIOElement.getAttribute("OpR");
+									Cell[8] = functionIOElement.getAttribute("OpU");
+									Cell[9] = functionIOElement.getAttribute("OpD");
 									tableModelTableForeignUsageList.addRow(Cell);
 								}
 							}
@@ -21157,27 +21259,53 @@ public class Modeler extends JFrame {
 							}
 							if (functionIOElement.getAttribute("TableID").equals(tableID)) {
 								if (functionElement.getAttribute("SubsystemID").equals(subsystemID)) {
-									Object[] Cell = new Object[8];
+									Object[] Cell = new Object[9];
 									Cell[0] =  new TableRowNumber(x++, functionIOElement);
 									Cell[1] = functionElement.getAttribute("SortKey");
 									Cell[2] = functionElement.getAttribute("Name");
-									Cell[3] = functionIOElement.getAttribute("OpC");
-									Cell[4] = functionIOElement.getAttribute("OpR");
-									Cell[5] = functionIOElement.getAttribute("OpU");
-									Cell[6] = functionIOElement.getAttribute("OpD");
-									Cell[7] = ioFieldDescriptions;
-									tableModelTableFieldUsageList.addRow(Cell);
-								}else{
-									Object[] Cell = new Object[9];
-									Cell[0] =  new TableRowNumber(y++, functionIOElement);
-									Cell[1] = subsystemElement.getAttribute("Name");
-									Cell[2] = functionElement.getAttribute("SortKey");
-									Cell[3] = functionElement.getAttribute("Name");
+									Cell[3] = res.getString("S755");
+									if (functionIOElement.getAttribute("Position").equals("PRIMARY")) {
+										Cell[3] = res.getString("S751");
+									}
+									if (functionIOElement.getAttribute("Position").equals("HEADER")) {
+										Cell[3] = res.getString("S752");
+									}
+									if (functionIOElement.getAttribute("Position").equals("DETAIL")) {
+										Cell[3] = res.getString("S753");
+									}
+									if (functionIOElement.getAttribute("Position").equals("JOIN")) {
+										Cell[3] = res.getString("S754");
+									}
 									Cell[4] = functionIOElement.getAttribute("OpC");
 									Cell[5] = functionIOElement.getAttribute("OpR");
 									Cell[6] = functionIOElement.getAttribute("OpU");
 									Cell[7] = functionIOElement.getAttribute("OpD");
 									Cell[8] = ioFieldDescriptions;
+									tableModelTableFieldUsageList.addRow(Cell);
+								}else{
+									Object[] Cell = new Object[10];
+									Cell[0] =  new TableRowNumber(y++, functionIOElement);
+									Cell[1] = subsystemElement.getAttribute("Name");
+									Cell[2] = functionElement.getAttribute("SortKey");
+									Cell[3] = functionElement.getAttribute("Name");
+									Cell[4] = res.getString("S755");
+									if (functionIOElement.getAttribute("Position").equals("PRIMARY")) {
+										Cell[4] = res.getString("S751");
+									}
+									if (functionIOElement.getAttribute("Position").equals("HEADER")) {
+										Cell[4] = res.getString("S752");
+									}
+									if (functionIOElement.getAttribute("Position").equals("DETAIL")) {
+										Cell[4] = res.getString("S753");
+									}
+									if (functionIOElement.getAttribute("Position").equals("JOIN")) {
+										Cell[4] = res.getString("S754");
+									}
+									Cell[5] = functionIOElement.getAttribute("OpC");
+									Cell[6] = functionIOElement.getAttribute("OpR");
+									Cell[7] = functionIOElement.getAttribute("OpU");
+									Cell[8] = functionIOElement.getAttribute("OpD");
+									Cell[9] = ioFieldDescriptions;
 									tableModelTableFieldForeignUsageList.addRow(Cell);
 								}
 							}
@@ -22074,6 +22202,19 @@ public class Modeler extends JFrame {
 			XeadTreeNode keyListNode = (XeadTreeNode)tableNode.getChildAt(1);
 			XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
 			jTextFieldIOTablePK.setText(primaryKeyNode.getNameOfTableKey());
+			jComboBoxIOTablePosition.setSelectedIndex(4);
+			if (domNode_.getAttribute("Position").equals("PRIMARY")) {
+				jComboBoxIOTablePosition.setSelectedIndex(0);
+			}
+			if (domNode_.getAttribute("Position").equals("HEADER")) {
+				jComboBoxIOTablePosition.setSelectedIndex(1);
+			}
+			if (domNode_.getAttribute("Position").equals("DETAIL")) {
+				jComboBoxIOTablePosition.setSelectedIndex(2);
+			}
+			if (domNode_.getAttribute("Position").equals("JOIN")) {
+				jComboBoxIOTablePosition.setSelectedIndex(3);
+			}
 			jTextFieldIOTableSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextFieldIOTableNameExtension.setText(domNode_.getAttribute("NameExtension"));
 			if (domNode_.getAttribute("OpC").equals("+")) {
@@ -22148,11 +22289,20 @@ public class Modeler extends JFrame {
 				fieldElement = fieldNode.getElement();
 				Object[] Cell = new Object[5];
 				Cell[0] = new TableRowNumber(i+1, null);
-				Cell[1] = fieldElement.getAttribute("Alias");
-				if (fieldElement.getAttribute("AttributeType").equals("NATIVE")) {
-					Cell[2] = fieldElement.getAttribute("Name");
+				if (fieldNode.isPrimaryKeyField()) {
+					Cell[1] = "<html><strong>" + fieldElement.getAttribute("Alias");
+					if (fieldElement.getAttribute("AttributeType").equals("NATIVE")) {
+						Cell[2] = "<html><strong>" + fieldElement.getAttribute("Name");
+					} else {
+						Cell[2] = "<html><strong>( " + fieldElement.getAttribute("Name") + " )";
+					}
 				} else {
-					Cell[2] = "( " + fieldElement.getAttribute("Name") + " )";
+					Cell[1] = fieldElement.getAttribute("Alias");
+					if (fieldElement.getAttribute("AttributeType").equals("NATIVE")) {
+						Cell[2] = fieldElement.getAttribute("Name");
+					} else {
+						Cell[2] = "( " + fieldElement.getAttribute("Name") + " )";
+					}
 				}
 				dataTypeElement = dataTypeElementMap.get(fieldElement.getAttribute("DataTypeID"));
 				if (dataTypeElement == null) {
@@ -26006,6 +26156,11 @@ public class Modeler extends JFrame {
 		private boolean[] updateFieldsForIOTable() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
+			if (domNode_.getAttribute("Position").equals("PRIMARY") && jComboBoxIOTablePosition.getSelectedIndex() != 0) {valueOfFieldsChanged = true;}
+			if (domNode_.getAttribute("Position").equals("HEADER") && jComboBoxIOTablePosition.getSelectedIndex() != 1) {valueOfFieldsChanged = true;}
+			if (domNode_.getAttribute("Position").equals("DETAIL") && jComboBoxIOTablePosition.getSelectedIndex() != 2) {valueOfFieldsChanged = true;}
+			if (domNode_.getAttribute("Position").equals("JOIN") && jComboBoxIOTablePosition.getSelectedIndex() != 3) {valueOfFieldsChanged = true;}
+			if (domNode_.getAttribute("Position").equals("") && jComboBoxIOTablePosition.getSelectedIndex() != 4) {valueOfFieldsChanged = true;}
 			if (domNode_.getAttribute("NameExtension").equals(jTextFieldIOTableNameExtension.getText())) {} else {valueOfFieldsChanged = true;}
 			if (domNode_.getAttribute("SortKey").equals(jTextFieldIOTableSortKey.getText())) {}
 			else {valueOfSortKeyChanged = true; valueOfFieldsChanged = true;}
@@ -26023,6 +26178,11 @@ public class Modeler extends JFrame {
 				isRequiredToSetupFunctionsStructre = true;
 				//
 				//Update DOM element//
+				if (jComboBoxIOTablePosition.getSelectedIndex() == 0) {domNode_.setAttribute("Position", "PRIMARY");}
+				if (jComboBoxIOTablePosition.getSelectedIndex() == 1) {domNode_.setAttribute("Position", "HEADER");}
+				if (jComboBoxIOTablePosition.getSelectedIndex() == 2) {domNode_.setAttribute("Position", "DETAIL");}
+				if (jComboBoxIOTablePosition.getSelectedIndex() == 3) {domNode_.setAttribute("Position", "JOIN");}
+				if (jComboBoxIOTablePosition.getSelectedIndex() == 4) {domNode_.setAttribute("Position", "");}
 				domNode_.setAttribute("NameExtension", jTextFieldIOTableNameExtension.getText());
 				domNode_.setAttribute("SortKey", jTextFieldIOTableSortKey.getText());
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaIOTableDescriptions.getText()));
@@ -26340,7 +26500,7 @@ public class Modeler extends JFrame {
 	}
 
 	/**
-	 * Class of Xead Undo Manager
+	 * Class of XEAD Undo Manager
 	 */
 	class XeadUndoManager {
 		ArrayList<String> actionArray = new ArrayList<String>();
@@ -26361,17 +26521,18 @@ public class Modeler extends JFrame {
 				indexOfRedoMax = indexOfLastElement;
 				indexOfLastUndo = indexOfLastElement;
 
-				//actionArray[indexOfLastElement] = "Add";
 				actionArray.add(indexOfLastElement, "Add");
 				nodeArray.add(indexOfLastElement, node);
 				oldDomElementArray.add(indexOfLastElement, null);
 				newDomElementArray.add(indexOfLastElement, null);
 				ownerNodeArray.add(indexOfLastElement, (XeadTreeNode)node.getParent());
+
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
+				jMenuItemEditUndo.setText(getTextOfUndoingElement());
+				jMenuItemEditRedo.setText(getTextOfRedoingElement());
 
 				changeState.setChanged(true);
-				//countUpIndex();
 				indexOfLastElement++;
 			}
 		}
@@ -26386,11 +26547,13 @@ public class Modeler extends JFrame {
 				oldDomElementArray.add(indexOfLastElement, null);
 				newDomElementArray.add(indexOfLastElement, null);
 				ownerNodeArray.add(indexOfLastElement, (XeadTreeNode)node.getParent());
+
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
+				jMenuItemEditUndo.setText(getTextOfUndoingElement());
+				jMenuItemEditRedo.setText(getTextOfRedoingElement());
 
 				changeState.setChanged(true);
-				//countUpIndex();
 				indexOfLastElement++;
 			}
 		}
@@ -26412,11 +26575,13 @@ public class Modeler extends JFrame {
 				oldDomElementArray.add(indexOfLastElement, savedDomElement);
 				newDomElementArray.add(indexOfLastElement, node.getUndoRedoElement());
 				ownerNodeArray.add(indexOfLastElement, savedOwnerNode);
+
 				jMenuItemEditUndo.setEnabled(true);
 				jMenuItemEditRedo.setEnabled(false);
+				jMenuItemEditUndo.setText(getTextOfUndoingElement());
+				jMenuItemEditRedo.setText(getTextOfRedoingElement());
 
 				changeState.setChanged(true);
-				//countUpIndex();
 				indexOfLastElement++;
 			}
 		}
@@ -26447,6 +26612,8 @@ public class Modeler extends JFrame {
 				indexOfLastElement = indexOfLastUndo + 1;
 				jMenuItemEditRedo.setEnabled(true);
 			}
+			jMenuItemEditUndo.setText(getTextOfUndoingElement());
+			jMenuItemEditRedo.setText(getTextOfRedoingElement());
 			undoRedoActionBeingExecuted = false;
 			jTreeMain.updateUI();
 		}
@@ -26474,6 +26641,8 @@ public class Modeler extends JFrame {
 				jMenuItemEditUndo.setEnabled(true);
 			}
 			undoRedoActionBeingExecuted = false;
+			jMenuItemEditUndo.setText(getTextOfUndoingElement());
+			jMenuItemEditRedo.setText(getTextOfRedoingElement());
 			jTreeMain.updateUI();
 		}
 
@@ -26481,8 +26650,11 @@ public class Modeler extends JFrame {
 			stringBufferForAmendment.append(getText());
 			indexOfLastUndo = -1;
 			indexOfLastElement = 0;
+
 			jMenuItemEditUndo.setEnabled(false);
+			jMenuItemEditUndo.setText(res.getString("S59"));
 			jMenuItemEditRedo.setEnabled(false);
+			jMenuItemEditRedo.setText(res.getString("S60"));
 		}
 
 		String getText() {
@@ -26540,7 +26712,6 @@ public class Modeler extends JFrame {
 			}
 
 			bf = new StringBuffer();
-			//bf.append(stringBufferForAmendment.toString());
 			for (int i = 0; i < logList.size(); i++) {
 				bf.append(logList.get(i));
 			}
@@ -26550,6 +26721,39 @@ public class Modeler extends JFrame {
 		String getTextForAmendment() {
 			return stringBufferForAmendment.toString();
 		}
+
+		  private String getTextOfUndoingElement() {
+			  if (indexOfLastUndo > -1 && indexOfLastUndo <= (nodeArray.size() - 1)) {
+				  return "Undo"+getTextOfElementOfIndex(indexOfLastUndo);
+			  } else {
+				  return res.getString("S59");
+			  }
+		  }
+
+		  private String getTextOfRedoingElement() {
+			  if ((indexOfLastUndo + 1) <= (nodeArray.size() - 1)) {
+				  return "Redo"+getTextOfElementOfIndex(indexOfLastUndo + 1);
+			  } else {
+				  return res.getString("S60");
+			  }
+		  }
+
+		  private String getTextOfElementOfIndex(int index) {
+			  StringBuffer bf = new StringBuffer();
+			  bf.append(res.getString("S3326"));
+			  bf.append(nodeArray.get(index).getName());
+			  bf.append(res.getString("S3327"));
+			  if (actionArray.get(index).equals("Add")) {
+				  bf.append(res.getString("S10"));
+			  }
+			  if (actionArray.get(index).equals("Modify")) {
+				  bf.append(res.getString("S11"));
+			  }
+			  if (actionArray.get(index).equals("Remove")) {
+				  bf.append(res.getString("S12"));
+			  }
+			  return bf.toString();
+		  }
 	}
 
 	/**
@@ -26659,69 +26863,6 @@ public class Modeler extends JFrame {
 		}
 	}
 
-//	/**
-//	 * Class of Node Comparator
-//	 */
-//	class NodeComparator implements java.util.Comparator<XeadTreeNode> {
-//		public int compare(XeadTreeNode node1, XeadTreeNode node2) {
-//			String value1, value2;
-//			value1 = node1.getElement().getAttribute("SortKey");
-//			value2 = node2.getElement().getAttribute("SortKey");
-//			int compareResult = value1.compareTo(value2);
-//			if (compareResult == 0) {
-//				value1 = node1.getElement().getAttribute("ID");
-//				value2 = node2.getElement().getAttribute("ID");
-//				compareResult = value1.compareTo(value2);
-//				if (compareResult == 0) {
-//					compareResult = 1;
-//				}
-//			}
-//			return(compareResult);
-//		}
-//	}
-
-//	/**
-//	 * Class of Element Comparator
-//	 */
-//	class ElementComparator implements java.util.Comparator<org.w3c.dom.Element> {
-//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-//			String value1, value2;
-//			value1 = element1.getAttribute("SortKey");
-//			value2 = element2.getAttribute("SortKey");
-//			int compareResult = value1.compareTo(value2);
-//			if (compareResult == 0) {
-//				value1 = element1.getAttribute("ID");
-//				value2 = element2.getAttribute("ID");
-//				compareResult = value1.compareTo(value2);
-//				if (compareResult == 0) {
-//					compareResult = 1;
-//				}
-//			}
-//			return(compareResult);
-//		}
-//	}
-
-//	/**
-//	 * Class of Field Element Comparator
-//	 */
-//	class ElementFieldComparator implements java.util.Comparator<org.w3c.dom.Element> {
-//		public int compare(org.w3c.dom.Element element1, org.w3c.dom.Element element2) {
-//			String value1, value2;
-//			value1 = element1.getAttribute("Alias");
-//			value2 = element2.getAttribute("Alias");
-//			int compareResult = value1.compareTo(value2);
-//			if (compareResult == 0) {
-//				value1 = element1.getAttribute("ID");
-//				value2 = element2.getAttribute("ID");
-//				compareResult = value1.compareTo(value2);
-//				if (compareResult == 0) {
-//					compareResult = 1;
-//				}
-//			}
-//			return(compareResult);
-//		}
-//	}
-	
 	/**
 	 * Method to adjust font size in text-field
 	 * @param textfield :text-field to be processed
@@ -29402,16 +29543,29 @@ public class Modeler extends JFrame {
 						}
 						if (functionIONode.getType().equals("IOTable")) {
 							elementFunctionIO = (org.w3c.dom.Element)functionIONode.getElement();
-							Object[] Cell = new Object[7];
+							Object[] Cell = new Object[8];
 							j = j+1;
 							Cell[0] =  new TableRowNumber(j, elementFunctionIO);
 							tableNode = getSpecificXeadTreeNode("Table", elementFunctionIO.getAttribute("TableID"), null);
 							Cell[1] = tableNode.getElement().getAttribute("SortKey");
 							Cell[2] = tableNode.getElement().getAttribute("Name") + elementFunctionIO.getAttribute("NameExtension");
-							Cell[3] = elementFunctionIO.getAttribute("OpC");
-							Cell[4] = elementFunctionIO.getAttribute("OpR");
-							Cell[5] = elementFunctionIO.getAttribute("OpU");
-							Cell[6] = elementFunctionIO.getAttribute("OpD");
+							Cell[3] = res.getString("S755");
+							if (elementFunctionIO.getAttribute("Position").equals("PRIMARY")) {
+								Cell[3] = res.getString("S751");
+							}
+							if (elementFunctionIO.getAttribute("Position").equals("HEADER")) {
+								Cell[3] = res.getString("S752");
+							}
+							if (elementFunctionIO.getAttribute("Position").equals("DETAIL")) {
+								Cell[3] = res.getString("S753");
+							}
+							if (elementFunctionIO.getAttribute("Position").equals("JOIN")) {
+								Cell[3] = res.getString("S754");
+							}
+							Cell[4] = elementFunctionIO.getAttribute("OpC");
+							Cell[5] = elementFunctionIO.getAttribute("OpR");
+							Cell[6] = elementFunctionIO.getAttribute("OpU");
+							Cell[7] = elementFunctionIO.getAttribute("OpD");
 							tableModelFunctionsStructureTableIOList.addRow(Cell);
 						}
 					}
@@ -33076,9 +33230,15 @@ public class Modeler extends JFrame {
 								svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
 								if (jDialogDatamodelSlideShow.isVisible()) {
+									Rectangle originalBounds = jPanelDatamodelSlideShow2.getBounds();
+									jPanelDatamodelSlideShow2.setBounds(new Rectangle(0,0,imageSize.x,imageSize.y));
 									jPanelDatamodelSlideShow2.paint(svg2d);
+									jPanelDatamodelSlideShow2.setBounds(originalBounds);
 								} else {
+									Rectangle originalBounds = jPanelDatamodel.getBounds();
+									jPanelDatamodel.setBounds(new Rectangle(0,0,imageSize.x,imageSize.y));
 									jPanelDatamodel.paint(svg2d);
+									jPanelDatamodel.setBounds(originalBounds);
 								}
 
 								org.w3c.dom.Element sv=svg2d.getRoot();
@@ -34425,8 +34585,6 @@ public class Modeler extends JFrame {
 			jMenuItemComponentToJump_actionPerformed(null);
 		} else {
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-				//selectedRow_jTableTableFieldList = jTableTableFieldList.rowAtPoint(e.getPoint());
-				//jTableTableFieldList.setRowSelectionInterval(selectedRow_jTableTableFieldList, selectedRow_jTableTableFieldList);
 				showPopupMenuComponent(e);
 			}
 		}

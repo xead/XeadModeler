@@ -1444,6 +1444,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Descriptions");
 		attrList.add("NameExtension");
 		attrList.add("SortKey");
+		attrList.add("Position");
 		elementName = getElementNameAccordingToTagName(tagName);
 		oldElementList = oldElement.getElementsByTagName(tagName);
 		newElementList = newElement.getElementsByTagName(tagName);

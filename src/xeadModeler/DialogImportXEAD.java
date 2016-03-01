@@ -1386,6 +1386,7 @@ public class DialogImportXEAD extends JDialog {
 				org.w3c.dom.Element childElement = frame_.domDocument.createElement("IOTable");
 
 				childElement.setAttribute("ID", Integer.toString(getNextIDOfFunctionIOs()));
+				childElement.setAttribute("Position", ioTableElementFrom.getAttribute("Position"));
 				childElement.setAttribute("NameExtension", ioTableElementFrom.getAttribute("NameExtension"));
 				childElement.setAttribute("SortKey", ioTableElementFrom.getAttribute("SortKey"));
 				childElement.setAttribute("Descriptions", ioTableElementFrom.getAttribute("Descriptions"));
