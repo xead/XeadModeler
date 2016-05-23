@@ -47,14 +47,27 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M28";
+	public static final String FULL_VERSION = "V1.R4.M31";
+	// 1.4.31での変更点
+	//・参照ファイルの扱いに関する細かいバグを修正した
+	//・各定義の説明に@NOTE@の予約語を置けば、注釈付項目としてツリービュー上で*付きで表示されるようにした
+	//・ツールメニューに注釈付項目の一覧出力機能を設けた
+	//・TXTファイルからのフィールド定義のインポート処理のバグを修正した
+	//
+	// 1.4.30での変更点
+	//・Macで実行した際のバックアップ処理の問題を修正した
+	//・データモデルの拡大縮小に関するバグを修正した
+	//
+	// 1.4.29での変更点
+	//・データモデルを拡大縮小できるようにした
+	//・SVG出力の範囲設定のロジックを改善した
+	//・Undo/Redo用メニューアイテムの表記を改善した
+	//・バックアップ時に指定フォルダを作成するようにした
+	//
 	// 1.4.28での変更点
 	//・テーブル一覧の欄にFLD(フィールド数)を加えた
 	//・テーブル入出力定義に「ポジション」の属性を追加した
 	//・パネル、スプールの表現をそれぞれフォーム、帳票に変更した
-	//・SVG出力の範囲設定のロジックを改善した
-	//・Undo/Redo用メニューアイテムの表記を改善した
-	//・バックアップ時に指定フォルダを作成するようにした
 	//
 	// 1.4.27での変更点
 	//・業務定義のアクションに機能定義をリンクできるようにした

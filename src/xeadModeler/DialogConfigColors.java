@@ -41,10 +41,15 @@ public class DialogConfigColors extends JDialog {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	private JPanel panelMain = new JPanel();
 	private JCheckBox jCheckBox = new JCheckBox();
-	private JPanel jPanelRadioButtons = new JPanel();
-	private JRadioButton jRadioButton1 = new JRadioButton();
-	private JRadioButton jRadioButton2 = new JRadioButton();
-	private ButtonGroup buttonGroup = new ButtonGroup();
+	private JPanel jPanelRadioButtonsColor = new JPanel();
+	private JRadioButton jRadioButtonColor1 = new JRadioButton();
+	private JRadioButton jRadioButtonColor2 = new JRadioButton();
+	private ButtonGroup buttonGroupColor = new ButtonGroup();
+	private JPanel jPanelRadioButtonsSize = new JPanel();
+	private JRadioButton jRadioButtonSizeS = new JRadioButton();
+	private JRadioButton jRadioButtonSizeM = new JRadioButton();
+	private JRadioButton jRadioButtonSizeL = new JRadioButton();
+	private ButtonGroup buttonGroupSize = new ButtonGroup();
 	private JButton jButtonOK = new JButton();
 	private JButton jButtonCancel = new JButton();
 	private boolean buttonOKIsPressed;
@@ -72,39 +77,59 @@ public class DialogConfigColors extends JDialog {
 		this.setTitle(res.getString("DialogConfigColors01"));
 
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(310, 130));
+		panelMain.setPreferredSize(new Dimension(310, 170));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 
 		jCheckBox.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBox.setText(res.getString("DialogConfigColors02"));
 		jCheckBox.setBounds(new Rectangle(8, 12, 200, 20));
 
-		jPanelRadioButtons.setLayout(null);
-		jPanelRadioButtons.setBounds(new Rectangle(5, 40, 300, 38));
-		jPanelRadioButtons.setBorder(BorderFactory.createEtchedBorder());
-		jRadioButton1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jRadioButton1.setText(res.getString("DialogConfigColors03"));
-		jRadioButton1.setBounds(new Rectangle(5, 9, 140, 20));
-		jRadioButton2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jRadioButton2.setText(res.getString("DialogConfigColors04"));
-		jRadioButton2.setBounds(new Rectangle(150, 9, 140, 20));
-		buttonGroup.add(jRadioButton1);
-		buttonGroup.add(jRadioButton2);
+		jPanelRadioButtonsColor.setLayout(null);
+		jPanelRadioButtonsColor.setBounds(new Rectangle(5, 40, 300, 38));
+		jPanelRadioButtonsColor.setBorder(BorderFactory.createEtchedBorder());
+		jRadioButtonColor1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonColor1.setText(res.getString("DialogConfigColors03"));
+		jRadioButtonColor1.setBounds(new Rectangle(5, 9, 140, 20));
+		jRadioButtonColor2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonColor2.setText(res.getString("DialogConfigColors04"));
+		jRadioButtonColor2.setBounds(new Rectangle(150, 9, 140, 20));
+		buttonGroupColor.add(jRadioButtonColor1);
+		buttonGroupColor.add(jRadioButtonColor2);
 
-		jButtonOK.setBounds(new Rectangle(30, 90, 110, 27));
+		jPanelRadioButtonsSize.setLayout(null);
+		jPanelRadioButtonsSize.setBounds(new Rectangle(5, 81, 300, 38));
+		jPanelRadioButtonsSize.setBorder(BorderFactory.createEtchedBorder());
+		jRadioButtonSizeS.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonSizeS.setText("S");
+		jRadioButtonSizeS.setBounds(new Rectangle(5, 9, 90, 20));
+		jRadioButtonSizeM.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonSizeM.setText("M");
+		jRadioButtonSizeM.setBounds(new Rectangle(100, 9, 90, 20));
+		jRadioButtonSizeL.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jRadioButtonSizeL.setText("L");
+		jRadioButtonSizeL.setBounds(new Rectangle(195, 9, 90, 20));
+		buttonGroupSize.add(jRadioButtonSizeS);
+		buttonGroupSize.add(jRadioButtonSizeM);
+		buttonGroupSize.add(jRadioButtonSizeL);
+
+		jButtonOK.setBounds(new Rectangle(30, 130, 110, 27));
 		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonOK.setText("OK");
 		jButtonOK.addActionListener(new DialogConfigColors_jButtonOK_actionAdapter(this));
-		jButtonCancel.setBounds(new Rectangle(170, 90, 110, 27));
+		jButtonCancel.setBounds(new Rectangle(170, 130, 110, 27));
 		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonCancel.setText(res.getString("DialogConfigColors05"));
 		jButtonCancel.addActionListener(new DialogConfigColors_jButtonCancel_actionAdapter(this));
 
 		getContentPane().add(panelMain);
 		panelMain.add(jCheckBox, null);
-		panelMain.add(jPanelRadioButtons, null);
-		jPanelRadioButtons.add(jRadioButton1, null);
-		jPanelRadioButtons.add(jRadioButton2, null);
+		panelMain.add(jPanelRadioButtonsColor, null);
+		jPanelRadioButtonsColor.add(jRadioButtonColor1, null);
+		jPanelRadioButtonsColor.add(jRadioButtonColor2, null);
+		panelMain.add(jPanelRadioButtonsSize, null);
+		jPanelRadioButtonsSize.add(jRadioButtonSizeS, null);
+		jPanelRadioButtonsSize.add(jRadioButtonSizeM, null);
+		jPanelRadioButtonsSize.add(jRadioButtonSizeL, null);
 		panelMain.add(jButtonOK, null);
 		panelMain.add(jButtonCancel, null);
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
@@ -115,7 +140,19 @@ public class DialogConfigColors extends JDialog {
 
 		// Set values of components //
 		jCheckBox.setSelected(frame_.isToShowGridsOnDataModel);
-		jRadioButton1.setSelected(frame_.isNormalColorConfigOnDataModel);
+		jRadioButtonColor1.setSelected(frame_.isNormalColorConfigOnDataModel);
+		jRadioButtonSizeS.setEnabled(true);
+		jRadioButtonSizeM.setEnabled(true);
+		jRadioButtonSizeL.setEnabled(true);
+		if (frame_.datamodelSize.equals("S")) {
+			jRadioButtonSizeS.setSelected(true);
+		}
+		if (frame_.datamodelSize.equals("M")) {
+			jRadioButtonSizeM.setSelected(true);
+		}
+		if (frame_.datamodelSize.equals("L")) {
+			jRadioButtonSizeL.setSelected(true);
+		}
 
 		//Setup dialog and show//
 		Dimension dlgSize = this.getPreferredSize();
@@ -128,7 +165,16 @@ public class DialogConfigColors extends JDialog {
 		//Update and return parameter value//
 		if (buttonOKIsPressed) {
 			frame_.isToShowGridsOnDataModel = jCheckBox.isSelected();
-			frame_.isNormalColorConfigOnDataModel = jRadioButton1.isSelected();
+			frame_.isNormalColorConfigOnDataModel = jRadioButtonColor1.isSelected();
+		}
+		if (jRadioButtonSizeS.isSelected()) {
+			frame_.datamodelSize = "S";
+		}
+		if (jRadioButtonSizeM.isSelected()) {
+			frame_.datamodelSize = "M";
+		}
+		if (jRadioButtonSizeL.isSelected()) {
+			frame_.datamodelSize = "L";
 		}
 		return buttonOKIsPressed;
 	}
@@ -138,7 +184,11 @@ public class DialogConfigColors extends JDialog {
 
 		// Set values of components //
 		jCheckBox.setSelected(frame_.isToShowGridsOnSubjectArea);
-		jRadioButton1.setSelected(frame_.isNormalColorConfigOnSubjectArea);
+		jRadioButtonColor1.setSelected(frame_.isNormalColorConfigOnSubjectArea);
+		jRadioButtonSizeS.setEnabled(false);
+		jRadioButtonSizeM.setEnabled(false);
+		jRadioButtonSizeL.setEnabled(false);
+		jRadioButtonSizeM.setSelected(true);
 
 		//Setup dialog and show//
 		Dimension dlgSize = this.getPreferredSize();
@@ -151,7 +201,7 @@ public class DialogConfigColors extends JDialog {
 		//Update and return parameter value//
 		if (buttonOKIsPressed) {
 			frame_.isToShowGridsOnSubjectArea = jCheckBox.isSelected();
-			frame_.isNormalColorConfigOnSubjectArea = jRadioButton1.isSelected();
+			frame_.isNormalColorConfigOnSubjectArea = jRadioButtonColor1.isSelected();
 		}
 		return buttonOKIsPressed;
 	}

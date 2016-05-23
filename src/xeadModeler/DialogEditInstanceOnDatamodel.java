@@ -60,7 +60,6 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	private boolean isEdited = false;
 
 	public DialogEditInstanceOnDatamodel(Modeler frame) {
-		//super(frame, res.getString("DialogEditInstanceOnDatamodel1"), false);
 		super(frame, "", true);
 		try {
 			frame_ = frame;
@@ -80,7 +79,6 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 		jMenuItemAddSlide.addActionListener(new DialogEditInstanceOnDatamodel_jMenuItemAddSlideActionAdapter(this));
 		jMenuItemRemoveSlide.addActionListener(new DialogEditInstanceOnDatamodel_jMenuItemRemoveSlideActionAdapter(this));
 		this.setResizable(true);
-		//this.setUndecorated(true);
 		this.getContentPane().add(jTabbedPane);
 	}
 
@@ -112,9 +110,18 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 
 		textAreaList.get(0).requestFocus();
 		this.setTitle("Instance - " + entityBox.getTableNode().getElement().getAttribute("Name"));
-		this.setPreferredSize(new Dimension(entityBox.getWidth()-150, 200));
-		//this.setLocation((int)entityBox.getLocationOnScreen().getX()+184, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight()));
-		this.setLocation((int)entityBox.getLocationOnScreen().getX()+175, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 8));
+		if (frame_.datamodelSize.equals("S")) {
+			this.setPreferredSize(new Dimension(entityBox.getWidth()-58, 150));
+			this.setLocation((int)entityBox.getLocationOnScreen().getX()+83, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 4));
+		}
+		if (frame_.datamodelSize.equals("M")) {
+			this.setPreferredSize(new Dimension(entityBox.getWidth()-150, 200));
+			this.setLocation((int)entityBox.getLocationOnScreen().getX()+175, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 8));
+		}
+		if (frame_.datamodelSize.equals("L")) {
+			this.setPreferredSize(new Dimension(entityBox.getWidth()-242, 300));
+			this.setLocation((int)entityBox.getLocationOnScreen().getX()+265, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 12));
+		}
 		this.pack();
 		this.setVisible(true);
 		updateAndClose();
@@ -124,7 +131,15 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	
 	int setupTextAreaForInstance(String text, String sortKey) {
 		JTextArea jTextArea = new JTextArea();
-		jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 14));
+		if (frame_.datamodelSize.equals("S")) {
+			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 7));
+		}
+		if (frame_.datamodelSize.equals("M")) {
+			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 14));
+		}
+		if (frame_.datamodelSize.equals("L")) {
+			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 21));
+		}
 		jTextArea.setLineWrap(false);
 		jTextArea.setText(Modeler.substringLinesWithTokenOfEOL(text, "\n"));
 		jTextArea.setCaretPosition(0);

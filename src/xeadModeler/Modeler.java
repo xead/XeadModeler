@@ -152,6 +152,7 @@ public class Modeler extends JFrame {
 	private JMenuItem jMenuItemToolDDLList = new JMenuItem();
 	private JMenuItem jMenuItemToolFieldList = new JMenuItem();
 	private JMenuItem jMenuItemToolFunctionList = new JMenuItem();
+	private JMenuItem jMenuItemToolNotedItemList = new JMenuItem();
 	private JMenuItem jMenuItemToolMatrixList = new JMenuItem();
 	private JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
 	private JMenuItem jMenuItemToolDocuments = new JMenuItem();
@@ -927,23 +928,65 @@ public class Modeler extends JFrame {
 				} else {
 					g2.setColor(GRID_COLOR2);
 				}
-				int gridPos = 8;
-				int height = this.getPreferredSize().height + 100;
-				if (height < 2000) {
-					height = 2000;
+				if (datamodelSize.equals("S")) {
+					int gridPos = 4;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 8;
+					}
+					gridPos = 4;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 8;
+					}
 				}
-				int width = this.getPreferredSize().width + 100;
-				if (width < 2500) {
-					width = 2500;
+				if (datamodelSize.equals("M")) {
+					int gridPos = 8;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 16;
+					}
+					gridPos = 8;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 16;
+					}
 				}
-				while (gridPos < width) {
-					g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
-					gridPos = gridPos + 16;
-				}
-				gridPos = 8;
-				while (gridPos < height) {
-					g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
-					gridPos = gridPos + 16;
+				if (datamodelSize.equals("L")) {
+					int gridPos = 12;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 24;
+					}
+					gridPos = 12;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 24;
+					}
 				}
 			}
 
@@ -1011,6 +1054,7 @@ public class Modeler extends JFrame {
 	};
 	private JLabel jLabelDatamodelSlideShowPageGuide = new JLabel();
 	private String datamodelPageTitle;
+	public String datamodelSize = "M";
 	public boolean isToShowGridsOnDataModel = true;
 	public boolean isNormalColorConfigOnDataModel = true;
 	/**
@@ -1787,6 +1831,8 @@ public class Modeler extends JFrame {
 		jMenuItemToolFieldList.addActionListener(new Modeler_jMenuItemToolFieldList_ActionAdapter(this));
 		jMenuItemToolFunctionList.setText(res.getString("S86"));
 		jMenuItemToolFunctionList.addActionListener(new Modeler_jMenuItemToolFunctionList_ActionAdapter(this));
+		jMenuItemToolNotedItemList.setText(res.getString("S122"));
+		jMenuItemToolNotedItemList.addActionListener(new Modeler_jMenuItemToolNotedItemList_ActionAdapter(this));
 		jMenuItemToolMatrixList.setText(res.getString("S74"));
 		jMenuItemToolMatrixList.addActionListener(new Modeler_jMenuItemToolMatrixList_ActionAdapter(this));
 		jMenuItemToolCreateTableStatement.setText(res.getString("S87"));
@@ -1851,6 +1897,7 @@ public class Modeler extends JFrame {
 		jMenuTool.add(jMenuItemToolFieldList);
 		jMenuTool.add(jMenuItemToolFunctionList);
 		jMenuTool.addSeparator();
+		jMenuTool.add(jMenuItemToolNotedItemList);
 		jMenuTool.add(jMenuItemToolMatrixList);
 		jMenuTool.add(jMenuItemToolDocuments);
 		jMenuTool.addSeparator();
@@ -4010,6 +4057,7 @@ public class Modeler extends JFrame {
 		jPanelDatamodel.setLayout(null);
 		jPanelDatamodel.addMouseListener(new Modeler_jPanelDatamodel_mouseAdapter(this));
 		jPanelDatamodel.addMouseMotionListener(new Modeler_jPanelDatamodel_mouseMotionAdapter(this));
+		jPanelDatamodel.addMouseWheelListener(new Modeler_MouseWheelAdapter(this));
 		jPanelTableList.add(jTabbedPaneTableList,  BorderLayout.CENTER);
 		jTabbedPaneTableList.addTab(res.getString("S464"), imageIconTable, jScrollPaneNativeTableList);
 		jTabbedPaneTableList.addTab(res.getString("S465"), imageIconForeignTable, jScrollPaneForeignTableList);
@@ -5845,11 +5893,12 @@ public class Modeler extends JFrame {
 			File file = new File(currentFileName);
 			fileName_ = fileName_.replace("<CURRENT>", file.getParent());
 		} else {
-			if (!fileName_.contains("\\")) {
+			if (!fileName_.contains(File.separator)) {
 				File file = new File(currentFileName);
-				fileName_ = file.getParent() + "\\" + fileName_;
+				fileName_ = file.getParent() + File.separator + fileName_;
 			}
 		}
+		//fileName_ = fileName_.replaceAll("\\", File.separator);
 
 		if (synchFileMap.containsKey(fileName_)) {
 			document = synchFileMap.get(fileName_);
@@ -5882,11 +5931,12 @@ public class Modeler extends JFrame {
 					File file = new File(currentFileName);
 					fileNameWithPath = fileName.replace("<CURRENT>", file.getParent());
 				} else {
-					if (!fileName.contains("\\")) {
+					if (!fileName.contains(File.separator)) {
 						File file = new File(currentFileName);
-						fileNameWithPath = file.getParent() + "\\" + fileName;
+						fileNameWithPath = file.getParent() + File.separator + fileName;
 					}
 				}
+				//fileNameWithPath = fileNameWithPath.replaceAll("\\", File.separator);
 				try {
 					domParser.parse(new InputSource(new FileInputStream(fileNameWithPath)));
 					document = domParser.getDocument();
@@ -8410,6 +8460,7 @@ public class Modeler extends JFrame {
 						try{
 							setCursor(new Cursor(Cursor.WAIT_CURSOR));
 							String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
+							//newFolder = newFolder.replaceAll("\\", File.separator);
 							File newFolderDir = new File(newFolder);
 							if (!newFolderDir.exists()) {
 								newFolderDir.mkdir();
@@ -9575,6 +9626,217 @@ public class Modeler extends JFrame {
 				bufferedWriter.flush();
 				bufferedWriter.close();
 				//
+				File workCsvFile = new File(csvFileName);
+				try {
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					desktop.open(workCsvFile);
+				} catch (Exception ex) {
+				} finally {
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+			}
+		} catch (Exception ex3) {
+			try {
+				bufferedWriter.close();
+			} catch (Exception ex4) {
+			}
+		}
+	}
+
+	/**
+	 * [Tool|Noted Item List] Write Noted Item List
+	 * @param e :Action Event
+	 */
+	void jMenuItemToolNotedItemList_actionPerformed(ActionEvent e) {
+		org.w3c.dom.Element element, element2;
+		NodeList nodeList, subjectAreaList, roleList, taskList, subsystemList, tableList, functionList;
+		XeadTreeNode tableNode, roleNode;
+		String dataLine;
+		int seqNumber = 0;
+		FileWriter fileWriter = null;
+		StringBuffer stringBuffer = new StringBuffer();
+		BufferedWriter bufferedWriter = null;
+		String csvFileName = "";
+
+		try {
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			currentMainTreeNode.updateFields();
+
+			subjectAreaList = domDocument.getElementsByTagName("SubjectArea");
+			roleList = domDocument.getElementsByTagName("Role");
+			taskList = domDocument.getElementsByTagName("Task");
+			subsystemList = domDocument.getElementsByTagName("Subsystem");
+			tableList = domDocument.getElementsByTagName("Table");
+			functionList = domDocument.getElementsByTagName("Function");
+			jProgressBar.setMaximum(1 + subjectAreaList.getLength() + roleList.getLength()
+					+ taskList.getLength() + subsystemList.getLength() + tableList.getLength() + functionList.getLength());
+
+			nodeList = domDocument.getElementsByTagName("System");
+			element = (org.w3c.dom.Element)nodeList.item(0);
+			if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+				seqNumber++;
+				dataLine = Integer.toString(seqNumber);
+				dataLine = dataLine + "," + res.getString("DialogScan06");
+				dataLine = dataLine + "," + element.getAttribute("Name");
+				stringBuffer.append(dataLine + "\n");
+			}
+			jProgressBar.setValue(jProgressBar.getValue()+1);
+			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+			for (int i = 0; i < subjectAreaList.getLength(); i++) {
+				element = (org.w3c.dom.Element)subjectAreaList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan12");
+					dataLine = dataLine + "," + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+			for (int i = 0; i < roleList.getLength(); i++) {
+				element = (org.w3c.dom.Element)roleList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan13");
+					dataLine = dataLine + "," + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+			for (int i = 0; i < taskList.getLength(); i++) {
+				element = (org.w3c.dom.Element)taskList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					roleNode = getSpecificXeadTreeNode("Role", element.getAttribute("RoleID"), null);
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan14");
+					dataLine = dataLine + "," + roleNode.getElement().getAttribute("SortKey") + "-" + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+			for (int i = 0; i < subsystemList.getLength(); i++) {
+				element = (org.w3c.dom.Element)subsystemList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan15");
+					dataLine = dataLine + "," + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+			for (int i = 0; i < tableList.getLength(); i++) {
+				element = (org.w3c.dom.Element)tableList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan50");
+					dataLine = dataLine + "," + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				nodeList = element.getElementsByTagName("TableField");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element2 = (org.w3c.dom.Element)nodeList.item(j);
+					if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+						seqNumber++;
+						dataLine = Integer.toString(seqNumber);
+						dataLine = dataLine + "," + res.getString("DialogScan51");
+						dataLine = dataLine + "," + element.getAttribute("SortKey") + "-" + element2.getAttribute("Alias") + " " + element2.getAttribute("Name");
+						stringBuffer.append(dataLine + "\n");
+					}
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+			for (int i = 0; i < functionList.getLength(); i++) {
+				element = (org.w3c.dom.Element)functionList.item(i);
+				if (element.getAttribute("Descriptions").contains("@NOTE@")) {
+					seqNumber++;
+					dataLine = Integer.toString(seqNumber);
+					dataLine = dataLine + "," + res.getString("DialogScan17");
+					dataLine = dataLine + "," + element.getAttribute("SortKey") + " " + element.getAttribute("Name");
+					stringBuffer.append(dataLine + "\n");
+				}
+				nodeList = element.getElementsByTagName("IOPanel");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element2 = (org.w3c.dom.Element)nodeList.item(j);
+					if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+						seqNumber++;
+						dataLine = Integer.toString(seqNumber);
+						dataLine = dataLine + "," + res.getString("DialogScan54");
+						dataLine = dataLine + "," + element.getAttribute("SortKey") + "-" + element2.getAttribute("SortKey") + " " + element2.getAttribute("Name");
+						stringBuffer.append(dataLine + "\n");
+					}
+				}
+				nodeList = element.getElementsByTagName("IOSpool");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element2 = (org.w3c.dom.Element)nodeList.item(j);
+					if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+						seqNumber++;
+						dataLine = Integer.toString(seqNumber);
+						dataLine = dataLine + "," + res.getString("DialogScan58");
+						dataLine = dataLine + "," + element.getAttribute("SortKey") + "-" + element2.getAttribute("SortKey") + " " + element2.getAttribute("Name");
+						stringBuffer.append(dataLine + "\n");
+					}
+				}
+				nodeList = element.getElementsByTagName("IOWebPage");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element2 = (org.w3c.dom.Element)nodeList.item(j);
+					if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+						seqNumber++;
+						dataLine = Integer.toString(seqNumber);
+						dataLine = dataLine + "," + res.getString("DialogScan56");
+						dataLine = dataLine + "," + element.getAttribute("SortKey") + "-" + element2.getAttribute("SortKey") + " " + element2.getAttribute("Name");
+						stringBuffer.append(dataLine + "\n");
+					}
+				}
+				nodeList = element.getElementsByTagName("IOTable");
+				for (int j = 0; j < nodeList.getLength(); j++) {
+					element2 = (org.w3c.dom.Element)nodeList.item(j);
+					if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+						seqNumber++;
+						tableNode = getSpecificXeadTreeNode("Table", element2.getAttribute("TableID"), null);
+						dataLine = Integer.toString(seqNumber);
+						dataLine = dataLine + "," + res.getString("DialogScan60");
+						dataLine = dataLine + "," + element.getAttribute("SortKey") + "-" + tableNode.getElement().getAttribute("SortKey") + " " + tableNode.getElement().getAttribute("Name");
+						stringBuffer.append(dataLine + "\n");
+					}
+				}
+				jProgressBar.setValue(jProgressBar.getValue()+1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+			}
+
+		} finally {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			jProgressBar.setValue(0);
+			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+		}
+
+		try {
+			if (seqNumber == 0) {
+				JOptionPane.showMessageDialog(this.getContentPane(), res.getString("S1317"));
+			} else {
+				File tempCsvFile = File.createTempFile("xeadTemp" + getStringValueOfDateTime("withTime"), ".csv");
+				csvFileName = tempCsvFile.getPath();
+				fileWriter = new FileWriter(csvFileName);
+				bufferedWriter = new BufferedWriter(fileWriter);
+				bufferedWriter.write(res.getString("S1318") + "\n");
+				bufferedWriter.write(stringBuffer.toString());
+
+				bufferedWriter.flush();
+				bufferedWriter.close();
 				File workCsvFile = new File(csvFileName);
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -10796,6 +11058,62 @@ public class Modeler extends JFrame {
 		}
 	}
 	/**
+	 * Mouse Handler for panels in case mouse wheel moved
+	 * @param e :Mouse Wheel Event
+	 */
+	void mouseWheelMoved(MouseWheelEvent e) {
+		if (e.isControlDown()) {
+			try {
+				setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+				boolean isUpdated = informationOnThisPageChanged;
+				currentMainTreeNode.updateFields();
+
+				boolean isSizeChanged = false;
+				int value = e.getWheelRotation();
+
+				if (datamodelSize.equals("S")) {
+					if (value < 0) {
+						datamodelSize = "M";
+						isSizeChanged = true;
+					}
+				} else {
+					if (datamodelSize.equals("M")) {
+						if (value > 0) {
+							datamodelSize = "S";
+							isSizeChanged = true;
+						}
+						if (value < 0) {
+							datamodelSize = "L";
+							isSizeChanged = true;
+						}
+					} else {
+						if (datamodelSize.equals("L")) {
+							if (value > 0) {
+								datamodelSize = "M";
+								isSizeChanged = true;
+							}
+						}
+					}
+				}
+
+				if (isSizeChanged) {
+					if (isUpdated) {
+						currentMainTreeNode.activateContentsPane();
+					} else {
+						resizeDatamodel();
+					}
+				}
+			} finally {
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		} else {
+			int value = jScrollPaneDatamodel.getVerticalScrollBar().getValue();
+			int unit = jScrollPaneDatamodel.getVerticalScrollBar().getUnitIncrement();
+			jScrollPaneDatamodel.getVerticalScrollBar().setValue(value + e.getWheelRotation() * unit);
+		}
+	}
+	/**
 	 * Event Handler for tables in case key released
 	 * @param e :Key Event
 	 */
@@ -11285,26 +11603,26 @@ public class Modeler extends JFrame {
 				jLabelEvent[2].setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelEvent[2].setOpaque(false);
 				FontMetrics metrics = jLabelEvent[0].getFontMetrics(jLabelEvent[0].getFont());
-				String work = taskNode.getElement().getAttribute("Event");
+				String event = taskNode.getElement().getAttribute("Event");
 				int textWidth;
 				String wrkStr1 = "";
 				String wrkStr2 = "";
 				int j = 0;
-				for (int i=0;i<work.length();i++) {
-					wrkStr2 = wrkStr1 + work.substring(i, i+1);
+				for (int i=0;i<event.length();i++) {
+					wrkStr2 = wrkStr1 + event.substring(i, i+1);
 					textWidth = metrics.stringWidth(wrkStr2);
 					if (textWidth > 56) {
 						jLabelEvent[j].setText(wrkStr1);
-						wrkStr1 = work.substring(i, i+1);
+						wrkStr1 = event.substring(i, i+1);
 						j++;
 						if (j > 2) {
 							break;
 						}
-						if (i+1==work.length()) {
-							jLabelEvent[j].setText(work.substring(i, i+1));
+						if (i+1==event.length()) {
+							jLabelEvent[j].setText(event.substring(i, i+1));
 						}
 					} else {
-						if (i+1==work.length()) {
+						if (i+1==event.length()) {
 							jLabelEvent[j].setText(wrkStr2);
 						}
 						wrkStr1 = wrkStr2;
@@ -11319,21 +11637,15 @@ public class Modeler extends JFrame {
 				}
 				if (jLabelEvent[2].getText().equals("")) {
 					if (jLabelEvent[1].getText().equals("")) {
-//						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 24, 56, 12));
 						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 22, 56, 15));
 						this.add(jLabelEvent[0], null);
 					} else {
-//						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 17, 56, 12));
-//						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 12));
 						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 14));
 						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 14));
 						this.add(jLabelEvent[0], null);
 						this.add(jLabelEvent[1], null);
 					}
 				} else {
-//					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 11));
-//					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 26, 56, 11));
-//					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 11));
 					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 11, 56, 13));
 					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 24, 56, 13));
 					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 13));
@@ -11346,13 +11658,15 @@ public class Modeler extends JFrame {
 				jPanelMouseActionSensor.setBounds(new Rectangle(25, 53, 100, 50));
 
 				strwork = taskNode.getElement().getAttribute("Descriptions");
-				if (!strwork.equals("")) {
+				if (strwork.equals("")) {
+					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + res.getString("S586"));
+				} else {
 					if ((strwork.getBytes().length) == strwork.length()) {
 						strwork = getLayoutedString(strwork, 40, "<br>");
 					} else {
 						strwork = getLayoutedString(strwork, 20, "<br>");
 					}
-					jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
+					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + strwork);
 				}
 			}
 			if (nodeType.equals("Subject")) {
@@ -14359,7 +14673,7 @@ public class Modeler extends JFrame {
 		private int terminalIndex, terminalIndex1, terminalIndex2;
 		private Line2D iconPart_11, iconPart_12, iconPart_13, iconPart_14;
 		private Line2D iconPart_21, iconPart_22, iconPart_23, iconPart_24;
-		private RoundRectangle2D iconPart_15, iconPart_25;
+		private RoundRectangle2D iconPart_2R;
 		public Arc2D arc2D_A, arc2D_B;
 		private int arc2D_x, arc2D_y, arc2D_w, arc2D_h;
 		private Line2D line2D_A, line2D_B;
@@ -14381,7 +14695,6 @@ public class Modeler extends JFrame {
 				if (iconPart_12 != null) g2.draw(iconPart_12);
 				if (iconPart_13 != null) g2.draw(iconPart_13);
 				if (iconPart_14 != null) g2.draw(iconPart_14);
-				if (iconPart_15 != null) g2.draw(iconPart_15);
 			}
 		};
 		private JLabel jLabelTerminal_2 = new JLabel() {
@@ -14398,7 +14711,7 @@ public class Modeler extends JFrame {
 				if (iconPart_22 != null) g2.draw(iconPart_22);
 				if (iconPart_23 != null) g2.draw(iconPart_23);
 				if (iconPart_24 != null) g2.draw(iconPart_24);
-				if (iconPart_25 != null) g2.draw(iconPart_25);
+				if (iconPart_2R != null) g2.draw(iconPart_2R);
 			}
 		};
 		private JLabel jLabelPressed;
@@ -14410,6 +14723,8 @@ public class Modeler extends JFrame {
 		private JPopupMenu jPopupMenuRelationshipLine = new JPopupMenu();
 		private JMenuItem jMenuItemRelationshipLineHide = new JMenuItem(res.getString("S2875"));
 		private boolean showOnModel = true;
+		private int terminalIconSize = 0;
+		private int boxHeight = 0;
 
 		///////////////////////////////////////////
 		//Position index of Relationship Terminal//
@@ -14427,13 +14742,12 @@ public class Modeler extends JFrame {
 			subsystemRelationshipElement_ = subsystemRelationshipElement;
 			relationshipElement_ = relationshipElement;
 			jPanelCanvas = panel;
-			//
-			//Retrieve related table's Attributes//
+
 			XeadTreeNode tableNode, keyListNode;
 			XeadTreeNode keyNode = null;
 			String workString1 = "";
 			String workString2 = "";
-			//
+
 			tableNode = getSpecificXeadTreeNode("Table", relationshipElement.getAttribute("Table1ID"), null);
 			keyListNode = (XeadTreeNode)tableNode.getChildAt(1);
 			for (int i = 0; i < keyListNode.getChildCount(); i++) {
@@ -14446,7 +14760,7 @@ public class Modeler extends JFrame {
 			if (!relationshipElement.getAttribute("ExistWhen2").equals("") || !keyNode.getNotNullOfTableKey()) {
 				terminal2Optional = true;
 			}
-			//
+
 			tableNode = getSpecificXeadTreeNode("Table", relationshipElement.getAttribute("Table2ID"), null);
 			keyListNode = (XeadTreeNode)tableNode.getChildAt(1);
 			for (int i = 0; i < keyListNode.getChildCount(); i++) {
@@ -14459,7 +14773,7 @@ public class Modeler extends JFrame {
 			if (!relationshipElement.getAttribute("ExistWhen1").equals("") || !keyNode.getNotNullOfTableKey()) {
 				terminal1Optional = true;
 			}
-			//
+
 			if (relationshipElement.getAttribute("Type").equals("FAMILY")) {
 				jLabelTerminal_1.setToolTipText(workString1);
 				jLabelTerminal_2.setToolTipText(workString2);
@@ -14496,7 +14810,7 @@ public class Modeler extends JFrame {
 					jLabelTerminal_2.setToolTipText(workString2 + " ; " + relationshipElement.getAttribute("ExistWhen2"));
 				}
 			}
-			//
+
 			// Add listener to jLabelTerminals//
 			if (jPanelCanvas == jPanelDatamodel) {
 				jLabelTerminal_1.addMouseListener(new jLabelTerminal_mouseAdapter(this));
@@ -14504,7 +14818,7 @@ public class Modeler extends JFrame {
 				jLabelTerminal_2.addMouseListener(new jLabelTerminal_mouseAdapter(this));
 				jLabelTerminal_2.addMouseMotionListener(new jLabelTerminal_mouseMotionAdapter(this));
 			}
-			//
+
 			//Retrieve entityBox1&2 and their position//
 			if (jPanelCanvas == jPanelDatamodel) {
 				for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
@@ -14526,7 +14840,7 @@ public class Modeler extends JFrame {
 					}
 				}
 			}
-			//
+
 			//Retrieve position-index of terminals specified by subsystem//
 			terminalIndex1 = Integer.parseInt(subsystemRelationshipElement_.getAttribute("TerminalIndex1"));
 			terminalIndex2 = Integer.parseInt(subsystemRelationshipElement_.getAttribute("TerminalIndex2"));
@@ -14554,15 +14868,14 @@ public class Modeler extends JFrame {
 					terminalIndex2 = 17;
 				}
 			}
-			//
+
 			if (subsystemRelationshipElement_.getAttribute("ShowOnModel").equals("false")) {
 				showOnModel = false;
 			}
-			//
+
 			setupTerminalIcons();
-			//
 			setupRelationLine();
-			//
+
 			//Setup PopUp Menu//
 			jMenuItemRelationshipLineHide.addActionListener(new jMenuItemRelationshipLineHide_actionAdapter(this));
 			jPopupMenuRelationshipLine.add(jMenuItemRelationshipLineHide);
@@ -14629,6 +14942,19 @@ public class Modeler extends JFrame {
 		}
 
 		public void setupTerminalIcons() {
+			if (datamodelSize.equals("S")) {
+				terminalIconSize = 4;
+				boxHeight = 20;
+			}
+			if (datamodelSize.equals("M")) {
+				terminalIconSize = 8;
+				boxHeight = 40;
+			}
+			if (datamodelSize.equals("L")) {
+				terminalIconSize = 12;
+				boxHeight = 60;
+			}
+
 			////////////////////////////
 			//Setup icon of terminal#1//
 			////////////////////////////
@@ -14638,33 +14964,33 @@ public class Modeler extends JFrame {
 			iconPart_12 = null;
 			iconPart_13 = null;
 			iconPart_14 = null;
-			iconPart_15 = null;
 
 			//Top-Sided//
 			if (terminalIndex1 >= 23 && terminalIndex1 <= 40) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
-					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize+2);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2-1, terminalIconSize-1, terminalIconSize/2-1);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
-					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
-					//optional-cross shape//
-					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(3, 0, 3, 1);
-						iconPart_14 = new Line2D.Double(5, 0, 5, 1);
-					}
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize+2);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2-1, terminalIconSize-1, terminalIconSize/2-1);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, 0, 4, 10);
-					iconPart_12 = new Line2D.Double(1, 3, 7, 3);
-					//optional-cross shape//
-					if (terminal1Optional) {
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize+2);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2-1, terminalIconSize-1, terminalIconSize/2-1);
+				}
+				//optional-cross shape//
+				if (terminal1Optional) {
+					if (datamodelSize.equals("M")) {
 						iconPart_13 = new Line2D.Double(3, 0, 3, 1);
 						iconPart_14 = new Line2D.Double(5, 0, 5, 1);
+					}
+					if (datamodelSize.equals("L")) {
+						iconPart_13 = new Line2D.Double(5, 0, 5, 3);
+						iconPart_14 = new Line2D.Double(7, 0, 7, 3);
 					}
 				}
 			}
@@ -14673,27 +14999,28 @@ public class Modeler extends JFrame {
 			if (terminalIndex1 >= 18 && terminalIndex1 <= 22) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
-					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
+					iconPart_11 = new Line2D.Double(0, terminalIconSize/2, terminalIconSize+2, terminalIconSize/2);
+					iconPart_12 = new Line2D.Double(terminalIconSize/2-1, 1, terminalIconSize/2-1, terminalIconSize-1);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
-					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
-					//optional-cross shape//
-					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(0, 3, 1, 3);
-						iconPart_14 = new Line2D.Double(0, 5, 1, 5);
-					}
+					iconPart_11 = new Line2D.Double(0, terminalIconSize/2, terminalIconSize+2, terminalIconSize/2);
+					iconPart_12 = new Line2D.Double(terminalIconSize/2-1, 1, terminalIconSize/2-1, terminalIconSize-1);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(0, 4, 10, 4);
-					iconPart_12 = new Line2D.Double(3, 1, 3, 7);
-					//optional-cross shape//
-					if (terminal1Optional) {
+					iconPart_11 = new Line2D.Double(0, terminalIconSize/2, terminalIconSize+2, terminalIconSize/2);
+					iconPart_12 = new Line2D.Double(terminalIconSize/2-1, 1, terminalIconSize/2-1, terminalIconSize-1);
+				}
+				//optional-cross shape//
+				if (terminal1Optional) {
+					if (datamodelSize.equals("M")) {
 						iconPart_13 = new Line2D.Double(0, 3, 1, 3);
 						iconPart_14 = new Line2D.Double(0, 5, 1, 5);
+					}
+					if (datamodelSize.equals("L")) {
+						iconPart_13 = new Line2D.Double(0, 5, 3, 5);
+						iconPart_14 = new Line2D.Double(0, 7, 3, 7);
 					}
 				}
 			}
@@ -14702,27 +15029,28 @@ public class Modeler extends JFrame {
 			if (terminalIndex1 >= 00 && terminalIndex1 <= 17) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
-					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, -3, terminalIconSize/2, terminalIconSize-1);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2, terminalIconSize-1, terminalIconSize/2);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
-					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
-					//optional-cross shape//
-					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(3, 6, 3, 7);
-						iconPart_14 = new Line2D.Double(5, 6, 5, 7);
-					}
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, -3, terminalIconSize/2, terminalIconSize-1);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2, terminalIconSize-1, terminalIconSize/2);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_11 = new Line2D.Double(4, -3, 4, 7);
-					iconPart_12 = new Line2D.Double(1, 4, 7, 4);
-					//optional-cross shape//
-					if (terminal1Optional) {
-						iconPart_13 = new Line2D.Double(3, 6, 3, 7);
-						iconPart_14 = new Line2D.Double(5, 6, 5, 7);
+					iconPart_11 = new Line2D.Double(terminalIconSize/2, -3, terminalIconSize/2, terminalIconSize-1);
+					iconPart_12 = new Line2D.Double(1, terminalIconSize/2, terminalIconSize-1, terminalIconSize/2);
+				}
+				//optional-cross shape//
+				if (terminal1Optional) {
+					if (datamodelSize.equals("M")) {
+						iconPart_13 = new Line2D.Double(3, 7, 3, 6);
+						iconPart_14 = new Line2D.Double(5, 7, 5, 6);
+					}
+					if (datamodelSize.equals("L")) {
+						iconPart_13 = new Line2D.Double(5, 11, 5, 8);
+						iconPart_14 = new Line2D.Double(7, 11, 7, 8);
 					}
 				}
 			}
@@ -14736,28 +15064,44 @@ public class Modeler extends JFrame {
 			iconPart_22 = null;
 			iconPart_23 = null;
 			iconPart_24 = null;
-			iconPart_25 = null;
+			iconPart_2R = null;
 
 			//Top-Sided//
 			if (terminalIndex2 >= 23 && terminalIndex2 <= 40) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(4, 0, 4, 10);
-					iconPart_25 = new RoundRectangle2D.Double(1, 0, 6, 15, 8, 8);
+					iconPart_21 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize+2);
+					iconPart_2R = new RoundRectangle2D.Double(1, 0, terminalIconSize-2, terminalIconSize*2-1, terminalIconSize, terminalIconSize);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
-					iconPart_21 = new Line2D.Double(4, 2, 4, 3);
-					iconPart_22 = new Line2D.Double(4, 6, 4, 7);
+					if (datamodelSize.equals("S")) {
+						iconPart_21 = new Line2D.Double(2, 0, 2, 0);
+						iconPart_22 = new Line2D.Double(2, 2, 2, 2);
+					}
+					if (datamodelSize.equals("M")) {
+						iconPart_21 = new Line2D.Double(4, 2, 4, 3);
+						iconPart_22 = new Line2D.Double(4, 6, 4, 7);
+					}
+					if (datamodelSize.equals("L")) {
+						iconPart_21 = new Line2D.Double(6, 3, 6, 5);
+						iconPart_22 = new Line2D.Double(6, 9, 6, 11);
+					}
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_21 = new Line2D.Double(4, 0, 4, 7);
-					iconPart_22 = new Line2D.Double(1, 3, 7, 3);
+					iconPart_21 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize-1);
+					iconPart_22 = new Line2D.Double(1, terminalIconSize/2-1, terminalIconSize-1, terminalIconSize/2-1);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						iconPart_23 = new Line2D.Double(3, 0, 3, 1);
-						iconPart_24 = new Line2D.Double(5, 0, 5, 1);
+						if (datamodelSize.equals("M")) {
+							iconPart_23 = new Line2D.Double(3, 0, 3, 1);
+							iconPart_24 = new Line2D.Double(5, 0, 5, 1);
+						}
+						if (datamodelSize.equals("L")) {
+							iconPart_23 = new Line2D.Double(5, 0, 5, 3);
+							iconPart_24 = new Line2D.Double(7, 0, 7, 3);
+						}
 					}
 				}
 			}
@@ -14766,23 +15110,38 @@ public class Modeler extends JFrame {
 			if (terminalIndex2 >= 18 && terminalIndex2 <= 22) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(0, 4, 10, 4);
-					iconPart_25 = new RoundRectangle2D.Double(0, 1, 15, 6, 8, 8);
+					iconPart_21 = new Line2D.Double(0, terminalIconSize/2, terminalIconSize+2, terminalIconSize/2);
+					iconPart_2R = new RoundRectangle2D.Double(0, 1, terminalIconSize*2-1, terminalIconSize-2, terminalIconSize, terminalIconSize);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
-					iconPart_21 = new Line2D.Double(3, 4, 4, 4);
-					iconPart_22 = new Line2D.Double(6, 4, 7, 4);
+					if (datamodelSize.equals("S")) {
+						iconPart_21 = new Line2D.Double(0, 2, 0, 2);
+						iconPart_22 = new Line2D.Double(2, 2, 2, 2);
+					}
+					if (datamodelSize.equals("M")) {
+						iconPart_21 = new Line2D.Double(3, 4, 4, 4);
+						iconPart_22 = new Line2D.Double(6, 4, 7, 4);
+					}
+					if (datamodelSize.equals("L")) {
+						iconPart_21 = new Line2D.Double(3, 6, 5, 6);
+						iconPart_22 = new Line2D.Double(9, 6, 11, 6);
+					}
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_21 = new Line2D.Double(0, 4, 10, 4);
-					//iconPart_22 = new Line2D.Double(4, 1, 4, 7);
-					iconPart_22 = new Line2D.Double(3, 1, 3, 7);
+					iconPart_21 = new Line2D.Double(0, terminalIconSize/2, terminalIconSize+2, terminalIconSize/2);
+					iconPart_22 = new Line2D.Double(terminalIconSize/2-1, 1, terminalIconSize/2-1, terminalIconSize-1);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						iconPart_23 = new Line2D.Double(0, 3, 1, 3);
-						iconPart_24 = new Line2D.Double(0, 5, 1, 5);
+						if (datamodelSize.equals("M")) {
+							iconPart_23 = new Line2D.Double(0, 3, 1, 3);
+							iconPart_24 = new Line2D.Double(0, 5, 1, 5);
+						}
+						if (datamodelSize.equals("L")) {
+							iconPart_23 = new Line2D.Double(0, 5, 3, 5);
+							iconPart_24 = new Line2D.Double(0, 7, 3, 7);
+						}
 					}
 				}
 			}
@@ -14791,8 +15150,8 @@ public class Modeler extends JFrame {
 			if (terminalIndex2 >= 00 && terminalIndex2 <= 17) {
 				if (relationshipElement_.getAttribute("Type").equals("FAMILY")) {
 					//chicken-foot shape//
-					iconPart_21 = new Line2D.Double(4, -3, 4, 7);
-					iconPart_25 = new RoundRectangle2D.Double(1, -8, 6, 15, 8, 8);
+					iconPart_21 = new Line2D.Double(terminalIconSize/2, -1, terminalIconSize/2, terminalIconSize-1);
+					iconPart_2R = new RoundRectangle2D.Double(1, terminalIconSize*-1, terminalIconSize-2, terminalIconSize*2-1, terminalIconSize, terminalIconSize);
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
@@ -14801,12 +15160,18 @@ public class Modeler extends JFrame {
 				}
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//normal-cross shape//
-					iconPart_21 = new Line2D.Double(4, 0, 4, 7);
-					iconPart_22 = new Line2D.Double(1, 4, 7, 4);
+					iconPart_21 = new Line2D.Double(terminalIconSize/2, 0, terminalIconSize/2, terminalIconSize-1);
+					iconPart_22 = new Line2D.Double(1, terminalIconSize/2, terminalIconSize-1, terminalIconSize/2);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						iconPart_23 = new Line2D.Double(3, 6, 3, 7);
-						iconPart_24 = new Line2D.Double(5, 6, 5, 7);
+						if (datamodelSize.equals("M")) {
+							iconPart_23 = new Line2D.Double(3, 7, 3, 6);
+							iconPart_24 = new Line2D.Double(5, 7, 5, 6);
+						}
+						if (datamodelSize.equals("L")) {
+							iconPart_23 = new Line2D.Double(5, 11, 5, 8);
+							iconPart_24 = new Line2D.Double(7, 11, 7, 8);
+						}
 					}
 				}
 			}
@@ -14817,49 +15182,43 @@ public class Modeler extends JFrame {
 			//Calculate bounds of terminal#1//
 			//////////////////////////////////
 			boxPoint1 = entityBox1.getBoxPositionPoint();
-
 			//Top-Sided//
 			if (terminalIndex1 >= 23 && terminalIndex1 <= 40) {
-				iconPoint1 = new Point(boxPoint1.x + (terminalIndex1 - 23) * 8, boxPoint1.y - 8);
-				lineTerminalPoint1 = new Point(iconPoint1.x + 4, iconPoint1.y);
+				iconPoint1 = new Point(boxPoint1.x + (terminalIndex1 - 23) * terminalIconSize, boxPoint1.y - terminalIconSize);
+				lineTerminalPoint1 = new Point(iconPoint1.x + terminalIconSize/2, iconPoint1.y);
 			}
-
 			//Left-Sided//
 			if (terminalIndex1 >= 18 && terminalIndex1 <= 22) {
-				iconPoint1 = new Point(boxPoint1.x - 8, boxPoint1.y + (22 - terminalIndex1) * 8);
-				lineTerminalPoint1 = new Point(iconPoint1.x, iconPoint1.y + 4);
+				iconPoint1 = new Point(boxPoint1.x - terminalIconSize, boxPoint1.y + (22 - terminalIndex1) * terminalIconSize);
+				lineTerminalPoint1 = new Point(iconPoint1.x, iconPoint1.y + terminalIconSize/2);
 			}
-
 			//Bottom-Sided//
 			if (terminalIndex1 >= 00 && terminalIndex1 <= 17) {
-				iconPoint1 = new Point(boxPoint1.x + (17 - terminalIndex1) * 8, boxPoint1.y + 40);
-				lineTerminalPoint1 = new Point(iconPoint1.x + 4, iconPoint1.y + 8);
+				iconPoint1 = new Point(boxPoint1.x + (17 - terminalIndex1) * terminalIconSize, boxPoint1.y + boxHeight);
+				lineTerminalPoint1 = new Point(iconPoint1.x + terminalIconSize/2, iconPoint1.y + terminalIconSize);
 			}
-			jLabelTerminal_1.setBounds(new Rectangle(iconPoint1.x, iconPoint1.y, 8, 8));
+			jLabelTerminal_1.setBounds(new Rectangle(iconPoint1.x, iconPoint1.y, terminalIconSize, terminalIconSize));
 
 			//////////////////////////////////
 			//Calculate bounds of terminal#2//
 			//////////////////////////////////
 			boxPoint2 = entityBox2.getBoxPositionPoint();
-
 			//Top-Sided//
 			if (terminalIndex2 >= 23 && terminalIndex2 <= 40) {
-				iconPoint2 = new Point(boxPoint2.x + (terminalIndex2 - 23) * 8, boxPoint2.y - 8);
-				lineTerminalPoint2 = new Point(iconPoint2.x + 4, iconPoint2.y);
+				iconPoint2 = new Point(boxPoint2.x + (terminalIndex2 - 23) * terminalIconSize, boxPoint2.y - terminalIconSize);
+				lineTerminalPoint2 = new Point(iconPoint2.x + terminalIconSize/2, iconPoint2.y);
 			}
-
 			//Left-Sided//
 			if (terminalIndex2 >= 18 && terminalIndex2 <= 22) {
-				iconPoint2 = new Point(boxPoint2.x - 8, boxPoint2.y + (22 - terminalIndex2) * 8 + 1);
-				lineTerminalPoint2 = new Point(iconPoint2.x, iconPoint2.y + 4);
+				iconPoint2 = new Point(boxPoint2.x - terminalIconSize, boxPoint2.y + (22 - terminalIndex2) * terminalIconSize + 1);
+				lineTerminalPoint2 = new Point(iconPoint2.x, iconPoint2.y + terminalIconSize/2);
 			}
-
 			//Bottom-Sided//
 			if (terminalIndex2 >= 00 && terminalIndex2 <= 17) {
-				iconPoint2 = new Point(boxPoint2.x + (17 - terminalIndex2) * 8, boxPoint2.y + 40);
-				lineTerminalPoint2 = new Point(iconPoint2.x + 4, iconPoint2.y + 8);
+				iconPoint2 = new Point(boxPoint2.x + (17 - terminalIndex2) * terminalIconSize, boxPoint2.y + boxHeight);
+				lineTerminalPoint2 = new Point(iconPoint2.x + terminalIconSize/2, iconPoint2.y + terminalIconSize);
 			}
-			jLabelTerminal_2.setBounds(new Rectangle(iconPoint2.x, iconPoint2.y, 8, 8));
+			jLabelTerminal_2.setBounds(new Rectangle(iconPoint2.x, iconPoint2.y, terminalIconSize, terminalIconSize));
 
 			///////////////////////////
 			//Setup Relationship line//
@@ -14925,38 +15284,110 @@ public class Modeler extends JFrame {
 					//1:left-below 2:right-above//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
-							arc2D_y = lineTerminalPoint1.y - 25;
-							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint1.y - 15;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y - 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y - 15;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 10;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y - 25;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 15;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y - 35;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 20;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							arc2D_x = lineTerminalPoint1.x;
-							arc2D_y = lineTerminalPoint2.y + 5;
-							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint2.y + 15;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y + 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint2.y + 10;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint2.y + 15;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint2.y + 20;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if ((terminal1Optional && terminal2Optional) || (!terminal1Optional && !terminal2Optional)) {
 							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
@@ -14965,38 +15396,110 @@ public class Modeler extends JFrame {
 					//1:right-below 2:left-above//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							arc2D_x = lineTerminalPoint2.x;
-							arc2D_y = lineTerminalPoint1.y - 25;
-							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint1.y - 15;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y - 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y - 15;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 10;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y - 25;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 15;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y - 35;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint1.y - 20;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
-							arc2D_y = lineTerminalPoint2.y + 5;
-							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint2.x + (lineTerminalPoint1.x - lineTerminalPoint2.x);
-							line2D_1y = lineTerminalPoint2.y + 15;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y + 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x + (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								line2D_1y = lineTerminalPoint2.y + 10;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x + (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								line2D_1y = lineTerminalPoint2.y + 15;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x + (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								line2D_1y = lineTerminalPoint2.y + 20;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if ((terminal1Optional && terminal2Optional) || (!terminal1Optional && !terminal2Optional)) {
 							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
@@ -15025,95 +15528,279 @@ public class Modeler extends JFrame {
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//1:left-above 2:right-below//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
-						arc2D_x = lineTerminalPoint1.x - 10;
-						arc2D_y = lineTerminalPoint1.y;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint1.x - 10;
-						line2D_1y = lineTerminalPoint1.y + 10;
-						line2D_2x = lineTerminalPoint1.x - 10;
-						line2D_2y = lineTerminalPoint2.y - 10;
-						line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint1.x - 10;
-						arc2D_y = lineTerminalPoint2.y - 20;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint1.x;
-						line2D_1y = lineTerminalPoint2.y;
-						line2D_2x = lineTerminalPoint2.x;
-						line2D_2y = lineTerminalPoint2.y;
-						line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						if (datamodelSize.equals("S")) {
+							arc2D_x = lineTerminalPoint1.x - 5;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 5;
+							line2D_1y = lineTerminalPoint1.y + 5;
+							line2D_2x = lineTerminalPoint1.x - 5;
+							line2D_2y = lineTerminalPoint2.y - 5;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 5;
+							arc2D_y = lineTerminalPoint2.y - 10;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (datamodelSize.equals("M")) {
+							arc2D_x = lineTerminalPoint1.x - 10;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 10;
+							line2D_1y = lineTerminalPoint1.y + 10;
+							line2D_2x = lineTerminalPoint1.x - 10;
+							line2D_2y = lineTerminalPoint2.y - 10;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 10;
+							arc2D_y = lineTerminalPoint2.y - 20;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (datamodelSize.equals("L")) {
+							arc2D_x = lineTerminalPoint1.x - 15;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 15;
+							line2D_1y = lineTerminalPoint1.y + 15;
+							line2D_2x = lineTerminalPoint1.x - 15;
+							line2D_2y = lineTerminalPoint2.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 15;
+							arc2D_y = lineTerminalPoint2.y - 30;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
 					}
 					//1:right-above 2:left-below//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
-						line2D_1x = lineTerminalPoint2.x;
-						line2D_1y = lineTerminalPoint1.y;
-						line2D_2x = lineTerminalPoint1.x;
-						line2D_2y = lineTerminalPoint1.y;
-						line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint2.x - 10;
-						arc2D_y = lineTerminalPoint1.y;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint2.x - 10;
-						line2D_1y = lineTerminalPoint1.y + 10;
-						line2D_2x = lineTerminalPoint2.x - 10;
-						line2D_2y = lineTerminalPoint2.y - 10;
-						line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint2.x - 10;
-						arc2D_y = lineTerminalPoint2.y - 20;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						if (datamodelSize.equals("S")) {
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 5;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 5;
+							line2D_1y = lineTerminalPoint1.y + 5;
+							line2D_2x = lineTerminalPoint2.x - 5;
+							line2D_2y = lineTerminalPoint2.y - 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 5;
+							arc2D_y = lineTerminalPoint2.y - 10;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
+						if (datamodelSize.equals("M")) {
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 10;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 10;
+							line2D_1y = lineTerminalPoint1.y + 10;
+							line2D_2x = lineTerminalPoint2.x - 10;
+							line2D_2y = lineTerminalPoint2.y - 10;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 10;
+							arc2D_y = lineTerminalPoint2.y - 20;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
+						if (datamodelSize.equals("L")) {
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 15;
+							arc2D_y = lineTerminalPoint1.y;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 15;
+							line2D_1y = lineTerminalPoint1.y + 15;
+							line2D_2x = lineTerminalPoint2.x - 15;
+							line2D_2y = lineTerminalPoint2.y - 15;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 15;
+							arc2D_y = lineTerminalPoint2.y - 30;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
 					}
 					//1:left-below 2:right-above//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
-						line2D_1x = lineTerminalPoint1.x;
-						line2D_1y = lineTerminalPoint2.y;
-						line2D_2x = lineTerminalPoint2.x;
-						line2D_2y = lineTerminalPoint2.y;
-						line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint1.x - 10;
-						arc2D_y = lineTerminalPoint2.y;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint1.x - 10;
-						line2D_1y = lineTerminalPoint2.y + 10;
-						line2D_2x = lineTerminalPoint1.x - 10;
-						line2D_2y = lineTerminalPoint1.y - 10;
-						line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint1.x - 10;
-						arc2D_y = lineTerminalPoint1.y - 20;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						if (datamodelSize.equals("S")) {
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 5;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 5;
+							line2D_1y = lineTerminalPoint2.y + 5;
+							line2D_2x = lineTerminalPoint1.x - 5;
+							line2D_2y = lineTerminalPoint1.y - 5;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 5;
+							arc2D_y = lineTerminalPoint1.y - 10;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
+						if (datamodelSize.equals("M")) {
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 10;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 10;
+							line2D_1y = lineTerminalPoint2.y + 10;
+							line2D_2x = lineTerminalPoint1.x - 10;
+							line2D_2y = lineTerminalPoint1.y - 10;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 10;
+							arc2D_y = lineTerminalPoint1.y - 20;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
+						if (datamodelSize.equals("L")) {
+							line2D_1x = lineTerminalPoint1.x;
+							line2D_1y = lineTerminalPoint2.y;
+							line2D_2x = lineTerminalPoint2.x;
+							line2D_2y = lineTerminalPoint2.y;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 15;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint1.x - 15;
+							line2D_1y = lineTerminalPoint2.y + 15;
+							line2D_2x = lineTerminalPoint1.x - 15;
+							line2D_2y = lineTerminalPoint1.y - 15;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint1.x - 15;
+							arc2D_y = lineTerminalPoint1.y - 30;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+						}
 					}
 					//1:right-below 2:left-above//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
-						arc2D_x = lineTerminalPoint2.x - 10;
-						arc2D_y = lineTerminalPoint2.y;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint2.x - 10;
-						line2D_1y = lineTerminalPoint2.y + 10;
-						line2D_2x = lineTerminalPoint2.x - 10;
-						line2D_2y = lineTerminalPoint1.y - 10;
-						line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-						arc2D_x = lineTerminalPoint2.x - 10;
-						arc2D_y = lineTerminalPoint1.y - 20;
-						arc2D_w = 20;
-						arc2D_h = 20;
-						arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
-						line2D_1x = lineTerminalPoint2.x;
-						line2D_1y = lineTerminalPoint1.y;
-						line2D_2x = lineTerminalPoint1.x;
-						line2D_2y = lineTerminalPoint1.y;
-						line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						if (datamodelSize.equals("S")) {
+							arc2D_x = lineTerminalPoint2.x - 5;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 5;
+							line2D_1y = lineTerminalPoint2.y + 5;
+							line2D_2x = lineTerminalPoint2.x - 5;
+							line2D_2y = lineTerminalPoint1.y - 5;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 5;
+							arc2D_y = lineTerminalPoint1.y - 10;
+							arc2D_w = 10;
+							arc2D_h = 10;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (datamodelSize.equals("M")) {
+							arc2D_x = lineTerminalPoint2.x - 10;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 10;
+							line2D_1y = lineTerminalPoint2.y + 10;
+							line2D_2x = lineTerminalPoint2.x - 10;
+							line2D_2y = lineTerminalPoint1.y - 10;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 10;
+							arc2D_y = lineTerminalPoint1.y - 20;
+							arc2D_w = 20;
+							arc2D_h = 20;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
+						if (datamodelSize.equals("L")) {
+							arc2D_x = lineTerminalPoint2.x - 15;
+							arc2D_y = lineTerminalPoint2.y;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x - 15;
+							line2D_1y = lineTerminalPoint2.y + 15;
+							line2D_2x = lineTerminalPoint2.x - 15;
+							line2D_2y = lineTerminalPoint1.y - 15;
+							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							arc2D_x = lineTerminalPoint2.x - 15;
+							arc2D_y = lineTerminalPoint1.y - 30;
+							arc2D_w = 30;
+							arc2D_h = 30;
+							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+							line2D_1x = lineTerminalPoint2.x;
+							line2D_1y = lineTerminalPoint1.y;
+							line2D_2x = lineTerminalPoint1.x;
+							line2D_2y = lineTerminalPoint1.y;
+							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+						}
 					}
 				} else {
 					line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
@@ -15139,38 +15826,110 @@ public class Modeler extends JFrame {
 					//1:left-above 2:right-below//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
-							arc2D_y = lineTerminalPoint1.y + 5;
-							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint1.y + 15;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y + 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 10;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 15;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 0, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 20;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							arc2D_x = lineTerminalPoint1.x;
-							arc2D_y = lineTerminalPoint2.y - 25;
-							arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint2.y - 15;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y - 5;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y - 15;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 10;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y - 5;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y - 25;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 15;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y - 5;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint1.x;
+								arc2D_y = lineTerminalPoint2.y - 35;
+								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 20;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y - 5;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if ((terminal1Optional && terminal2Optional) || (!terminal1Optional && !terminal2Optional)) {
 							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
@@ -15179,38 +15938,110 @@ public class Modeler extends JFrame {
 					//1:right-above 2:left-below//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							arc2D_x = lineTerminalPoint2.x;
-							arc2D_y = lineTerminalPoint1.y + 5;
-							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint1.y + 15;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint1.y + 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 10;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 15;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint2.x;
+								arc2D_y = lineTerminalPoint1.y + 5;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 90, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint1.y + 20;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint1.y + 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
-							arc2D_y = lineTerminalPoint2.y - 25;
-							arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
-							arc2D_h = 20;
-							arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
-							line2D_1x = lineTerminalPoint1.x;
-							line2D_1y = lineTerminalPoint1.y;
-							line2D_2x = lineTerminalPoint1.x;
-							line2D_2y = lineTerminalPoint2.y - 15;
-							line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
-							line2D_1x = lineTerminalPoint2.x;
-							line2D_1y = lineTerminalPoint2.y;
-							line2D_2x = lineTerminalPoint2.x;
-							line2D_2y = lineTerminalPoint2.y - 5;
-							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							if (datamodelSize.equals("S")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y - 15;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 10;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 10;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("M")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y - 25;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 20;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 15;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
+							if (datamodelSize.equals("L")) {
+								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
+								arc2D_y = lineTerminalPoint2.y - 35;
+								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
+								arc2D_h = 30;
+								arc2D_A = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 270, 90, Arc2D.OPEN);
+								line2D_1x = lineTerminalPoint1.x;
+								line2D_1y = lineTerminalPoint1.y;
+								line2D_2x = lineTerminalPoint1.x;
+								line2D_2y = lineTerminalPoint2.y - 20;
+								line2D_A = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+								line2D_1x = lineTerminalPoint2.x;
+								line2D_1y = lineTerminalPoint2.y;
+								line2D_2x = lineTerminalPoint2.x;
+								line2D_2y = lineTerminalPoint2.y - 5;
+								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
+							}
 						}
 						if ((terminal1Optional && terminal2Optional) || (!terminal1Optional && !terminal2Optional)) {
 							line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y, lineTerminalPoint2.x, lineTerminalPoint2.y);
@@ -15369,26 +16200,34 @@ public class Modeler extends JFrame {
 
 			//Calculate pixel point of the terminal-position-index//
 			if (terminalIndex >= 23 && terminalIndex <= 40) {
-				iconGuidePoint = new Point(boxPoint.x + (terminalIndex - 23) * 8, boxPoint.y - 8);
+				iconGuidePoint = new Point(boxPoint.x + (terminalIndex - 23) * terminalIconSize, boxPoint.y - terminalIconSize);
 			}
 			if (terminalIndex >= 18 && terminalIndex <= 22) {
-				iconGuidePoint = new Point(boxPoint.x - 8, boxPoint.y + (22 - terminalIndex) * 8);
+				iconGuidePoint = new Point(boxPoint.x - terminalIconSize, boxPoint.y + (22 - terminalIndex) * terminalIconSize);
 			}
 			if (terminalIndex >= 00 && terminalIndex <= 17) {
-				iconGuidePoint = new Point(boxPoint.x + (17 - terminalIndex) * 8, boxPoint.y + 40);
+				iconGuidePoint = new Point(boxPoint.x + (17 - terminalIndex) * terminalIconSize, boxPoint.y + boxHeight);
 			}
 
 			//Draw rectangle for dragging guide
 			Graphics2D g2 = (Graphics2D)jPanelCanvas.getGraphics();
 			g2.setColor(Color.LIGHT_GRAY);
-			g2.drawRect(iconGuidePoint.x, iconGuidePoint.y, 8, 8);
+			g2.drawRect(iconGuidePoint.x, iconGuidePoint.y, terminalIconSize, terminalIconSize);
 		}
 
 		private void jLabelTerminal_mousePressed(MouseEvent e) {
 			jLabelPressed = (JLabel)e.getSource();
 			Graphics2D g2 = (Graphics2D)jPanelCanvas.getGraphics();
 			g2.setColor(SELECT_COLOR);
-			g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 6, 6);
+			if (datamodelSize.equals("S")) {
+				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 3, 3);
+			}
+			if (datamodelSize.equals("M")) {
+				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 6, 6);
+			}
+			if (datamodelSize.equals("L")) {
+				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 12, 12);
+			}
 		}
 
 		private void jLabelTerminal_mouseReleased(MouseEvent e) {
@@ -15408,9 +16247,6 @@ public class Modeler extends JFrame {
 	 */
 	class DatamodelEntityBox extends JPanel {
 		private static final long serialVersionUID = 1L;
-
-		//Constants//
-		private final int BOX_HEIGHT = 40;
 
 		//Internal fields//
 		private org.w3c.dom.Element subsystemTableElement_;
@@ -15436,6 +16272,17 @@ public class Modeler extends JFrame {
 		private int mousePosY = 0;
 		private int boxPosX = 0;
 		private int boxPosY = 0;
+		private int boxWidth = 0;
+		private int boxHeight = 0;
+		private int jPanel2Width = 0;
+		private int idFontSize = 0;
+		private int nameFontSize = 0;
+		private Rectangle numberBounds = null;
+		private Rectangle idBounds = null;
+		private Rectangle nameBounds = null;
+		private Rectangle crudBounds = null;
+		private Rectangle synchFileBounds = null;
+		private int elementLabelPosY = 0;
 		private int originalGuidePosX;
 		private int originalGuidePosY;
 		private JPopupMenu jPopupMenuEntityBox = new JPopupMenu();
@@ -15448,7 +16295,7 @@ public class Modeler extends JFrame {
 		private boolean isSelected_ = false;
 		private int heightOfInstanceArea;
 		private ArrayList<ElementLabel> elementLabelArray = new ArrayList<ElementLabel>();
-		public int widthOfShownFields = 0;
+		private int rightMarginOfElementsPanel = 0;
 		private ArrayList<String> slideInstanceArray = new ArrayList<String>();
 		private ArrayList<Integer> slideNumberArray = new ArrayList<Integer>();
 		private int currentSlideArrayIndex = -1;
@@ -15467,9 +16314,6 @@ public class Modeler extends JFrame {
 			subsystemTableElement_ = element;
 			subsystemID_ = id;
 			jPanelCanvas = panel;
-			StringTokenizer workTokenizer = new StringTokenizer(subsystemTableElement_.getAttribute("BoxPosition"), "," );
-			boxPosX = Integer.parseInt(workTokenizer.nextToken());
-			boxPosY = Integer.parseInt(workTokenizer.nextToken());
 			tableNode_ = tableNode;
 			XeadTreeNode fieldListNode = (XeadTreeNode)tableNode_.getChildAt(0);
 			XeadTreeNode keyListNode = (XeadTreeNode)tableNode_.getChildAt(1);
@@ -15481,7 +16325,6 @@ public class Modeler extends JFrame {
 
 			//Setup components//
 			this.setLayout(new BorderLayout());
-			this.setBounds(new Rectangle(boxPosX, boxPosY, Integer.parseInt(subsystemTableElement_.getAttribute("ExtDivLoc")), BOX_HEIGHT));
 			this.setBorder(null);
 			this.setOpaque(false);
 			normalBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.white,Color.gray,Color.black,Color.gray);
@@ -15490,7 +16333,6 @@ public class Modeler extends JFrame {
 			this.add(jPanel1, BorderLayout.CENTER);
 			jPanel1.setLayout(new BorderLayout());
 			jPanel1.setBorder(normalBorder);
-			jPanel1.setMinimumSize(new Dimension(151, 40));
 			if (jPanelCanvas == jPanelDatamodel) {
 				jPanel1.addMouseListener(new jPanel1_mouseAdapter(this));
 				jPanel1.addMouseMotionListener(new jPanel1_mouseMotionAdapter(this));
@@ -15540,8 +16382,6 @@ public class Modeler extends JFrame {
 							elementLabel = new ElementLabel(", ", partOfPrimaryKey);
 						}
 						elementLabelArray.add(elementLabel);
-						elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-						widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 						jPanelElements.add(elementLabel);
 
 						if (partOfPrimaryKey) {
@@ -15550,8 +16390,6 @@ public class Modeler extends JFrame {
 							elementLabel = new ElementLabel(node, false, null, this);
 						}
 						elementLabelArray.add(elementLabel);
-						elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-						widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 						jPanelElements.add(elementLabel);
 					}
 				} else {
@@ -15586,8 +16424,6 @@ public class Modeler extends JFrame {
 							elementLabel = new ElementLabel(", {");
 						}
 						elementLabelArray.add(elementLabel);
-						elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-						widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 						jPanelElements.add(elementLabel);
 
 						firstFieldOfTheKey = true;
@@ -15599,14 +16435,10 @@ public class Modeler extends JFrame {
 									if (!firstFieldOfTheKey) {
 										elementLabel = new ElementLabel(", ");
 										elementLabelArray.add(elementLabel);
-										elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-										widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 										jPanelElements.add(elementLabel);
 									}
 									elementLabel = new ElementLabel(node, false, keyNode.getElement(), this);
 									elementLabelArray.add(elementLabel);
-									elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-									widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 									jPanelElements.add(elementLabel);
 									firstFieldOfTheKey = false;
 								}
@@ -15614,8 +16446,6 @@ public class Modeler extends JFrame {
 						}
 						elementLabel = new ElementLabel("}");
 						elementLabelArray.add(elementLabel);
-						elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-						widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 						jPanelElements.add(elementLabel);
 					}
 				}
@@ -15625,42 +16455,27 @@ public class Modeler extends JFrame {
 				if (elementLabelArray.size() == 0) {
 					elementLabel = new ElementLabel(" *none");
 					elementLabelArray.add(elementLabel);
-					elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-					widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 					jPanelElements.add(elementLabel);
 				}
 			} else {
 				if (elementLabelArray.size() > 0) {
 					elementLabel = new ElementLabel(", ");
 					elementLabelArray.add(elementLabel);
-					elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-					widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 					jPanelElements.add(elementLabel);
 				}
 				elementLabel = new ElementLabel("...", hiddenFieldNames);
 				elementLabelArray.add(elementLabel);
-				elementLabel.setBounds(new Rectangle(widthOfShownFields, 9, elementLabel.getPreferredSize().width, elementLabel.getPreferredSize().height));
-				widthOfShownFields = widthOfShownFields + elementLabel.getPreferredSize().width;
 				jPanelElements.add(elementLabel);
 			}
 
 			jPanel2 = new DropAcceptablePanel(tableNode_);
-			jLabelNo.setForeground(Color.white);
-			jLabelName.setForeground(Color.white);
 			if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
-				jLabelID.setForeground(Color.cyan);
-				jLabelSynchFile.setForeground(Color.cyan);
-				jLabelCRUD.setForeground(Color.cyan);
 			} else {
-				jLabelID.setForeground(Color.white);
-				jLabelSynchFile.setForeground(Color.white);
-				jLabelCRUD.setForeground(Color.white);
 				XeadTreeNode ownerSubsystemNode = getSpecificXeadTreeNode("Subsystem", tableNode_.getElement().getAttribute("SubsystemID"), null);
 				subsystemName = ownerSubsystemNode.getElement().getAttribute("Name");
 			}
 			jPanel2.setLayout(null);
 			jPanel2.setBorder(null);
-			jPanel2.setPreferredSize(new Dimension(184, 40));
 			if (jPanelCanvas == jPanelDatamodel) {
 				jPanel2.addMouseListener(new jPanel2_mouseAdapter(this));
 				jPanel2.addMouseMotionListener(new jPanel2_mouseMotionAdapter(this));
@@ -15706,19 +16521,12 @@ public class Modeler extends JFrame {
 			}
 			jPanel2.setToolTipText(tipText);
 
-			jLabelName.setFont(new java.awt.Font(mainFontName, 0, 14));
 			jLabelName.setHorizontalAlignment(SwingConstants.CENTER);
 			jLabelName.setText(tableNode_.getElement().getAttribute("Name"));
-			jLabelName.setBounds(new Rectangle(0, 9, 184, 18));
-			adjustFontSizeOfTextField(jLabelName, 14);
-			jLabelID.setFont(new java.awt.Font(mainFontName, 0, 11));
 			if (!tableNode_.getElement().getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("Name"))) {
 				jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
 			}
-			jLabelID.setBounds(new Rectangle(20, -1, 162, 13));
 			jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
-			jLabelSynchFile.setFont(new java.awt.Font(mainFontName, 0, 10));
-			jLabelSynchFile.setBounds(new Rectangle(40, 24, 142, 12));
 			jLabelSynchFile.setHorizontalAlignment(SwingConstants.RIGHT);
 			String fileName = tableNode_.getElement().getAttribute("SynchFile");
 			int posOfFileSeparator = -1;
@@ -15734,24 +16542,27 @@ public class Modeler extends JFrame {
 				String synchFileName = "";
 				for (int i = 0; i < referringFileDocList.size(); i++) {
 					document = referringFileDocList.get(i);
-					NodeList tableList = document.getElementsByTagName("Table");
-					for (int j = 0; j < tableList.getLength(); j++) {
-						tableElement = (org.w3c.dom.Element)tableList.item(j);
-						if (tableElement.getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("SortKey"))
-								&& !tableElement.getAttribute("SynchFile").equals("")) {
-							synchFileName = tableElement.getAttribute("SynchFile");
-							if (synchFileName.contains("<CURRENT>")) {
-								File file = new File(currentFileName);
-								synchFileName = synchFileName.replace("<CURRENT>", file.getParent());
-							} else {
-								if (!synchFileName.contains("\\")) {
+					if (document != null) {
+						NodeList tableList = document.getElementsByTagName("Table");
+						for (int j = 0; j < tableList.getLength(); j++) {
+							tableElement = (org.w3c.dom.Element)tableList.item(j);
+							if (tableElement.getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("SortKey"))
+									&& !tableElement.getAttribute("SynchFile").equals("")) {
+								synchFileName = tableElement.getAttribute("SynchFile");
+								if (synchFileName.contains("<CURRENT>")) {
 									File file = new File(currentFileName);
-									synchFileName = file.getParent() + "\\" + synchFileName;
+									synchFileName = synchFileName.replace("<CURRENT>", file.getParent());
+								} else {
+									if (!synchFileName.contains(File.separator)) {
+										File file = new File(currentFileName);
+										synchFileName = file.getParent() + File.separator + synchFileName;
+									}
 								}
-							}
-							if (synchFileName.equals(currentFileName)) {
-								jLabelSynchFile.setText("*Referred");
-								break;
+								//synchFileName = synchFileName.replaceAll("\\", File.separator);
+								if (synchFileName.equals(currentFileName)) {
+									jLabelSynchFile.setText("*Referred");
+									break;
+								}
 							}
 						}
 					}
@@ -15762,9 +16573,7 @@ public class Modeler extends JFrame {
 			} else {
 				jLabelSynchFile.setText("@"+fileName.substring(posOfFileSeparator + 1, fileName.length()).replace(".xead", ""));
 			}
-			jLabelNo.setFont(new java.awt.Font(mainFontName, 0, 11));
 			jLabelNo.setText(tableNode_.getElement().getAttribute("SortKey"));
-			jLabelNo.setBounds(new Rectangle(3, 0, 15, 11));
 			jPanelElements.setBackground(Color.white);
 			boolean isC = false;
 			boolean isR = false;
@@ -15797,9 +16606,7 @@ public class Modeler extends JFrame {
 			if (isD) {
 				bf.append("D");
 			}
-			jLabelCRUD.setFont(new java.awt.Font(mainFontName, 0, 11));
 			jLabelCRUD.setText(bf.toString());
-			jLabelCRUD.setBounds(new Rectangle(3, 24, 35, 11));
 			jLabelCRUD.setHorizontalAlignment(SwingConstants.LEFT);
 			jPanel1.add(jPanel2, BorderLayout.WEST);
 			jPanel1.add(jPanelElements, BorderLayout.CENTER);
@@ -15822,12 +16629,11 @@ public class Modeler extends JFrame {
 			jPopupMenuEntityBox.add(jMenuItemEntityBoxHide);
 
 			jTextAreaShowInstance.setOpaque(false);
-			jTextAreaShowInstance.setForeground(Color.white);
-			jTextAreaShowInstance.setFont(new java.awt.Font(ioImageFontName, 0, 14));
+			jTextAreaShowInstance.setFont(new java.awt.Font(ioImageFontName, 0, nameFontSize));
 			jTextAreaShowInstance.setEditable(false);
 			setupSlideInstanceArray();
 
-			updateColors();
+			setSizeAndColors();
 
 			if (subsystemTableElement_.getAttribute("ShowOnModel").equals("true")) {
 				isVisibleOnModel = true;
@@ -15905,7 +16711,15 @@ public class Modeler extends JFrame {
 				}
 			}
 			heightOfInstanceArea = maxHeight;
-			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, heightOfInstanceArea));
+			if (datamodelSize.equals("S")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 93, boxPosY + boxHeight, width, heightOfInstanceArea));
+			}
+			if (datamodelSize.equals("M")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + boxHeight, width, heightOfInstanceArea));
+			}
+			if (datamodelSize.equals("L")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 280, boxPosY + boxHeight, width, heightOfInstanceArea));
+			}
 			jTextAreaShowInstance.setText("");
 			jPanel.add(jTextAreaShowInstance);
 			return maxHeight;
@@ -15926,7 +16740,7 @@ public class Modeler extends JFrame {
 		}
 
 		public void setElementsPanelWidth(int width) {
-			this.setBounds(new Rectangle(boxPosX, boxPosY, width + jPanel2.getPreferredSize().width, BOX_HEIGHT));
+			this.setBounds(new Rectangle(boxPosX, boxPosY, jPanel2Width + width, boxHeight));
 
 			//Resize jPanelDatamodel//
 			int boxRightEdgeLocation = getRightEdgeLocationOfArea();
@@ -15936,7 +16750,83 @@ public class Modeler extends JFrame {
 			jPanelCanvas.setPreferredSize(new Dimension(panelWidth, panelHeight));
 		}
 
-		public void updateColors() {
+		public void setSizeAndColors() {
+			StringTokenizer workTokenizer = new StringTokenizer(subsystemTableElement_.getAttribute("BoxPosition"), "," );
+			boxPosX = Integer.parseInt(workTokenizer.nextToken());
+			boxPosY = Integer.parseInt(workTokenizer.nextToken());
+			boxWidth = Integer.parseInt(subsystemTableElement_.getAttribute("ExtDivLoc"));
+
+			if (datamodelSize.equals("S")) {
+				boxPosX = boxPosX/2;
+				boxPosY = boxPosY/2;
+				boxWidth = boxWidth/2;
+				boxHeight = 20;
+				jPanel2Width = 92;
+				idFontSize = 8;
+				nameFontSize = 7;
+				numberBounds = new Rectangle(0, 0, 0, 0);
+				idBounds = new Rectangle(0, 0, 0, 0);
+				nameBounds = new Rectangle(0, 1, 92, 14);
+				crudBounds = new Rectangle(0, 0, 0, 0);
+				synchFileBounds = new Rectangle(0, 0, 0, 0);
+				elementLabelPosY = 1;
+				rightMarginOfElementsPanel = 22;
+			}
+			if (datamodelSize.equals("M")) {
+				boxPosX = boxPosX/1;
+				boxPosY = boxPosY/1;
+				boxWidth = boxWidth/1;
+				boxHeight = 40;
+				jPanel2Width = 184;
+				idFontSize = 11;
+				nameFontSize = 14;
+				numberBounds = new Rectangle(3, 0, 15, 11);
+				idBounds = new Rectangle(20, -1, 162, 13);
+				nameBounds = new Rectangle(0, 9, 184, 18);
+				crudBounds = new Rectangle(3, 23, 35, 11);
+				synchFileBounds = new Rectangle(40, 23, 142, 12);
+				elementLabelPosY = 9;
+				rightMarginOfElementsPanel = 23;
+			}
+			if (datamodelSize.equals("L")) {
+				boxPosX = boxPosX*150/100;
+				boxPosY = boxPosY*150/100;
+				boxWidth = boxWidth*150/100;
+				boxHeight = 60;
+				jPanel2Width = 276;
+				idFontSize = 14;
+				nameFontSize = 21;
+				numberBounds = new Rectangle(3, 0, 20, 14);
+				idBounds = new Rectangle(25, 0, 248, 17);
+				nameBounds = new Rectangle(0, 16, 276, 22);
+				crudBounds = new Rectangle(3, 38, 45, 17);
+				synchFileBounds = new Rectangle(50, 38, 223, 17);
+				elementLabelPosY = 16;
+				rightMarginOfElementsPanel = 40;
+			}
+
+			this.setBounds(new Rectangle(boxPosX, boxPosY, boxWidth, boxHeight));
+			jPanel2.setPreferredSize(new Dimension(jPanel2Width, boxHeight));
+			jLabelName.setFont(new java.awt.Font(mainFontName, 0, nameFontSize));
+			jLabelName.setBounds(nameBounds);
+			adjustFontSizeOfTextField(jLabelName, nameFontSize);
+			jLabelID.setFont(new java.awt.Font(mainFontName, 0, idFontSize));
+			jLabelID.setBounds(idBounds);
+			jLabelSynchFile.setFont(new java.awt.Font(mainFontName, 0, idFontSize-1));
+			jLabelSynchFile.setBounds(synchFileBounds);
+			jLabelNo.setFont(new java.awt.Font(mainFontName, 0, idFontSize));
+			jLabelNo.setBounds(numberBounds);
+			jLabelCRUD.setFont(new java.awt.Font(mainFontName, 0, idFontSize));
+			jLabelCRUD.setBounds(crudBounds);
+			jTextAreaShowInstance.setFont(new java.awt.Font(ioImageFontName, 0, nameFontSize));
+
+			int labelPosX = 0;
+			for (int i = 0; i < elementLabelArray.size(); i++) {
+				elementLabelArray.get(i).resetSize();
+				elementLabelArray.get(i).setBounds(new Rectangle(labelPosX, elementLabelPosY, elementLabelArray.get(i).getPreferredSize().width, elementLabelArray.get(i).getPreferredSize().height));
+				labelPosX = labelPosX + elementLabelArray.get(i).getPreferredSize().width;
+			}
+
 			if (isNormalColorConfigOnDataModel) {
 				jPanel1.setBorder(normalBorder);
 				jTextAreaShowInstance.setForeground(Color.white);
@@ -15952,7 +16842,6 @@ public class Modeler extends JFrame {
 					jLabelCRUD.setForeground(Color.white);
 					jLabelSynchFile.setForeground(Color.white);
 				}
-
 			} else {
 				jPanel1.setBorder(printBorder);
 				jTextAreaShowInstance.setForeground(Color.black);
@@ -15969,6 +16858,14 @@ public class Modeler extends JFrame {
 					jLabelSynchFile.setForeground(Color.black);
 				}
 			}
+		}
+
+		public int getWidthOfShownFields() {
+			int width = rightMarginOfElementsPanel;
+			if (elementLabelArray.size() > 0) {
+				width = width + elementLabelArray.get(elementLabelArray.size()-1).getBounds().x + elementLabelArray.get(elementLabelArray.size()-1).getBounds().width;
+			}
+			return width;
 		}
 
 		public void setNumber(int number) {
@@ -16000,10 +16897,24 @@ public class Modeler extends JFrame {
 		}
 
 		public void updateElement(boolean isWithInstanceShown) {
-			if (!isWithInstanceShown) {
-				subsystemTableElement_.setAttribute("BoxPosition", this.getLocation().x + "," + this.getLocation().y);
+			if (datamodelSize.equals("S")) {
+				if (!isWithInstanceShown) {
+					subsystemTableElement_.setAttribute("BoxPosition", (this.getLocation().x * 2) + "," + (this.getLocation().y * 2));
+				}
+				subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth() * 2));
 			}
-			subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth()));
+			if (datamodelSize.equals("M")) {
+				if (!isWithInstanceShown) {
+					subsystemTableElement_.setAttribute("BoxPosition", this.getLocation().x + "," + this.getLocation().y);
+				}
+				subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth()));
+			}
+			if (datamodelSize.equals("L")) {
+				if (!isWithInstanceShown) {
+					subsystemTableElement_.setAttribute("BoxPosition", (this.getLocation().x * 2 / 3) + "," + (this.getLocation().y *2 / 3));
+				}
+				subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth() * 2 / 3));
+			}
 			if (isVisibleOnModel) {
 				subsystemTableElement_.setAttribute("ShowOnModel", "true");
 			} else {
@@ -16014,32 +16925,76 @@ public class Modeler extends JFrame {
 		public Point[] getIndexCordinates() {
 			Point[] point = new Point[41];
 			Point pointBox = this.getLocation();
-			for (int i = 0; i <= 17; i++) {
-				point[i] = new Point(pointBox.x + 3 + (17 - i) * 8, pointBox.y + 40);
+			if (datamodelSize.equals("S")) {
+				for (int i = 0; i <= 17; i++) {
+					point[i] = new Point(pointBox.x + 1 + (17 - i) * 4, pointBox.y + 20);
+				}
+				for (int i = 18; i <= 22; i++) {
+					point[i] = new Point(pointBox.x, pointBox.y + 1 + (22 - i) * 4);
+				}
+				for (int i = 23; i <= 40; i++) {
+					point[i] = new Point(pointBox.x + 1 + (i - 23) * 4, pointBox.y);
+				}
 			}
-			for (int i = 18; i <= 22; i++) {
-				point[i] = new Point(pointBox.x, pointBox.y + 3 + (22 - i) * 8);
+			if (datamodelSize.equals("M")) {
+				for (int i = 0; i <= 17; i++) {
+					point[i] = new Point(pointBox.x + 3 + (17 - i) * 8, pointBox.y + 40);
+				}
+				for (int i = 18; i <= 22; i++) {
+					point[i] = new Point(pointBox.x, pointBox.y + 3 + (22 - i) * 8);
+				}
+				for (int i = 23; i <= 40; i++) {
+					point[i] = new Point(pointBox.x + 3 + (i - 23) * 8, pointBox.y);
+				}
 			}
-			for (int i = 23; i <= 40; i++) {
-				point[i] = new Point(pointBox.x + 3 + (i - 23) * 8, pointBox.y);
+			if (datamodelSize.equals("L")) {
+				for (int i = 0; i <= 17; i++) {
+					point[i] = new Point(pointBox.x + 5 + (17 - i) * 12, pointBox.y + 60);
+				}
+				for (int i = 18; i <= 22; i++) {
+					point[i] = new Point(pointBox.x, pointBox.y + 5 + (22 - i) * 12);
+				}
+				for (int i = 23; i <= 40; i++) {
+					point[i] = new Point(pointBox.x + 5 + (i - 23) * 12, pointBox.y);
+				}
 			}
 			return point;
 		}
 
 		public int getRightEdgeLocationOfArea() {
-			return boxPosX + this.getWidth() + 60;
+			int areaMargin = 0;
+			if (datamodelSize.equals("S")) {
+				areaMargin = 30;
+			}
+			if (datamodelSize.equals("M")) {
+				areaMargin = 60;
+			}
+			if (datamodelSize.equals("L")) {
+				areaMargin = 90;
+			}
+			return boxPosX + this.getWidth() + areaMargin;
 		}
 
 		public int getBottomEdgeLocationOfBox() {
-			return boxPosY + BOX_HEIGHT;
+			return boxPosY + boxHeight;
 		}
 
 		public int getBottomEdgeLocationOfArea() {
-			return boxPosY + BOX_HEIGHT + 30;
+			int areaMargin = 0;
+			if (datamodelSize.equals("S")) {
+				areaMargin = 15;
+			}
+			if (datamodelSize.equals("M")) {
+				areaMargin = 30;
+			}
+			if (datamodelSize.equals("L")) {
+				areaMargin = 45;
+			}
+			return boxPosY + boxHeight + areaMargin;
 		}
 
 		public int getBoxHeight() {
-			return BOX_HEIGHT;
+			return boxHeight;
 		}
 		
 		public boolean isSelected() {
@@ -16062,8 +17017,6 @@ public class Modeler extends JFrame {
 		class ElementLabel extends JLabel{
 			private static final long serialVersionUID = 1L;
 			private XeadTreeNode elementNode_;
-			private JPopupMenu jPopupMenuElementLabel = new JPopupMenu();
-			private JMenuItem jMenuItemElementLabelJump = new JMenuItem(res.getString("S2870"));
 			private boolean isKey_;
 			private DatamodelEntityBox entityBox_;
 			private org.w3c.dom.Element keyElement_;
@@ -16082,19 +17035,14 @@ public class Modeler extends JFrame {
 				if (elementNode_.getElement().getAttribute("AttributeType").equals("NATIVE")) {
 					if (isKey_) {
 						setText("<html><u>" + wrkStr);
-						setFont(new java.awt.Font(mainFontName, 1, 14));
 					} else {
 						setText(wrkStr);
-						setFont(new java.awt.Font(mainFontName, 0, 14));
 					}
 				} else {
 					wrkStr = "(" + wrkStr + ")";
 					setText(wrkStr);
-					setFont(new java.awt.Font(mainFontName, 0, 14));
 				}
 				setForeground(Color.black);
-				FontMetrics metrics = this.getFontMetrics(this.getFont());
-				this.setPreferredSize(new Dimension(metrics.stringWidth(wrkStr), 20));
 
 				// Setup ToolTipText //
 				String zenkaku;
@@ -16133,17 +17081,12 @@ public class Modeler extends JFrame {
 
 				if (jPanelCanvas == jPanelDatamodel) {
 					addMouseListener(new elementLabel_mouseAdapter(this));
-					jMenuItemElementLabelJump.addActionListener(new jMenuItemElementLabelJump_actionAdapter(this));
-					jPopupMenuElementLabel.add(jMenuItemElementLabelJump);
 				}
 			}
 
 			public ElementLabel(String label){
 				super(label);
-				setFont(new java.awt.Font(mainFontName, 0, 14));
 				setForeground(Color.black);
-				FontMetrics metrics = this.getFontMetrics(this.getFont());
-				this.setPreferredSize(new Dimension(metrics.stringWidth(label), 20));
 			}
 
 			public ElementLabel(String label, boolean isKey){
@@ -16153,10 +17096,24 @@ public class Modeler extends JFrame {
 				} else {
 					setText(label);
 				}
-				setFont(new java.awt.Font(mainFontName, 0, 14));
 				setForeground(Color.black);
+			}
+
+			public ElementLabel(String label, String toolTipText){
+				super(label);
+				setForeground(Color.black);
+				setToolTipText("<html>" + toolTipText);
+				//addMouseListener(new elementLabel_mouseAdapter(this));
+			}
+
+			public void resetSize() {
+				setFont(new java.awt.Font(mainFontName, 0, nameFontSize));
+				if (elementNode_ != null && isKey_
+						&& elementNode_.getElement().getAttribute("AttributeType").equals("NATIVE")) {
+					setFont(new java.awt.Font(mainFontName, 1, nameFontSize));
+				}
 				FontMetrics metrics = this.getFontMetrics(this.getFont());
-				this.setPreferredSize(new Dimension(metrics.stringWidth(label), 20));
+				this.setPreferredSize(new Dimension(metrics.stringWidth(this.getText().replace("<html><u>", "")), boxHeight/2));
 			}
 
 			public String getID() {
@@ -16181,14 +17138,6 @@ public class Modeler extends JFrame {
 				} else {
 					setForeground(Color.black);
 				}
-			}
-
-			public ElementLabel(String label, String toolTipText){
-				super(label);
-				setFont(new java.awt.Font(ioImageFontName, 0, 12));
-				setForeground(Color.black);
-				setToolTipText("<html>" + toolTipText);
-				addMouseListener(new elementLabel_mouseAdapter(this));
 			}
 
 			class elementLabel_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -16223,7 +17172,11 @@ public class Modeler extends JFrame {
 				}
 				public void mouseClicked(MouseEvent e) {
 					if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK) {
-						jPopupMenuElementLabel.show(e.getComponent(), e.getX(), e.getY());
+						//jPopupMenuElementLabel.show(e.getComponent(), e.getX(), e.getY());
+					} else {
+						TreePath tp = new TreePath(elementNode_.getPath());
+						jTreeMain.setSelectionPath(tp);
+						setupContentsPaneForTreeNodeSelected(elementNode_, false);
 					}
 				}
 				public void mouseEntered(MouseEvent e) {
@@ -16231,6 +17184,7 @@ public class Modeler extends JFrame {
 							&& draggingKeyElement != null) {
 					} else {
 						setForeground(SELECT_COLOR);
+						setCursor(htmlEditorKit.getLinkCursor());
 					}
 				}
 				public void mouseExited(MouseEvent e) {
@@ -16239,6 +17193,7 @@ public class Modeler extends JFrame {
 					} else {
 						setForeground(Color.black);
 					}
+					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 
@@ -16270,19 +17225,19 @@ public class Modeler extends JFrame {
 				Graphics2D g2 = (Graphics2D)g;
 				if (isNormalColorConfigOnDataModel) {
 					if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
-						g2.setPaint(new GradientPaint(92, 40, Color.BLUE.darker(), 92, 0, Color.BLUE.brighter()));
-						g2.fillRect(0,0,184,40);
+						g2.setPaint(new GradientPaint(jPanel2Width/2, boxHeight, Color.BLUE.darker(), jPanel2Width/2, 0, Color.BLUE.brighter()));
+						g2.fillRect(0,0,jPanel2Width,boxHeight);
 					} else {
-						g2.setPaint(new GradientPaint(92, 40, Color.DARK_GRAY.darker(), 92, 0, Color.DARK_GRAY.brighter()));
-						g2.fillRect(0,0,184,40);
+						g2.setPaint(new GradientPaint(jPanel2Width/2, boxHeight, Color.DARK_GRAY.darker(), jPanel2Width/2, 0, Color.DARK_GRAY.brighter()));
+						g2.fillRect(0,0,jPanel2Width,boxHeight);
 					}
 				} else {
 					if (subsystemID_.equals(tableNode_.getElement().getAttribute("SubsystemID"))) {
-						g2.setPaint(new GradientPaint(92, -10, Color.WHITE, 92, 40, new Color(145, 255, 255)));
-						g2.fillRect(0,0,184,40);
+						g2.setPaint(new GradientPaint(jPanel2Width/2, -boxHeight/4, Color.WHITE, jPanel2Width/2, 40, new Color(145, 255, 255)));
+						g2.fillRect(0,0,jPanel2Width,boxHeight);
 					} else {
-						g2.setPaint(new GradientPaint(92, -10, Color.WHITE, 92, 40, new Color(200, 200, 200)));
-						g2.fillRect(0,0,184,40);
+						g2.setPaint(new GradientPaint(jPanel2Width/2, -boxHeight/4, Color.WHITE, jPanel2Width/2, 40, new Color(200, 200, 200)));
+						g2.fillRect(0,0,jPanel2Width,boxHeight);
 					}
 				}
 			}
@@ -16396,12 +17351,6 @@ public class Modeler extends JFrame {
 		}
 
 		private void jPanel2_mousePressed(MouseEvent e) {
-//			if (dialogEditInstanceOnDatamodel.isVisible()) {
-//				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
-//				if (isEdited) {
-//					informationOnThisPageChanged = true;
-//				}
-//			}
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				mousePosX = e.getX();
 				mousePosY = e.getY();
@@ -16506,7 +17455,7 @@ public class Modeler extends JFrame {
 		}
 
 		public void changePositionTo(int posX, int posY) {
-			this.setBounds(new Rectangle(posX, posY, this.getWidth(), BOX_HEIGHT));
+			this.setBounds(new Rectangle(posX, posY, this.getWidth(), boxHeight));
 			boxPosX = posX;
 			boxPosY = posY;
 
@@ -16519,8 +17468,16 @@ public class Modeler extends JFrame {
 
 			//Resize jTextAreaShowInstance//
 			int width = this.getWidth() - jPanel2.getWidth();
-			jTextAreaShowInstance.setBounds(new Rectangle(posX + 186, posY + BOX_HEIGHT, width, heightOfInstanceArea));
-
+			if (datamodelSize.equals("S")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(posX + 93, posY + boxHeight, width, heightOfInstanceArea));
+			}
+			if (datamodelSize.equals("M")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(posX + 186, posY + boxHeight, width, heightOfInstanceArea));
+			}
+			if (datamodelSize.equals("L")) {
+				jTextAreaShowInstance.setBounds(new Rectangle(posX + 279, posY + boxHeight, width, heightOfInstanceArea));
+			}
+			
 			//Resize jPanelDatamodel//
 			int boxRightEdgeLocation = getRightEdgeLocationOfArea();
 			int boxBottomEdgeLocation = getBottomEdgeLocationOfArea();
@@ -16564,16 +17521,10 @@ public class Modeler extends JFrame {
 		}
 
 		private void jPanel1_mousePressed(MouseEvent e) {
-//			if (dialogEditInstanceOnDatamodel.isVisible()) {
-//				boolean isEdited = dialogEditInstanceOnDatamodel.updateAndClose();
-//				if (isEdited) {
-//					informationOnThisPageChanged = true;
-//				}
-//			}
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				int rangeX = jPanel1.getWidth() - 5;
 				if (e.getX() > rangeX) {
-					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
+					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), boxHeight));
 					jPanelCanvas.add(jPanelMoveGuide, null);
 				}
 			}
@@ -16589,7 +17540,7 @@ public class Modeler extends JFrame {
 						if (width < 189) {
 							width = 189;
 						}
-						this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, width, BOX_HEIGHT));
+						this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, width, boxHeight));
 					}
 					jPanelCanvas.updateUI();
 					informationOnThisPageChanged = true;
@@ -16603,8 +17554,8 @@ public class Modeler extends JFrame {
 					&& jPanelMoveGuide.getParent() != null) {
 				int rangeY = jPanel1.getHeight() - 2;
 				if (e.getX() >= 189 && e.getY() > 2 && e.getY() < rangeY) {
-					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX()-1, BOX_HEIGHT));
-					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), BOX_HEIGHT));
+					this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX()-1, boxHeight));
+					jPanelMoveGuide.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, e.getX(), boxHeight));
 					sizeOfTableOnModelChanged = true;
 				}
 			}
@@ -16650,7 +17601,9 @@ public class Modeler extends JFrame {
 				informationOnThisPageChanged = true;
 
 				if (isShowingInstance) {
-					int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation, panelWidth, panelHeight;
+					int panelWidth = 100;
+					int panelHeight = 100;
+					int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation;
 					Point point;
 					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 						moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
@@ -16665,7 +17618,6 @@ public class Modeler extends JFrame {
 					}
 
 					setupSlideInstanceArray();
-					jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
 					for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 						moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
 						if (moveDistance != 0) {
@@ -16689,8 +17641,8 @@ public class Modeler extends JFrame {
 						if (boxBottomEdgeLocation > panelHeight) {
 							panelHeight = boxBottomEdgeLocation;
 						}
-						jPanelDatamodel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 					}
+					jPanelDatamodel.setPreferredSize(new Dimension((int)panelWidth*120/100, (int)panelHeight*150/100));
 					jPanelDatamodel.updateUI();
 				} else {
 					setupSlideInstanceArray();
@@ -16786,7 +17738,7 @@ public class Modeler extends JFrame {
 
 			//Resize jTextAreaShowInstance//
 			int width = this.getWidth() - jPanel2.getWidth();
-			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + BOX_HEIGHT, width, heightOfInstanceArea));
+			jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + boxHeight, width, heightOfInstanceArea));
 
 			//Resize jPanelDatamodel//
 			int boxRightEdgeLocation = getRightEdgeLocationOfArea();
@@ -16985,6 +17937,7 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		private String nodeType_;
 		private org.w3c.dom.Element domNode_;
+		private boolean isPending_ = false;
 		private boolean isError_ = false;
 		private boolean isExtRefered_ = false;
 		private boolean searchImageFile_ = true; //a variant particularly for Function PanelIO and SpoolIO//
@@ -16994,6 +17947,9 @@ public class Modeler extends JFrame {
 			super();
 			nodeType_ = type;
 			domNode_ = node;
+			if (domNode_ != null && domNode_.getAttribute("Descriptions").contains("@NOTE@")) {
+				isPending_ = true;
+			}
 		}
 
 		public int compareTo(Object other) {
@@ -17065,7 +18021,10 @@ public class Modeler extends JFrame {
 			if (this.isPrimaryKeyField()) {
 				str = "<html><strong>" + mark + this.getName();
 			} else {
-				str = mark + this.getName();
+				str = "<html>" + mark + this.getName();
+			}
+			if (this.isPending_) {
+				str = str + "<strong><FONT color=\"purple\">*";
 			}
 			return str;
 		}
@@ -20711,16 +21670,14 @@ public class Modeler extends JFrame {
 				/////////////////////////////////////////
 				int boxRightEdgeLocation = 0;
 				int boxBottomEdgeLocation = 0;
-				int panelWidth = 0;
-				int panelHeight = 0;
-				jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
+				int panelWidth = 100;
+				int panelHeight = 100;
 				jPanelDatamodel.removeAll();
 
 				DatamodelEntityBox entityBox = null;
 				datamodelEntityBoxArray.clear();
 				for (int i = 0; i < subsystemTableList.getLength(); i++) {
 					subsystemTableElement = (org.w3c.dom.Element)subsystemTableList.item(i);
-
 					tableNode = getSpecificXeadTreeNode("Table", subsystemTableElement.getAttribute("TableID"), null);
 					if (tableNode != null) {
 						entityBox = new DatamodelEntityBox(subsystemTableElement, parentElement.getAttribute("ID"), jPanelDatamodel, tableNode);
@@ -20732,22 +21689,19 @@ public class Modeler extends JFrame {
 							/////////////////////////////////////////
 							boxRightEdgeLocation = entityBox.getRightEdgeLocationOfArea();
 							boxBottomEdgeLocation = entityBox.getBottomEdgeLocationOfArea();
-							panelWidth = jPanelDatamodel.getPreferredSize().width;
-							panelHeight = jPanelDatamodel.getPreferredSize().height;
 							if (boxRightEdgeLocation > panelWidth) {
 								panelWidth = boxRightEdgeLocation;
 							}
 							if (boxBottomEdgeLocation > panelHeight) {
 								panelHeight = boxBottomEdgeLocation;
 							}
-							jPanelDatamodel.setPreferredSize(new Dimension(panelWidth*2, panelHeight*2));
 						}
 						datamodelEntityBoxArray.add(entityBox);
 					}
-
 					jProgressBar.setValue(jProgressBar.getValue()+1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 				}
+				jPanelDatamodel.setPreferredSize(new Dimension((int)panelWidth*120/100, (int)panelHeight*150/100));
 
 				///////////////////////////////////////////
 				//Set Table number according to positions//
@@ -20824,6 +21778,9 @@ public class Modeler extends JFrame {
 
 				jProgressBar.setValue(0);
 				jPanelDatamodel.updateUI();
+				if (currentMainTreeNode != previousMainTreeNode) {
+					jScrollPaneDatamodel.getVerticalScrollBar().setValue(0);
+				}
 			}
 
 			///////////////////////////////////
@@ -21002,43 +21959,46 @@ public class Modeler extends JFrame {
 				}
 				for (int i = 0; i < referringFileDocList.size(); i++) {
 					document = referringFileDocList.get(i);
-					NodeList tableList = document.getElementsByTagName("Table");
-					for (int j = 0; j < tableList.getLength(); j++) {
-						tableElement = (org.w3c.dom.Element)tableList.item(j);
-						if (tableElement.getAttribute("SortKey").equals(domNode_.getAttribute("SortKey"))
-								&& !tableElement.getAttribute("SynchFile").equals("")) {
-							fileName = tableElement.getAttribute("SynchFile");
-							if (fileName.contains("<CURRENT>")) {
-								File file = new File(currentFileName);
-								fileName = fileName.replace("<CURRENT>", file.getParent());
-							} else {
-								if (!fileName.contains("\\")) {
+					if (document != null) {
+						NodeList tableList = document.getElementsByTagName("Table");
+						for (int j = 0; j < tableList.getLength(); j++) {
+							tableElement = (org.w3c.dom.Element)tableList.item(j);
+							if (tableElement.getAttribute("SortKey").equals(domNode_.getAttribute("SortKey"))
+									&& !tableElement.getAttribute("SynchFile").equals("")) {
+								fileName = tableElement.getAttribute("SynchFile");
+								if (fileName.contains("<CURRENT>")) {
 									File file = new File(currentFileName);
-									fileName = file.getParent() + "\\" + fileName;
-								}
-							}
-							if (fileName.equals(currentFileName)) {
-								workList = document.getElementsByTagName("System");
-								systemElement = (org.w3c.dom.Element)workList.item(0);
-								workList = document.getElementsByTagName("Subsystem");
-								for (int k = 0; k < workList.getLength(); k++) {
-									subsystemElement = (org.w3c.dom.Element)workList.item(k);
-									if (subsystemElement.getAttribute("ID").equals(tableElement.getAttribute("SubsystemID"))) {
-										Object[] Cell = new Object[5];
-										Cell[0] = count++;
-										Cell[1] = referringFileNameList.get(i);
-										Cell[2] = systemElement.getAttribute("Name") + "(" + systemElement.getAttribute("Version") + ")";
-										Cell[3] = subsystemElement.getAttribute("SortKey") + " " + subsystemElement.getAttribute("Name");
-										if (dialogTableSynchronize.isSynchError(tableElement, domDocument)) {
-											Cell[4] = "UNMATCH";
-										} else {
-											Cell[4] = "OK";
-										}
-										tableModelTableReferringFileList.addRow(Cell);
+									fileName = fileName.replace("<CURRENT>", file.getParent());
+								} else {
+									if (!fileName.contains(File.separator)) {
+										File file = new File(currentFileName);
+										fileName = file.getParent() + File.separator + fileName;
 									}
 								}
+								//fileName = fileName.replaceAll("\\", File.separator);
+								if (fileName.equals(currentFileName)) {
+									workList = document.getElementsByTagName("System");
+									systemElement = (org.w3c.dom.Element)workList.item(0);
+									workList = document.getElementsByTagName("Subsystem");
+									for (int k = 0; k < workList.getLength(); k++) {
+										subsystemElement = (org.w3c.dom.Element)workList.item(k);
+										if (subsystemElement.getAttribute("ID").equals(tableElement.getAttribute("SubsystemID"))) {
+											Object[] Cell = new Object[5];
+											Cell[0] = count++;
+											Cell[1] = referringFileNameList.get(i);
+											Cell[2] = systemElement.getAttribute("Name") + "(" + systemElement.getAttribute("Version") + ")";
+											Cell[3] = subsystemElement.getAttribute("SortKey") + " " + subsystemElement.getAttribute("Name");
+											if (dialogTableSynchronize.isSynchError(tableElement, domDocument)) {
+												Cell[4] = "UNMATCH";
+											} else {
+												Cell[4] = "OK";
+											}
+											tableModelTableReferringFileList.addRow(Cell);
+										}
+									}
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -23118,93 +24078,112 @@ public class Modeler extends JFrame {
 				}
 			}
 			//
-			//Add a tab to jTabbedPaneTaskFunctionIO//
+			//Add or update a tab of jTabbedPaneTaskFunctionIO//
 			if ((this.getType().equals("Function")
 					|| this.getType().equals("IOTable")
 					|| this.getType().equals("IOPanel")
 					|| this.getType().equals("IOSpool")
 					|| this.getType().equals("IOWebPage")) && cursor.equals(DragSource.DefaultLinkDrop)) {
+
 				if ((dropTarget.equals(jTabbedPaneTaskFunctionIO)) || (dropTarget.equals(jPanelTaskFunctionIOImage)) ||
 						(dropTarget.equals(jEditorPaneTaskFunctionIOImage)) || (dropTarget.equals(jTextPaneTaskFunctionIOImage)) ||
 						(dropTarget.equals(jPanelTaskFunctionIODummy)) || (dropTarget.equals(jLabelTaskFunctionIOImage)) ||
 						(dropTarget.equals(jTableFunctionIOImageIOList)) || (dropTarget.equals(jScrollPaneFunctionIOImageIOList))) {
-					//
-					//jTextPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					//jEditorPaneTaskFunctionIOImage.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					//
-					boolean ioIdDuplicated = false;
-					int wrkInt, ioIdSeq = 0;
-					XeadTreeNode functionNode = null;
+
+					informationOnThisPageChanged = true;
 					TreePath tp = jTreeTaskActions.getSelectionPath();
 					XeadTreeNode currentTaskActionNode = (XeadTreeNode)tp.getLastPathComponent();
-					if (this.getType().equals("Function")) {
-						functionNode = this;
-						nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
-						for (int i = 0; i < nodeList.getLength(); i++) {
-							element = (org.w3c.dom.Element)nodeList.item(i);
-							if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
-								if (element.getAttribute("IOID").equals("0")) {
-									ioIdDuplicated = true;
-									if (!element.getAttribute("IOIDSeq").equals("")) {
-										wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
-										if (wrkInt > ioIdSeq) {
-											ioIdSeq = wrkInt;
+					XeadTreeNode functionNode = null;
+
+					if (e.isShiftDown()) {
+						if (this.getType().equals("Function")) {
+							functionNode = this;
+						} else {
+							functionNode = (XeadTreeNode)this.getParent();
+						}
+
+						//Update DOM element//
+						element = getElementOfCurrentTabTaskFunctionIO();
+						element.setAttribute("FunctionID", functionNode.getElement().getAttribute("ID"));
+						if (this.getType().equals("Function")) {
+							element.setAttribute("IOID", "0");
+						} else {
+							element.setAttribute("IOID", domNode_.getAttribute("ID"));
+						}
+
+						currentTaskActionTreeNode.updateFieldsForTaskFunctionIO(currentMainTreeNode);
+						currentTaskActionTreeNode.updateFieldsForTaskAction(currentMainTreeNode);
+						activateContentsPaneForTaskAction(currentTaskActionNode, element.getAttribute("SortKey"));
+
+					} else {
+						boolean ioIdDuplicated = false;
+						int wrkInt, ioIdSeq = 0;
+						if (this.getType().equals("Function")) {
+							functionNode = this;
+							nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
+							for (int i = 0; i < nodeList.getLength(); i++) {
+								element = (org.w3c.dom.Element)nodeList.item(i);
+								if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
+									if (element.getAttribute("IOID").equals("0")) {
+										ioIdDuplicated = true;
+										if (!element.getAttribute("IOIDSeq").equals("")) {
+											wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
+											if (wrkInt > ioIdSeq) {
+												ioIdSeq = wrkInt;
+											}
 										}
 									}
 								}
+								sortKey = Integer.parseInt(element.getAttribute("SortKey"));
+								if (sortKey > lastSortKey) {
+									lastSortKey = sortKey;
+								}
 							}
-							sortKey = Integer.parseInt(element.getAttribute("SortKey"));
-							if (sortKey > lastSortKey) {
-								lastSortKey = sortKey;
-							}
-						}
-					} else {
-						functionNode = (XeadTreeNode)this.getParent();
-						nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
-						for (int i = 0; i < nodeList.getLength(); i++) {
-							element = (org.w3c.dom.Element)nodeList.item(i);
-							if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
-								if (element.getAttribute("IOID").equals(domNode_.getAttribute("ID"))) {
-									ioIdDuplicated = true;
-									if (!element.getAttribute("IOIDSeq").equals("")) {
-										wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
-										if (wrkInt > ioIdSeq) {
-											ioIdSeq = wrkInt;
+						} else {
+							functionNode = (XeadTreeNode)this.getParent();
+							nodeList = currentTaskActionNode.getElement().getElementsByTagName("TaskFunctionIO");
+							for (int i = 0; i < nodeList.getLength(); i++) {
+								element = (org.w3c.dom.Element)nodeList.item(i);
+								if (element.getAttribute("FunctionID").equals(functionNode.getElement().getAttribute("ID"))) {
+									if (element.getAttribute("IOID").equals(domNode_.getAttribute("ID"))) {
+										ioIdDuplicated = true;
+										if (!element.getAttribute("IOIDSeq").equals("")) {
+											wrkInt = Integer.parseInt(element.getAttribute("IOIDSeq"));
+											if (wrkInt > ioIdSeq) {
+												ioIdSeq = wrkInt;
+											}
 										}
 									}
 								}
-							}
-							sortKey = Integer.parseInt(element.getAttribute("SortKey"));
-							if (sortKey > lastSortKey) {
-								lastSortKey = sortKey;
+								sortKey = Integer.parseInt(element.getAttribute("SortKey"));
+								if (sortKey > lastSortKey) {
+									lastSortKey = sortKey;
+								}
 							}
 						}
+
+						//Update DOM element//
+						newElement = domDocument.createElement("TaskFunctionIO");
+						newElement.setAttribute("FunctionID", functionNode.getElement().getAttribute("ID"));
+						if (this.getType().equals("Function")) {
+							newElement.setAttribute("IOID", "0");
+						} else {
+							newElement.setAttribute("IOID", domNode_.getAttribute("ID"));
+						}
+						if (ioIdDuplicated) {
+							newElement.setAttribute("IOIDSeq", Integer.toString(ioIdSeq + 1));
+						} else {
+							newElement.setAttribute("IOIDSeq", "");
+						}
+						newElement.setAttribute("SortKey", getFormatted4ByteString(lastSortKey + 10));
+						newElement.setAttribute("Operations", "");
+						currentTaskActionNode.getElement().appendChild(newElement);
+
+						currentTaskActionTreeNode.updateFieldsForTaskFunctionIO(currentMainTreeNode);
+						currentTaskActionTreeNode.updateFieldsForTaskAction(currentMainTreeNode);
+						activateContentsPaneForTaskAction(currentTaskActionNode, newElement.getAttribute("SortKey"));
 					}
-					informationOnThisPageChanged = true;
-					//
-					//Update DOM element//
-					newElement = domDocument.createElement("TaskFunctionIO");
-					newElement.setAttribute("FunctionID", functionNode.getElement().getAttribute("ID"));
-					if (this.getType().equals("Function")) {
-						newElement.setAttribute("IOID", "0");
-					} else {
-						newElement.setAttribute("IOID", domNode_.getAttribute("ID"));
-					}
-					if (ioIdDuplicated) {
-						newElement.setAttribute("IOIDSeq", Integer.toString(ioIdSeq + 1));
-					} else {
-						newElement.setAttribute("IOIDSeq", "");
-					}
-					newElement.setAttribute("SortKey", getFormatted4ByteString(lastSortKey + 10));
-					newElement.setAttribute("Operations", "");
-					currentTaskActionNode.getElement().appendChild(newElement);
-					//
-					currentTaskActionTreeNode.updateFieldsForTaskFunctionIO(currentMainTreeNode);
-					currentTaskActionTreeNode.updateFieldsForTaskAction(currentMainTreeNode);
-					//
-					activateContentsPaneForTaskAction(currentTaskActionNode, newElement.getAttribute("SortKey"));
 					jTreeTaskActions.updateUI();
-					//
 					refreshRequired = false;
 				}
 			}
@@ -23345,8 +24324,18 @@ public class Modeler extends JFrame {
 						Point viewPosition = jScrollPaneTreeView.getViewport().getViewPosition();
 						Point pointOfCanvas = jPanelDatamodel.getLocationOnScreen();
 						Point pointOfFrame = getModelerPosition();
-						positionX = e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x + 7;
-						positionY = e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y + 64;
+						if (datamodelSize.equals("S")) {
+							positionX = (e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x) * 2 + 24;
+							positionY = (e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y) * 2 + 210;
+						}
+						if (datamodelSize.equals("M")) {
+							positionX = e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x + 12;
+							positionY = e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y + 105;
+						}
+						if (datamodelSize.equals("L")) {
+							positionX = (e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x) * 2/3 + 8;
+							positionY = (e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y) * 2/3 + 70;
+						}
 					}
 					newElement = domDocument.createElement("SubsystemTable");
 					newElement.setAttribute("TableID", domNode_.getAttribute("ID"));
@@ -24484,10 +25473,10 @@ public class Modeler extends JFrame {
 
 		public void updateFields() {
 			XeadTreeNode parentNode;
-			//
+
 			//[0]:any fields value changed, [1]:value of "SortKey" changed//
 			boolean[] updateStatusFlag = new boolean[2];
-			//
+
 			//Update related area of xmlDocument according to nodeType//
 			if (nodeType_.equals("System"))     {updateStatusFlag = updateFieldsForSystem();}
 			if (nodeType_.equals("SubjectArea"))  {updateStatusFlag = updateFieldsForSubjectArea();}
@@ -24504,7 +25493,14 @@ public class Modeler extends JFrame {
 			if (nodeType_.equals("IOSpool"))    {updateStatusFlag = updateFieldsForIOSpool();}
 			if (nodeType_.equals("IOTable"))    {updateStatusFlag = updateFieldsForIOTable();}
 			if (nodeType_.equals("IOWebPage"))    {updateStatusFlag = updateFieldsForIOWebPage();}
-			//
+
+			//Reset pending flag
+			if (domNode_ != null && domNode_.getAttribute("Descriptions").contains("@NOTE@")) {
+				isPending_ = true;
+			} else {
+				isPending_ = false;
+			}
+
 			//Refresh TreeView if any of fields value was changed//
 			if (updateStatusFlag[0] == true) {
 				float fileFormat = Float.parseFloat(systemNode.getElement().getAttribute("FormatVersion"));
@@ -27554,6 +28550,7 @@ public class Modeler extends JFrame {
 					} else {
 						File currentFile = new File(currentFileName);
 						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
+						//fileName = fileName.replaceAll("\\", File.separator);
 						desktop.open(new File(fileName));
 					}
 				} catch (Exception ex) {
@@ -28980,34 +29977,41 @@ public class Modeler extends JFrame {
 			int validLineNumber = 0;
 			String csvFileName = specifyNameOfExistingFile(res.getString("S1735"), "txt");
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(csvFileName));
 				String line, idColumn, nameColumn, descriptionsColumn;
+				BufferedReader br = new BufferedReader(new FileReader(csvFileName));
 				while ((line = br.readLine()) != null) {
 					totalLineNumber++;
+					int index = 0;
+					String[] tokenArray = new String[]{"","",""};
 					StringTokenizer workTokenizer = new StringTokenizer(line, "\t" );
+					while(workTokenizer.hasMoreTokens()) {
+						tokenArray[index] = workTokenizer.nextToken();
+						index++;
+						if (index > 2) {
+							break;
+						}
+				    }
 
-					try {
-						idColumn = workTokenizer.nextToken();
-					} catch (Exception ex1) {
-						idColumn = "";
-					}
-
-					try {
-						nameColumn = workTokenizer.nextToken();
-					} catch (Exception ex1) {
-						nameColumn = "";
-					}
-
-					try {
-						descriptionsColumn = workTokenizer.nextToken();
-					} catch (Exception ex1) {
-						descriptionsColumn = "";
+					if (line.startsWith("\t")) {
+						if (line.startsWith("\t\t")) {
+							idColumn = "";
+							nameColumn = "";
+							descriptionsColumn = tokenArray[0];
+						} else {
+							idColumn = "";
+							nameColumn = tokenArray[0];
+							descriptionsColumn = tokenArray[1];
+						}
+					} else {
+						idColumn = tokenArray[0];
+						nameColumn = tokenArray[1];
+						descriptionsColumn = tokenArray[2];
 					}
 
 					if (!idColumn.equals("") || !nameColumn.equals("")) {
 						validLineNumber++;
 						XeadTreeNode childNode = currentMainTreeNode.getChildNodeBySortKey(idColumn);
-						if (childNode == null) {
+						if (childNode == null || idColumn.equals("")) {
 							childNode = currentMainTreeNode.getChildNodeByName(nameColumn);
 							if (childNode == null) {
 								currentMainTreeNode.addChildNode(null, "", idColumn, nameColumn, descriptionsColumn);
@@ -30399,7 +31403,7 @@ public class Modeler extends JFrame {
 							if (htmlFileName.startsWith("file:")) {
 								fileName = htmlFileName;
 							} else {
-								if (!htmlFileName.contains("/") && !htmlFileName.contains("\\")) {
+								if (!htmlFileName.contains("/") && !htmlFileName.contains(File.separator)) {
 									File xeadFile = new File(currentFileName);
 									fileName = "file:///" + xeadFile.getParent() + File.separator + htmlFileName;
 								} else {
@@ -31008,7 +32012,8 @@ public class Modeler extends JFrame {
 		if (componentType_jPopupMenuComponent.equals("TaskFunctionIOBackground")) {
 			tipsText = res.getString("S2039") + "\n" +
 			res.getString("S2041") + "\n" +
-			res.getString("S2043");
+			res.getString("S2043") + "\n" +
+			res.getString("S2044");
 			container = jTabbedPaneTaskFunctionIO;
 		}
 		//
@@ -32659,12 +33664,12 @@ public class Modeler extends JFrame {
 			currentMainTreeNode.activateContentsPane();
 		}
 	}
+
 	/**
 	 * Event Handler for jMenuItemComponentToShowSlideNumber in case item selected
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToShowSlideNumber_actionPerformed(ActionEvent e) {
-		//
 		for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
 			if (dataflowNodeEditorArray.get(i).hasSlideNumberShown()) {
 				dataflowNodeEditorArray.get(i).setHideSlideNumber();
@@ -32672,7 +33677,6 @@ public class Modeler extends JFrame {
 				dataflowNodeEditorArray.get(i).setShowSlideNumber();
 			}
 		}
-		//
 		for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
 			if (dataflowLineEditorArray.get(i).hasSlideNumberShown()) {
 				dataflowLineEditorArray.get(i).setHideSlideNumber();
@@ -32682,12 +33686,60 @@ public class Modeler extends JFrame {
 		}
 	}
 
+	void resizeDatamodel() {
+		int boxRightEdgeLocation = 0;
+		int boxBottomEdgeLocation = 0;
+		int panelWidth = 100;
+		int panelHeight = 100;
+		int moveDistance;
+		Point point;
+		for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+			datamodelEntityBoxArray.get(i).setSizeAndColors();
+			boxRightEdgeLocation = datamodelEntityBoxArray.get(i).getRightEdgeLocationOfArea();
+			if (boxRightEdgeLocation > panelWidth) {
+				panelWidth = boxRightEdgeLocation;
+			}
+			boxBottomEdgeLocation = datamodelEntityBoxArray.get(i).getBottomEdgeLocationOfArea();
+			if (boxBottomEdgeLocation > panelHeight) {
+				panelHeight = boxBottomEdgeLocation;
+			}
+		}
+		if (isShowingInstance) {
+			for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
+				moveDistance = datamodelEntityBoxArray.get(i).calculateInstanceHeightToShowOnPanel(jPanelDatamodel);
+				if (moveDistance != 0) {
+					for (int j = 0; j < datamodelEntityBoxArray.size(); j++) {
+						point = datamodelEntityBoxArray.get(j).getBoxPositionPoint();
+						if (point.y > datamodelEntityBoxArray.get(i).getBoxPositionPoint().y) {
+							datamodelEntityBoxArray.get(j).changePositionTo(point.x, point.y + moveDistance);
+						}
+					}
+					datamodelEntityBoxArray.get(i).setInstanceBySlideNumber(datamodelEntityBoxArray.get(i).getLastSlideNumber(), true);
+					boxBottomEdgeLocation = datamodelEntityBoxArray.get(i).getBottomEdgeLocationOfArea() + moveDistance;
+					if (boxBottomEdgeLocation > panelHeight) {
+						panelHeight = boxBottomEdgeLocation;
+					}
+				}
+			}
+		}
+		jPanelDatamodel.setPreferredSize(new Dimension((int)panelWidth*120/100, (int)panelHeight*150/100));
+		for (int i= 0; i < datamodelRelationshipLineArray.size(); i++) {
+			datamodelRelationshipLineArray.get(i).setupTerminalIcons();
+			datamodelRelationshipLineArray.get(i).setupRelationLine();
+		}
+		jProgressBar.setValue(0);
+		jPanelDatamodel.updateUI();
+	}
+
 	/**
 	 * Event Handler for jMenuItemComponentToConfigColors in case item selected
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToConfigColors_actionPerformed(ActionEvent e) {
 		if (currentMainTreeNode.getType().equals("TableList")) {
+			boolean isChanged = informationOnThisPageChanged;
+			currentMainTreeNode.updateFields();
+
 			boolean isProcessed = dialogConfigColors.requestForDataModel();
 			if (isProcessed) {
 				if (isNormalColorConfigOnDataModel) {
@@ -32699,10 +33751,11 @@ public class Modeler extends JFrame {
 					jPanelDatamodelSlideShow1.setBackground(Color.WHITE);
 					jPanelDatamodelSlideShow2.setBackground(Color.WHITE);
 				}
-				for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
-					datamodelEntityBoxArray.get(i).updateColors();
+				if (isChanged) {
+					currentMainTreeNode.activateContentsPane();
+				} else {
+					resizeDatamodel();
 				}
-				jPanelDatamodel.updateUI();
 			}
 		}
 		if (currentMainTreeNode.getType().equals("SubjectArea")) {
@@ -32743,11 +33796,12 @@ public class Modeler extends JFrame {
 	void jMenuItemComponentToShowInstance_actionPerformed(ActionEvent e) {
 		currentMainTreeNode.updateFieldsForTableList();
 
-		int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation, panelWidth, panelHeight;
+		int moveDistance, boxRightEdgeLocation, boxBottomEdgeLocation;
+		int panelWidth = 100;
+		int panelHeight = 100;
 		Point point;
 		isShowingInstance = !isShowingInstance;
 		boolean hasNoInstance = true; 
-		jPanelDatamodel.setPreferredSize(new Dimension(100, 100));
 
 		for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 			if (datamodelEntityBoxArray.get(i).isVisibleOnModel) {
@@ -32785,9 +33839,9 @@ public class Modeler extends JFrame {
 				if (boxBottomEdgeLocation > panelHeight) {
 					panelHeight = boxBottomEdgeLocation;
 				}
-				jPanelDatamodel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 			}
 		}
+		jPanelDatamodel.setPreferredSize(new Dimension((int)panelWidth*120/100, (int)panelHeight*150/100));
 		if (isShowingInstance && hasNoInstance) {
 			JOptionPane.showMessageDialog(null, res.getString("S900"));
 			isShowingInstance = false;
@@ -32887,6 +33941,8 @@ public class Modeler extends JFrame {
 		DatamodelEntityBox entityBox;
 		int moveDistance;
 		Point point;
+		int intWrk;
+		int panelHeight = 0;
 		
 		//Clear canvas panel//
 		jPanelDatamodelSlideShow2.removeAll();
@@ -32907,6 +33963,10 @@ public class Modeler extends JFrame {
 					datamodelEntityBoxSlideShowArray.add(entityBox);
 					if (entityBox.getLastSlideNumber() > datamodelSlideTotalNumber) {
 						datamodelSlideTotalNumber = entityBox.getLastSlideNumber();
+					}
+					intWrk = entityBox.getBottomEdgeLocationOfArea();
+					if (intWrk > panelHeight) {
+						panelHeight = intWrk;
 					}
 				}
 			}
@@ -32929,7 +33989,7 @@ public class Modeler extends JFrame {
 		int tableNumber = 0;
 		int edgeLocation = 0;
 		int pos = 0;
-		while (pos <= jPanelDatamodelSlideShow2.getPreferredSize().height) {
+		while (pos <= panelHeight) {
 			for (int j = 0; j < datamodelEntityBoxSlideShowArray.size(); j++) {
 				if (datamodelEntityBoxSlideShowArray.get(j).isShowOnModel()) {
 					edgeLocation = datamodelEntityBoxSlideShowArray.get(j).getBottomEdgeLocationOfArea();
@@ -33010,12 +34070,29 @@ public class Modeler extends JFrame {
 	void jMenuItemComponentToAlignTables_actionPerformed(ActionEvent e) {
 		int topBoxIndex = 0;
 		int intWork;
+		int maxSize = 0;
 		float distanceX, distanceY, floatWork;
-		float pixelRoundValue = 16; //Note: value of 16 is consequential because of height of jTextAreaShowInstance of DatamodelEntityBox//
+		float pixelRoundValue = 0;
 		Point point;
-		Point topBoxPoint = new Point(0, 800);
+		Point topBoxPoint = new Point(0, 0);
 		informationOnThisPageChanged = true;
 		Point diff = new Point();
+
+		if (datamodelSize.equals("S")) {
+			topBoxPoint = new Point(0, 400);
+			pixelRoundValue = 8;
+			maxSize = 1000;
+		}
+		if (datamodelSize.equals("M")) {
+			topBoxPoint = new Point(0, 800);
+			pixelRoundValue = 16;
+			maxSize = 2000;
+		}
+		if (datamodelSize.equals("L")) {
+			topBoxPoint = new Point(0, 1200);
+			pixelRoundValue = 24;
+			maxSize = 3000;
+		}
 
 		for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 			point = datamodelEntityBoxArray.get(i).getBoxPositionPoint();
@@ -33026,15 +34103,15 @@ public class Modeler extends JFrame {
 			}
 		}
 
-		floatWork = (topBoxPoint.x - 8) / pixelRoundValue;
+		floatWork = (topBoxPoint.x - pixelRoundValue/2) / pixelRoundValue;
 		intWork = Math.round(floatWork);
-		diff.x = topBoxPoint.x - ((int)pixelRoundValue * intWork + 8);
-		topBoxPoint.x = ((int)pixelRoundValue * intWork + 8);
+		diff.x = topBoxPoint.x - ((int)pixelRoundValue * intWork + (int)pixelRoundValue/2);
+		topBoxPoint.x = ((int)pixelRoundValue * intWork + (int)pixelRoundValue/2);
 
-		floatWork = (topBoxPoint.y - 8) / pixelRoundValue;
+		floatWork = (topBoxPoint.y - (int)pixelRoundValue/2) / pixelRoundValue;
 		intWork = Math.round(floatWork);
-		diff.y = topBoxPoint.y - ((int)pixelRoundValue * intWork + 8);
-		topBoxPoint.y = ((int)pixelRoundValue * intWork + 8);
+		diff.y = topBoxPoint.y - ((int)pixelRoundValue * intWork + (int)pixelRoundValue/2);
+		topBoxPoint.y = ((int)pixelRoundValue * intWork + (int)pixelRoundValue/2);
 
 		datamodelEntityBoxArray.get(topBoxIndex).changePositionTo((int)topBoxPoint.x, (int)topBoxPoint.y);
 
@@ -33057,11 +34134,11 @@ public class Modeler extends JFrame {
 				datamodelEntityBoxArray.get(i).changePositionTo((int)(topBoxPoint.x + distanceX), (int)(topBoxPoint.y + distanceY));
 			}
 
-			intWork = datamodelEntityBoxArray.get(i).widthOfShownFields + 20;
-			if (intWork < 2000) {
+			intWork = datamodelEntityBoxArray.get(i).getWidthOfShownFields();
+			if (intWork < maxSize) {
 				datamodelEntityBoxArray.get(i).setElementsPanelWidth(intWork);
 			} else {
-				datamodelEntityBoxArray.get(i).setElementsPanelWidth(2000);
+				datamodelEntityBoxArray.get(i).setElementsPanelWidth(maxSize);
 			}
 		}
 
@@ -33212,6 +34289,9 @@ public class Modeler extends JFrame {
 								for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {
 									if (datamodelEntityBoxArray.get(i).isShowOnModel()) {
 										wrkRec = datamodelEntityBoxArray.get(i).getBounds();
+										if (isShowingInstance) {
+											wrkRec.height = wrkRec.height + datamodelEntityBoxArray.get(i).getInstanceHeight();
+										}
 										if (wrkRec.x + wrkRec.width + 30 > imageSize.x) {
 											imageSize.x = wrkRec.x + wrkRec.width + 30; 
 										}
@@ -35938,6 +37018,15 @@ class Modeler_jMenuItemToolFunctionList_ActionAdapter implements ActionListener 
 		adaptee.jMenuItemToolFunctionList_actionPerformed(e);
 	}
 }
+class Modeler_jMenuItemToolNotedItemList_ActionAdapter implements ActionListener {
+	Modeler adaptee;
+	Modeler_jMenuItemToolNotedItemList_ActionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jMenuItemToolNotedItemList_actionPerformed(e);
+	}
+}
 class Modeler_jMenuItemToolMatrixList_ActionAdapter implements ActionListener {
 	Modeler adaptee;
 	Modeler_jMenuItemToolMatrixList_ActionAdapter(Modeler adaptee) {
@@ -38272,6 +39361,15 @@ class Modeler_TableKeyAdapter extends java.awt.event.KeyAdapter {
 	}
 	public void keyReleased(KeyEvent e) {
 		adaptee.jTableKeyReleased(e);
+	}
+}
+class Modeler_MouseWheelAdapter implements java.awt.event.MouseWheelListener {
+	Modeler adaptee;
+	Modeler_MouseWheelAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		adaptee.mouseWheelMoved(e);
 	}
 }
 class Modeler_jListSubjectAreaWithThisTask_mouseAdapter extends java.awt.event.MouseAdapter {
