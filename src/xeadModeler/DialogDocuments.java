@@ -2078,7 +2078,7 @@ public class DialogDocuments extends JDialog {
 							cellH.setCellStyle(styleValue);
 							XSSFCell cellI = rowValue2.createCell(8);
 							cellI.setCellStyle(styleValue);
-							workString1 = "test";
+							workString1 = "";
 							for (int m = 0; m < ioFieldList.getLength(); m++) {
 								workElement4 = (org.w3c.dom.Element)ioFieldList.item(m);
 								if (workElement4.getAttribute("FieldID").equals(workElement3.getAttribute("ID"))) {
