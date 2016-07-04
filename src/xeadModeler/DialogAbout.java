@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2016 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M31";
+	public static final String FULL_VERSION = "V1.R4.M32";
+	// 1.4.32での変更点
+	//・Macでファイル名指定用ダイアログの動作が不安定である問題に対応した
+	//・仕様書出力でテーブル入出力項目がブランクだと不要な文字が出力されるバグを修正した
+	//
 	// 1.4.31での変更点
 	//・参照ファイルの扱いに関する細かいバグを修正した
 	//・各定義の説明に@NOTE@の予約語を置けば、注釈付項目としてツリービュー上で*付きで表示されるようにした

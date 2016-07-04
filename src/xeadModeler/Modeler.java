@@ -1313,6 +1313,12 @@ public class Modeler extends JFrame {
 			jMenuItemIOImageCancelSelectedCharStyle_actionPerformed(null);
 		}
 	};
+	private Action actionChangeBackgroundToWhite = new AbstractAction(){
+		private static final long serialVersionUID = 1L;
+		public void actionPerformed(ActionEvent e){
+			jMenuItemIOImageChangeSelectedBackgroundColorToWhite();
+		}
+	};
 	/**
 	 * Definition components on jPanelIOSpool
 	 */
@@ -2127,6 +2133,7 @@ public class Modeler extends JFrame {
 		jMenuItemIOImageChangeSelectedBackgroundColorToWhite.setBackground(Color.white);
 		jMenuItemIOImageChangeSelectedBackgroundColorToWhite.setText("WHITE");
 		jMenuItemIOImageChangeSelectedBackgroundColorToWhite.addActionListener(new Modeler_jMenuItemIOImageChangeSelectedBackgroundColor_actionAdapter(this));
+		jMenuItemIOImageChangeSelectedBackgroundColorToWhite.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,ActionEvent.CTRL_MASK));
 		jMenuItemIOImageChangeSelectedBackgroundColorToLightGray.setBackground(Color.lightGray);
 		jMenuItemIOImageChangeSelectedBackgroundColorToLightGray.setText("LIGHTGREY");
 		jMenuItemIOImageChangeSelectedBackgroundColorToLightGray.addActionListener(new Modeler_jMenuItemIOImageChangeSelectedBackgroundColor_actionAdapter(this));
@@ -5282,6 +5289,8 @@ public class Modeler extends JFrame {
 		actionMap.put("UNDERLINE", actionUnderlineIOPanelImage);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "RESET");
 		actionMap.put("RESET", actionResetAttrIOPanelImage);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK), "BACKGROUND_WHITE");
+		actionMap.put("BACKGROUND_WHITE", actionChangeBackgroundToWhite);
 		jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
 		jTextPaneIOPanelImage.setBackground(SystemColor.control);
 		jTextPaneIOPanelImage.addKeyListener(new Modeler_jTextPaneIOPanelImage_keyAdapter(this));
@@ -5767,6 +5776,7 @@ public class Modeler extends JFrame {
 			}
 		}
 	}
+
 	/**
 	 * Specify existing file in the dialog
 	 * @param dialogTitle :title of the dialog
@@ -5774,46 +5784,60 @@ public class Modeler extends JFrame {
 	 * @return String :name of file
 	 */
 	String specifyNameOfExistingFile(String dialogTitle, String fileExtention) {
-		jFileChooser.setDialogTitle("X-TEA Modeler - " + dialogTitle);
-		jFileChooser.resetChoosableFileFilters();
-		ArrayList<String> extentionList = new ArrayList<String>();
-		if (!fileExtention.equals("")) {
-			StringTokenizer workTokenizer = new StringTokenizer(fileExtention, "," );
-			while (workTokenizer.hasMoreTokens()) {
-				String extention = workTokenizer.nextToken();
-				extentionList.add(extention);
-				jFileChooser.setFileFilter(new FileNameExtensionFilter(extention, extention));
-			}
-		}
 		String name = "";
-		int reply = jFileChooser.showOpenDialog(this);
-		if (reply == JFileChooser.APPROVE_OPTION) {
-			File file = new File(jFileChooser.getSelectedFile().getPath());
-			if (getExtention(file) == null) {
-				for (int j = 0; j < extentionList.size(); j++) {
-					file = new File(jFileChooser.getSelectedFile().getPath() + "." + extentionList.get(j));
-					if (file.exists()) {
-						name = file.getPath();
-						break;
+		String osName = System.getProperty("os.name").toLowerCase();
+		if (osName.startsWith("mac")){
+			FileDialog fileDialog = new FileDialog(this);
+			fileDialog.setTitle("X-TEA Modeler - " + dialogTitle);
+			fileDialog.setFile("*." + fileExtention);
+			fileDialog.setVisible(true);
+
+			String dir = fileDialog.getDirectory();
+			String fileName = fileDialog.getFile();
+			if (dir != null && fileName != null) name = dir + File.separator + fileName;
+
+		} else {
+			jFileChooser.setDialogTitle("X-TEA Modeler - " + dialogTitle);
+			jFileChooser.resetChoosableFileFilters();
+			ArrayList<String> extentionList = new ArrayList<String>();
+			if (!fileExtention.equals("")) {
+				StringTokenizer workTokenizer = new StringTokenizer(fileExtention, "," );
+				while (workTokenizer.hasMoreTokens()) {
+					String extention = workTokenizer.nextToken();
+					extentionList.add(extention);
+					jFileChooser.setFileFilter(new FileNameExtensionFilter(extention, extention));
+				}
+			}
+			int reply = jFileChooser.showOpenDialog(this);
+			if (reply == JFileChooser.APPROVE_OPTION) {
+				File file = new File(jFileChooser.getSelectedFile().getPath());
+				if (getExtention(file) == null) {
+					for (int j = 0; j < extentionList.size(); j++) {
+						file = new File(jFileChooser.getSelectedFile().getPath() + "." + extentionList.get(j));
+						if (file.exists()) {
+							name = file.getPath();
+							break;
+						}
 					}
-				}
-				if (name.equals("")) {
-					JOptionPane.showMessageDialog(this, res.getString("S798"));
-				}
-			} else {
-				for (int j = 0; j < extentionList.size(); j++) {
-					if (getExtention(file).equals(extentionList.get(j))) {
-						name = file.getPath();
-						break;
+					if (name.equals("")) {
+						JOptionPane.showMessageDialog(this, res.getString("S798"));
 					}
-				}
-				if (name.equals("")) {
-					JOptionPane.showMessageDialog(this, res.getString("S799"));
+				} else {
+					for (int j = 0; j < extentionList.size(); j++) {
+						if (getExtention(file).equals(extentionList.get(j))) {
+							name = file.getPath();
+							break;
+						}
+					}
+					if (name.equals("")) {
+						JOptionPane.showMessageDialog(this, res.getString("S799"));
+					}
 				}
 			}
 		}
 		return name;
 	}
+
 	/**
 	 * Specify new file in the dialog
 	 * @param dialogTitle :title of the dialog
@@ -5825,27 +5849,19 @@ public class Modeler extends JFrame {
 		String name = "";
 		String extention = "";
 		int rtn = 0;
-		//
-		while (rtn != 2) {
-			//
-			if (name.equals("")) {
-				jFileChooser.setSelectedFile(new File(defaultFileName));
-				extention = getExtention(jFileChooser.getSelectedFile());
-			} else {
-				jFileChooser.setSelectedFile(new File(name));
-			}
-			jFileChooser.setDialogTitle(dialogTitle);
-			int reply = jFileChooser.showDialog(this, buttonText);
-			//
-			if (reply == JFileChooser.CANCEL_OPTION) {
-				name = "";
-				break;
-			}
-			//
-			if (reply == JFileChooser.APPROVE_OPTION) {
-				File file = new File(jFileChooser.getSelectedFile().getPath());
+		String osName = System.getProperty("os.name").toLowerCase();
+		if (osName.startsWith("mac")){
+			FileDialog fileDialog = new FileDialog(this);
+			fileDialog.setTitle(dialogTitle);
+			fileDialog.setVisible(true);
+
+			String dir = fileDialog.getDirectory();
+			String fileName = fileDialog.getFile();
+			if (dir != null && fileName != null) {
+				name = dir + File.separator + fileName;
+				File file = new File(name);
 				if (getExtention(file) == null) {
-					file = new File(jFileChooser.getSelectedFile().getPath() + "." + extention);
+					file = new File(name + "." + extention);
 				}
 				if (file.exists()) {
 					Object[] bts = {res.getString("S804"), res.getString("S805"), res.getString("S806")};
@@ -5856,29 +5872,75 @@ public class Modeler extends JFrame {
 							file.delete();
 							file.createNewFile();
 							name = file.getPath();
-						}
-						catch (IOException ex) {
+						} catch (IOException ex) {
 							JOptionPane.showMessageDialog(this, "Creating file has failed; Application will terminate.");
 							System.exit(0);
 						}
-						break;
 					}
 					if (rtn == 1) {
 						name = file.getPath();
-					}
-					if (rtn == 2) {
-						break;
 					}
 				} else {
 					try {
 						file.createNewFile();
 						name = file.getPath();
-					}
-					catch (IOException ex) {
+					} catch (IOException ex) {
 						JOptionPane.showMessageDialog(this, "Creating file has failed; Application will terminate.");
 						System.exit(0);
 					}
+				}
+			}
+
+		} else {
+			while (rtn != 2) {
+				if (name.equals("")) {
+					jFileChooser.setSelectedFile(new File(defaultFileName));
+					extention = getExtention(jFileChooser.getSelectedFile());
+				} else {
+					jFileChooser.setSelectedFile(new File(name));
+				}
+				jFileChooser.setDialogTitle(dialogTitle);
+				int reply = jFileChooser.showDialog(this, buttonText);
+				if (reply == JFileChooser.CANCEL_OPTION) {
+					name = "";
 					break;
+				}
+				if (reply == JFileChooser.APPROVE_OPTION) {
+					File file = new File(jFileChooser.getSelectedFile().getPath());
+					if (getExtention(file) == null) {
+						file = new File(jFileChooser.getSelectedFile().getPath() + "." + extention);
+					}
+					if (file.exists()) {
+						Object[] bts = {res.getString("S804"), res.getString("S805"), res.getString("S806")};
+						rtn = JOptionPane.showOptionDialog(this, res.getString("S807"),
+								res.getString("S808"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+						if (rtn == 0) {
+							try {
+								file.delete();
+								file.createNewFile();
+								name = file.getPath();
+							} catch (IOException ex) {
+								JOptionPane.showMessageDialog(this, "Creating file has failed; Application will terminate.");
+								System.exit(0);
+							}
+							break;
+						}
+						if (rtn == 1) {
+							name = file.getPath();
+						}
+						if (rtn == 2) {
+							break;
+						}
+					} else {
+						try {
+							file.createNewFile();
+							name = file.getPath();
+						} catch (IOException ex) {
+							JOptionPane.showMessageDialog(this, "Creating file has failed; Application will terminate.");
+							System.exit(0);
+						}
+						break;
+					}
 				}
 			}
 		}
@@ -10720,8 +10782,9 @@ public class Modeler extends JFrame {
 					//////////////////////
 					setupMainTreeModelWithCurrentFileName();
 
-				} catch(Exception exception) {
-					exception.printStackTrace();
+				} catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
+					ex.printStackTrace();
 				} finally {
 					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
@@ -29235,6 +29298,17 @@ public class Modeler extends JFrame {
 		}
 		if (currentMainTreeNode.getType().equals("IOSpool")) {
 			changeSelectedStyle(jTextPaneIOSpoolImage, menuItemColor, "BG_COLOR");
+			resetBlockSelectModeAndRepaintImage(jTextPaneIOSpoolImage);
+		}
+	}
+	void jMenuItemIOImageChangeSelectedBackgroundColorToWhite() {
+		informationOnThisPageChanged = true;
+		if (currentMainTreeNode.getType().equals("IOPanel")) {
+			changeSelectedStyle(jTextPaneIOPanelImage, Color.white, "BG_COLOR");
+			resetBlockSelectModeAndRepaintImage(jTextPaneIOPanelImage);
+		}
+		if (currentMainTreeNode.getType().equals("IOSpool")) {
+			changeSelectedStyle(jTextPaneIOSpoolImage, Color.white, "BG_COLOR");
 			resetBlockSelectModeAndRepaintImage(jTextPaneIOSpoolImage);
 		}
 	}
