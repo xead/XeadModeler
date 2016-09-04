@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
 	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M32";
+	public static final String FULL_VERSION = "V1.R4.M33";
+	// 1.4.33での変更点
+	//・IOイメージ上でのペースト操作でのバグを修正した
+	//・フィールドにデータタイプを設定した場合、フィールドID（エイリアス）が自動設定されるようにした
+	//
 	// 1.4.32での変更点
 	//・Macでファイル名指定用ダイアログの動作が不安定である問題に対応した
 	//・仕様書出力でテーブル入出力項目がブランクだと不要な文字が出力されるバグを修正した

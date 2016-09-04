@@ -36,12 +36,15 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+
 import org.w3c.dom.*;
+
 import xeadModeler.Modeler.XeadTreeNode;
 
 public class DialogReorganizeDataTypes extends JDialog {
@@ -58,6 +61,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 	private JLabel jLabel2 = new JLabel();
 	private JTextField jTextFieldDataTypeInto = new JTextField();
 	private String targetDataTypeID = "";
+	private String targetDataTypeCommonAlias = "";
 	private TableModelReadOnlyList tableModelDataTypeList = new TableModelReadOnlyList();
 	private JTable jTableDataTypeList = new JTable(tableModelDataTypeList);
 	private JScrollPane jScrollPaneDataTypeList = new JScrollPane();
@@ -264,6 +268,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 			jButtonDeleteDataType.setEnabled(false);
 			jTextFieldDataTypeInto.setText("");
 			targetDataTypeID = "";
+			targetDataTypeCommonAlias = "";
 
 			NodeList fieldList = frame_.domDocument.getElementsByTagName("TableField");
 			sortableDomElementFieldListModel.removeAllElements();
@@ -427,6 +432,9 @@ public class DialogReorganizeDataTypes extends JDialog {
 					TableRowNumber tableRowNumber = (TableRowNumber)tableModelFieldList.getValueAt(i, 0);
 					org.w3c.dom.Element element = tableRowNumber.getElement();
 					element.setAttribute("DataTypeID", targetDataTypeID);
+					if (element.getAttribute("Alias").equals("") && !targetDataTypeCommonAlias.equals("")) {
+						element.setAttribute("Alias", targetDataTypeCommonAlias);
+					}
 					updated = true;
 				}
 			}
@@ -797,6 +805,29 @@ public class DialogReorganizeDataTypes extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				jTextFieldDataTypeInto.setText(getText());
 				targetDataTypeID = dataTypeID;
+
+				targetDataTypeCommonAlias = "";
+				NodeList fieldList = frame_.domDocument.getElementsByTagName("TableField");
+				String fieldAlias = "";
+				org.w3c.dom.Element element;
+				boolean isAllTheSameAlias = true;
+				for (int i = 0; i < fieldList.getLength(); i++) {
+					element = (org.w3c.dom.Element)fieldList.item(i);
+					if (element.getAttribute("DataTypeID").equals(targetDataTypeID)) {
+						if (!element.getAttribute("Alias").equals("")
+								&& !fieldAlias.equals("")
+								&& !element.getAttribute("Alias").equals(fieldAlias)) {
+							isAllTheSameAlias = false;
+						}
+						if (!element.getAttribute("Alias").equals("")) {
+							fieldAlias = element.getAttribute("Alias");
+						}
+					}
+				}
+				if (isAllTheSameAlias) {
+					targetDataTypeCommonAlias = fieldAlias;
+				}
+				
 				jTableFieldList_mouseClicked(null);
 			}
 		}

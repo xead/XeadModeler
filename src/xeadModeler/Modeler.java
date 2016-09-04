@@ -29774,7 +29774,8 @@ public class Modeler extends JFrame {
 				textPane.setCaretPosition(pastingPos);
 			}
 		} else {
-			selectionStartPos = getPointPositionInText(textPane, pointWherePasteStart);
+			//selectionStartPos = getPointPositionInText(textPane, pointWherePasteStart);
+			selectionStartPos = getPointPositionInText(textPane, bytePointOfTextPoint);
 			textPane.select(selectionStartPos, selectionStartPos);
 			textPane.replaceSelection(clipboardData);
 		}
@@ -36799,6 +36800,27 @@ public class Modeler extends JFrame {
 				if (!dataTypeElement.getAttribute("ID").equals(tableFieldDataTypeID)) {
 					tableFieldDataTypeID = dataTypeElement.getAttribute("ID");
 					jTextFieldTableFieldDataType.setText(getText());
+					if (jTextFieldTableFieldAlias.getText().equals("")) {
+						NodeList fieldList = domDocument.getElementsByTagName("TableField");
+						String fieldAlias = "";
+						boolean isAllTheSameAlias = true;
+						for (int i = 0; i < fieldList.getLength(); i++) {
+							element1 = (org.w3c.dom.Element)fieldList.item(i);
+							if (element1.getAttribute("DataTypeID").equals(tableFieldDataTypeID)) {
+								if (!element1.getAttribute("Alias").equals("")
+										&& !fieldAlias.equals("")
+										&& !element1.getAttribute("Alias").equals(fieldAlias)) {
+									isAllTheSameAlias = false;
+								}
+								if (!element1.getAttribute("Alias").equals("")) {
+									fieldAlias = element1.getAttribute("Alias");
+								}
+							}
+						}
+						if (isAllTheSameAlias) {
+							jTextFieldTableFieldAlias.setText(fieldAlias);
+						}
+					}
 					//
 					nodeList1 = tableNode.getElement().getElementsByTagName("TableKey");
 					for (int i = 0; i < nodeList1.getLength(); i++) {
