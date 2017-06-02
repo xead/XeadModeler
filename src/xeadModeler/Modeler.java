@@ -244,6 +244,7 @@ public class Modeler extends JFrame {
 	public boolean setCommentToFieldsWithAlias = true;
 	public boolean ignoreForeignKeyConstraints = false;
 	public boolean ignoreKeyDefinitionWarnings = true;
+	public boolean isToConvertCamel = true;
 	private DialogMatrixList dialogMatrixList;
 	private DialogDocuments dialogDocuments;
 	private DialogImportXEAD dialogImportXEAD;
@@ -587,6 +588,9 @@ public class Modeler extends JFrame {
 	private JScrollPane jScrollPaneSubjectAreaDescriptions = new JScrollPane();
 	private JLabel jLabelSubjectAreaSortKey = new JLabel();
 	private JTextField jTextFieldSubjectAreaSortKey = new JTextField();
+	private JLabel jLabelSubjectAreaBoundarySetting = new JLabel();
+	private JComboBox jComboBoxSubjectAreaBoundarySetting = new JComboBox();
+	private boolean isChangedByUser = false;
 	private KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
 	//private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel();
 	private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel() {
@@ -3234,6 +3238,19 @@ public class Modeler extends JFrame {
 		jLabelSubjectAreaSortKey.setBounds(new Rectangle(310, 10, 130, 20));
 		jTextFieldSubjectAreaSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldSubjectAreaSortKey.setBounds(new Rectangle(445, 6, 100, 25));
+		jLabelSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSubjectAreaBoundarySetting.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSubjectAreaBoundarySetting.setText(res.getString("S381"));
+		jLabelSubjectAreaBoundarySetting.setBounds(new Rectangle(555, 10, 160, 20));
+		jComboBoxSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jComboBoxSubjectAreaBoundarySetting.setBounds(new Rectangle(720, 6, 170, 25));
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S382")); //0:Hidden//
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S383")); //1:Top-Left//
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S384")); //2:Top-Right//
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S385")); //3:Bottom-Left//
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S386")); //4:Bottom-Right//
+		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S387")); //H:Border-Hidden//
+		jComboBoxSubjectAreaBoundarySetting.addItemListener(new Modeler_jComboBoxSubjectAreaBoundarySetting_itemAdapter(this));
 		jTextAreaSubjectAreaDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSubjectAreaDescriptions.setLineWrap(true);
 		jPanelSubjectArea.add(jSplitPaneSubjectArea, BorderLayout.CENTER);
@@ -3246,6 +3263,8 @@ public class Modeler extends JFrame {
 		jPanelSubjectArea3.add(jTextFieldSubjectAreaName, null);
 		jPanelSubjectArea3.add(jLabelSubjectAreaSortKey, null);
 		jPanelSubjectArea3.add(jTextFieldSubjectAreaSortKey, null);
+		jPanelSubjectArea3.add(jLabelSubjectAreaBoundarySetting, null);
+		jPanelSubjectArea3.add(jComboBoxSubjectAreaBoundarySetting, null);
 		jScrollPaneSubjectAreaDescriptions.getViewport().add(jTextAreaSubjectAreaDescriptions, null);
 		jScrollPaneSubjectArea.getViewport().add(jPanelSubjectAreaDataflowEditor1, null);
 		jScrollPaneSubjectArea.getVerticalScrollBar().setUnitIncrement(25);
@@ -4120,14 +4139,14 @@ public class Modeler extends JFrame {
 		columnD = jTableNativeTableList.getColumnModel().getColumn(13);
 		columnE = jTableNativeTableList.getColumnModel().getColumn(14);
 		column0.setPreferredWidth(40);
-		column1.setPreferredWidth(150);
-		column2.setPreferredWidth(250);
+		column1.setPreferredWidth(120);
+		column2.setPreferredWidth(310);
 		column3.setPreferredWidth(75);
 		column4.setPreferredWidth(30);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
 		column7.setPreferredWidth(30);
-		column8.setPreferredWidth(150);
+		column8.setPreferredWidth(120);
 		column9.setPreferredWidth(350);
 		columnA.setPreferredWidth(45);
 		columnB.setPreferredWidth(42);
@@ -4186,9 +4205,9 @@ public class Modeler extends JFrame {
 		columnA = jTableForeignTableList.getColumnModel().getColumn(10);
 		columnB = jTableForeignTableList.getColumnModel().getColumn(11);
 		column0.setPreferredWidth(40);
-		column1.setPreferredWidth(250);
-		column2.setPreferredWidth(150);
-		column3.setPreferredWidth(250);
+		column1.setPreferredWidth(220);
+		column2.setPreferredWidth(120);
+		column3.setPreferredWidth(310);
 		column4.setPreferredWidth(75);
 		column5.setPreferredWidth(30);
 		column6.setPreferredWidth(30);
@@ -5505,14 +5524,14 @@ public class Modeler extends JFrame {
 		jLabelIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTableName.setEditable(false);
 		jTextFieldIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 300, 25));
+		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 350, 25));
 		jLabelIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableID.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableID.setText("ID");
-		jLabelIOTableID.setBounds(new Rectangle(310, 8, 70, 20));
+		jLabelIOTableID.setBounds(new Rectangle(360, 8, 70, 20));
 		jTextFieldIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTableID.setEditable(false);
-		jTextFieldIOTableID.setBounds(new Rectangle(385, 5, 220, 25));
+		jTextFieldIOTableID.setBounds(new Rectangle(435, 5, 170, 25));
 		jButtonIOTableJump.setBounds(new Rectangle(610, 4, 291, 26));
 		jButtonIOTableJump.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jButtonIOTableJump.setText(res.getString("S761"));
@@ -6076,7 +6095,8 @@ public class Modeler extends JFrame {
 				|| !systemNode.getElement().getAttribute("DDLSectionMark").equals("")
 				|| !systemNode.getElement().getAttribute("DDLAdditionalParms").equals("")
 				|| !systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("")
-				|| !systemNode.getElement().getAttribute("DDLIgnoreFK").equals("")) {
+				|| !systemNode.getElement().getAttribute("DDLIgnoreFK").equals("")
+				|| !systemNode.getElement().getAttribute("DDLConvertCamel").equals("")) {
 				ddlCommentMark = systemNode.getElement().getAttribute("DDLCommentMark");
 				ddlSectionMark = systemNode.getElement().getAttribute("DDLSectionMark");
 				ddlAdditionalParms = systemNode.getElement().getAttribute("DDLAdditionalParms");
@@ -6090,12 +6110,18 @@ public class Modeler extends JFrame {
 				} else {
 					ignoreForeignKeyConstraints = false;
 				}
+				if (systemNode.getElement().getAttribute("DDLConvertCamel").equals("false")) {
+					isToConvertCamel = false;
+				} else {
+					isToConvertCamel = true;
+				}
 			} else {
 				ddlCommentMark = "--";
 				ddlSectionMark = ";";
 				ddlAdditionalParms = "";
 				setCommentToFieldsWithAlias = true;
 				ignoreForeignKeyConstraints = false;
+				isToConvertCamel = true;
 			}
 			
 			if (this.isVisible()) {
@@ -8515,7 +8541,7 @@ public class Modeler extends JFrame {
 				if (isNeedToBackup) {
 					isNeedToBackup = false;
 					String backupFileName = "";
-					Object[] bts = {"Yes", "No"} ;
+					Object[] bts = {res.getString("S1153"), res.getString("S1154")} ;
 					int rtn1 = JOptionPane.showOptionDialog(this, res.getString("S1152"),
 							res.getString("S1151"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
 					if (rtn1 == 0 && domDocumentSaved != null) {
@@ -9492,13 +9518,21 @@ public class Modeler extends JFrame {
 						}
 						dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
 						if (dataTypeElement != null) {
-							if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
-								+ dataTypeElement.getAttribute("Length") + ")";
-							} else {
+//							if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
+//								+ dataTypeElement.getAttribute("Length") + ")";
+//							} else {
+//								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
+//								+ dataTypeElement.getAttribute("Length") + "."
+//								+ dataTypeElement.getAttribute("Decimal") + ")";
+//							}
+							if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
 								+ dataTypeElement.getAttribute("Length") + "."
 								+ dataTypeElement.getAttribute("Decimal") + ")";
+							} else {
+								dataLine = dataLine + "," +  dataTypeElement.getAttribute("Name") + "("
+								+ dataTypeElement.getAttribute("Length") + ")";
 							}
 						}
 						if (element3.getAttribute("NotNull").equals("true")) {
@@ -9957,6 +9991,29 @@ public class Modeler extends JFrame {
 		}
 	}
 
+	String convertCamelNotation(String originalText) {
+		StringBuffer bf = new StringBuffer();
+		String letter = "";
+		if (isToConvertCamel) {
+			if (originalText.equals(originalText.toUpperCase())) {
+				return originalText;
+			} else {
+				for (int i = 0; i < originalText.length(); i++) {
+					letter = originalText.substring(i, i+1);
+					if (!letter.equals("") && !letter.equals("@")) {
+						if (i > 0 && letter.equals(letter.toUpperCase())) {
+							bf.append("_");
+						}
+						bf.append(letter.toUpperCase());
+					}
+				}
+				return bf.toString();
+			}
+		} else {
+			return originalText;
+		}
+	}
+
 	/**
 	 * Generate CreateTable Statement of specified Table
 	 * @param node1 :Node of Subsystem
@@ -9988,12 +10045,10 @@ public class Modeler extends JFrame {
 			dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
 		}
 		//
-		//Header Comments//
-		statement = ddlCommentMark + node1.getElement().getAttribute("Name") + " - " + node2.getElement().getAttribute("Name") + "\n";
-		//
-		//Table Name//
+		//Header Comments with table Name//
 		if (useTableNameAsTableNameInCreateTableStatement) {
 			tableName = node2.getElement().getAttribute("Name");
+			statement = ddlCommentMark + node1.getElement().getAttribute("Name") + "(" + node1.getElement().getAttribute("SortKey") + ") - " + node2.getElement().getAttribute("Name") + "\n";
 		} else {
 			if (node2.getElement().getAttribute("Alias").equals("")) {
 				if (node2.getElement().getAttribute("SortKey").equals("")) {
@@ -10004,8 +10059,10 @@ public class Modeler extends JFrame {
 			} else {
 				tableName = node2.getElement().getAttribute("Alias");
 			}
+			statement = ddlCommentMark + node1.getElement().getAttribute("Name") + "(" + node1.getElement().getAttribute("SortKey") + ") - " + node2.getElement().getAttribute("Name") + "(" + tableName +")\n";
 		}
-		statement = statement + "CREATE TABLE " + tableName + "(" + "\n";
+		//
+		statement = statement + "CREATE TABLE " + convertCamelNotation(tableName) + "(" + "\n";
 		//
 		//Table Fields//
 		for (int k = 0; k < node2.getChildAt(0).getChildCount(); k++) {
@@ -10018,9 +10075,9 @@ public class Modeler extends JFrame {
 			}
 			//
 			if (node3.getElement().getAttribute("Alias").equals("")) {
-				statement = statement + "     " + node3.getElement().getAttribute("Name");
+				statement = statement + "     " + convertCamelNotation(node3.getElement().getAttribute("Name"));
 			} else {
-				statement = statement + "     " + node3.getElement().getAttribute("Alias");
+				statement = statement + "     " + convertCamelNotation(node3.getElement().getAttribute("Alias"));
 			}
 			dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
 			if (dataTypeElement == null) {
@@ -10065,11 +10122,11 @@ public class Modeler extends JFrame {
 					}
 					//
 					if (node3.getElement().getAttribute("Type").equals("PK")) {
-						statement = statement + "CONSTRAINT " + tableName + "_PK PRIMARY KEY (";
+						statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_PK PRIMARY KEY (";
 					}
 					if (node3.getElement().getAttribute("Type").equals("SK")) {
 						indexOfSK++;
-						statement = statement + "CONSTRAINT " + tableName + "_SK" + Integer.toString(indexOfSK) + " UNIQUE (";
+						statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_SK" + Integer.toString(indexOfSK) + " UNIQUE (";
 					}
 					//
 					sortableDomElementListModel.sortElements();
@@ -10080,9 +10137,9 @@ public class Modeler extends JFrame {
 							statement = statement + ", ";
 						}
 						if (node4.getElement().getAttribute("Alias").equals("")) {
-							statement = statement + node4.getElement().getAttribute("Name");
+							statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
 						} else {
-							statement = statement + node4.getElement().getAttribute("Alias");
+							statement = statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
 						}
 					}
 				}
@@ -10112,7 +10169,7 @@ public class Modeler extends JFrame {
 						}
 						//
 						indexOfFK++;
-						statement = statement + "CONSTRAINT " + tableName + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
+						statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
 						//
 						keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
 						keyFieldList2 = tableKeyElement.getElementsByTagName("TableKeyField");
@@ -10141,9 +10198,9 @@ public class Modeler extends JFrame {
 							}
 							if (numberOfCandidateFields == 1) {
 								if (node5.getElement().getAttribute("Alias").equals("")) {
-									statement = statement + node5.getElement().getAttribute("Name");
+									statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
 								} else {
-									statement = statement + node5.getElement().getAttribute("Alias");
+									statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
 								}
 							} else {
 								//statement = statement + "(?)";
@@ -10161,9 +10218,9 @@ public class Modeler extends JFrame {
 								}
 								if (numberOfCandidateFields == 1) {
 									if (node5.getElement().getAttribute("Alias").equals("")) {
-										statement = statement + node5.getElement().getAttribute("Name");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
 									} else {
-										statement = statement + node5.getElement().getAttribute("Alias");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
 									}
 								} else {
 									statement = statement + "(?)";
@@ -10185,7 +10242,7 @@ public class Modeler extends JFrame {
 								refferencingTableName = objectTableElement.getAttribute("Alias");
 							}
 						}
-						statement = statement + ") REFERENCES " + refferencingTableName + " (";
+						statement = statement + ") REFERENCES " + convertCamelNotation(refferencingTableName) + " (";
 						//
 						for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
 							keyFieldElement = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(m);
@@ -10194,9 +10251,9 @@ public class Modeler extends JFrame {
 								statement = statement + ", ";
 							}
 							if (node4.getElement().getAttribute("Alias").equals("")) {
-								statement = statement + node4.getElement().getAttribute("Name");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
 							} else {
-								statement = statement + node4.getElement().getAttribute("Alias");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
 							}
 						}
 					}
@@ -10212,7 +10269,7 @@ public class Modeler extends JFrame {
 						}
 						//
 						indexOfFK++;
-						statement = statement + "CONSTRAINT " + tableName + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
+						statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
 						//
 						keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
 						keyFieldList2 = tableKeyElement.getElementsByTagName("TableKeyField");
@@ -10241,13 +10298,11 @@ public class Modeler extends JFrame {
 							}
 							if (numberOfCandidateFields == 1) {
 								if (node5.getElement().getAttribute("Alias").equals("")) {
-									statement = statement + node5.getElement().getAttribute("Name");
+									statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
 								} else {
-									statement = statement + node5.getElement().getAttribute("Alias");
+									statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
 								}
 							} else {
-								//statement = statement + "(?)";
-								//warningHasOccured = true;
 								node4 = null;
 								node5 = null;
 								numberOfCandidateFields = 0;
@@ -10261,9 +10316,9 @@ public class Modeler extends JFrame {
 								}
 								if (numberOfCandidateFields == 1) {
 									if (node5.getElement().getAttribute("Alias").equals("")) {
-										statement = statement + node5.getElement().getAttribute("Name");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
 									} else {
-										statement = statement + node5.getElement().getAttribute("Alias");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
 									}
 								} else {
 									statement = statement + "(?)";
@@ -10285,7 +10340,7 @@ public class Modeler extends JFrame {
 								refferencingTableName = objectTableElement.getAttribute("Alias");
 							}
 						}
-						statement = statement + ") REFERENCES " + refferencingTableName + " (";
+						statement = statement + ") REFERENCES " + convertCamelNotation(refferencingTableName) + " (";
 						//
 						keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
 						sortableDomElementListModel.removeAllElements();
@@ -10300,9 +10355,9 @@ public class Modeler extends JFrame {
 								statement = statement + ", ";
 							}
 							if (node4.getElement().getAttribute("Alias").equals("")) {
-								statement = statement + node4.getElement().getAttribute("Name");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
 							} else {
-								statement = statement + node4.getElement().getAttribute("Alias");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
 							}
 						}
 					}
@@ -10326,7 +10381,7 @@ public class Modeler extends JFrame {
 						}
 						//
 						indexOfFK++;
-						statement = statement + "CONSTRAINT " + tableName + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
+						statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_FK" + Integer.toString(indexOfFK) + " FOREIGN KEY (";
 						//
 						keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
 						keyFieldList2 = tableKeyElement.getElementsByTagName("TableKeyField");
@@ -10354,14 +10409,18 @@ public class Modeler extends JFrame {
 								}
 							}
 							if (numberOfCandidateFields == 1 || ignoreKeyDefinitionWarnings) {
-								if (node5.getElement().getAttribute("Alias").equals("")) {
-									statement = statement + node5.getElement().getAttribute("Name");
+								if (node5 == null) {
+									statement = statement + "(?)";
+									warningHasOccured = true;
+									ignoreKeyDefinitionWarnings = false;
 								} else {
-									statement = statement + node5.getElement().getAttribute("Alias");
+									if (node5.getElement().getAttribute("Alias").equals("")) {
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+									} else {
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+									}
 								}
 							} else {
-								//statement = statement + "(?)";
-								//warningHasOccured = true;
 								node4 = null;
 								node5 = null;
 								numberOfCandidateFields = 0;
@@ -10375,9 +10434,9 @@ public class Modeler extends JFrame {
 								}
 								if (numberOfCandidateFields == 1) {
 									if (node5.getElement().getAttribute("Alias").equals("")) {
-										statement = statement + node5.getElement().getAttribute("Name");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
 									} else {
-										statement = statement + node5.getElement().getAttribute("Alias");
+										statement = statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
 									}
 								} else {
 									statement = statement + "(?)";
@@ -10399,7 +10458,7 @@ public class Modeler extends JFrame {
 								refferencingTableName = objectTableElement.getAttribute("Alias");
 							}
 						}
-						statement = statement + ") REFERENCES " + refferencingTableName + " (";
+						statement = statement + ") REFERENCES " + convertCamelNotation(refferencingTableName) + " (";
 						//
 						keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
 						sortableDomElementListModel.removeAllElements();
@@ -10414,9 +10473,9 @@ public class Modeler extends JFrame {
 								statement = statement + ", ";
 							}
 							if (node4.getElement().getAttribute("Alias").equals("")) {
-								statement = statement + node4.getElement().getAttribute("Name");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
 							} else {
-								statement = statement + node4.getElement().getAttribute("Alias");
+								statement = statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
 							}
 						}
 					}
@@ -10465,9 +10524,9 @@ public class Modeler extends JFrame {
 							statement = statement + ", ";
 						}
 						if (node4.getElement().getAttribute("Alias").equals("")) {
-							statement = statement + node4.getElement().getAttribute("Name");
+							statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
 						} else {
-							statement = statement + node4.getElement().getAttribute("Alias");
+							statement = statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
 						}
 						if (keyFieldElement.getAttribute("AscDesc").equals("D")) {
 							statement = statement + " DESC ";
@@ -12088,8 +12147,16 @@ public class Modeler extends JFrame {
 			return slideNumber;
 		}
 
+		public int getNodePosX() {
+			return nodePosX;
+		}
+
 		public int getNodeRightEdgeLocation() {
 			return nodePosX + NODE_WIDTH + 5;
+		}
+
+		public int getNodePosY() {
+			return nodePosY;
 		}
 
 		public int getNodeBottomEdgeLocation() {
@@ -13497,10 +13564,27 @@ public class Modeler extends JFrame {
 			this.setBorder(null);
 			this.setOpaque(false);
 			jLabelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-			jLabelName.setText(currentMainTreeNode.getRoot().toString());
-			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 32, 300, 20));
+			jLabelName.setText(currentMainTreeNode.getRoot().toString().replace("*", ""));
+			if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("1")) {
+				jLabelName.setBounds(new Rectangle(15, 12, 300, 20));
+			}
+			if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("2")) {
+				jLabelName.setBounds(new Rectangle(boundaryWidth - 315, 12, 300, 20));
+				jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
+				jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
+			}
+			if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("") || dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("3")) {
+				jLabelName.setBounds(new Rectangle(15, boundaryHeight - 32, 300, 20));
+			}
+			if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("4")) {
+				jLabelName.setBounds(new Rectangle(boundaryWidth - 315, boundaryHeight - 32, 300, 20));
+				jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
+				jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
+			}
 			updateColors();
-			this.add(jLabelName,null);
+			if (!dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("0")) {
+				this.add(jLabelName,null);
+			}
 		}
 
 		public DataflowBoundary() {
@@ -16586,8 +16670,19 @@ public class Modeler extends JFrame {
 
 			jLabelName.setHorizontalAlignment(SwingConstants.CENTER);
 			jLabelName.setText(tableNode_.getElement().getAttribute("Name"));
-			if (!tableNode_.getElement().getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("Name"))) {
-				jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
+//			if (!tableNode_.getElement().getAttribute("SortKey").equals(tableNode_.getElement().getAttribute("Name"))) {
+//				jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
+//			}
+			String wrkStr1 = tableNode_.getElement().getAttribute("Alias").replaceAll("_", "").toUpperCase();
+			String wrkStr2 = tableNode_.getElement().getAttribute("Name").replaceAll(" ", "").toUpperCase();
+			if (!wrkStr1.equals(wrkStr2)) {
+				if (wrkStr1.equals("")) {
+					if (!tableNode_.getElement().getAttribute("SortKey").toUpperCase().equals(tableNode_.getElement().getAttribute("Name").toUpperCase())) {
+						jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
+					}
+				} else {
+					jLabelID.setText(tableNode_.getElement().getAttribute("Alias"));
+				}
 			}
 			jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
 			jLabelSynchFile.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -16844,9 +16939,11 @@ public class Modeler extends JFrame {
 				idFontSize = 11;
 				nameFontSize = 14;
 				numberBounds = new Rectangle(3, 0, 15, 11);
-				idBounds = new Rectangle(20, -1, 162, 13);
+				//idBounds = new Rectangle(20, -1, 162, 13);
+				idBounds = new Rectangle(20, -2, 162, 13);
 				nameBounds = new Rectangle(0, 9, 184, 18);
-				crudBounds = new Rectangle(3, 23, 35, 11);
+				//crudBounds = new Rectangle(3, 23, 35, 11);
+				crudBounds = new Rectangle(3, 26, 35, 11);
 				synchFileBounds = new Rectangle(40, 23, 142, 12);
 				elementLabelPosY = 9;
 				rightMarginOfElementsPanel = 23;
@@ -17116,10 +17213,15 @@ public class Modeler extends JFrame {
 				}
 				org.w3c.dom.Element dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
 				strbf.append(" " + dataTypeElement.getAttribute("Name"));
-				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-					wrkStr = dataTypeElement.getAttribute("Length");
-				} else {
+//				if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//					wrkStr = dataTypeElement.getAttribute("Length");
+//				} else {
+//					wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+//				}
+				if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 					wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+				} else {
+					wrkStr = dataTypeElement.getAttribute("Length");
 				}
 				zenkaku = getZenkakuOfHankaku(wrkStr);
 				if (!dataTypeElement.getAttribute("Name").contains(wrkStr)
@@ -18113,15 +18215,25 @@ public class Modeler extends JFrame {
 				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
 			}
 			if (nodeType_.equals("DataType")) {
-				if (domNode_.getAttribute("Decimal").equals("") || domNode_.getAttribute("Decimal").equals("0")) {
-					str = domNode_.getAttribute("SortKey") + " "
-					+ domNode_.getAttribute("Name") + "("
-					+ domNode_.getAttribute("Length") + ")";
-				} else {
+//				if (domNode_.getAttribute("Decimal").equals("") || domNode_.getAttribute("Decimal").equals("0")) {
+//					str = domNode_.getAttribute("SortKey") + " "
+//					+ domNode_.getAttribute("Name") + "("
+//					+ domNode_.getAttribute("Length") + ")";
+//				} else {
+//					str = domNode_.getAttribute("SortKey") + " "
+//					+ domNode_.getAttribute("Name") + "("
+//					+ domNode_.getAttribute("Length") + "."
+//					+ domNode_.getAttribute("Decimal") + ")";
+//				}
+				if (domNode_.getAttribute("BasicType").equals("SignedNumber") || domNode_.getAttribute("BasicType").equals("UnsignedNumber")) {
 					str = domNode_.getAttribute("SortKey") + " "
 					+ domNode_.getAttribute("Name") + "("
 					+ domNode_.getAttribute("Length") + "."
 					+ domNode_.getAttribute("Decimal") + ")";
+				} else {
+					str = domNode_.getAttribute("SortKey") + " "
+					+ domNode_.getAttribute("Name") + "("
+					+ domNode_.getAttribute("Length") + ")";
 				}
 			}
 			if (nodeType_.equals("FunctionType")) {
@@ -18159,10 +18271,15 @@ public class Modeler extends JFrame {
 				str = res.getString("S3407");
 			}
 			if (nodeType_.equals("Table")) {
-				if (domNode_.getAttribute("SortKey").equals(domNode_.getAttribute("Name"))) {
+				if (domNode_.getAttribute("SortKey").toUpperCase().equals(domNode_.getAttribute("Name").toUpperCase())) {
 					str = domNode_.getAttribute("SortKey");
 				} else {
 					str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+				}
+				String wrkStr1 = domNode_.getAttribute("Alias").replaceAll("_", "").toUpperCase();
+				String wrkStr2 = domNode_.getAttribute("Name").replaceAll(" ", "").toUpperCase();
+				if (!wrkStr1.equals(wrkStr2) && !wrkStr1.equals("")) {
+					str = str + " - " + domNode_.getAttribute("Alias");
 				}
 			}
 			if (nodeType_.equals("TableFieldList")) {
@@ -20810,6 +20927,26 @@ public class Modeler extends JFrame {
 			jTextFieldSubjectAreaSortKey.setText(domNode_.getAttribute("SortKey"));
 			jTextAreaSubjectAreaDescriptions.setText(substringLinesWithTokenOfEOL(domNode_.getAttribute("Descriptions"), "\n"));
 			jTextAreaSubjectAreaDescriptions.setCaretPosition(0);
+			if (!isChangedByUser) {
+				if (domNode_.getAttribute("BoundarySetting").equals("0")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(0);
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("1")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(1);
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("2")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(2);
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("3") || domNode_.getAttribute("BoundarySetting").equals("")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(3);
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("4")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(4);
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("H")) {
+					jComboBoxSubjectAreaBoundarySetting.setSelectedIndex(5);
+				}
+			}
 			//
 			//Setup DataFlow-Diagram(DFD) panel//
 			dataflowNodeList = domNode_.getElementsByTagName("DataflowNode");
@@ -20819,9 +20956,11 @@ public class Modeler extends JFrame {
 			//
 			//Setup SystemBoundary//
 			jPanelSubjectAreaDataflowEditor1.remove(dataflowBoundaryEditor);
-			dataflowBoundaryEditor = new DataflowBoundary(domNode_);
-			jPanelSubjectAreaDataflowEditor1.setPreferredSize(dataflowBoundaryEditor.getPreferredSizeOfParentPanel());
-			jPanelSubjectAreaDataflowEditor1.add(dataflowBoundaryEditor);
+			if (!domNode_.getAttribute("BoundarySetting").equals("H")) {
+				dataflowBoundaryEditor = new DataflowBoundary(domNode_);
+				jPanelSubjectAreaDataflowEditor1.setPreferredSize(dataflowBoundaryEditor.getPreferredSizeOfParentPanel());
+				jPanelSubjectAreaDataflowEditor1.add(dataflowBoundaryEditor);
+			}
 			//
 			//Clear canvas panel//
 			jPanelSubjectAreaDataflowEditor2.removeAll();
@@ -21533,7 +21672,7 @@ public class Modeler extends JFrame {
 			NodeList functionList = domDocument.getElementsByTagName("Function");
 			NodeList ioTableList;
 			org.w3c.dom.Element functionElement, ioTableElement;
-			String opC,opR,opU,opD,opExC,opExR,opExU,opExD;
+			String opC,opR,opU,opD,opExC,opExR,opExU,opExD,wrkStr1, wrkStr2;
 
 			/////////////////////////
 			//Setup NativeTableList//
@@ -21554,7 +21693,13 @@ public class Modeler extends JFrame {
 					if (node.getElement().getAttribute("Alias").equals("")) {
 						Cell[2] = node.getElement().getAttribute("Name");
 					} else {
-						Cell[2] = node.getElement().getAttribute("Name") + "(" + node.getElement().getAttribute("Alias") + ")";
+						wrkStr1 = node.getElement().getAttribute("Alias").replaceAll("_", "").toUpperCase();
+						wrkStr2 = node.getElement().getAttribute("Name").replaceAll(" ", "").toUpperCase();
+						if (wrkStr1.equals(wrkStr2)) {
+							Cell[2] = node.getElement().getAttribute("Name");
+						} else {
+							Cell[2] = node.getElement().getAttribute("Name") + " - " + node.getElement().getAttribute("Alias");
+						}
 					}
 					Cell[3] = Boolean.TRUE;
 					for (int j = 0; j < subsystemTableList.getLength(); j++) {
@@ -21657,7 +21802,14 @@ public class Modeler extends JFrame {
 									if (tableElement.getAttribute("Alias").equals("")) {
 										Cell[3] = tableElement.getAttribute("Name");
 									} else {
-										Cell[3] = tableElement.getAttribute("Name") + "(" + tableElement.getAttribute("Alias") + ")";
+										//Cell[3] = tableElement.getAttribute("Name") + "(" + tableElement.getAttribute("Alias") + ")";
+										wrkStr1 = tableElement.getAttribute("Alias").replaceAll("_", "").toUpperCase();
+										wrkStr2 = tableElement.getAttribute("Name").replaceAll(" ", "").toUpperCase();
+										if (wrkStr1.equals(wrkStr2)) {
+											Cell[3] = tableElement.getAttribute("Name");
+										} else {
+											Cell[3] = tableElement.getAttribute("Name") + " - " + tableElement.getAttribute("Alias");
+										}
 									}
 									if (element.getAttribute("ShowOnModel").equals("true")) {
 										Cell[4] = Boolean.TRUE;
@@ -22126,10 +22278,15 @@ public class Modeler extends JFrame {
 				}
 				dataTypeElement = dataTypeElementMap.get(node.getElement().getAttribute("DataTypeID"));
 				if (dataTypeElement != null) {
-					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						wrkStr = dataTypeElement.getAttribute("Length");
-					} else {
+//					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//						wrkStr = dataTypeElement.getAttribute("Length");
+//					} else {
+//						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+//					}
+					if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+					} else {
+						wrkStr = dataTypeElement.getAttribute("Length");
 					}
 					zenkaku = getZenkakuOfHankaku(wrkStr);
 					if (dataTypeElement.getAttribute("Name").contains(wrkStr)
@@ -22217,10 +22374,15 @@ public class Modeler extends JFrame {
 			for (int i = 0; i < dataTypeList.getLength(); i++) {
 				dataTypeElement = (org.w3c.dom.Element)dataTypeList.item(i);
 				if (dataTypeElement.getAttribute("ID").equals(tableFieldDataTypeID)) {
-					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						wrkStr1 = dataTypeElement.getAttribute("Length");
-					} else {
+//					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//						wrkStr1 = dataTypeElement.getAttribute("Length");
+//					} else {
+//						wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+//					}
+					if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 						wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+					} else {
+						wrkStr1 = dataTypeElement.getAttribute("Length");
 					}
 					zenkaku = getZenkakuOfHankaku(wrkStr1);
 					if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
@@ -23220,7 +23382,15 @@ public class Modeler extends JFrame {
 					+ ((XeadTreeNode)this.getParent()).getName() + " - " + this.getName());
 			XeadTreeNode tableNode = getSpecificXeadTreeNode("Table", domNode_.getAttribute("TableID"), null);
 			org.w3c.dom.Element tableElement = tableNode.getElement();
-			jTextFieldIOTableName.setText(tableElement.getAttribute("Name"));
+			//jTextFieldIOTableName.setText(tableElement.getAttribute("Name"));
+			String wrkStr1 = tableElement.getAttribute("Alias").replaceAll("_", "").toUpperCase();
+			String wrkStr2 = tableElement.getAttribute("Name").replaceAll(" ", "").toUpperCase();
+			if (wrkStr1.equals(wrkStr2)) {
+				jTextFieldIOTableName.setText(tableElement.getAttribute("Name"));
+			} else {
+				jTextFieldIOTableName.setText(tableElement.getAttribute("Name") + " - " + tableElement.getAttribute("Alias"));
+			}
+			
 			jTextFieldIOTableID.setText(tableElement.getAttribute("SortKey"));
 			XeadTreeNode keyListNode = (XeadTreeNode)tableNode.getChildAt(1);
 			XeadTreeNode primaryKeyNode = (XeadTreeNode)keyListNode.getChildAt(0);
@@ -23331,10 +23501,15 @@ public class Modeler extends JFrame {
 				if (dataTypeElement == null) {
 					Cell[3] = "";
 				} else {
-					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-						wrkStr = dataTypeElement.getAttribute("Length");
-					} else {
+//					if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//						wrkStr = dataTypeElement.getAttribute("Length");
+//					} else {
+//						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+//					}
+					if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 						wrkStr = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+					} else {
+						wrkStr = dataTypeElement.getAttribute("Length");
 					}
 					zenkaku = getZenkakuOfHankaku(wrkStr);
 					if (dataTypeElement.getAttribute("Name").contains(wrkStr)
@@ -24884,12 +25059,18 @@ public class Modeler extends JFrame {
 					} else {
 						ignoreForeignKeyConstraints = false;
 					}
+					if (domNode_.getAttribute("DDLConvertCamel").equals("false")) {
+						isToConvertCamel = false;
+					} else {
+						isToConvertCamel = true;
+					}
 				} else {
 					ddlCommentMark = "--";
 					ddlSectionMark = ";";
 					ddlAdditionalParms = "";
 					setCommentToFieldsWithAlias = true;
 					ignoreForeignKeyConstraints = false;
+					isToConvertCamel = true;
 				}
 			}
 
@@ -25258,12 +25439,18 @@ public class Modeler extends JFrame {
 					} else {
 						ignoreForeignKeyConstraints = false;
 					}
+					if (domNode_.getAttribute("DDLConvertCamel").equals("false")) {
+						isToConvertCamel = false;
+					} else {
+						isToConvertCamel = true;
+					}
 				} else {
 					ddlCommentMark = "--";
 					ddlSectionMark = ";";
 					ddlAdditionalParms = "";
 					setCommentToFieldsWithAlias = true;
 					ignoreForeignKeyConstraints = false;
+					isToConvertCamel = true;
 				}
 			}
 			//
@@ -25645,6 +25832,18 @@ public class Modeler extends JFrame {
 					valueOfFieldsChanged = true;
 				}
 			}
+			if (domNode_.getAttribute("DDLConvertCamel").equals("")) {
+				if (!isToConvertCamel) {
+					valueOfFieldsChanged = true;
+				}
+			} else {
+				if (domNode_.getAttribute("DDLConvertCamel").equals("true") && !isToConvertCamel) {
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("DDLConvertCamel").equals("false") && isToConvertCamel) {
+					valueOfFieldsChanged = true;
+				}
+			}
 
 			if (valueOfFieldsChanged) {
 				systemName = jTextFieldSystemName.getText(); //variant for frame title//
@@ -25675,6 +25874,11 @@ public class Modeler extends JFrame {
 					domNode_.setAttribute("DDLIgnoreFK", "true");
 				} else {
 					domNode_.setAttribute("DDLIgnoreFK", "false");
+				}
+				if (isToConvertCamel) {
+					domNode_.setAttribute("DDLConvertCamel", "true");
+				} else {
+					domNode_.setAttribute("DDLConvertCamel", "false");
 				}
 			}
 
@@ -25972,6 +26176,43 @@ public class Modeler extends JFrame {
 				valueOfSortKeyChanged = true;
 				valueOfFieldsChanged = true;
 			}
+			if (domNode_.getAttribute("BoundarySetting").equals("")) {
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 3) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+			} else {
+				if (domNode_.getAttribute("BoundarySetting").equals("0")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 0) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("1")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 1) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("2")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 2) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("3")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 3) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("4")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 4) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("BoundarySetting").equals("H")
+						&& jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() != 5) {
+					valueOfSortKeyChanged = true;
+					valueOfFieldsChanged = true;
+				}
+			}
 			if (!domNode_.getAttribute("Descriptions").equals(concatLinesWithTokenOfEOL(jTextAreaSubjectAreaDescriptions.getText()))) {
 				valueOfFieldsChanged = true;
 			}
@@ -25980,6 +26221,24 @@ public class Modeler extends JFrame {
 				//Update DOM element//
 				domNode_.setAttribute("Name", jTextFieldSubjectAreaName.getText());
 				domNode_.setAttribute("SortKey", jTextFieldSubjectAreaSortKey.getText());
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 0) {
+					domNode_.setAttribute("BoundarySetting", "0");
+				}
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 1) {
+					domNode_.setAttribute("BoundarySetting", "1");
+				}
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 2) {
+					domNode_.setAttribute("BoundarySetting", "2");
+				}
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 3) {
+					domNode_.setAttribute("BoundarySetting", "3");
+				}
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 4) {
+					domNode_.setAttribute("BoundarySetting", "4");
+				}
+				if (jComboBoxSubjectAreaBoundarySetting.getSelectedIndex() == 5) {
+					domNode_.setAttribute("BoundarySetting", "H");
+				}
 				domNode_.setAttribute("Descriptions", concatLinesWithTokenOfEOL(jTextAreaSubjectAreaDescriptions.getText()));
 				//
 				for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
@@ -29703,6 +29962,7 @@ public class Modeler extends JFrame {
 		Point pointWherePasteStart = new Point(0,0);
 		int selectionStartPos = 0;
 //		int selectionEndPos = 0;
+		int pastingPos = 0;
 
 		informationOnThisPageChanged = true;
 		textPane.requestFocus();
@@ -29752,7 +30012,6 @@ public class Modeler extends JFrame {
 			}
 		}
 		if (clipboardData.equals(wrkStr)) {
-			int pastingPos = 0;
 			StyledDocument styledDocument = textPane.getStyledDocument();
 			for (int j = 0; j < styledDocumentCopiedTextList.size(); j++) {
 				//point.x = pointWherePasteStart.x + j;
@@ -29760,7 +30019,6 @@ public class Modeler extends JFrame {
 				point.x = bytePointOfTextPoint.x + j;
 				point.y = bytePointOfTextPoint.y;
 				pastingPos = getPointPositionInTextToIgnoreCR(textPane, point);
-				//JOptionPane.showMessageDialog(null, point.x+","+point.y+":"+pastingPos);
 				for (int i = 0; i < styledDocumentCopiedTextList.get(j).length(); i++) {
 					javax.swing.text.Element textElement = styledDocumentCopiedSegmentList.get(j).getCharacterElement(i);
 					try {
@@ -29775,7 +30033,8 @@ public class Modeler extends JFrame {
 			}
 		} else {
 			//selectionStartPos = getPointPositionInText(textPane, pointWherePasteStart);
-			selectionStartPos = getPointPositionInText(textPane, bytePointOfTextPoint);
+			//selectionStartPos = getPointPositionInText(textPane, bytePointOfTextPoint);
+			selectionStartPos = getPointPositionInTextToIgnoreCR(textPane, bytePointOfTextPoint);
 			textPane.select(selectionStartPos, selectionStartPos);
 			textPane.replaceSelection(clipboardData);
 		}
@@ -33928,13 +34187,19 @@ public class Modeler extends JFrame {
 	void startSlideShowOfDataFlow() {
 		//Setup System Boundary//
 		jPanelSubjectAreaDataflowSlideShow1.remove(dataflowBoundarySlideShow);
-		dataflowBoundarySlideShow = new DataflowBoundary(currentMainTreeNode.getElement());
-		jPanelSubjectAreaDataflowSlideShow1.add(dataflowBoundarySlideShow);
+		if (!currentMainTreeNode.getElement().getAttribute("BoundarySetting").equals("H")) {
+			dataflowBoundarySlideShow = new DataflowBoundary(currentMainTreeNode.getElement());
+			jPanelSubjectAreaDataflowSlideShow1.add(dataflowBoundarySlideShow);
+		}
 
 		//Clear canvas panel//
 		jPanelSubjectAreaDataflowSlideShow2.removeAll();
 
 		//Create ArrayList of DataflowNodes//
+		int leftEdgePos = dataflowBoundarySlideShow.boundaryPosX;
+		int rightEdgePos = dataflowBoundarySlideShow.boundaryPosX + dataflowBoundarySlideShow.boundaryWidth;
+		int topEdgePos = dataflowBoundarySlideShow.boundaryPosY;
+		int bottomEdgePos = dataflowBoundarySlideShow.boundaryPosY + dataflowBoundarySlideShow.boundaryHeight;
 		dataflowSlideNumber = 0;
 		dataflowSlideTotalNumber = 0;
 		DataflowNode dataflowNode = null;
@@ -33950,6 +34215,20 @@ public class Modeler extends JFrame {
 			//Set maximum slide number//
 			if (dataflowNode.getSlideNumber() > dataflowSlideTotalNumber) {
 				dataflowSlideTotalNumber = dataflowNode.getSlideNumber();
+			}
+
+			//Set edge positions//
+			if (dataflowNode.getNodePosX() < leftEdgePos) {
+				leftEdgePos = dataflowNode.getNodePosX();
+			}
+			if (dataflowNode.getNodeRightEdgeLocation() > rightEdgePos) {
+				rightEdgePos = dataflowNode.getNodeRightEdgeLocation();
+			}
+			if (dataflowNode.getNodePosY() < topEdgePos) {
+				topEdgePos = dataflowNode.getNodePosY();
+			}
+			if (dataflowNode.getNodeBottomEdgeLocation() > bottomEdgePos) {
+				bottomEdgePos = dataflowNode.getNodeBottomEdgeLocation();
 			}
 		}
 
@@ -33999,11 +34278,17 @@ public class Modeler extends JFrame {
 		Dimension dimDialog = jDialogDataflowSlideShow.getSize();
 		int posX = 0;
 		int posY = 0;
-		if (dataflowBoundarySlideShow.boundaryWidth < dimDialog.width) {
-			posX = (dimDialog.width - dataflowBoundarySlideShow.boundaryWidth)/2 - dataflowBoundarySlideShow.boundaryPosX;
+//		if (dataflowBoundarySlideShow.boundaryWidth < dimDialog.width) {
+//			posX = (dimDialog.width - dataflowBoundarySlideShow.boundaryWidth)/2 - dataflowBoundarySlideShow.boundaryPosX;
+//		}
+//		if (dataflowBoundarySlideShow.boundaryHeight < dimDialog.height) {
+//			posY = (dimDialog.height - dataflowBoundarySlideShow.boundaryHeight)/2 - dataflowBoundarySlideShow.boundaryPosY;
+//		}
+		if ((rightEdgePos - leftEdgePos) < dimDialog.width) {
+			posX = (dimDialog.width - (rightEdgePos - leftEdgePos))/2 - leftEdgePos;
 		}
-		if (dataflowBoundarySlideShow.boundaryHeight < dimDialog.height) {
-			posY = (dimDialog.height - dataflowBoundarySlideShow.boundaryHeight)/2 - dataflowBoundarySlideShow.boundaryPosY;
+		if ((bottomEdgePos - topEdgePos) < dimDialog.height) {
+			posY = (dimDialog.height - (bottomEdgePos - topEdgePos))/2 - topEdgePos;
 		}
 		jPanelSubjectAreaDataflowSlideShow1.setLocation(posX, posY);
 		jLabelDataflowSlideShowPageGuide.setText(res.getString("S1846") + dataflowPageTitle + res.getString("S1847") + dataflowSlideNumber + " / " + dataflowSlideTotalNumber + ")");
@@ -35112,6 +35397,16 @@ public class Modeler extends JFrame {
 				showPopupMenuComponent(e);
 			}
 		}
+	}
+	/**
+	 * Event Handler for jComboBoxSubjectAreaBoundarySetting in case tab select changed
+	 * @param e :Change Event
+	 */
+	void jComboBoxSubjectAreaBoundarySetting_itemChanged(ItemEvent e) {
+		isChangedByUser = true;
+		currentMainTreeNode.updateFields();
+		currentMainTreeNode.activateContentsPane();
+		isChangedByUser = false;
 	}
 	/**
 	 * Event Handler for jScrollPaneSubjectAreaList in case mouse clicked
@@ -36767,10 +37062,15 @@ public class Modeler extends JFrame {
 			String wrkStr2 = "";
 			String zenkaku = "";
 			dataTypeElement = element;
-			if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-				wrkStr1 = dataTypeElement.getAttribute("Length");
-			} else {
+//			if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
+//				wrkStr1 = dataTypeElement.getAttribute("Length");
+//			} else {
+//				wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+//			}
+			if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber") || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
 				wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+			} else {
+				wrkStr1 = dataTypeElement.getAttribute("Length");
 			}
 			zenkaku = getZenkakuOfHankaku(wrkStr1);
 			if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
@@ -38729,6 +39029,15 @@ class Modeler_jTableSystemMaintenanceLog_mouseAdapter extends java.awt.event.Mou
 	}
 	public void mouseClicked(MouseEvent e) {
 		adaptee.jTableSystemMaintenanceLog_mouseClicked(e);
+	}
+}
+class Modeler_jComboBoxSubjectAreaBoundarySetting_itemAdapter  implements ItemListener {
+	Modeler adaptee;
+	Modeler_jComboBoxSubjectAreaBoundarySetting_itemAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void itemStateChanged(ItemEvent e) {
+		adaptee.jComboBoxSubjectAreaBoundarySetting_itemChanged(e);
 	}
 }
 class Modeler_jScrollPaneSubjectAreaList_mouseAdapter extends java.awt.event.MouseAdapter {

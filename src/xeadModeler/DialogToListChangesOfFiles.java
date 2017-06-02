@@ -35,10 +35,14 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+
+import xeadModeler.Modeler.XeadTreeNode;
 
 public class DialogToListChangesOfFiles extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +51,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 	private JScrollPane jScrollPane = new JScrollPane();
 	private JProgressBar jProgressBar = new JProgressBar();
 	private JButton jButtonStart = new JButton();
+	private JCheckBox jCheckBoxListDiffDDL = new JCheckBox();
 	private JButton jButtonCancel = new JButton();
 	private JTextArea jTextArea = new JTextArea();
 	private JLabel jLabel1 = new JLabel();
@@ -57,8 +62,11 @@ public class DialogToListChangesOfFiles extends JDialog {
 	private org.w3c.dom.Document domDocumentOld;
 	private org.w3c.dom.Element systemElementOld, systemElementNew;
 	private int countOfChanges = 0;
+	private boolean containsValueToBeCorrected = false;
 	private StringBuffer buffer;
-
+	private HashMap<String, org.w3c.dom.Element> newDataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+	private HashMap<String, org.w3c.dom.Element> oldDataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+	
 	public DialogToListChangesOfFiles(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
 		try {
@@ -103,14 +111,19 @@ public class DialogToListChangesOfFiles extends JDialog {
 		jTextArea.setBackground(SystemColor.control);
 		jTextArea.setBorder(null);
 
-		jProgressBar.setBounds(new Rectangle(30, 540, 640, 30));
+		jProgressBar.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jProgressBar.setBounds(new Rectangle(30, 540, 420, 30));
 		jProgressBar.setStringPainted(true);
 		jProgressBar.setVisible(false);
 
-		jButtonStart.setBounds(new Rectangle(30, 540, 640, 30));
+		jButtonStart.setBounds(new Rectangle(30, 540, 420, 30));
 		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogToListChangesOfFiles5"));
 		jButtonStart.addActionListener(new DialogToListChangesOfFiles_jButtonStart_actionAdapter(this));
+
+		jCheckBoxListDiffDDL.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jCheckBoxListDiffDDL.setText(res.getString("DialogToListChangesOfFiles36"));
+		jCheckBoxListDiffDDL.setBounds(new Rectangle(460, 545, 235, 20));
 
 		jButtonCancel.setBounds(new Rectangle(700, 540, 110, 30));
 		jButtonCancel.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
@@ -127,6 +140,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		panelMain.add(jScrollPane, null);
 		panelMain.add(jProgressBar, null);
 		panelMain.add(jButtonStart, null);
+		panelMain.add(jCheckBoxListDiffDDL, null);
 		panelMain.add(jButtonCancel, null);
 
 		this.getContentPane().add(panelMain, BorderLayout.SOUTH);
@@ -158,7 +172,9 @@ public class DialogToListChangesOfFiles extends JDialog {
 				jTextFieldImportSystemName.setText(systemElementOld.getAttribute("Name") + " V" + systemElementOld.getAttribute("Version"));
 				jTextArea.setText(res.getString("DialogToListChangesOfFiles2"));
 				jProgressBar.setValue(0);
+				jProgressBar.setString(res.getString("DialogToListChangesOfFiles37"));
 				jButtonStart.setEnabled(true);
+				jCheckBoxListDiffDDL.setEnabled(true);
 				this.getRootPane().setDefaultButton(jButtonStart);
 				super.setVisible(true);
 			}
@@ -184,6 +200,37 @@ public class DialogToListChangesOfFiles extends JDialog {
 			listChangesOfTable();
 			listChangesOfFunction();
 
+			////////////////////////////////////
+			// Generate text file of Diff-DDL //
+			////////////////////////////////////
+			if (jCheckBoxListDiffDDL.isSelected()) {
+				FileWriter fileWriter = null;
+				NodeList oldTableElementList = systemElementOld.getElementsByTagName("Table");
+				NodeList newTableElementList = systemElementNew.getElementsByTagName("Table");
+				BufferedWriter bufferedWriter = null;
+				try {
+					String diffDDL = getDiffDDL(newTableElementList, oldTableElementList);
+					if (!diffDDL.equals("")) {
+						File textFile = File.createTempFile("AlterTables" + frame_.getStringValueOfDateTime("withTime"), ".txt");
+						String textFileName = textFile.getPath();
+						fileWriter = new FileWriter(textFileName);
+						bufferedWriter = new BufferedWriter(fileWriter);
+						if (containsValueToBeCorrected) {
+							diffDDL = frame_.ddlCommentMark + "Warning: It contains constraint id(s) indicated as '???' that should be checked and corrected before executing.\n\n" + diffDDL;
+						}
+						bufferedWriter.write(diffDDL);
+						bufferedWriter.flush();
+						frame_.desktop.open(textFile);
+					}
+				} catch (Exception ex1) {
+					ex1.printStackTrace();
+				} finally {
+					try {
+						bufferedWriter.close();
+					} catch (Exception ex2) {}
+				}
+			}
+
 		} finally {
 			jTextArea.setText(countOfChanges + res.getString("DialogToListChangesOfFiles35") + buffer.toString());
 			jTextArea.setCaretPosition(0);
@@ -191,6 +238,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 			jProgressBar.setVisible(false);
 			jButtonStart.setVisible(true);
 			jButtonStart.setEnabled(false);
+			jCheckBoxListDiffDDL.setEnabled(false);
 			this.getRootPane().setDefaultButton(jButtonCancel);
 
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -474,6 +522,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
+		containsValueToBeCorrected = false;
 		buffer.append("\n\n<" + res.getString("DialogToListChangesOfFiles10") + ">");
 
 		////////////
@@ -498,6 +547,997 @@ public class DialogToListChangesOfFiles extends JDialog {
 		if (countOfChanges == workCount) {
 			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
 		}
+	}
+
+	String getDiffDDL(NodeList newTableElementList, NodeList oldTableElementList) {
+		StringBuffer bf = new StringBuffer();
+		String wrkStr, tableID = "";
+		XeadTreeNode subsystemNode, tableNode;
+		org.w3c.dom.Element newTableElement, workElement, oldTableElement;
+		NodeList dataTypeList;
+		NodeList relationshipList = frame_.getDomDocument().getElementsByTagName("Relationship");
+		NodeList oldSubsystemList = systemElementOld.getElementsByTagName("Subsystem");
+
+		jProgressBar.setValue(0);
+		jProgressBar.setString(res.getString("DialogToListChangesOfFiles38"));
+		jProgressBar.setMaximum(newTableElementList.getLength() + oldTableElementList.getLength());
+
+		////////////////////////
+		// Setup DataType-Map //
+		////////////////////////
+		newDataTypeElementMap.clear();
+		dataTypeList = systemElementNew.getElementsByTagName("DataType");
+		for (int i = 0; i < dataTypeList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)dataTypeList.item(i);
+			newDataTypeElementMap.put(workElement.getAttribute("ID"), workElement);
+		}
+		oldDataTypeElementMap.clear();
+		dataTypeList = systemElementOld.getElementsByTagName("DataType");
+		for (int i = 0; i < dataTypeList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)dataTypeList.item(i);
+			oldDataTypeElementMap.put(workElement.getAttribute("ID"), workElement);
+		}
+
+		///////////////////////////////////
+		// Setup Create/Alter statements //
+		///////////////////////////////////
+		for (int i = 0; i < frame_.getSubsystemListNode().getChildCount(); i++) {
+			subsystemNode = (XeadTreeNode)frame_.getSubsystemListNode().getChildAt(i);
+			for (int j = 0; j < subsystemNode.getChildAt(0).getChildCount(); j++) {
+				tableNode = (XeadTreeNode)subsystemNode.getChildAt(0).getChildAt(j);
+				newTableElement = (org.w3c.dom.Element)tableNode.getElement();
+
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+				oldTableElement = null;
+				for (int k = 0; k < oldTableElementList.getLength(); k++) {
+					workElement = (org.w3c.dom.Element)oldTableElementList.item(k);
+					if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+						if (workElement.getAttribute("Name").equals(newTableElement.getAttribute("Name"))) {
+							oldTableElement = workElement;
+							break;
+						}
+					} else {
+						if (workElement.getAttribute("Alias").equals("")) {
+							if (newTableElement.getAttribute("Alias").equals("")) {
+								if (workElement.getAttribute("SortKey").equals(newTableElement.getAttribute("SortKey"))) {
+									oldTableElement = workElement;
+									break;
+								}
+							} else {
+								if (workElement.getAttribute("SortKey").equals(newTableElement.getAttribute("Alias"))) {
+									oldTableElement = workElement;
+									break;
+								}
+							}
+						} else {
+							if (newTableElement.getAttribute("Alias").equals("")) {
+								if (workElement.getAttribute("Alias").equals(newTableElement.getAttribute("SortKey"))) {
+									oldTableElement = workElement;
+									break;
+								}
+							} else {
+								if (workElement.getAttribute("Alias").equals(newTableElement.getAttribute("Alias"))) {
+									oldTableElement = workElement;
+									break;
+								}
+							}
+						}
+					}
+				}
+				if (oldTableElement == null) {
+					bf.append(frame_.getCreateStatementByTable(subsystemNode, tableNode, relationshipList));
+				} else {
+					wrkStr = getAlterStatementsByTable(subsystemNode, tableNode, oldTableElement);
+					if (!wrkStr.equals("")) {
+						bf.append(wrkStr + "\n");
+					}
+				}
+			}
+		}
+
+		///////////////////////////
+		// Setup Drop statements //
+		///////////////////////////
+		for (int i = 0; i < oldTableElementList.getLength(); i++) {
+
+			jProgressBar.setValue(jProgressBar.getValue() + 1);
+			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+
+			oldTableElement = (org.w3c.dom.Element)oldTableElementList.item(i);
+			newTableElement = null;
+			for (int j = 0; j < newTableElementList.getLength(); j++) {
+				workElement = (org.w3c.dom.Element)newTableElementList.item(j);
+				if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+					tableID = oldTableElement.getAttribute("Name");
+					if (workElement.getAttribute("Name").equals(tableID)) {
+						newTableElement = workElement;
+						break;
+					}
+				} else {
+					if (workElement.getAttribute("Alias").equals("")) {
+						if (oldTableElement.getAttribute("Alias").equals("")) {
+							tableID = oldTableElement.getAttribute("SortKey");
+							if (workElement.getAttribute("SortKey").equals(tableID)) {
+								newTableElement = workElement;
+								break;
+							}
+						} else {
+							tableID = oldTableElement.getAttribute("Alias");
+							if (workElement.getAttribute("SortKey").equals(tableID)) {
+								newTableElement = workElement;
+								break;
+							}
+						}
+					} else {
+						if (oldTableElement.getAttribute("Alias").equals("")) {
+							tableID = oldTableElement.getAttribute("SortKey");
+							if (workElement.getAttribute("Alias").equals(tableID)) {
+								newTableElement = workElement;
+								break;
+							}
+						} else {
+							tableID = oldTableElement.getAttribute("Alias");
+							if (workElement.getAttribute("Alias").equals(tableID)) {
+								newTableElement = workElement;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (newTableElement == null) {
+				for (int j = 0; j < oldSubsystemList.getLength(); j++) {
+					workElement = (org.w3c.dom.Element)oldSubsystemList.item(j);
+					if (oldTableElement.getAttribute("SubsystemID").equals(workElement.getAttribute("ID"))) {
+						if (oldTableElement.getAttribute("Alias").equals("")) {
+							if (oldTableElement.getAttribute("SortKey").equals("")) {
+								bf.append(frame_.ddlCommentMark + workElement.getAttribute("Name")
+										+ "(" + workElement.getAttribute("SortKey") + ")"
+										+ " - " + oldTableElement.getAttribute("Name")
+										+ "\nDROP TABLE " + tableID + frame_.ddlSectionMark + "\n\n");
+							} else {
+								bf.append(frame_.ddlCommentMark + workElement.getAttribute("Name")
+										+ "(" + workElement.getAttribute("SortKey") + ")"
+										+ " - " + oldTableElement.getAttribute("Name")
+										+ "(" + oldTableElement.getAttribute("SortKey") + ")"
+										+ "\nDROP TABLE " + tableID + frame_.ddlSectionMark + "\n\n");
+							}
+						} else {
+							bf.append(frame_.ddlCommentMark + workElement.getAttribute("Name")
+									+ "(" + workElement.getAttribute("SortKey") + ")"
+									+ " - " + oldTableElement.getAttribute("Name")
+									+ "(" + oldTableElement.getAttribute("Alias") + ")"
+									+ "\nDROP TABLE " + tableID + frame_.ddlSectionMark + "\n\n");
+						}
+						break;
+					}
+				}
+			}
+		}
+		return bf.toString();
+	}
+
+	String getAlterStatementsByTable(XeadTreeNode subsystemNode, XeadTreeNode tableNode, org.w3c.dom.Element oldTableElement) {
+		org.w3c.dom.Element keyFieldElement, dataTypeElement, fieldElement, keyElement, workElement, correspondingFieldElement;
+		XeadTreeNode fieldNode, keyNode, workFieldNode;
+		NodeList keyFieldList;
+		boolean firstFieldStatement = true;
+		int indexOfSK = 0; int indexOfFK = 0;
+		String statement = "";
+		String tableName, fieldName, fieldComment, dataType, dataTypeOld, defaultValue, defaultValueOld, keyFields, keyFieldsOld, wrkStr;
+		boolean isNotNull, isNotNullOld, isNotFound;
+
+		//List of old elements//
+		NodeList oldFieldList = oldTableElement.getElementsByTagName("TableField");
+		NodeList oldKeyList = oldTableElement.getElementsByTagName("TableKey");
+		NodeList newRelationshipList = systemElementNew.getElementsByTagName("Relationship");
+		NodeList oldRelationshipList = systemElementOld.getElementsByTagName("Relationship");
+
+		//List of fields to be added//
+		ArrayList<String> addFieldIDList = new ArrayList<String>();
+		ArrayList<String> addFieldTypeList = new ArrayList<String>();
+		ArrayList<String> addFieldDefaultList = new ArrayList<String>();
+		ArrayList<Boolean> addFieldNotNullList = new ArrayList<Boolean>();
+		ArrayList<String> addFieldCommentList = new ArrayList<String>();
+		//List of fields to be modified//
+		ArrayList<String> modifyFieldIDList = new ArrayList<String>();
+		ArrayList<String> modifyFieldTypeList = new ArrayList<String>();
+		ArrayList<String> modifyFieldDefaultList = new ArrayList<String>();
+		ArrayList<Boolean> modifyFieldNotNullList = new ArrayList<Boolean>();
+		//List of fields to be dropped//
+		ArrayList<String> dropFieldIDList = new ArrayList<String>();
+		//Variants to operate keys//
+		boolean isToDropOldPrimaryKey = false;
+		String addPrimaryKeyFieldIDs = "";
+		ArrayList<String> dropUniqueKeyList = new ArrayList<String>();
+		ArrayList<String> addUniqueKeyList = new ArrayList<String>();
+		ArrayList<String> addUniqueKeyConstraintIDList = new ArrayList<String>();
+		ArrayList<String> dropIndexKeyList = new ArrayList<String>();
+		ArrayList<String> addIndexKeyList = new ArrayList<String>();
+		//Variants to operate foreign keys//
+		ArrayList<String> addForeignKeyConstraintIDList = new ArrayList<String>();
+		ArrayList<String> addForeignKeyFieldIDsList = new ArrayList<String>();
+		ArrayList<String> addForeignKeyRefferencesList = new ArrayList<String>();
+		ArrayList<String> dropForeignKeyFieldIDsList = new ArrayList<String>();
+		ArrayList<String> dropForeignKeyRefferencesList = new ArrayList<String>();
+
+		//////////////////////
+		// Setup Table Name //
+		//////////////////////
+		if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+			tableName = tableNode.getElement().getAttribute("Name");
+		} else {
+			if (tableNode.getElement().getAttribute("Alias").equals("")) {
+				if (tableNode.getElement().getAttribute("SortKey").equals("")) {
+					tableName = tableNode.getElement().getAttribute("Name");
+				} else {
+					tableName = tableNode.getElement().getAttribute("SortKey");
+				}
+			} else {
+				tableName = tableNode.getElement().getAttribute("Alias");
+			}
+		}
+
+		/////////////////////////////////////////
+		// Scan fields to be added or modified //
+		/////////////////////////////////////////
+		for (int i = 0; i < tableNode.getChildAt(0).getChildCount(); i++) {
+			fieldNode = (XeadTreeNode)tableNode.getChildAt(0).getChildAt(i);
+
+			if (fieldNode.getElement().getAttribute("Alias").equals("")) {
+				fieldName = fieldNode.getElement().getAttribute("Name");
+				fieldComment = "";
+			} else {
+				fieldName = fieldNode.getElement().getAttribute("Alias");
+				fieldComment = fieldNode.getElement().getAttribute("Name");
+			}
+			dataTypeElement = newDataTypeElementMap.get(fieldNode.getElement().getAttribute("DataTypeID"));
+			if (dataTypeElement == null) {
+				dataType = "Invalid-data-type";
+			} else {
+				if (dataTypeElement.getAttribute("SQLExpression").equals("")) {
+					dataType = "Invalid-data-type";
+				} else {
+					dataType = dataTypeElement.getAttribute("SQLExpression");
+				}
+			}
+			if (fieldNode.getElement().getAttribute("Default").equals("")) {
+				defaultValue = "";
+			} else {
+				defaultValue = fieldNode.getElement().getAttribute("Default");
+			}
+			if (fieldNode.getElement().getAttribute("NotNull").equals("true")) {
+				isNotNull = true;
+			} else {
+				isNotNull = false;
+			}
+
+			correspondingFieldElement = null;
+			for (int j = 0; j < oldFieldList.getLength(); j++) {
+				workElement = (org.w3c.dom.Element)oldFieldList.item(j);
+				if (workElement.getAttribute("Alias").equals("")) {
+					if (workElement.getAttribute("Name").equals(fieldName)) {
+						correspondingFieldElement = workElement;
+						break;
+					}
+				} else {
+					if (workElement.getAttribute("Alias").equals(fieldName)) {
+						correspondingFieldElement = workElement;
+						break;
+					}
+				}
+			}
+
+			if (correspondingFieldElement == null) {
+				addFieldIDList.add(fieldName);
+				addFieldTypeList.add(dataType);
+				addFieldDefaultList.add(defaultValue);
+				addFieldNotNullList.add(isNotNull);
+				addFieldCommentList.add(fieldComment);
+			} else {
+				workElement = oldDataTypeElementMap.get(correspondingFieldElement.getAttribute("DataTypeID"));
+				if (workElement == null) {
+					dataTypeOld = "Invalid-data-type";
+				} else {
+					if (workElement.getAttribute("SQLExpression").equals("")) {
+						dataTypeOld = "Invalid-data-type";
+					} else {
+						dataTypeOld = workElement.getAttribute("SQLExpression");
+					}
+				}
+				if (correspondingFieldElement.getAttribute("Default").equals("")) {
+					defaultValueOld = "";
+				} else {
+					defaultValueOld = correspondingFieldElement.getAttribute("Default");
+				}
+				if (correspondingFieldElement.getAttribute("NotNull").equals("true")) {
+					isNotNullOld = true;
+				} else {
+					isNotNullOld = false;
+				}
+				if (!dataType.equals(dataTypeOld) || !defaultValue.equals(defaultValueOld) || isNotNull != isNotNullOld) {
+					modifyFieldIDList.add(fieldName);
+					 if (dataType.equals(dataTypeOld)) {
+						 modifyFieldTypeList.add(null);
+					 } else {
+						 modifyFieldTypeList.add(dataType);
+					 }
+					 if (defaultValue.equals(defaultValueOld)) {
+						 modifyFieldDefaultList.add(null);
+					 } else {
+						 modifyFieldDefaultList.add(defaultValue);
+					 }
+					 if (isNotNull == isNotNullOld) {
+						 modifyFieldNotNullList.add(null);
+					 } else {
+						 modifyFieldNotNullList.add(isNotNull);
+					 }
+				}
+			}
+		}
+
+		///////////////////////////////
+		// Scan fields to be dropped //
+		///////////////////////////////
+		for (int i = 0; i < oldFieldList.getLength(); i++) {
+			fieldElement = (org.w3c.dom.Element)oldFieldList.item(i);
+			if (fieldElement.getAttribute("Alias").equals("")) {
+				fieldName = fieldElement.getAttribute("Name");
+			} else {
+				fieldName = fieldElement.getAttribute("Alias");
+			}
+			correspondingFieldElement = null;
+			for (int j = 0; j < tableNode.getChildAt(0).getChildCount(); j++) {
+				workElement = ((XeadTreeNode)tableNode.getChildAt(0).getChildAt(j)).getElement();
+				if (workElement.getAttribute("Alias").equals("")) {
+					if (workElement.getAttribute("Name").equals(fieldName)) {
+						correspondingFieldElement = workElement;
+						break;
+					}
+				} else {
+					if (workElement.getAttribute("Alias").equals(fieldName)) {
+						correspondingFieldElement = workElement;
+						break;
+					}
+				}
+			}
+			if (correspondingFieldElement == null) {
+				dropFieldIDList.add(fieldName);
+			}
+		}
+		
+		///////////////////////////
+		// Scan keys to be added //
+		///////////////////////////
+		for (int i = 0; i < tableNode.getChildAt(1).getChildCount(); i++) {
+			keyNode = (XeadTreeNode)tableNode.getChildAt(1).getChildAt(i);
+			if (keyNode.getElement().getAttribute("Type").equals("SK")) {
+				indexOfSK++;
+			}
+			if (keyNode.getElement().getAttribute("Type").equals("PK")
+					|| keyNode.getElement().getAttribute("Type").equals("SK")
+					|| keyNode.getElement().getAttribute("Type").equals("XK")) {
+				keyFields = getKeyFieldIDs(tableNode.getElement(), keyNode.getElement(), systemElementNew);
+				isNotFound = true;
+				for (int j = 0; j < oldKeyList.getLength(); j++) {
+					workElement = (org.w3c.dom.Element)oldKeyList.item(j);
+					if (workElement.getAttribute("Type").equals(keyNode.getElement().getAttribute("Type"))) {
+						keyFieldsOld = getKeyFieldIDs(oldTableElement, workElement, systemElementOld);
+						if (keyFieldsOld.equals(keyFields)) {
+							isNotFound = false;
+							break;
+						}
+					}
+				}
+				if (isNotFound) {
+					isToDropOldPrimaryKey = false;
+					if (keyNode.getElement().getAttribute("Type").equals("PK")) {
+						for (int j = 0; j < oldKeyList.getLength(); j++) {
+							workElement = (org.w3c.dom.Element)oldKeyList.item(j);
+							if (workElement.equals("PK")) {
+								isToDropOldPrimaryKey = true;
+								break;
+							}
+						}
+					}
+					frame_.sortableDomElementListModel.removeAllElements();
+					keyFieldList = keyNode.getElement().getElementsByTagName("TableKeyField");
+					for (int m = 0; m < keyFieldList.getLength(); m++) {
+						frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+					}
+					if (frame_.sortableDomElementListModel.getSize() > 0) {
+						frame_.sortableDomElementListModel.sortElements();
+						wrkStr = "";
+						for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+							keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+							workFieldNode = frame_.getSpecificXeadTreeNode("TableField", tableNode.getElement().getAttribute("ID"), keyFieldElement.getAttribute("FieldID"));
+							if (keyNode.getElement().getAttribute("Type").equals("PK")) {
+								if (m > 0) {
+									addPrimaryKeyFieldIDs = addPrimaryKeyFieldIDs + ", ";
+								}
+								if (workFieldNode.getElement().getAttribute("Alias").equals("")) {
+									addPrimaryKeyFieldIDs = addPrimaryKeyFieldIDs + workFieldNode.getElement().getAttribute("Name");
+								} else {
+									addPrimaryKeyFieldIDs = addPrimaryKeyFieldIDs + workFieldNode.getElement().getAttribute("Alias");
+								}
+							} else {
+								if (m > 0) {
+									wrkStr = wrkStr + ", ";
+								}
+								if (workFieldNode.getElement().getAttribute("Alias").equals("")) {
+									wrkStr = wrkStr + workFieldNode.getElement().getAttribute("Name");
+								} else {
+									wrkStr = wrkStr + workFieldNode.getElement().getAttribute("Alias");
+								}
+							}
+						}
+						if (keyNode.getElement().getAttribute("Type").equals("SK")) {
+							addUniqueKeyList.add(wrkStr);
+							addUniqueKeyConstraintIDList.add(Integer.toString(indexOfSK));
+						}
+						if (keyNode.getElement().getAttribute("Type").equals("XK")) {
+							addIndexKeyList.add(wrkStr);
+						}
+					}
+				}
+			}
+		}
+
+		/////////////////////////////
+		// Scan keys to be dropped //
+		/////////////////////////////
+		for (int i = 0; i < oldKeyList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)oldKeyList.item(i);
+			if (workElement.getAttribute("Type").equals("PK")
+					|| workElement.getAttribute("Type").equals("SK")
+					|| workElement.getAttribute("Type").equals("XK")) {
+				keyFieldsOld = getKeyFieldIDs(oldTableElement, workElement, systemElementOld);
+				isNotFound = true;
+				for (int j = 0; j < tableNode.getChildAt(1).getChildCount(); j++) {
+					keyNode = (XeadTreeNode)tableNode.getChildAt(1).getChildAt(j);
+					if (workElement.getAttribute("Type").equals(keyNode.getElement().getAttribute("Type"))) {
+						keyFields = getKeyFieldIDs(tableNode.getElement(), keyNode.getElement(), systemElementNew);
+						if (keyFields.equals(keyFieldsOld)) {
+							isNotFound = false;
+							break;
+						}
+					}
+				}
+				if (isNotFound) {
+					wrkStr = getKeyFieldIDs(oldTableElement, workElement, systemElementOld);
+					if (!wrkStr.equals("")) {
+						if (workElement.getAttribute("Type").equals("PK") || workElement.getAttribute("Type").equals("SK")) {
+							dropUniqueKeyList.add(wrkStr);
+							containsValueToBeCorrected = true;
+						}
+						if (workElement.getAttribute("Type").equals("XK")) {
+							dropIndexKeyList.add(wrkStr);
+						}
+					}
+				}
+			}
+		}
+
+		//////////////////////////////////////////////
+		// Scan foreign-key constraints to be added //
+		//////////////////////////////////////////////
+		if (!frame_.ignoreForeignKeyConstraints) {
+			for (int i = 0; i < tableNode.getChildAt(1).getChildCount(); i++) {
+				keyNode = (XeadTreeNode)tableNode.getChildAt(1).getChildAt(i);
+				indexOfFK++;
+				if (keyNode.getElement().getAttribute("Type").equals("PK")
+						|| keyNode.getElement().getAttribute("Type").equals("SK")
+						|| keyNode.getElement().getAttribute("Type").equals("FK")) {
+					for (int j = 0; j < newRelationshipList.getLength(); j++) {
+						workElement = (org.w3c.dom.Element)newRelationshipList.item(j);
+						if (workElement.getAttribute("Table2ID").equals(tableNode.getElement().getAttribute("ID"))
+								&& workElement.getAttribute("TableKey2ID").equals(keyNode.getElement().getAttribute("ID"))
+								&& workElement.getAttribute("ExistWhen1").equals("")) {
+							if (isLackingForeignKeyConstraint(workElement, tableNode.getElement(), systemElementNew, oldTableElement, systemElementOld)) {
+								addForeignKeyConstraintIDList.add(Integer.toString(indexOfFK));
+								addForeignKeyFieldIDsList.add(getKeyFieldIDs(tableNode.getElement(), keyNode.getElement(), systemElementNew));
+								addForeignKeyRefferencesList.add(getRefferences(workElement, systemElementNew));
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		////////////////////////////////////////////////
+		// Scan foreign-key constraints to be dropped //
+		////////////////////////////////////////////////
+		if (!frame_.ignoreForeignKeyConstraints) {
+			for (int i = 0; i < oldKeyList.getLength(); i++) {
+				keyElement = (org.w3c.dom.Element)oldKeyList.item(i);
+				if (keyElement.getAttribute("Type").equals("PK")
+						|| keyElement.getAttribute("Type").equals("SK")
+						|| keyElement.getAttribute("Type").equals("FK")) {
+					for (int j = 0; j < oldRelationshipList.getLength(); j++) {
+						workElement = (org.w3c.dom.Element)oldRelationshipList.item(j);
+						if (workElement.getAttribute("Table2ID").equals(oldTableElement.getAttribute("ID"))
+								&& workElement.getAttribute("TableKey2ID").equals(keyElement.getAttribute("ID"))
+								&& workElement.getAttribute("ExistWhen1").equals("")) {
+							if (isLackingForeignKeyConstraint(workElement, oldTableElement, systemElementOld, tableNode.getElement(), systemElementNew)) {
+								dropForeignKeyFieldIDsList.add(getKeyFieldIDs(oldTableElement, keyElement, systemElementOld));
+								dropForeignKeyRefferencesList.add(getRefferences(workElement, systemElementOld));
+								containsValueToBeCorrected = true;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		////////////////////////////////////////
+		// Generate ALTER-DROP-KEY statements //
+		////////////////////////////////////////
+		for (int i = 0; i < dropUniqueKeyList.size(); i++) {
+			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop unique-constraint with keys(" + dropUniqueKeyList.get(i) + "). Check value of constraint id and correct '???' before executing.\n";
+			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < dropIndexKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " DROP INDEX (" + dropIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		////////////////////////////////////////////////
+		// Generate ALTER-DROP-FOREIGN-KEY statements //
+		////////////////////////////////////////////////
+		for (int i = 0; i < dropForeignKeyFieldIDsList.size(); i++) {
+			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop refference-constraint with keys(" + dropForeignKeyFieldIDsList.get(i) + ") to " + dropForeignKeyRefferencesList.get(i) + ". Check value of constraint id and correct '???' before executing.\n";
+			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+		}
+
+		////////////////////////////////////
+		// Generate DROP-COLUMN statement //
+		////////////////////////////////////
+		firstFieldStatement = true;
+		for (int i = 0; i < dropFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " DROP (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + dropFieldIDList.get(i);
+		}
+		if (dropFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////
+		// Generate ADD-COLUMN statement //
+		///////////////////////////////////
+		firstFieldStatement = true;
+		for (int i = 0; i < addFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " ADD (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + addFieldIDList.get(i);
+			statement = statement + " " + addFieldTypeList.get(i);
+			if (addFieldNotNullList.get(i)) {
+				statement = statement + " NOT NULL";
+			}
+			statement = statement + " DEFAULT " + addFieldDefaultList.get(i);
+			if (!addFieldCommentList.get(i).equals("") && frame_.setCommentToFieldsWithAlias) {
+				statement = statement + " COMMENT '" + addFieldCommentList.get(i) + "'";
+			}
+		}
+		if (addFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		//////////////////////////////////////
+		// Generate MODIFY-COLUMN statement //
+		//////////////////////////////////////
+		firstFieldStatement = true;
+		for (int i = 0; i < modifyFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " MODIFY (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + modifyFieldIDList.get(i);
+			if (modifyFieldTypeList.get(i) != null) {
+				statement = statement + " " + modifyFieldTypeList.get(i);
+			}
+			if (modifyFieldNotNullList.get(i) != null) {
+				if (modifyFieldNotNullList.get(i)) {
+					statement = statement + " NOT NULL";
+				} else {
+					statement = statement + " NULL";
+				}
+			}
+			if (modifyFieldDefaultList.get(i) != null) {
+				statement = statement + " DEFAULT " + modifyFieldDefaultList.get(i);
+			}
+		}
+		if (modifyFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////////
+		// Generate ALTER-ADD-KEY statements //
+		///////////////////////////////////////
+		if (!addPrimaryKeyFieldIDs.equals("")) {
+			if (isToDropOldPrimaryKey) {
+				statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT " + tableName + "_PK PRIMARY KEY" + frame_.ddlSectionMark + "\n";
+			}
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_PK PRIMARY KEY (" + addPrimaryKeyFieldIDs + ")" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < addUniqueKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_SK" + addUniqueKeyConstraintIDList.get(i) + " UNIQUE (" + addUniqueKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < addIndexKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD INDEX (" + addIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////////////////
+		// Generate ALTER-ADD-FOREIGN-KEY statements //
+		///////////////////////////////////////////////
+		for (int i = 0; i < addForeignKeyConstraintIDList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_FK" + addForeignKeyConstraintIDList.get(i) + " FOREIGN KEY (" + addForeignKeyFieldIDsList.get(i) + ") REFFERENCES " + addForeignKeyRefferencesList.get(i) + frame_.ddlSectionMark + "\n";
+		}
+
+		/////////////////////
+		// Header Comments //
+		/////////////////////
+		if (!statement.equals("")) {
+			if (tableNode.getElement().getAttribute("Alias").equals("")) {
+				if (tableNode.getElement().getAttribute("SortKey").equals("")) {
+					statement = frame_.ddlCommentMark + subsystemNode.getElement().getAttribute("Name")
+							+ "(" + subsystemNode.getElement().getAttribute("SortKey") + ")"
+							+ " - " + tableNode.getElement().getAttribute("Name")
+							+ "\n" + statement;
+				} else {
+					statement = frame_.ddlCommentMark + subsystemNode.getElement().getAttribute("Name")
+							+ "(" + subsystemNode.getElement().getAttribute("SortKey") + ")"
+							+ " - " + tableNode.getElement().getAttribute("Name")
+							+ "(" + tableNode.getElement().getAttribute("SortKey") + ")"
+							+ "\n" + statement;
+				}
+			} else {
+				statement = frame_.ddlCommentMark + subsystemNode.getElement().getAttribute("Name")
+						+ "(" + subsystemNode.getElement().getAttribute("SortKey") + ")"
+						+ " - " + tableNode.getElement().getAttribute("Name")
+						+ "(" + tableNode.getElement().getAttribute("Alias") + ")"
+						+ "\n" + statement;
+			}
+		}
+
+		return statement;
+	}
+
+	String getKeyFieldIDs(org.w3c.dom.Element tableElement, org.w3c.dom.Element keyElement, org.w3c.dom.Element systemElement) {
+		String keyFieldIDs = "";
+		org.w3c.dom.Element keyFieldElement, fieldElement;
+		NodeList keyFieldList = keyElement.getElementsByTagName("TableKeyField");
+		frame_.sortableDomElementListModel.removeAllElements();
+		for (int m = 0; m < keyFieldList.getLength(); m++) {
+			frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+		}
+		if (frame_.sortableDomElementListModel.getSize() > 0) {
+			frame_.sortableDomElementListModel.sortElements();
+			for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+				keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+				fieldElement = getFieldElementAccordingToID(tableElement.getAttribute("ID"), keyFieldElement.getAttribute("FieldID"), systemElement);
+				if (m > 0) {
+					keyFieldIDs = keyFieldIDs + ", ";
+				}
+				if (fieldElement.getAttribute("Alias").equals("")) {
+					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Name");
+				} else {
+					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Alias");
+				}
+				if (keyElement.getAttribute("Type").equals("XK") && keyFieldElement.getAttribute("AscDesc").equals("D")) {
+					keyFieldIDs = keyFieldIDs + "(D)";
+				}
+			}
+		}
+		return keyFieldIDs;
+	}
+
+	String getRefferences(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element systemElement) {
+		String value = "";
+		String tableName = "";
+		String fieldNames = "";
+		org.w3c.dom.Element tableElement = null;
+		org.w3c.dom.Element tableKeyElement = null;
+		org.w3c.dom.Element workElement;
+
+		String tableID = relationshipElement.getAttribute("Table1ID");
+		String tableKeyID = relationshipElement.getAttribute("TableKey1ID");
+
+		NodeList tableElementList = systemElement.getElementsByTagName("Table");
+		for (int i = 0; i < tableElementList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)tableElementList.item(i);
+			if (workElement.getAttribute("ID").equals(tableID)) {
+				tableElement = workElement;
+				break;
+			}
+		}
+		if (tableElement != null) {
+			if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+				tableName = tableElement.getAttribute("Name");
+			} else {
+				if (tableElement.getAttribute("Alias").equals("")) {
+					if (tableElement.getAttribute("SortKey").equals("")) {
+						tableName = tableElement.getAttribute("Name");
+					} else {
+						tableName = tableElement.getAttribute("SortKey");
+					}
+				} else {
+					tableName = tableElement.getAttribute("Alias");
+				}
+			}
+			NodeList tableKeyElementList = tableElement.getElementsByTagName("TableKey");
+			for (int i = 0; i < tableKeyElementList.getLength(); i++) {
+				workElement = (org.w3c.dom.Element)tableKeyElementList.item(i);
+				if (workElement.getAttribute("ID").equals(tableKeyID)) {
+					tableKeyElement = workElement;
+					break;
+				}
+			}
+			if (tableKeyElement != null) {
+				fieldNames = getKeyFieldIDs(tableElement, tableKeyElement, systemElement);
+			}
+			value = tableName + "(" + fieldNames + ")";
+		}
+
+		return value;
+	}
+
+	boolean isLackingForeignKeyConstraint(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element tableElement, org.w3c.dom.Element systemElement, org.w3c.dom.Element targetTableElement, org.w3c.dom.Element targetSystemElement) {
+		boolean reply = true;
+		String wrkStr;
+		org.w3c.dom.Element workElement, keyFieldElement, fieldElement;
+
+		String tableIDFrom = relationshipElement.getAttribute("Table2ID");
+		String tableKeyIDFrom = relationshipElement.getAttribute("TableKey2ID");
+		int countOfTableKeyFieldsFrom = 0;
+		String tableIDThru = relationshipElement.getAttribute("Table1ID");
+		String tableKeyIDThru = relationshipElement.getAttribute("TableKey1ID");
+		int countOfTableKeyFieldsThru = 0;
+
+		String tableKeyTypeFrom = "";
+		String tableKeyFieldsFrom = "";
+		String tableNameThru = "";
+		String tableKeyTypeThru = "";
+		String tableKeyFieldsThru = "";
+
+		String tableIDFromTarget = targetTableElement.getAttribute("ID");
+		String tableKeyIDFromTarget = "";
+		String tableIDThruTarget = "";
+		String tableKeyIDThruTarget = "";
+
+		/////////////////////////////////////////////////
+		// Get tableKeyTypeFrom and tableKeyFieldsFrom //
+		/////////////////////////////////////////////////
+		NodeList keyElementList = tableElement.getElementsByTagName("TableKey");
+		for (int i = 0; i < keyElementList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)keyElementList.item(i);
+			if (workElement.getAttribute("ID").equals(tableKeyIDFrom)) {
+				tableKeyTypeFrom = workElement.getAttribute("Type");
+				NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
+				frame_.sortableDomElementListModel.removeAllElements();
+				for (int m = 0; m < keyFieldList.getLength(); m++) {
+					frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+				}
+				if (frame_.sortableDomElementListModel.getSize() > 0) {
+					frame_.sortableDomElementListModel.sortElements();
+					for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+						countOfTableKeyFieldsFrom++;
+						keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+						fieldElement = getFieldElementAccordingToID(tableIDFrom, keyFieldElement.getAttribute("FieldID"), systemElement);
+						if (fieldElement == null) {
+							tableKeyFieldsFrom = "";
+							break;
+						} else {
+							if (m > 0) {
+								tableKeyFieldsFrom = tableKeyFieldsFrom + ", ";
+							}
+							if (fieldElement.getAttribute("Alias").equals("")) {
+								tableKeyFieldsFrom = tableKeyFieldsFrom + fieldElement.getAttribute("Name");
+							} else {
+								tableKeyFieldsFrom = tableKeyFieldsFrom + fieldElement.getAttribute("Alias");
+							}
+						}
+					}
+				}
+				break;
+			}
+		}
+		if (tableKeyFieldsFrom.equals("")) {
+			return false;
+		}
+
+		////////////////////////////////////////////////////////////////
+		// Get tableNameThru, tableKeyTypeThru and tableKeyFieldsThru //
+		////////////////////////////////////////////////////////////////
+		NodeList tableElementList = systemElement.getElementsByTagName("Table");
+		for (int i = 0; i < tableElementList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)tableElementList.item(i);
+			if (workElement.getAttribute("ID").equals(tableIDThru)) {
+				if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+					tableNameThru = workElement.getAttribute("Name");
+				} else {
+					if (workElement.getAttribute("Alias").equals("")) {
+						if (workElement.getAttribute("SortKey").equals("")) {
+							tableNameThru = workElement.getAttribute("Name");
+						} else {
+							tableNameThru = workElement.getAttribute("SortKey");
+						}
+					} else {
+						tableNameThru = workElement.getAttribute("Alias");
+					}
+				}
+				keyElementList = workElement.getElementsByTagName("TableKey");
+				for (int j = 0; j < keyElementList.getLength(); j++) {
+					workElement = (org.w3c.dom.Element)keyElementList.item(j);
+					if (workElement.getAttribute("ID").equals(tableKeyIDThru)) {
+						tableKeyTypeThru = workElement.getAttribute("Type");
+						NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
+						frame_.sortableDomElementListModel.removeAllElements();
+						for (int m = 0; m < keyFieldList.getLength(); m++) {
+							frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+						}
+						if (frame_.sortableDomElementListModel.getSize() > 0) {
+							frame_.sortableDomElementListModel.sortElements();
+							for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+								countOfTableKeyFieldsThru++;
+								keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+								fieldElement = getFieldElementAccordingToID(tableIDThru, keyFieldElement.getAttribute("FieldID"), systemElement);
+								if (fieldElement == null) {
+									tableKeyFieldsThru = "";
+									break;
+								} else {
+									if (m > 0) {
+										tableKeyFieldsThru = tableKeyFieldsThru + ", ";
+									}
+									if (fieldElement.getAttribute("Alias").equals("")) {
+										tableKeyFieldsThru = tableKeyFieldsThru + fieldElement.getAttribute("Name");
+									} else {
+										tableKeyFieldsThru = tableKeyFieldsThru + fieldElement.getAttribute("Alias");
+									}
+								}
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+		if (tableNameThru.equals("") || tableKeyFieldsThru.equals("")) {
+			return false;
+		}
+		if (countOfTableKeyFieldsFrom > countOfTableKeyFieldsThru) {
+			return false;
+		}
+
+		//////////////////////////////
+		// Get tableKeyIDFromTarget //
+		//////////////////////////////
+		keyElementList = targetTableElement.getElementsByTagName("TableKey");
+		for (int i = 0; i < keyElementList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)keyElementList.item(i);
+			if (workElement.getAttribute("Type").equals(tableKeyTypeFrom)) {
+				NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
+				frame_.sortableDomElementListModel.removeAllElements();
+				for (int m = 0; m < keyFieldList.getLength(); m++) {
+					frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+				}
+				if (frame_.sortableDomElementListModel.getSize() > 0) {
+					frame_.sortableDomElementListModel.sortElements();
+					wrkStr = "";
+					for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+						keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+						fieldElement = getFieldElementAccordingToID(targetTableElement.getAttribute("ID"), keyFieldElement.getAttribute("FieldID"), targetSystemElement);
+						if (fieldElement == null) {
+							wrkStr = "";
+							break;
+						} else {
+							if (m > 0) {
+								wrkStr = wrkStr + ", ";
+							}
+							if (fieldElement.getAttribute("Alias").equals("")) {
+								wrkStr = wrkStr + fieldElement.getAttribute("Name");
+							} else {
+								wrkStr = wrkStr + fieldElement.getAttribute("Alias");
+							}
+						}
+					}
+					if (wrkStr.equals(tableKeyFieldsFrom)) {
+						tableKeyIDFromTarget = workElement.getAttribute("ID");
+						break;
+					}
+				}
+			}
+		}
+
+		////////////////////////////////////////////////////
+		// Get tableIDThruTarget and tableKeyIDThruTarget //
+		////////////////////////////////////////////////////
+		tableElementList = targetSystemElement.getElementsByTagName("Table");
+		for (int i = 0; i < tableElementList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)tableElementList.item(i);
+			if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+				wrkStr = workElement.getAttribute("Name");
+			} else {
+				if (workElement.getAttribute("Alias").equals("")) {
+					if (workElement.getAttribute("SortKey").equals("")) {
+						wrkStr = workElement.getAttribute("Name");
+					} else {
+						wrkStr = workElement.getAttribute("SortKey");
+					}
+				} else {
+					wrkStr = workElement.getAttribute("Alias");
+				}
+			}
+			if (wrkStr.equals(tableNameThru)) {
+				tableIDThruTarget = workElement.getAttribute("ID");
+				keyElementList = workElement.getElementsByTagName("TableKey");
+				for (int j = 0; j < keyElementList.getLength(); j++) {
+					workElement = (org.w3c.dom.Element)keyElementList.item(j);
+					if (workElement.getAttribute("Type").equals(tableKeyTypeThru)) {
+						NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
+						frame_.sortableDomElementListModel.removeAllElements();
+						for (int m = 0; m < keyFieldList.getLength(); m++) {
+							frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+						}
+						if (frame_.sortableDomElementListModel.getSize() > 0) {
+							frame_.sortableDomElementListModel.sortElements();
+							wrkStr = "";
+							for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+								keyFieldElement = (org.w3c.dom.Element)frame_.sortableDomElementListModel.getElementAt(m);
+								fieldElement = getFieldElementAccordingToID(tableIDThruTarget, keyFieldElement.getAttribute("FieldID"), targetSystemElement);
+								if (fieldElement == null) {
+									wrkStr = "";
+									break;
+								} else {
+									if (m > 0) {
+										wrkStr = wrkStr + ", ";
+									}
+									if (fieldElement.getAttribute("Alias").equals("")) {
+										wrkStr = wrkStr + fieldElement.getAttribute("Name");
+									} else {
+										wrkStr = wrkStr + fieldElement.getAttribute("Alias");
+									}
+								}
+							}
+							if (wrkStr.equals(tableKeyFieldsThru)) {
+								tableKeyIDThruTarget = workElement.getAttribute("ID");
+								break;
+							}
+						}
+					}
+				}
+				break;
+			}
+		}
+
+		NodeList relationshipList = targetSystemElement.getElementsByTagName("Relationship");
+		for (int i = 0; i < relationshipList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)relationshipList.item(i);
+			if (workElement.getAttribute("Table2ID").equals(tableIDFromTarget)
+					&& workElement.getAttribute("TableKey2ID").equals(tableKeyIDFromTarget)
+					&& workElement.getAttribute("Table1ID").equals(tableIDThruTarget)
+					&& workElement.getAttribute("TableKey1ID").equals(tableKeyIDThruTarget)
+					&& workElement.getAttribute("ExistWhen1").equals("")) {
+				reply = false;
+				break;
+			}
+		}
+
+		return reply;
 	}
 
 	void listChangesOfFunction() {
@@ -533,7 +1573,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void compareNewAndOldElements(org.w3c.dom.Element elementNew, org.w3c.dom.Element elementOld, String attribute, String elementLabel) {
-		String sortKeyOld, sortKeyNew;
+		String sortKeyOld, sortKeyNew, notNullOld, notNullNew;
 		if (attribute.endsWith("ID")) {
 			sortKeyOld = getSortKeyAccordingToID(attribute, elementOld.getAttribute(attribute), systemElementOld);
 			sortKeyNew = getSortKeyAccordingToID(attribute, elementNew.getAttribute(attribute), systemElementNew);
@@ -546,31 +1586,46 @@ public class DialogToListChangesOfFiles extends JDialog {
 							+ sortKeyNew + res.getString("DialogToListChangesOfFiles23"));
 			}
 		} else {
-			if (!elementNew.getAttribute(attribute).equals(elementOld.getAttribute(attribute))) {
-				countOfChanges++;
-				if (attribute.equals("ImageText")) {
+			if (attribute.equals("NoUpdate")) {
+				notNullNew = elementNew.getAttribute(attribute);
+				notNullOld = elementOld.getAttribute(attribute);
+				if ((notNullNew.equals("") && notNullOld.equals("true"))
+					|| (notNullNew.equals("false") && notNullOld.equals("true"))
+					|| (notNullNew.equals("true") && notNullOld.equals(""))
+					|| (notNullNew.equals("true") && notNullOld.equals("false"))) {
 					buffer.append("\n" + countOfChanges + "."
-								+ elementLabel + res.getString("DialogToListChangesOfFiles24"));
-				} else {
-					if (attribute.equals("Descriptions")) {
+							+ elementLabel + res.getString("DialogToListChangesOfFiles20")
+							+ attribute + res.getString("DialogToListChangesOfFiles21")
+							+ elementOld.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles22")
+							+ elementNew.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles23"));
+				}
+			} else {
+				if (!elementNew.getAttribute(attribute).equals(elementOld.getAttribute(attribute))) {
+					countOfChanges++;
+					if (attribute.equals("ImageText")) {
 						buffer.append("\n" + countOfChanges + "."
-									+ elementLabel + res.getString("DialogToListChangesOfFiles25"));
+								+ elementLabel + res.getString("DialogToListChangesOfFiles24"));
 					} else {
-						if (attribute.equals("DatamodelDescriptions")) {
+						if (attribute.equals("Descriptions")) {
 							buffer.append("\n" + countOfChanges + "."
-										+ elementLabel + res.getString("DialogToListChangesOfFiles26"));
+									+ elementLabel + res.getString("DialogToListChangesOfFiles25"));
 						} else {
-							if (attribute.equals("Name")) {
+							if (attribute.equals("DatamodelDescriptions")) {
 								buffer.append("\n" + countOfChanges + "."
+										+ elementLabel + res.getString("DialogToListChangesOfFiles26"));
+							} else {
+								if (attribute.equals("Name")) {
+									buffer.append("\n" + countOfChanges + "."
 											+ elementLabel + res.getString("DialogToListChangesOfFiles27")
 											+ elementOld.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles22")
 											+ elementNew.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles23"));
-							} else {
-								buffer.append("\n" + countOfChanges + "."
+								} else {
+									buffer.append("\n" + countOfChanges + "."
 											+ elementLabel + res.getString("DialogToListChangesOfFiles20")
 											+ attribute + res.getString("DialogToListChangesOfFiles21")
 											+ elementOld.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles22")
 											+ elementNew.getAttribute(attribute) + res.getString("DialogToListChangesOfFiles23"));
+								}
 							}
 						}
 					}
@@ -788,7 +1843,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		ArrayList<String> attrList = new ArrayList<String>();
 		org.w3c.dom.Element newElementWork, oldElementWork;
 		boolean isNotFound;
-		String tagName, elementName, elementLabel;
+		String tagName, elementName, elementLabel, fieldID, fieldIDOld;
 		String tableInternalID = newElement.getAttribute("ID");
 		String tableLabel = res.getString("DialogToListChangesOfFiles10")
 					+ res.getString("DialogToListChangesOfFiles28")
@@ -801,6 +1856,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		tagName = "TableField";
 		elementName = getElementNameAccordingToTagName(tagName);
 		attrList.clear();
+		attrList.add("Name");
 		attrList.add("Descriptions");
 		attrList.add("AttributeType");
 		attrList.add("DataTypeID");
@@ -813,11 +1869,20 @@ public class DialogToListChangesOfFiles extends JDialog {
 		newElementList = newElement.getElementsByTagName(tagName);
 		for (int i = 0; i < newElementList.getLength(); i++) {
 			newElementWork = (org.w3c.dom.Element)newElementList.item(i);
+			if (newElementWork.getAttribute("Alias").equals("")) {
+				fieldID = newElementWork.getAttribute("Name");
+			} else {
+				fieldID = newElementWork.getAttribute("Alias");
+			}
 			isNotFound = true;
 			for (int j = 0; j < oldElementList.getLength(); j++) {
 				oldElementWork = (org.w3c.dom.Element)oldElementList.item(j);
-				if (oldElementWork.getAttribute("Name").equals(newElementWork.getAttribute("Name"))
-						&& oldElementWork.getAttribute("Alias").equals(newElementWork.getAttribute("Alias"))) {
+				if (oldElementWork.getAttribute("Alias").equals("")) {
+					fieldIDOld = oldElementWork.getAttribute("Name");
+				} else {
+					fieldIDOld = oldElementWork.getAttribute("Alias");
+				}
+				if (fieldIDOld.equals(fieldID)) {
 					elementLabel = tableLabel+ res.getString("DialogToListChangesOfFiles20")
 							+ elementName + res.getString("DialogToListChangesOfFiles28")
 							+ newElementWork.getAttribute("Alias")
@@ -842,10 +1907,20 @@ public class DialogToListChangesOfFiles extends JDialog {
 		}
 		for (int i = 0; i < oldElementList.getLength(); i++) {
 			oldElementWork = (org.w3c.dom.Element)oldElementList.item(i);
+			if (oldElementWork.getAttribute("Alias").equals("")) {
+				fieldIDOld = oldElementWork.getAttribute("Name");
+			} else {
+				fieldIDOld = oldElementWork.getAttribute("Alias");
+			}
 			isNotFound = true;
 			for (int j = 0; j < newElementList.getLength(); j++) {
 				newElementWork = (org.w3c.dom.Element)newElementList.item(j);
-				if (oldElementWork.getAttribute("Name").equals(newElementWork.getAttribute("Name"))) {
+				if (newElementWork.getAttribute("Alias").equals("")) {
+					fieldID = newElementWork.getAttribute("Name");
+				} else {
+					fieldID = newElementWork.getAttribute("Alias");
+				}
+				if (fieldID.equals(fieldIDOld)) {
 					isNotFound = false;
 					break;
 				}
@@ -958,7 +2033,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 	void checkFunctionDetails(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement) {
 		NodeList oldElementList, newElementList, oldElementList2, newElementList2;
 		String tagName, elementName, wrkStr1, wrkStr2, tableID1, tableID2, fieldName1, fieldName2, tableCRUD1, tableCRUD2, elementLabel;
-		org.w3c.dom.Element newElementWork, oldElementWork, newElementWork2, oldElementWork2;
+		org.w3c.dom.Element newElementWork, oldElementWork, newElementWork2, oldElementWork2, workElement;
 		ArrayList<String> attrList = new ArrayList<String>();
 		String functionLabel = res.getString("DialogToListChangesOfFiles14")
 				+ res.getString("DialogToListChangesOfFiles28")
@@ -1501,11 +2576,13 @@ public class DialogToListChangesOfFiles extends JDialog {
 					}
 					for (int m = 0; m < oldElementList2.getLength(); m++) {
 						oldElementWork2 = (org.w3c.dom.Element)oldElementList2.item(m);
-						fieldName2 = getFieldNameAccordingToID(oldElementWork.getAttribute("TableID"), oldElementWork2.getAttribute("FieldID"), systemElementOld);
+						workElement = getFieldElementAccordingToID(oldElementWork.getAttribute("TableID"), oldElementWork2.getAttribute("FieldID"), systemElementOld);
+						fieldName2 = workElement.getAttribute("Name");
 						isNotFound2 = true;
 						for (int p = 0; p < newElementList2.getLength(); p++) {
 							newElementWork2 = (org.w3c.dom.Element)newElementList2.item(p);
-							fieldName1 = getFieldNameAccordingToID(newElementWork.getAttribute("TableID"), newElementWork2.getAttribute("FieldID"), systemElementNew);
+							workElement = getFieldElementAccordingToID(newElementWork.getAttribute("TableID"), newElementWork2.getAttribute("FieldID"), systemElementNew);
+							fieldName1 = workElement.getAttribute("Name");
 							if (fieldName1.equals(fieldName2)) {
 								isNotFound2 = false;
 								break;
@@ -1576,25 +2653,46 @@ public class DialogToListChangesOfFiles extends JDialog {
 		return crud;
 	}
 
-	private String getFieldNameAccordingToID(String tableID, String fieldID, org.w3c.dom.Element systemElement) {
-		String value = "(N/A)";
-		org.w3c.dom.Element tableElement, fieldElement;
+//	private String getFieldNameAccordingToID(String tableID, String fieldID, org.w3c.dom.Element systemElement) {
+//		String value = "(N/A)";
+//		org.w3c.dom.Element tableElement, fieldElement;
+//		NodeList tableList = systemElement.getElementsByTagName("Table");
+//		for (int i = 0; i < tableList.getLength(); i++) {
+//			tableElement = (org.w3c.dom.Element)tableList.item(i);
+//			if (tableElement.getAttribute("ID").equals(tableID)) {
+//				NodeList fieldList = tableElement.getElementsByTagName("TableField");
+//				for (int j = 0; j < fieldList.getLength(); j++) {
+//					fieldElement = (org.w3c.dom.Element)fieldList.item(j);
+//					if (fieldElement.getAttribute("ID").equals(fieldID)) {
+//						value = fieldElement.getAttribute("Name");
+//						break;
+//					}
+//				}
+//				break;
+//			}
+//		}
+//		return value;
+//	}
+
+	private org.w3c.dom.Element getFieldElementAccordingToID(String tableID, String fieldID, org.w3c.dom.Element systemElement) {
+		org.w3c.dom.Element fieldElement = null;
+		org.w3c.dom.Element tableElement, workElement;
 		NodeList tableList = systemElement.getElementsByTagName("Table");
 		for (int i = 0; i < tableList.getLength(); i++) {
 			tableElement = (org.w3c.dom.Element)tableList.item(i);
 			if (tableElement.getAttribute("ID").equals(tableID)) {
 				NodeList fieldList = tableElement.getElementsByTagName("TableField");
 				for (int j = 0; j < fieldList.getLength(); j++) {
-					fieldElement = (org.w3c.dom.Element)fieldList.item(j);
-					if (fieldElement.getAttribute("ID").equals(fieldID)) {
-						value = fieldElement.getAttribute("Name");
+					workElement = (org.w3c.dom.Element)fieldList.item(j);
+					if (workElement.getAttribute("ID").equals(fieldID)) {
+						fieldElement = workElement;
 						break;
 					}
 				}
 				break;
 			}
 		}
-		return value;
+		return fieldElement;
 	}
 
 	private String getElementNameAccordingToTagName(String tagName) {

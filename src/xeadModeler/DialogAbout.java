@@ -46,8 +46,19 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
-	public static final String URL_DBC = "http://homepage2.nifty.com/dbc/";
-	public static final String FULL_VERSION = "V1.R4.M33";
+	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
+	public static final String FULL_VERSION = "V1.R4.M36";
+	// 1.4.36での変更点
+	//・業務フロー上のシステム境界のキャプション位置を設定できるようにした
+	//
+	// 1.4.35での変更点
+	//・テーブル名のツリービュー上、およびテーブル一覧上での表示様式を改善した
+	//・数値系のデータタイプの桁数表示様式を改善した
+	//・「ツール｜DDLの設定」を機能強化した
+	//
+	// 1.4.34での変更点
+	//・定義ファイル間の差異レポート出力の際に「差分DLL」を出力できるようにした
+	//
 	// 1.4.33での変更点
 	//・IOイメージ上でのペースト操作でのバグを修正した
 	//・フィールドにデータタイプを設定した場合、フィールドID（エイリアス）が自動設定されるようにした
