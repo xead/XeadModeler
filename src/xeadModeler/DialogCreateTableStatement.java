@@ -84,7 +84,7 @@ public class DialogCreateTableStatement extends JDialog {
 
 	private void jbInit() throws Exception {
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(410, 440));
+		panelMain.setPreferredSize(new Dimension(410, 490));
 		this.setResizable(false);
 		this.setTitle(res.getString("DialogCreateTableStatement01"));
 
@@ -112,9 +112,9 @@ public class DialogCreateTableStatement extends JDialog {
 		jLabelSectionMark.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelSectionMark.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSectionMark.setText(res.getString("DialogCreateTableStatement07"));
-		jLabelSectionMark.setBounds(new Rectangle(180, 80, 140, 20));
+		jLabelSectionMark.setBounds(new Rectangle(180, 80, 160, 20));
 		jTextFieldSectionMark.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jTextFieldSectionMark.setBounds(new Rectangle(325, 77, 30, 25));
+		jTextFieldSectionMark.setBounds(new Rectangle(345, 77, 30, 25));
 
 		jCheckBoxWithComment.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxWithComment.setBounds(new Rectangle(12, 108, 390, 25));
@@ -135,15 +135,15 @@ public class DialogCreateTableStatement extends JDialog {
 		jLabelAdditionalParms.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabelAdditionalParms.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabelAdditionalParms.setText(res.getString("DialogCreateTableStatement12"));
-		jLabelAdditionalParms.setBounds(new Rectangle(12, 220, 200, 20));
+		jLabelAdditionalParms.setBounds(new Rectangle(12, 225, 200, 20));
 		jTextAreaAdditionalParms.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jScrollPaneAdditionalParms.getViewport().add(jTextAreaAdditionalParms, null);
-		jScrollPaneAdditionalParms.setBounds(new Rectangle(9, 242, 392, 70));
+		jScrollPaneAdditionalParms.setBounds(new Rectangle(9, 247, 392, 70));
 
 		jTextAreaMessage.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextAreaMessage.setForeground(Color.BLUE);
 		jTextAreaMessage.setEditable(false);
-		jTextAreaMessage.setBounds(new Rectangle(9, 322, 392, 74));
+		jTextAreaMessage.setBounds(new Rectangle(9, 327, 392, 120));
 		jTextAreaMessage.setLineWrap(true);
 		jTextAreaMessage.setBackground(SystemColor.control);
 		jTextAreaMessage.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -151,11 +151,11 @@ public class DialogCreateTableStatement extends JDialog {
 
 		buttonGroup.add(jRadioButtonTableName);
 		buttonGroup.add(jRadioButtonTableAlias);
-		jButtonClose.setBounds(new Rectangle(50, 405, 100, 27));
+		jButtonClose.setBounds(new Rectangle(50, 453, 120, 29));
 		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonClose.setText(res.getString("DialogCreateTableStatement09"));
 		jButtonClose.addActionListener(new DialogCreateTableStatement_jButtonClose_actionAdapter(this));
-		jButtonSet.setBounds(new Rectangle(250, 405, 100, 27));
+		jButtonSet.setBounds(new Rectangle(245, 453, 120, 29));
 		jButtonSet.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonSet.setText(res.getString("DialogCreateTableStatement10"));
 		jButtonSet.addActionListener(new DialogCreateTableStatement_jButtonSet_actionAdapter(this));

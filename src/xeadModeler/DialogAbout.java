@@ -47,9 +47,17 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M36";
+	public static final String FULL_VERSION = "V1.R4.M37";
+	// 1.4.37での変更点
+	//・高解像度環境に合わせてメインフォントの文字サイズの省略値を16から18に変更した
+	//・propertiesファイルでメインフォントの文字サイズ(MainFontSize)を設定できるようにした
+	//・propertiesファイルでデータモデルサイズの初期値(InitialModelSize)を設定できるようにした
+	//・ファイル差異検査の対象範囲に、業務フロー上のシステム境界のキャプション位置を含めた
+	//・設計書出力で対象定義が１件も含まれない場合、エクセル表示でエラーになる問題を修正した
+	//
 	// 1.4.36での変更点
 	//・業務フロー上のシステム境界のキャプション位置を設定できるようにした
+	//・IOイメージのカーソル位置表示のバグを修正した
 	//
 	// 1.4.35での変更点
 	//・テーブル名のツリービュー上、およびテーブル一覧上での表示様式を改善した

@@ -116,7 +116,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		jTableDataTypeList.getSelectionModel().addListSelectionListener(new DialogReorganizeDataTypes_jTableDataTypeList_listSelectionAdapter(this));
 		jTableDataTypeList.addFocusListener(new Modeler_FocusListener());
 		jTableDataTypeList.setRowHeight(Modeler.TABLE_ROW_HEIGHT);
-		tableModelDataTypeList.addColumn("NO.");
+		tableModelDataTypeList.addColumn("No.");
 		tableModelDataTypeList.addColumn(res.getString("S201"));
 		tableModelDataTypeList.addColumn(res.getString("S289"));
 		tableModelDataTypeList.addColumn(res.getString("S290"));
@@ -158,7 +158,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		jTableFieldList.setRowHeight(Modeler.TABLE_ROW_HEIGHT);
 		jTableFieldList.addMouseListener(new DialogReorganizeDataTypes_jTableFieldList_mouseAdapter(this));
 		jTableFieldList.getTableHeader().setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		tableModelFieldList.addColumn("NO.");
+		tableModelFieldList.addColumn("No.");
 		tableModelFieldList.addColumn("");
 		tableModelFieldList.addColumn(res.getString("S297"));
 		tableModelFieldList.addColumn(res.getString("S298"));

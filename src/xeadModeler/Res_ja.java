@@ -74,7 +74,7 @@ public class Res_ja extends java.util.ListResourceBundle {
 		{ "DialogCreateTableStatement08", "無条件のテーブル関連定義のみが参照制約として解釈される点に注意してください。条件付きのテーブル関連については、データ処理上の制約として組み込む必要があります。" },
 		{ "DialogCreateTableStatement09", "閉じる" },
 		{ "DialogCreateTableStatement10", "OK" },
-		{ "DialogCreateTableStatement11", "エイリアス指定フィールドについてCOMMENT出力" },
+		{ "DialogCreateTableStatement11", "エイリアス指定フィールドをCOMMENT出力" },
 		{ "DialogCreateTableStatement12", "追加パラメータ" },
 		{ "DialogCreateTableStatement13", "参照制約を組み込まない" },
 		{ "DialogCreateTableStatement14", "キー定義の警告を無視する" },

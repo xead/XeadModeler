@@ -1756,7 +1756,8 @@ public class DialogToListChangesOfFiles extends JDialog {
 
 	void checkSubjectAreaDetails(org.w3c.dom.Element oldElement, org.w3c.dom.Element newElement, String elementName) {
 		if (!oldElement.getAttribute("BoundaryPosition").equals(newElement.getAttribute("BoundaryPosition"))
-				|| !oldElement.getAttribute("BoundarySize").equals(newElement.getAttribute("BoundarySize"))) {
+				|| !oldElement.getAttribute("BoundarySize").equals(newElement.getAttribute("BoundarySize"))
+				|| !oldElement.getAttribute("BoundarySetting").equals(newElement.getAttribute("BoundarySetting"))) {
 			countOfChanges++;
 			buffer.append("\n" + countOfChanges + "."
 					+ elementName + res.getString("DialogToListChangesOfFiles28")

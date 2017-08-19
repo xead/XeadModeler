@@ -70,10 +70,10 @@ public class Modeler extends JFrame {
 	 * Static constants
 	 */
 	private static final ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
-	public static final int MAIN_FONT_SIZE = 16;
-	public static final int TREE_ROW_HEIGHT = 20;
-	public static final int TABLE_ROW_HEIGHT_EDITABLE = 25;
-	public static final int TABLE_ROW_HEIGHT = 22;
+	public static int MAIN_FONT_SIZE = 18;
+	public static final int TREE_ROW_HEIGHT = 22;
+	public static final int TABLE_ROW_HEIGHT_EDITABLE = 27;
+	public static final int TABLE_ROW_HEIGHT = 24;
 	public static final Color DESKTOP_COLOR = new Color(58,110,165);
 	public static final Color GRID_COLOR1 = new Color(72,129,191);
 	public static final Color GRID_COLOR2 = new Color(226,226,226);
@@ -932,7 +932,7 @@ public class Modeler extends JFrame {
 				} else {
 					g2.setColor(GRID_COLOR2);
 				}
-				if (datamodelSize.equals("S")) {
+				if (modelSize.equals("S")) {
 					int gridPos = 4;
 					int height = this.getPreferredSize().height + 100;
 					if (height < 2000) {
@@ -952,7 +952,7 @@ public class Modeler extends JFrame {
 						gridPos = gridPos + 8;
 					}
 				}
-				if (datamodelSize.equals("M")) {
+				if (modelSize.equals("M")) {
 					int gridPos = 8;
 					int height = this.getPreferredSize().height + 100;
 					if (height < 2000) {
@@ -972,7 +972,7 @@ public class Modeler extends JFrame {
 						gridPos = gridPos + 16;
 					}
 				}
-				if (datamodelSize.equals("L")) {
+				if (modelSize.equals("L")) {
 					int gridPos = 12;
 					int height = this.getPreferredSize().height + 100;
 					if (height < 2000) {
@@ -1058,7 +1058,8 @@ public class Modeler extends JFrame {
 	};
 	private JLabel jLabelDatamodelSlideShowPageGuide = new JLabel();
 	private String datamodelPageTitle;
-	public String datamodelSize = "M";
+	public String initialModelSize = "M";
+	public String modelSize = "M";
 	public boolean isToShowGridsOnDataModel = true;
 	public boolean isNormalColorConfigOnDataModel = true;
 	/**
@@ -1591,6 +1592,13 @@ public class Modeler extends JFrame {
 				if (wrkStr != null && !wrkStr.equals("")) {
 					mainFontName = wrkStr;
 				}
+				wrkStr = properties.getProperty("MainFontSize");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					int size = Integer.parseInt(wrkStr);
+					if (size > 18) {
+						MAIN_FONT_SIZE = size;
+					}
+				}
 				wrkStr = properties.getProperty("IOImageFont");
 				if (wrkStr != null && !wrkStr.equals("")) {
 					ioImageFontName = wrkStr;
@@ -1602,6 +1610,10 @@ public class Modeler extends JFrame {
 				wrkStr = properties.getProperty("IOImageFolder");
 				if (wrkStr != null && !wrkStr.equals("")) {
 					ioImageFolder = wrkStr;
+				}
+				wrkStr = properties.getProperty("InitialModelSize");
+				if (wrkStr != null && !wrkStr.equals("")) {
+					initialModelSize = wrkStr;
 				}
 				wrkStr = properties.getProperty("BackupFolder");
 				if (wrkStr != null && !wrkStr.equals("")) {
@@ -1695,7 +1707,7 @@ public class Modeler extends JFrame {
 		 */
 		jPanelMain = (JPanel) this.getContentPane();
 		jPanelMain.setLayout(new BorderLayout());
-		jPanelJumpButtons.setPreferredSize(new Dimension(10, 25));
+		jPanelJumpButtons.setPreferredSize(new Dimension(10, 26));
 		jPanelJumpButtons.setLayout(gridLayoutJumpButtons);
 		gridLayoutJumpButtons.setColumns(8);
 		gridLayoutJumpButtons.setRows(0);
@@ -1704,11 +1716,11 @@ public class Modeler extends JFrame {
 		jLabelChangeState.setBorder(jProgressBar.getBorder());
 		jLabelChangeState.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelChangeState.setHorizontalAlignment(SwingConstants.CENTER);
-		jPanelTopMargin1.setPreferredSize(new Dimension(10, 25));
+		jPanelTopMargin1.setPreferredSize(new Dimension(10, 26));
 		jPanelTopMargin1.setLayout(new BorderLayout());
 		jPanelTopMargin1.setBorder(null);
 		GridLayout gridLayoutTopMargin = new GridLayout();
-		jPanelTopMargin2.setPreferredSize(new Dimension(160, 25));
+		jPanelTopMargin2.setPreferredSize(new Dimension(160, 20));
 		jPanelTopMargin2.setLayout(gridLayoutTopMargin);
 		jPanelTopMargin2.setBorder(null);
 		jLabelSubtitle.setBorder(jProgressBar.getBorder());
@@ -2759,9 +2771,9 @@ public class Modeler extends JFrame {
 		jLabelSystemMaintenanceLogSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemMaintenanceLogSortKey.setText(res.getString("S257"));
-		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(450, 12, 150, 20));
 		jTextFieldSystemMaintenanceLogSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(585, 9, 180, 25));
+		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(605, 9, 180, 25));
 		jLabelSystemMaintenanceLogDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -2793,7 +2805,7 @@ public class Modeler extends JFrame {
 		jTableSystemDepartmentList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemDepartmentList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemDepartmentList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemDepartmentList.addColumn("NO.");
+		tableModelSystemDepartmentList.addColumn("No.");
 		tableModelSystemDepartmentList.addColumn(res.getString("S201"));
 		tableModelSystemDepartmentList.addColumn(res.getString("S265"));
 		tableModelSystemDepartmentList.addColumn(res.getString("S204"));
@@ -2821,7 +2833,7 @@ public class Modeler extends JFrame {
 		jTableSystemDepartmentWhereUsedList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemDepartmentWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
 		jScrollPaneSystemDepartmentWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemDepartmentWhereUsedList_mouseAdapter(this));
-		tableModelSystemDepartmentWhereUsedList.addColumn("NO.");
+		tableModelSystemDepartmentWhereUsedList.addColumn("No.");
 		tableModelSystemDepartmentWhereUsedList.addColumn("ID");
 		tableModelSystemDepartmentWhereUsedList.addColumn(res.getString("S271"));
 		tableModelSystemDepartmentWhereUsedList.addColumn(res.getString("S204"));
@@ -2850,7 +2862,7 @@ public class Modeler extends JFrame {
 		jTableSystemTaskTypeList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemTaskTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemTaskTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemTaskTypeList.addColumn("NO.");
+		tableModelSystemTaskTypeList.addColumn("No.");
 		tableModelSystemTaskTypeList.addColumn(res.getString("S201"));
 		tableModelSystemTaskTypeList.addColumn(res.getString("S362"));
 		tableModelSystemTaskTypeList.addColumn(res.getString("S204"));
@@ -2878,7 +2890,7 @@ public class Modeler extends JFrame {
 		jTableSystemTaskTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemTaskTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
 		jScrollPaneSystemTaskTypeWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemTaskTypeWhereUsedList_mouseAdapter(this));
-		tableModelSystemTaskTypeWhereUsedList.addColumn("NO.");
+		tableModelSystemTaskTypeWhereUsedList.addColumn("No.");
 		tableModelSystemTaskTypeWhereUsedList.addColumn("ID");
 		tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S363"));
 		tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S340"));
@@ -2911,7 +2923,7 @@ public class Modeler extends JFrame {
 		jTableSystemTableTypeList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemTableTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemTableTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemTableTypeList.addColumn("NO.");
+		tableModelSystemTableTypeList.addColumn("No.");
 		tableModelSystemTableTypeList.addColumn(res.getString("S201"));
 		tableModelSystemTableTypeList.addColumn(res.getString("S277"));
 		tableModelSystemTableTypeList.addColumn(res.getString("S204"));
@@ -2939,7 +2951,7 @@ public class Modeler extends JFrame {
 		jTableSystemTableTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemTableTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
 		jScrollPaneSystemTableTypeWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemTableTypeWhereUsedList_mouseAdapter(this));
-		tableModelSystemTableTypeWhereUsedList.addColumn("NO.");
+		tableModelSystemTableTypeWhereUsedList.addColumn("No.");
 		tableModelSystemTableTypeWhereUsedList.addColumn("ID");
 		tableModelSystemTableTypeWhereUsedList.addColumn(res.getString("S283"));
 		tableModelSystemTableTypeWhereUsedList.addColumn(res.getString("S284"));
@@ -2968,7 +2980,7 @@ public class Modeler extends JFrame {
 		jTableSystemDataTypeList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemDataTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemDataTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemDataTypeList.addColumn("NO.");
+		tableModelSystemDataTypeList.addColumn("No.");
 		tableModelSystemDataTypeList.addColumn(res.getString("S201"));
 		tableModelSystemDataTypeList.addColumn(res.getString("S289"));
 		tableModelSystemDataTypeList.addColumn(res.getString("S290"));
@@ -3008,7 +3020,7 @@ public class Modeler extends JFrame {
 		jTableSystemDataTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemDataTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
 		jScrollPaneSystemDataTypeWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemDataTypeWhereUsedList_mouseAdapter(this));
-		tableModelSystemDataTypeWhereUsedList.addColumn("NO.");
+		tableModelSystemDataTypeWhereUsedList.addColumn("No.");
 		tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S297"));
 		tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S298"));
 		tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S299"));
@@ -3041,7 +3053,7 @@ public class Modeler extends JFrame {
 		jTableSystemFunctionTypeList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemFunctionTypeList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemFunctionTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemFunctionTypeList.addColumn("NO.");
+		tableModelSystemFunctionTypeList.addColumn("No.");
 		tableModelSystemFunctionTypeList.addColumn(res.getString("S201"));
 		tableModelSystemFunctionTypeList.addColumn(res.getString("S305"));
 		tableModelSystemFunctionTypeList.addColumn(res.getString("S204"));
@@ -3069,7 +3081,7 @@ public class Modeler extends JFrame {
 		jTableSystemFunctionTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemFunctionTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
 		jScrollPaneSystemFunctionTypeWhereUsedList.addMouseListener(new Modeler_jScrollPaneSystemFunctionTypeWhereUsedList_mouseAdapter(this));
-		tableModelSystemFunctionTypeWhereUsedList.addColumn("NO.");
+		tableModelSystemFunctionTypeWhereUsedList.addColumn("No.");
 		tableModelSystemFunctionTypeWhereUsedList.addColumn("ID");
 		tableModelSystemFunctionTypeWhereUsedList.addColumn(res.getString("S311"));
 		tableModelSystemFunctionTypeWhereUsedList.addColumn(res.getString("S312"));
@@ -3102,7 +3114,7 @@ public class Modeler extends JFrame {
 		jTableSystemTermsList.addFocusListener(new Modeler_FocusListener());
 		jTableSystemTermsList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemTermsList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemTermsList.addColumn("NO.");
+		tableModelSystemTermsList.addColumn("No.");
 		tableModelSystemTermsList.addColumn(res.getString("S248"));
 		tableModelSystemTermsList.addColumn(res.getString("S246"));
 		tableModelSystemTermsList.addColumn(res.getString("S247"));
@@ -3135,7 +3147,7 @@ public class Modeler extends JFrame {
 		jTableSystemMaintenanceLog.addFocusListener(new Modeler_FocusListener());
 		jTableSystemMaintenanceLog.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableSystemMaintenanceLog.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSystemMaintenanceLog.addColumn("NO.");
+		tableModelSystemMaintenanceLog.addColumn("No.");
 		tableModelSystemMaintenanceLog.addColumn(res.getString("S317"));
 		tableModelSystemMaintenanceLog.addColumn(res.getString("S318"));
 		tableModelSystemMaintenanceLog.addColumn(res.getString("S319"));
@@ -3174,7 +3186,7 @@ public class Modeler extends JFrame {
 		jTableSubjectAreaList.setBackground(SystemColor.control);
 		jTableSubjectAreaList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableSubjectAreaList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelSubjectAreaList.addColumn("NO.");
+		tableModelSubjectAreaList.addColumn("No.");
 		tableModelSubjectAreaList.addColumn(res.getString("S201"));
 		tableModelSubjectAreaList.addColumn(res.getString("S324"));
 		tableModelSubjectAreaList.addColumn(res.getString("S204"));
@@ -3318,7 +3330,7 @@ public class Modeler extends JFrame {
 		jTableRoleList.setBackground(SystemColor.control);
 		jTableRoleList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableRoleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelRoleList.addColumn("NO.");
+		tableModelRoleList.addColumn("No.");
 		tableModelRoleList.addColumn(res.getString("S201"));
 		tableModelRoleList.addColumn(res.getString("S340"));
 		tableModelRoleList.addColumn(res.getString("S341"));
@@ -3418,7 +3430,7 @@ public class Modeler extends JFrame {
 		jTableTaskList.addFocusListener(new Modeler_FocusListener());
 		jTableTaskList.addKeyListener(new Modeler_TableKeyAdapter(this));
 		jTableTaskList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelTaskList.addColumn("NO.");
+		tableModelTaskList.addColumn("No.");
 		tableModelTaskList.addColumn(res.getString("S201"));
 		tableModelTaskList.addColumn(res.getString("S360"));
 		tableModelTaskList.addColumn(res.getString("S361"));
@@ -3736,7 +3748,7 @@ public class Modeler extends JFrame {
 		jTableFunctionIOImageIOList.setRowHeight(TABLE_ROW_HEIGHT);
 		jTableFunctionIOImageIOList.setRowSelectionAllowed(false);
 		jTableFunctionIOImageIOList.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
-		tableModelFunctionIOImageIOList.addColumn("NO.");
+		tableModelFunctionIOImageIOList.addColumn("No.");
 		tableModelFunctionIOImageIOList.addColumn(res.getString("S680"));
 		tableModelFunctionIOImageIOList.addColumn(res.getString("S204"));
 		column0 = jTableFunctionIOImageIOList.getColumnModel().getColumn(0);
@@ -3937,7 +3949,7 @@ public class Modeler extends JFrame {
 		jTableSubsystemList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableSubsystemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableSubsystemList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelSubsystemList.addColumn("NO.");
+		tableModelSubsystemList.addColumn("No.");
 		tableModelSubsystemList.addColumn(res.getString("S201"));
 		tableModelSubsystemList.addColumn(res.getString("S436"));
 		tableModelSubsystemList.addColumn(res.getString("S437"));
@@ -3968,7 +3980,7 @@ public class Modeler extends JFrame {
 		column6.setPreferredWidth(42);
 		column7.setPreferredWidth(42);
 		column8.setPreferredWidth(42);
-		column9.setPreferredWidth(45);
+		column9.setPreferredWidth(47);
 		columnA.setPreferredWidth(700);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
@@ -3990,7 +4002,7 @@ public class Modeler extends JFrame {
 		jTableFunctionsStructureTableIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableFunctionsStructureTableIOList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableFunctionsStructureTableIOList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelFunctionsStructureTableIOList.addColumn("NO.");
+		tableModelFunctionsStructureTableIOList.addColumn("No.");
 		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S448"));
 		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S449"));
 		tableModelFunctionsStructureTableIOList.addColumn(res.getString("S750"));
@@ -4108,7 +4120,7 @@ public class Modeler extends JFrame {
 		jTableNativeTableList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableNativeTableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableNativeTableList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelNativeTableList.addColumn("NO.");
+		tableModelNativeTableList.addColumn("No.");
 		tableModelNativeTableList.addColumn(res.getString("S201"));
 		tableModelNativeTableList.addColumn(res.getString("S471"));
 		tableModelNativeTableList.addColumn(res.getString("S472"));
@@ -4180,7 +4192,7 @@ public class Modeler extends JFrame {
 		jTableForeignTableList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTableForeignTableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableForeignTableList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelForeignTableList.addColumn("NO.");
+		tableModelForeignTableList.addColumn("No.");
 		tableModelForeignTableList.addColumn(res.getString("S436"));
 		tableModelForeignTableList.addColumn(res.getString("S448"));
 		tableModelForeignTableList.addColumn(res.getString("S471"));
@@ -4403,7 +4415,7 @@ public class Modeler extends JFrame {
 		jScrollPaneTableDescriptions.getViewport().add(jTextAreaTableDescriptions, null);
 		jScrollPaneTableCreateStatement.getViewport().add(jTextAreaTableCreateStatement, null);
 		//(jTableTableUsageList)//
-		tableModelTableUsageList.addColumn("NO.");
+		tableModelTableUsageList.addColumn("No.");
 		tableModelTableUsageList.addColumn("ID");
 		tableModelTableUsageList.addColumn(res.getString("S523"));
 		tableModelTableUsageList.addColumn(res.getString("S639"));
@@ -4443,7 +4455,7 @@ public class Modeler extends JFrame {
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		//(jTableTableForeignUsageList)//
-		tableModelTableForeignUsageList.addColumn("NO.");
+		tableModelTableForeignUsageList.addColumn("No.");
 		tableModelTableForeignUsageList.addColumn(res.getString("S436"));
 		tableModelTableForeignUsageList.addColumn("ID");
 		tableModelTableForeignUsageList.addColumn(res.getString("S532"));
@@ -4487,7 +4499,7 @@ public class Modeler extends JFrame {
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableForeignUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		//(jTableTableReferringFileList)//
-		tableModelTableReferringFileList.addColumn("NO.");
+		tableModelTableReferringFileList.addColumn("No.");
 		tableModelTableReferringFileList.addColumn(res.getString("S435"));
 		tableModelTableReferringFileList.addColumn(res.getString("S49"));
 		tableModelTableReferringFileList.addColumn(res.getString("S436"));
@@ -4532,7 +4544,7 @@ public class Modeler extends JFrame {
 		jTableTableFieldList.setBackground(SystemColor.control);
 		jTableTableFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableTableFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelTableFieldList.addColumn("NO.");
+		tableModelTableFieldList.addColumn("No.");
 		tableModelTableFieldList.addColumn(res.getString("S297"));
 		tableModelTableFieldList.addColumn(res.getString("S542"));
 		tableModelTableFieldList.addColumn(res.getString("S547"));
@@ -4599,16 +4611,16 @@ public class Modeler extends JFrame {
 		jLabelTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAlias.setText(res.getString("S297"));
-		jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 15));
+		jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 20));
 		jTextFieldTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 300, 25));
-		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 100, 25));
+		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 120, 25));
 		jCheckBoxTableFieldNotNull.setText("Not Null");
 		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1040, 8, 130, 25));
+		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1060, 8, 130, 25));
 		jCheckBoxTableFieldNoUpdate.setText(res.getString("S582"));
 		jCheckBoxTableFieldNoUpdate.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1170, 8, 160, 25));
+		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1190, 8, 160, 25));
 		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
 		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
@@ -4726,7 +4738,7 @@ public class Modeler extends JFrame {
 		jScrollPaneTableFieldForeignUsageList.addMouseListener(new Modeler_jScrollPaneTableFieldForeignUsageList_mouseAdapter(this));
 		jScrollPaneTableFieldDescriptions.getViewport().add(jTextAreaTableFieldDescriptions, null);
 		//(jTableTableFieldUsageList)//
-		tableModelTableFieldUsageList.addColumn("NO.");
+		tableModelTableFieldUsageList.addColumn("No.");
 		tableModelTableFieldUsageList.addColumn("ID");
 		tableModelTableFieldUsageList.addColumn(res.getString("S592"));
 		tableModelTableFieldUsageList.addColumn(res.getString("S750"));
@@ -4766,7 +4778,7 @@ public class Modeler extends JFrame {
 		rendererTableHeader = (DefaultTableCellRenderer)jTableTableFieldUsageList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		//(jTableTableFieldForeignUsageList)//
-		tableModelTableFieldForeignUsageList.addColumn("NO.");
+		tableModelTableFieldForeignUsageList.addColumn("No.");
 		tableModelTableFieldForeignUsageList.addColumn(res.getString("S436"));
 		tableModelTableFieldForeignUsageList.addColumn("ID");
 		tableModelTableFieldForeignUsageList.addColumn(res.getString("S602"));
@@ -4829,7 +4841,7 @@ public class Modeler extends JFrame {
 		jTableTableKeyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableTableKeyList.addFocusListener(new Modeler_FocusListener());
 		jTableTableKeyList.addKeyListener(new Modeler_TableKeyAdapter(this));
-		tableModelTableKeyList.addColumn("NO.");
+		tableModelTableKeyList.addColumn("No.");
 		tableModelTableKeyList.addColumn(res.getString("S540"));
 		tableModelTableKeyList.addColumn(res.getString("S612"));
 		tableModelTableKeyList.addColumn(res.getString("S613"));
@@ -4928,7 +4940,7 @@ public class Modeler extends JFrame {
 		jTableTableKeyFieldList.setBackground(SystemColor.control);
 		jTableTableKeyFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableTableKeyFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelTableKeyFieldList.addColumn("NO.");
+		tableModelTableKeyFieldList.addColumn("No.");
 		tableModelTableKeyFieldList.addColumn(res.getString("S297"));
 		tableModelTableKeyFieldList.addColumn(res.getString("S542"));
 		tableModelTableKeyFieldList.addColumn(res.getString("S544"));
@@ -4989,7 +5001,7 @@ public class Modeler extends JFrame {
 		jTableFunctionList.setBackground(SystemColor.control);
 		jTableFunctionList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableFunctionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelFunctionList.addColumn("NO.");
+		tableModelFunctionList.addColumn("No.");
 		tableModelFunctionList.addColumn(res.getString("S201"));
 		tableModelFunctionList.addColumn(res.getString("S638"));
 		tableModelFunctionList.addColumn(res.getString("S639"));
@@ -5029,7 +5041,7 @@ public class Modeler extends JFrame {
 		jTableForeignFunctionList.setBackground(SystemColor.control);
 		jTableForeignFunctionList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableForeignFunctionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableModelForeignFunctionList.addColumn("NO.");
+		tableModelForeignFunctionList.addColumn("No.");
 		tableModelForeignFunctionList.addColumn(res.getString("S436"));
 		tableModelForeignFunctionList.addColumn(res.getString("S647"));
 		tableModelForeignFunctionList.addColumn(res.getString("S648"));
@@ -5183,7 +5195,7 @@ public class Modeler extends JFrame {
 		jTableFunctionIOList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTableFunctionIOList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableFunctionIOList.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelFunctionIOList.addColumn("NO.");
+		tableModelFunctionIOList.addColumn("No.");
 		tableModelFunctionIOList.addColumn(res.getString("S201"));
 		tableModelFunctionIOList.addColumn(res.getString("S680"));
 		tableModelFunctionIOList.addColumn(res.getString("S204"));
@@ -5219,7 +5231,7 @@ public class Modeler extends JFrame {
 		jTableFunctionsUsingThis.addMouseListener(new Modeler_jTableFunctionsUsingThis_mouseAdapter(this));
 		jTableFunctionsUsingThis.addFocusListener(new Modeler_FocusListener());
 		jTableFunctionsUsingThis.setRowHeight(TABLE_ROW_HEIGHT);
-		tableModelFunctionsUsingThis.addColumn("NO.");
+		tableModelFunctionsUsingThis.addColumn("No.");
 		tableModelFunctionsUsingThis.addColumn(res.getString("S436"));
 		tableModelFunctionsUsingThis.addColumn("ID");
 		tableModelFunctionsUsingThis.addColumn(res.getString("S688"));
@@ -5251,7 +5263,7 @@ public class Modeler extends JFrame {
 		jScrollPaneTasksUsingThis.addMouseListener(new Modeler_jScrollPaneTasksUsingThis_mouseAdapter(this));
 		jTableTasksUsingThis.addMouseListener(new Modeler_jTableTasksUsingThis_mouseAdapter(this));
 		jTableTasksUsingThis.addFocusListener(new Modeler_FocusListener());
-		tableModelTasksUsingThis.addColumn("NO.");
+		tableModelTasksUsingThis.addColumn("No.");
 		tableModelTasksUsingThis.addColumn(res.getString("S693"));
 		tableModelTasksUsingThis.addColumn(res.getString("S694"));
 		tableModelTasksUsingThis.addColumn("ID");
@@ -5560,29 +5572,29 @@ public class Modeler extends JFrame {
 		jLabelIOTableCRUD.setText(res.getString("S745"));
 		jLabelIOTableCRUD.setBounds(new Rectangle(5, 70, 130, 20));
 		jPanelIOTable4.setLayout(null);
-		jPanelIOTable4.setBounds(new Rectangle(0, 67, 400, 26));
+		jPanelIOTable4.setBounds(new Rectangle(0, 67, 417, 26));
 		jPanelIOTable4.setBorder(BorderFactory.createEtchedBorder());
 		jCheckBoxIOTableC.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableC.setText("Create");
-		jCheckBoxIOTableC.setBounds(new Rectangle(2, 1, 90, 23));
+		jCheckBoxIOTableC.setBounds(new Rectangle(2, 1, 100, 23));
 		jCheckBoxIOTableC.addActionListener(new Modeler_jCheckBoxIOTableC_actionAdapter(this));
 		jCheckBoxIOTableR.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableR.setText("Read");
-		jCheckBoxIOTableR.setBounds(new Rectangle(102, 1, 90, 23));
+		jCheckBoxIOTableR.setBounds(new Rectangle(102, 1, 100, 23));
 		jCheckBoxIOTableU.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableU.setText("Update");
-		jCheckBoxIOTableU.setBounds(new Rectangle(202, 1, 90, 23));
+		jCheckBoxIOTableU.setBounds(new Rectangle(202, 1, 105, 23));
 		jCheckBoxIOTableU.addActionListener(new Modeler_jCheckBoxIOTableU_actionAdapter(this));
 		jCheckBoxIOTableD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableD.setText("Delete");
-		jCheckBoxIOTableD.setBounds(new Rectangle(302, 1, 90, 23));
+		jCheckBoxIOTableD.setBounds(new Rectangle(307, 1, 100, 23));
 		jCheckBoxIOTableD.addActionListener(new Modeler_jCheckBoxIOTableD_actionAdapter(this));
 		jLabelIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableSortKey.setText(res.getString("S540"));
-		jLabelIOTableSortKey.setBounds(new Rectangle(410, 70, 100, 20));
+		jLabelIOTableSortKey.setBounds(new Rectangle(420, 70, 100, 20));
 		jTextFieldIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOTableSortKey.setBounds(new Rectangle(515, 67, 90, 25));
+		jTextFieldIOTableSortKey.setBounds(new Rectangle(525, 67, 80, 25));
 		jLabelIOTableNameExtension.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableNameExtension.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableNameExtension.setText(res.getString("S742"));
@@ -11194,25 +11206,25 @@ public class Modeler extends JFrame {
 				boolean isSizeChanged = false;
 				int value = e.getWheelRotation();
 
-				if (datamodelSize.equals("S")) {
+				if (modelSize.equals("S")) {
 					if (value < 0) {
-						datamodelSize = "M";
+						modelSize = "M";
 						isSizeChanged = true;
 					}
 				} else {
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						if (value > 0) {
-							datamodelSize = "S";
+							modelSize = "S";
 							isSizeChanged = true;
 						}
 						if (value < 0) {
-							datamodelSize = "L";
+							modelSize = "L";
 							isSizeChanged = true;
 						}
 					} else {
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							if (value > 0) {
-								datamodelSize = "M";
+								modelSize = "M";
 								isSizeChanged = true;
 							}
 						}
@@ -11653,11 +11665,12 @@ public class Modeler extends JFrame {
 			if (strwork.equals("")) {
 				jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 			} else {
-				if ((strwork.getBytes().length) == strwork.length()) {
-					strwork = getLayoutedString(strwork, 40, "<br>");
-				} else {
-					strwork = getLayoutedString(strwork, 20, "<br>");
-				}
+//				if ((strwork.getBytes().length) == strwork.length()) {
+//					strwork = getLayoutedString(strwork, 40, "<br>");
+//				} else {
+//					strwork = getLayoutedString(strwork, 30, "<br>");
+//				}
+				strwork = getLayoutedString(strwork, "<br>");
 				jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 			}
 
@@ -11783,11 +11796,12 @@ public class Modeler extends JFrame {
 				if (strwork.equals("")) {
 					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + res.getString("S586"));
 				} else {
-					if ((strwork.getBytes().length) == strwork.length()) {
-						strwork = getLayoutedString(strwork, 40, "<br>");
-					} else {
-						strwork = getLayoutedString(strwork, 20, "<br>");
-					}
+//					if ((strwork.getBytes().length) == strwork.length()) {
+//						strwork = getLayoutedString(strwork, 40, "<br>");
+//					} else {
+//						strwork = getLayoutedString(strwork, 20, "<br>");
+//					}
+					strwork = getLayoutedString(strwork, "<br>");
 					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + strwork);
 				}
 			}
@@ -11804,11 +11818,12 @@ public class Modeler extends JFrame {
 						if (strwork.equals("")) {
 							jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 						} else {
-							if ((strwork.getBytes().length) == strwork.length()) {
-								strwork = getLayoutedString(strwork, 40, "<br>");
-							} else {
-								strwork = getLayoutedString(strwork, 20, "<br>");
-							}
+//							if ((strwork.getBytes().length) == strwork.length()) {
+//								strwork = getLayoutedString(strwork, 40, "<br>");
+//							} else {
+//								strwork = getLayoutedString(strwork, 20, "<br>");
+//							}
+							strwork = getLayoutedString(strwork, "<br>");
 							jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 						}
 					}
@@ -15089,15 +15104,15 @@ public class Modeler extends JFrame {
 		}
 
 		public void setupTerminalIcons() {
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				terminalIconSize = 4;
 				boxHeight = 20;
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				terminalIconSize = 8;
 				boxHeight = 40;
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				terminalIconSize = 12;
 				boxHeight = 60;
 			}
@@ -15131,11 +15146,11 @@ public class Modeler extends JFrame {
 				}
 				//optional-cross shape//
 				if (terminal1Optional) {
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						iconPart_13 = new Line2D.Double(3, 0, 3, 1);
 						iconPart_14 = new Line2D.Double(5, 0, 5, 1);
 					}
-					if (datamodelSize.equals("L")) {
+					if (modelSize.equals("L")) {
 						iconPart_13 = new Line2D.Double(5, 0, 5, 3);
 						iconPart_14 = new Line2D.Double(7, 0, 7, 3);
 					}
@@ -15161,11 +15176,11 @@ public class Modeler extends JFrame {
 				}
 				//optional-cross shape//
 				if (terminal1Optional) {
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						iconPart_13 = new Line2D.Double(0, 3, 1, 3);
 						iconPart_14 = new Line2D.Double(0, 5, 1, 5);
 					}
-					if (datamodelSize.equals("L")) {
+					if (modelSize.equals("L")) {
 						iconPart_13 = new Line2D.Double(0, 5, 3, 5);
 						iconPart_14 = new Line2D.Double(0, 7, 3, 7);
 					}
@@ -15191,11 +15206,11 @@ public class Modeler extends JFrame {
 				}
 				//optional-cross shape//
 				if (terminal1Optional) {
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						iconPart_13 = new Line2D.Double(3, 7, 3, 6);
 						iconPart_14 = new Line2D.Double(5, 7, 5, 6);
 					}
-					if (datamodelSize.equals("L")) {
+					if (modelSize.equals("L")) {
 						iconPart_13 = new Line2D.Double(5, 11, 5, 8);
 						iconPart_14 = new Line2D.Double(7, 11, 7, 8);
 					}
@@ -15222,15 +15237,15 @@ public class Modeler extends JFrame {
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
-					if (datamodelSize.equals("S")) {
+					if (modelSize.equals("S")) {
 						iconPart_21 = new Line2D.Double(2, 0, 2, 0);
 						iconPart_22 = new Line2D.Double(2, 2, 2, 2);
 					}
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						iconPart_21 = new Line2D.Double(4, 2, 4, 3);
 						iconPart_22 = new Line2D.Double(4, 6, 4, 7);
 					}
-					if (datamodelSize.equals("L")) {
+					if (modelSize.equals("L")) {
 						iconPart_21 = new Line2D.Double(6, 3, 6, 5);
 						iconPart_22 = new Line2D.Double(6, 9, 6, 11);
 					}
@@ -15241,11 +15256,11 @@ public class Modeler extends JFrame {
 					iconPart_22 = new Line2D.Double(1, terminalIconSize/2-1, terminalIconSize-1, terminalIconSize/2-1);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							iconPart_23 = new Line2D.Double(3, 0, 3, 1);
 							iconPart_24 = new Line2D.Double(5, 0, 5, 1);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							iconPart_23 = new Line2D.Double(5, 0, 5, 3);
 							iconPart_24 = new Line2D.Double(7, 0, 7, 3);
 						}
@@ -15262,15 +15277,15 @@ public class Modeler extends JFrame {
 				}
 				if (relationshipElement_.getAttribute("Type").equals("REFFER")) {
 					//broken-line shape//
-					if (datamodelSize.equals("S")) {
+					if (modelSize.equals("S")) {
 						iconPart_21 = new Line2D.Double(0, 2, 0, 2);
 						iconPart_22 = new Line2D.Double(2, 2, 2, 2);
 					}
-					if (datamodelSize.equals("M")) {
+					if (modelSize.equals("M")) {
 						iconPart_21 = new Line2D.Double(3, 4, 4, 4);
 						iconPart_22 = new Line2D.Double(6, 4, 7, 4);
 					}
-					if (datamodelSize.equals("L")) {
+					if (modelSize.equals("L")) {
 						iconPart_21 = new Line2D.Double(3, 6, 5, 6);
 						iconPart_22 = new Line2D.Double(9, 6, 11, 6);
 					}
@@ -15281,11 +15296,11 @@ public class Modeler extends JFrame {
 					iconPart_22 = new Line2D.Double(terminalIconSize/2-1, 1, terminalIconSize/2-1, terminalIconSize-1);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							iconPart_23 = new Line2D.Double(0, 3, 1, 3);
 							iconPart_24 = new Line2D.Double(0, 5, 1, 5);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							iconPart_23 = new Line2D.Double(0, 5, 3, 5);
 							iconPart_24 = new Line2D.Double(0, 7, 3, 7);
 						}
@@ -15311,11 +15326,11 @@ public class Modeler extends JFrame {
 					iconPart_22 = new Line2D.Double(1, terminalIconSize/2, terminalIconSize-1, terminalIconSize/2);
 					//optional-cross shape//
 					if (terminal2Optional) {
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							iconPart_23 = new Line2D.Double(3, 7, 3, 6);
 							iconPart_24 = new Line2D.Double(5, 7, 5, 6);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							iconPart_23 = new Line2D.Double(5, 11, 5, 8);
 							iconPart_24 = new Line2D.Double(7, 11, 7, 8);
 						}
@@ -15431,7 +15446,7 @@ public class Modeler extends JFrame {
 					//1:left-below 2:right-above//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y - 15;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15448,7 +15463,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y - 25;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15465,7 +15480,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y - 35;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15484,7 +15499,7 @@ public class Modeler extends JFrame {
 							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15501,7 +15516,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15518,7 +15533,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15543,7 +15558,7 @@ public class Modeler extends JFrame {
 					//1:right-below 2:left-above//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y - 15;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15560,7 +15575,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y - 25;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15577,7 +15592,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y - 35;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15596,7 +15611,7 @@ public class Modeler extends JFrame {
 							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15613,7 +15628,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15630,7 +15645,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -15675,7 +15690,7 @@ public class Modeler extends JFrame {
 				if (relationshipElement_.getAttribute("Type").equals("SUBTYPE")) {
 					//1:left-above 2:right-below//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
-						if (datamodelSize.equals("S")) {
+						if (modelSize.equals("S")) {
 							arc2D_x = lineTerminalPoint1.x - 5;
 							arc2D_y = lineTerminalPoint1.y;
 							arc2D_w = 10;
@@ -15697,7 +15712,7 @@ public class Modeler extends JFrame {
 							line2D_2y = lineTerminalPoint2.y;
 							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 						}
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							arc2D_x = lineTerminalPoint1.x - 10;
 							arc2D_y = lineTerminalPoint1.y;
 							arc2D_w = 20;
@@ -15719,7 +15734,7 @@ public class Modeler extends JFrame {
 							line2D_2y = lineTerminalPoint2.y;
 							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							arc2D_x = lineTerminalPoint1.x - 15;
 							arc2D_y = lineTerminalPoint1.y;
 							arc2D_w = 30;
@@ -15744,7 +15759,7 @@ public class Modeler extends JFrame {
 					}
 					//1:right-above 2:left-below//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
-						if (datamodelSize.equals("S")) {
+						if (modelSize.equals("S")) {
 							line2D_1x = lineTerminalPoint2.x;
 							line2D_1y = lineTerminalPoint1.y;
 							line2D_2x = lineTerminalPoint1.x;
@@ -15766,7 +15781,7 @@ public class Modeler extends JFrame {
 							arc2D_h = 10;
 							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
 						}
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							line2D_1x = lineTerminalPoint2.x;
 							line2D_1y = lineTerminalPoint1.y;
 							line2D_2x = lineTerminalPoint1.x;
@@ -15788,7 +15803,7 @@ public class Modeler extends JFrame {
 							arc2D_h = 20;
 							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							line2D_1x = lineTerminalPoint2.x;
 							line2D_1y = lineTerminalPoint1.y;
 							line2D_2x = lineTerminalPoint1.x;
@@ -15813,7 +15828,7 @@ public class Modeler extends JFrame {
 					}
 					//1:left-below 2:right-above//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
-						if (datamodelSize.equals("S")) {
+						if (modelSize.equals("S")) {
 							line2D_1x = lineTerminalPoint1.x;
 							line2D_1y = lineTerminalPoint2.y;
 							line2D_2x = lineTerminalPoint2.x;
@@ -15835,7 +15850,7 @@ public class Modeler extends JFrame {
 							arc2D_h = 10;
 							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
 						}
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							line2D_1x = lineTerminalPoint1.x;
 							line2D_1y = lineTerminalPoint2.y;
 							line2D_2x = lineTerminalPoint2.x;
@@ -15857,7 +15872,7 @@ public class Modeler extends JFrame {
 							arc2D_h = 20;
 							arc2D_B = new Arc2D.Double(arc2D_x, arc2D_y, arc2D_w, arc2D_h, 180, 90, Arc2D.OPEN);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							line2D_1x = lineTerminalPoint1.x;
 							line2D_1y = lineTerminalPoint2.y;
 							line2D_2x = lineTerminalPoint2.x;
@@ -15882,7 +15897,7 @@ public class Modeler extends JFrame {
 					}
 					//1:right-below 2:left-above//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y > lineTerminalPoint2.y) {
-						if (datamodelSize.equals("S")) {
+						if (modelSize.equals("S")) {
 							arc2D_x = lineTerminalPoint2.x - 5;
 							arc2D_y = lineTerminalPoint2.y;
 							arc2D_w = 10;
@@ -15904,7 +15919,7 @@ public class Modeler extends JFrame {
 							line2D_2y = lineTerminalPoint1.y;
 							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 						}
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							arc2D_x = lineTerminalPoint2.x - 10;
 							arc2D_y = lineTerminalPoint2.y;
 							arc2D_w = 20;
@@ -15926,7 +15941,7 @@ public class Modeler extends JFrame {
 							line2D_2y = lineTerminalPoint1.y;
 							line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							arc2D_x = lineTerminalPoint2.x - 15;
 							arc2D_y = lineTerminalPoint2.y;
 							arc2D_w = 30;
@@ -15973,7 +15988,7 @@ public class Modeler extends JFrame {
 					//1:left-above 2:right-below//
 					if (lineTerminalPoint1.x <= lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -15990,7 +16005,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -16007,7 +16022,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint1.x - (lineTerminalPoint2.x - lineTerminalPoint1.x);
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -16026,7 +16041,7 @@ public class Modeler extends JFrame {
 							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y - 15;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -16043,7 +16058,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y - 25;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -16060,7 +16075,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint1.x;
 								arc2D_y = lineTerminalPoint2.y - 35;
 								arc2D_w = (lineTerminalPoint2.x - lineTerminalPoint1.x) * 2;
@@ -16085,7 +16100,7 @@ public class Modeler extends JFrame {
 					//1:right-above 2:left-below//
 					if (lineTerminalPoint1.x > lineTerminalPoint2.x && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
 						if (terminal2Optional && !terminal1Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16102,7 +16117,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16119,7 +16134,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint1.y + 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint2.x;
 								arc2D_y = lineTerminalPoint1.y + 5;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16138,7 +16153,7 @@ public class Modeler extends JFrame {
 							}
 						}
 						if (terminal1Optional && !terminal2Optional) {
-							if (datamodelSize.equals("S")) {
+							if (modelSize.equals("S")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y - 15;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16155,7 +16170,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("M")) {
+							if (modelSize.equals("M")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y - 25;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16172,7 +16187,7 @@ public class Modeler extends JFrame {
 								line2D_2y = lineTerminalPoint2.y - 5;
 								line2D_B = new Line2D.Double(line2D_1x, line2D_1y, line2D_2x, line2D_2y);
 							}
-							if (datamodelSize.equals("L")) {
+							if (modelSize.equals("L")) {
 								arc2D_x = lineTerminalPoint2.x - (lineTerminalPoint1.x - lineTerminalPoint2.x);
 								arc2D_y = lineTerminalPoint2.y - 35;
 								arc2D_w = (lineTerminalPoint1.x - lineTerminalPoint2.x) * 2;
@@ -16366,13 +16381,13 @@ public class Modeler extends JFrame {
 			jLabelPressed = (JLabel)e.getSource();
 			Graphics2D g2 = (Graphics2D)jPanelCanvas.getGraphics();
 			g2.setColor(SELECT_COLOR);
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 3, 3);
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 6, 6);
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				g2.drawRect(jLabelPressed.getBounds().x+1, jLabelPressed.getBounds().y+1, 12, 12);
 			}
 		}
@@ -16647,11 +16662,12 @@ public class Modeler extends JFrame {
 					}
 				}
 			} else {
-				if ((descriptions.getBytes().length) == descriptions.length()) {
-					descriptions = getLayoutedString(descriptions, 40, "<br>");
-				} else {
-					descriptions = getLayoutedString(descriptions, 20, "<br>");
-				}
+//				if ((descriptions.getBytes().length) == descriptions.length()) {
+//					descriptions = getLayoutedString(descriptions, 40, "<br>");
+//				} else {
+//					descriptions = getLayoutedString(descriptions, 30, "<br>");
+//				}
+				descriptions = getLayoutedString(descriptions, "<br>");
 				if (subsystemName.equals("")) {
 					if (alias.equals("")) {
 						tipText = "<html>" + descriptions;
@@ -16675,7 +16691,9 @@ public class Modeler extends JFrame {
 //			}
 			String wrkStr1 = tableNode_.getElement().getAttribute("Alias").replaceAll("_", "").toUpperCase();
 			String wrkStr2 = tableNode_.getElement().getAttribute("Name").replaceAll(" ", "").toUpperCase();
-			if (!wrkStr1.equals(wrkStr2)) {
+			if (wrkStr1.equals(wrkStr2)) {
+				jLabelID.setText("");
+			} else {
 				if (wrkStr1.equals("")) {
 					if (!tableNode_.getElement().getAttribute("SortKey").toUpperCase().equals(tableNode_.getElement().getAttribute("Name").toUpperCase())) {
 						jLabelID.setText(tableNode_.getElement().getAttribute("SortKey"));
@@ -16869,13 +16887,13 @@ public class Modeler extends JFrame {
 				}
 			}
 			heightOfInstanceArea = maxHeight;
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 93, boxPosY + boxHeight, width, heightOfInstanceArea));
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 186, boxPosY + boxHeight, width, heightOfInstanceArea));
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(boxPosX + 280, boxPosY + boxHeight, width, heightOfInstanceArea));
 			}
 			jTextAreaShowInstance.setText("");
@@ -16914,7 +16932,7 @@ public class Modeler extends JFrame {
 			boxPosY = Integer.parseInt(workTokenizer.nextToken());
 			boxWidth = Integer.parseInt(subsystemTableElement_.getAttribute("ExtDivLoc"));
 
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				boxPosX = boxPosX/2;
 				boxPosY = boxPosY/2;
 				boxWidth = boxWidth/2;
@@ -16930,7 +16948,7 @@ public class Modeler extends JFrame {
 				elementLabelPosY = 1;
 				rightMarginOfElementsPanel = 22;
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				boxPosX = boxPosX/1;
 				boxPosY = boxPosY/1;
 				boxWidth = boxWidth/1;
@@ -16948,7 +16966,7 @@ public class Modeler extends JFrame {
 				elementLabelPosY = 9;
 				rightMarginOfElementsPanel = 23;
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				boxPosX = boxPosX*150/100;
 				boxPosY = boxPosY*150/100;
 				boxWidth = boxWidth*150/100;
@@ -17057,19 +17075,19 @@ public class Modeler extends JFrame {
 		}
 
 		public void updateElement(boolean isWithInstanceShown) {
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				if (!isWithInstanceShown) {
 					subsystemTableElement_.setAttribute("BoxPosition", (this.getLocation().x * 2) + "," + (this.getLocation().y * 2));
 				}
 				subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth() * 2));
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				if (!isWithInstanceShown) {
 					subsystemTableElement_.setAttribute("BoxPosition", this.getLocation().x + "," + this.getLocation().y);
 				}
 				subsystemTableElement_.setAttribute("ExtDivLoc", Integer.toString(this.getWidth()));
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				if (!isWithInstanceShown) {
 					subsystemTableElement_.setAttribute("BoxPosition", (this.getLocation().x * 2 / 3) + "," + (this.getLocation().y *2 / 3));
 				}
@@ -17085,7 +17103,7 @@ public class Modeler extends JFrame {
 		public Point[] getIndexCordinates() {
 			Point[] point = new Point[41];
 			Point pointBox = this.getLocation();
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				for (int i = 0; i <= 17; i++) {
 					point[i] = new Point(pointBox.x + 1 + (17 - i) * 4, pointBox.y + 20);
 				}
@@ -17096,7 +17114,7 @@ public class Modeler extends JFrame {
 					point[i] = new Point(pointBox.x + 1 + (i - 23) * 4, pointBox.y);
 				}
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				for (int i = 0; i <= 17; i++) {
 					point[i] = new Point(pointBox.x + 3 + (17 - i) * 8, pointBox.y + 40);
 				}
@@ -17107,7 +17125,7 @@ public class Modeler extends JFrame {
 					point[i] = new Point(pointBox.x + 3 + (i - 23) * 8, pointBox.y);
 				}
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				for (int i = 0; i <= 17; i++) {
 					point[i] = new Point(pointBox.x + 5 + (17 - i) * 12, pointBox.y + 60);
 				}
@@ -17123,13 +17141,13 @@ public class Modeler extends JFrame {
 
 		public int getRightEdgeLocationOfArea() {
 			int areaMargin = 0;
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				areaMargin = 30;
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				areaMargin = 60;
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				areaMargin = 90;
 			}
 			return boxPosX + this.getWidth() + areaMargin;
@@ -17141,13 +17159,13 @@ public class Modeler extends JFrame {
 
 		public int getBottomEdgeLocationOfArea() {
 			int areaMargin = 0;
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				areaMargin = 15;
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				areaMargin = 30;
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				areaMargin = 45;
 			}
 			return boxPosY + boxHeight + areaMargin;
@@ -17231,11 +17249,12 @@ public class Modeler extends JFrame {
 				strwork = elementNode_.getElement().getAttribute("Descriptions");
 				if (!strwork.equals("")) {
 					strbf.append("<br>");
-					if ((strwork.getBytes().length) == strwork.length()) {
-						strwork = getLayoutedString(strwork, 40, "<br>");
-					} else {
-						strwork = getLayoutedString(strwork, 20, "<br>");
-					}
+//					if ((strwork.getBytes().length) == strwork.length()) {
+//						strwork = getLayoutedString(strwork, 40, "<br>");
+//					} else {
+//						strwork = getLayoutedString(strwork, 30, "<br>");
+//					}
+					strwork = getLayoutedString(strwork, "<br>");
 					strbf.append(strwork);
 				}
 				if (strbf.toString().equals("<html>")) {
@@ -17633,13 +17652,13 @@ public class Modeler extends JFrame {
 
 			//Resize jTextAreaShowInstance//
 			int width = this.getWidth() - jPanel2.getWidth();
-			if (datamodelSize.equals("S")) {
+			if (modelSize.equals("S")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(posX + 93, posY + boxHeight, width, heightOfInstanceArea));
 			}
-			if (datamodelSize.equals("M")) {
+			if (modelSize.equals("M")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(posX + 186, posY + boxHeight, width, heightOfInstanceArea));
 			}
-			if (datamodelSize.equals("L")) {
+			if (modelSize.equals("L")) {
 				jTextAreaShowInstance.setBounds(new Rectangle(posX + 279, posY + boxHeight, width, heightOfInstanceArea));
 			}
 			
@@ -22620,7 +22639,7 @@ public class Modeler extends JFrame {
 			tableKeyNode = this; //Refer to Class TableModelRelationshipList//
 			tableModelRelationshipList = new TableModelRelationshipList();
 			jTableRelationshipList.setModel(tableModelRelationshipList);
-			tableModelRelationshipList.addColumn("NO.");
+			tableModelRelationshipList.addColumn("No.");
 			tableModelRelationshipList.addColumn(res.getString("S5032"));
 			tableModelRelationshipList.addColumn(res.getString("S5033"));
 			tableModelRelationshipList.addColumn("ID");
@@ -22943,7 +22962,7 @@ public class Modeler extends JFrame {
 			//Setup FunctionsUsedByThis//
 			tableModelFunctionsUsedByThis = new TableModelFunctionsUsedByThis();
 			jTableFunctionsUsedByThis.setModel(tableModelFunctionsUsedByThis);
-			tableModelFunctionsUsedByThis.addColumn("NO.");
+			tableModelFunctionsUsedByThis.addColumn("No.");
 			tableModelFunctionsUsedByThis.addColumn(res.getString("S436"));
 			tableModelFunctionsUsedByThis.addColumn("ID");
 			tableModelFunctionsUsedByThis.addColumn(res.getString("S5161"));
@@ -23170,7 +23189,7 @@ public class Modeler extends JFrame {
 			//Setup IOPanelFieldList//
 			tableModelIOPanelFieldList = new TableModelEditableList();
 			jTableIOPanelFieldList.setModel(tableModelIOPanelFieldList);
-			tableModelIOPanelFieldList.addColumn("NO.");
+			tableModelIOPanelFieldList.addColumn("No.");
 			tableModelIOPanelFieldList.addColumn(res.getString("S540"));
 			tableModelIOPanelFieldList.addColumn(res.getString("S5219"));
 			tableModelIOPanelFieldList.addColumn(res.getString("S5220"));
@@ -23316,7 +23335,7 @@ public class Modeler extends JFrame {
 			//Setup IOSpoolFieldList//
 			tableModelIOSpoolFieldList = new TableModelEditableList();
 			jTableIOSpoolFieldList.setModel(tableModelIOSpoolFieldList);
-			tableModelIOSpoolFieldList.addColumn("NO.");
+			tableModelIOSpoolFieldList.addColumn("No.");
 			tableModelIOSpoolFieldList.addColumn(res.getString("S540"));
 			tableModelIOSpoolFieldList.addColumn(res.getString("S5219"));
 			tableModelIOSpoolFieldList.addColumn(res.getString("S5220"));
@@ -23385,7 +23404,7 @@ public class Modeler extends JFrame {
 			//jTextFieldIOTableName.setText(tableElement.getAttribute("Name"));
 			String wrkStr1 = tableElement.getAttribute("Alias").replaceAll("_", "").toUpperCase();
 			String wrkStr2 = tableElement.getAttribute("Name").replaceAll(" ", "").toUpperCase();
-			if (wrkStr1.equals(wrkStr2)) {
+			if (wrkStr1.equals(wrkStr2) || wrkStr1.equals("")) {
 				jTextFieldIOTableName.setText(tableElement.getAttribute("Name"));
 			} else {
 				jTextFieldIOTableName.setText(tableElement.getAttribute("Name") + " - " + tableElement.getAttribute("Alias"));
@@ -23443,7 +23462,7 @@ public class Modeler extends JFrame {
 			//Setup IOTableFieldList//
 			tableModelIOTableFieldList = new TableModelIOTableFieldList();
 			jTableIOTableFieldList.setModel(tableModelIOTableFieldList);
-			tableModelIOTableFieldList.addColumn("NO.");
+			tableModelIOTableFieldList.addColumn("No.");
 			tableModelIOTableFieldList.addColumn(res.getString("S297"));
 			tableModelIOTableFieldList.addColumn(res.getString("S5220"));
 			tableModelIOTableFieldList.addColumn(res.getString("S544"));
@@ -23589,7 +23608,7 @@ public class Modeler extends JFrame {
 			//Setup IOWebPageFieldList//
 			tableModelIOWebPageFieldList = new TableModelEditableList();
 			jTableIOWebPageFieldList.setModel(tableModelIOWebPageFieldList);
-			tableModelIOWebPageFieldList.addColumn("NO.");
+			tableModelIOWebPageFieldList.addColumn("No.");
 			tableModelIOWebPageFieldList.addColumn(res.getString("S540"));
 			tableModelIOWebPageFieldList.addColumn(res.getString("S5219"));
 			tableModelIOWebPageFieldList.addColumn(res.getString("S5220"));
@@ -24562,15 +24581,15 @@ public class Modeler extends JFrame {
 						Point viewPosition = jScrollPaneTreeView.getViewport().getViewPosition();
 						Point pointOfCanvas = jPanelDatamodel.getLocationOnScreen();
 						Point pointOfFrame = getModelerPosition();
-						if (datamodelSize.equals("S")) {
+						if (modelSize.equals("S")) {
 							positionX = (e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x) * 2 + 24;
 							positionY = (e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y) * 2 + 210;
 						}
-						if (datamodelSize.equals("M")) {
+						if (modelSize.equals("M")) {
 							positionX = e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x + 12;
 							positionY = e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y + 105;
 						}
-						if (datamodelSize.equals("L")) {
+						if (modelSize.equals("L")) {
 							positionX = (e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x) * 2/3 + 8;
 							positionY = (e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y) * 2/3 + 70;
 						}
@@ -28279,36 +28298,83 @@ public class Modeler extends JFrame {
 	 * @param stringToBeInserted :value to be replaced into "#EOL#"(usually it's "\n")
 	 * @return String :string value of processed string
 	 */
-	static String getLayoutedString(String originalString, int length, String stringToBeInserted) {
+//	static String getLayoutedString(String originalString, int length, String stringToBeInserted) {
+//		StringBuffer processedString = new StringBuffer();
+//		int lastEnd = 0;
+//		int count = 0;
+//		for (int i = 0; i <= originalString.length(); i++) {
+//			count++;
+//			if (i+5 <= originalString.length()) {
+//				if (originalString.substring(i,i+5).equals("#EOL#")) {
+//					processedString.append(originalString.substring(lastEnd, i));
+//					processedString.append(stringToBeInserted);
+//					lastEnd = i+5;
+//					count = 0;
+//				} else {
+//					if (count > length
+//						&& !originalString.substring(i+1,i+2).equals("。")
+//						&& !originalString.substring(i+1,i+2).equals("、")
+//						&& !originalString.substring(i+1,i+3).equals(". ")
+//						&& !originalString.substring(i+1,i+3).equals(", ")) {
+//						processedString.append(originalString.substring(lastEnd, i+1));
+//						processedString.append(stringToBeInserted);
+//						lastEnd = i+1;
+//						count = 0;
+//					}
+//				}
+//			} else {
+//				if (i == originalString.length()) {
+//					processedString.append(originalString.substring(lastEnd, i));
+//				}
+//			}
+//		}
+//		return processedString.toString();
+//	}
+	String getLayoutedString(String originalString, String stringToBeInserted) {
 		StringBuffer processedString = new StringBuffer();
 		int lastEnd = 0;
-		int count = 0;
-		for (int i = 0; i <= originalString.length(); i++) {
-			count++;
-			if (i+5 <= originalString.length()) {
-				if (originalString.substring(i,i+5).equals("#EOL#")) {
-					processedString.append(originalString.substring(lastEnd, i));
-					processedString.append(stringToBeInserted);
-					lastEnd = i+5;
-					count = 0;
-				} else {
-					if (count > length
-						&& !originalString.substring(i+1,i+2).equals("。")
-						&& !originalString.substring(i+1,i+2).equals("、")
-						&& !originalString.substring(i+1,i+3).equals(". ")
-						&& !originalString.substring(i+1,i+3).equals(", ")) {
-						processedString.append(originalString.substring(lastEnd, i+1));
-						processedString.append(stringToBeInserted);
-						lastEnd = i+1;
-						count = 0;
+		int maxRowLength = 0;
+		int pixcelLengthOfFirstRow = 0;
+		String wrkStr;
+		JLabel label = new JLabel();
+		FontMetrics metrics = label.getFontMetrics(new java.awt.Font(mainFontName, 0, 14));
+		
+		if ((originalString.getBytes().length) == originalString.length()) {
+			maxRowLength = 40;
+		} else {
+			maxRowLength = 30;
+		}
+
+		String adjustedString = originalString.replaceAll("#EOL#", "");
+		if (adjustedString.length() > maxRowLength) {
+			wrkStr = adjustedString.substring(0, maxRowLength);
+			pixcelLengthOfFirstRow = metrics.stringWidth(wrkStr);
+
+			adjustedString = originalString.replaceAll("#EOL#", "\n");
+			for (int i = 0; i < adjustedString.length(); i++) {
+				wrkStr = adjustedString.substring(lastEnd, i+1);
+				if (metrics.stringWidth(wrkStr) < pixcelLengthOfFirstRow) {
+					if (i == (adjustedString.length()-1)) {
+						wrkStr = adjustedString.substring(lastEnd, i+1);
+						processedString.append(adjustedString.substring(lastEnd, i+1));
+						lastEnd = i;
+					} else {
+						if (adjustedString.substring(i, i+1).equals("\n")) {
+							wrkStr = adjustedString.substring(lastEnd, i);
+							processedString.append(wrkStr + stringToBeInserted);
+							lastEnd = i+1;
+						}
 					}
-				}
-			} else {
-				if (i == originalString.length()) {
-					processedString.append(originalString.substring(lastEnd, i));
+				} else {
+					wrkStr = adjustedString.substring(lastEnd, i);
+					processedString.append(wrkStr + stringToBeInserted);
+					lastEnd = i;
 				}
 			}
+		} else {
+			processedString.append(adjustedString.replaceAll("\n", stringToBeInserted));
 		}
+
 		return processedString.toString();
 	}
 
@@ -28409,27 +28475,47 @@ public class Modeler extends JFrame {
 	 * @param textpane :JTextpane where the caret is placed
 	 * @return Point :calculated position of caret
 	 */
+//	static Point getCaretPositionInText(JTextPane textpane) {
+//		int rowNumber = 1;
+//		int charPosOfLine = 0;
+//		Point caretPosition = new Point();
+//		String text = textpane.getText();
+//		String lastLine = text.substring(0, textpane.getSelectionEnd());
+//		for (int i = 0; i < textpane.getSelectionEnd(); i++) {
+//			if (text.substring(i,i+1).equals("\n")) {
+//				rowNumber++;
+//				if (textpane.getSelectionEnd() + rowNumber-1 >= text.length()) {
+//					rowNumber--;
+//					break;
+//				} else {
+//					lastLine = text.substring(charPosOfLine + rowNumber-1, textpane.getSelectionEnd() + rowNumber-1);
+//				}
+//			} else {
+//				charPosOfLine++;
+//			}
+//		}
+//		caretPosition.x = rowNumber;
+//		caretPosition.y = lastLine.getBytes().length;
+//		return caretPosition;
+//	}
 	static Point getCaretPositionInText(JTextPane textpane) {
-		int rowNumber = 1;
-		int charPosOfLine = 0;
+		int lastFirstPosOfLine = 0;
 		Point caretPosition = new Point();
+		ArrayList<String> lines = new ArrayList<String>();
+
 		String text = textpane.getText();
-		String lastLine = text.substring(0, textpane.getSelectionEnd());
-		for (int i = 0; i < textpane.getSelectionEnd(); i++) {
-			if (text.substring(i,i+1).equals("\n")) {
-				rowNumber++;
-				if (textpane.getSelectionEnd() + rowNumber-1 >= text.length()) {
-					rowNumber--;
-					break;
-				} else {
-					lastLine = text.substring(charPosOfLine + rowNumber-1, textpane.getSelectionEnd() + rowNumber-1);
+		if (!text.equals("")) {
+			for (int i = 0; i < textpane.getSelectionEnd(); i++) {
+				if (text.substring(i,i+1).equals("\n")) {
+					lines.add(text.substring(lastFirstPosOfLine, i));
+					lastFirstPosOfLine = i+1;
 				}
-			} else {
-				charPosOfLine++;
 			}
+			lines.add(text.substring(lastFirstPosOfLine, textpane.getSelectionEnd()));
+			caretPosition.x = lines.size();
+			caretPosition.y = lines.get(lines.size()-1).getBytes().length;
 		}
-		caretPosition.x = rowNumber;
-		caretPosition.y = lastLine.getBytes().length;
+
 		return caretPosition;
 	}
 
@@ -28790,14 +28876,7 @@ public class Modeler extends JFrame {
 	void jTextPaneIOPanelImage_caretUpdate(CaretEvent e) {
 		if (jTextPaneIOPanelImage.getStyle("style1") != null) {
 			drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
-
 			Element elm = jTextPaneIOPanelImage.getStyledDocument().getCharacterElement(jTextPaneIOPanelImage.getCaretPosition());
-//			Color bg = StyleConstants.getBackground(elm.getAttributes());
-//			if (bg.equals(Color.black) || bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {
-//				jTextPaneIOPanelImage.setCaretColor(Color.white);
-//			} else {
-//				jTextPaneIOPanelImage.setCaretColor(Color.black);
-//			}
 			jTextPaneIOPanelImage.setCaretColor(StyleConstants.getForeground(elm.getAttributes()));
 		}
 	}
@@ -34438,17 +34517,17 @@ public class Modeler extends JFrame {
 		informationOnThisPageChanged = true;
 		Point diff = new Point();
 
-		if (datamodelSize.equals("S")) {
+		if (modelSize.equals("S")) {
 			topBoxPoint = new Point(0, 400);
 			pixelRoundValue = 8;
 			maxSize = 1000;
 		}
-		if (datamodelSize.equals("M")) {
+		if (modelSize.equals("M")) {
 			topBoxPoint = new Point(0, 800);
 			pixelRoundValue = 16;
 			maxSize = 2000;
 		}
-		if (datamodelSize.equals("L")) {
+		if (modelSize.equals("L")) {
 			topBoxPoint = new Point(0, 1200);
 			pixelRoundValue = 24;
 			maxSize = 3000;

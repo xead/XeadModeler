@@ -110,15 +110,15 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 
 		textAreaList.get(0).requestFocus();
 		this.setTitle("Instance - " + entityBox.getTableNode().getElement().getAttribute("Name"));
-		if (frame_.datamodelSize.equals("S")) {
+		if (frame_.modelSize.equals("S")) {
 			this.setPreferredSize(new Dimension(entityBox.getWidth()-58, 150));
 			this.setLocation((int)entityBox.getLocationOnScreen().getX()+83, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 4));
 		}
-		if (frame_.datamodelSize.equals("M")) {
+		if (frame_.modelSize.equals("M")) {
 			this.setPreferredSize(new Dimension(entityBox.getWidth()-150, 200));
 			this.setLocation((int)entityBox.getLocationOnScreen().getX()+175, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 8));
 		}
-		if (frame_.datamodelSize.equals("L")) {
+		if (frame_.modelSize.equals("L")) {
 			this.setPreferredSize(new Dimension(entityBox.getWidth()-242, 300));
 			this.setLocation((int)entityBox.getLocationOnScreen().getX()+265, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 12));
 		}
@@ -131,13 +131,13 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	
 	int setupTextAreaForInstance(String text, String sortKey) {
 		JTextArea jTextArea = new JTextArea();
-		if (frame_.datamodelSize.equals("S")) {
+		if (frame_.modelSize.equals("S")) {
 			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 7));
 		}
-		if (frame_.datamodelSize.equals("M")) {
+		if (frame_.modelSize.equals("M")) {
 			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 14));
 		}
-		if (frame_.datamodelSize.equals("L")) {
+		if (frame_.modelSize.equals("L")) {
 			jTextArea.setFont(new java.awt.Font(frame_.ioImageFontName, 0, 21));
 		}
 		jTextArea.setLineWrap(false);

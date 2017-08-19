@@ -326,7 +326,6 @@ public class DialogDocuments extends JDialog {
 							if (workElement.getAttribute("ID").equals(tableID) || tableID.equals("")) {
 								jProgressBar.setValue(jProgressBar.getValue() + 1);
 								jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-								//
 								generateTableDocument(workElement);
 							}
 						}
@@ -340,14 +339,15 @@ public class DialogDocuments extends JDialog {
 							if (workElement.getAttribute("ID").equals(functionID) || functionID.equals("")) {
 								jProgressBar.setValue(jProgressBar.getValue() + 1);
 								jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-								//
 								generateFunctionDocument(workElement);
 							}
 						}
 					}
 				}
 
-				workBook.write(fileOut);
+				if (countOfDefinitions > 0) {
+					workBook.write(fileOut);
+				}
 				fileOut.close();
 			}
 		} catch(Exception ex1) {
@@ -357,18 +357,22 @@ public class DialogDocuments extends JDialog {
 			jButtonStart.setVisible(true);
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-			if (countOfErrors == 0) {
-				File workXlsFile = new File(xlsFileName);
+			if (countOfErrors == 0 && countOfDefinitions > 0) {
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					File workXlsFile = new File(xlsFileName);
 					frame_.desktop.open(workXlsFile);
 				} catch (Exception ex) {
 				} finally {
 					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			} else {
-				countOfDefinitions = countOfDefinitions - countOfErrors;
-				JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName + "\n" + countOfErrors + res.getString("DialogDocuments12"));
+				if (countOfDefinitions > 0) {
+					countOfDefinitions = countOfDefinitions - countOfErrors;
+					JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName + "\n" + countOfErrors + res.getString("DialogDocuments12"));
+				} else {
+					JOptionPane.showMessageDialog(null, "No elements found to be processed.");
+				}
 			}
 		}
 	}

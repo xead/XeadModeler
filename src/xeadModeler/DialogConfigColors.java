@@ -111,6 +111,20 @@ public class DialogConfigColors extends JDialog {
 		buttonGroupSize.add(jRadioButtonSizeS);
 		buttonGroupSize.add(jRadioButtonSizeM);
 		buttonGroupSize.add(jRadioButtonSizeL);
+		if (frame_.initialModelSize.equals("S")) {
+			jRadioButtonSizeS.setSelected(true);
+		}
+		if (frame_.initialModelSize.equals("M")) {
+			jRadioButtonSizeM.setSelected(true);
+		}
+		if (frame_.initialModelSize.equals("L")) {
+			jRadioButtonSizeL.setSelected(true);
+		}
+		if (frame_.initialModelSize.equals("S")
+				|| frame_.initialModelSize.equals("M")
+				|| frame_.initialModelSize.equals("L")) {
+			frame_.modelSize = frame_.initialModelSize;
+		}
 
 		jButtonOK.setBounds(new Rectangle(30, 130, 110, 27));
 		jButtonOK.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
@@ -144,13 +158,13 @@ public class DialogConfigColors extends JDialog {
 		jRadioButtonSizeS.setEnabled(true);
 		jRadioButtonSizeM.setEnabled(true);
 		jRadioButtonSizeL.setEnabled(true);
-		if (frame_.datamodelSize.equals("S")) {
+		if (frame_.modelSize.equals("S")) {
 			jRadioButtonSizeS.setSelected(true);
 		}
-		if (frame_.datamodelSize.equals("M")) {
+		if (frame_.modelSize.equals("M")) {
 			jRadioButtonSizeM.setSelected(true);
 		}
-		if (frame_.datamodelSize.equals("L")) {
+		if (frame_.modelSize.equals("L")) {
 			jRadioButtonSizeL.setSelected(true);
 		}
 
@@ -168,13 +182,13 @@ public class DialogConfigColors extends JDialog {
 			frame_.isNormalColorConfigOnDataModel = jRadioButtonColor1.isSelected();
 		}
 		if (jRadioButtonSizeS.isSelected()) {
-			frame_.datamodelSize = "S";
+			frame_.modelSize = "S";
 		}
 		if (jRadioButtonSizeM.isSelected()) {
-			frame_.datamodelSize = "M";
+			frame_.modelSize = "M";
 		}
 		if (jRadioButtonSizeL.isSelected()) {
-			frame_.datamodelSize = "L";
+			frame_.modelSize = "L";
 		}
 		return buttonOKIsPressed;
 	}
