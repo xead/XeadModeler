@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2016 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2017 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -45,9 +45,13 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2016 DBC Ltd.";
+	public static final String COPYRIGHT = "Copyright 2017 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M37";
+	public static final String FULL_VERSION = "V1.R4.M38";
+	// 1.4.38での変更点
+	//・テーブル名のCamel表記の変換ロジックを改善した
+	//・CreateTable文でのフィールドコメントの設定仕様を改善した
+	//
 	// 1.4.37での変更点
 	//・高解像度環境に合わせてメインフォントの文字サイズの省略値を16から18に変更した
 	//・propertiesファイルでメインフォントの文字サイズ(MainFontSize)を設定できるようにした

@@ -52,7 +52,8 @@ public class DialogCreateTableStatement extends JDialog {
 	private JTextField jTextFieldCommentMark = new JTextField();
 	private JLabel jLabelSectionMark = new JLabel();
 	private JTextField jTextFieldSectionMark = new JTextField();
-	private JCheckBox jCheckBoxWithComment = new JCheckBox();
+	//private JCheckBox jCheckBoxWithComment = new JCheckBox();
+	private JComboBox jComboBoxWithComment = new JComboBox();
 	private JCheckBox jCheckBoxIgnoreFKConstraints = new JCheckBox();
 	private JCheckBox jCheckBoxIgnoreWarnings = new JCheckBox();
 	private JCheckBox jCheckBoxConvertCamel = new JCheckBox();
@@ -116,9 +117,11 @@ public class DialogCreateTableStatement extends JDialog {
 		jTextFieldSectionMark.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextFieldSectionMark.setBounds(new Rectangle(345, 77, 30, 25));
 
-		jCheckBoxWithComment.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jCheckBoxWithComment.setBounds(new Rectangle(12, 108, 390, 25));
-		jCheckBoxWithComment.setText(res.getString("DialogCreateTableStatement11"));
+		jComboBoxWithComment.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxWithComment.setBounds(new Rectangle(12, 108, 390, 25));
+		jComboBoxWithComment.addItem(res.getString("DialogCreateTableStatement11"));
+		jComboBoxWithComment.addItem(res.getString("DialogCreateTableStatement16"));
+		jComboBoxWithComment.addItem(res.getString("DialogCreateTableStatement17"));
 
 		jCheckBoxIgnoreFKConstraints.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxIgnoreFKConstraints.setBounds(new Rectangle(12, 136, 390, 25));
@@ -170,7 +173,7 @@ public class DialogCreateTableStatement extends JDialog {
 		panelMain.add(jTextFieldCommentMark, null);
 		panelMain.add(jLabelSectionMark, null);
 		panelMain.add(jTextFieldSectionMark, null);
-		panelMain.add(jCheckBoxWithComment, null);
+		panelMain.add(jComboBoxWithComment, null);
 		panelMain.add(jCheckBoxIgnoreFKConstraints, null);
 		panelMain.add(jCheckBoxIgnoreWarnings, null);
 		panelMain.add(jCheckBoxConvertCamel, null);
@@ -195,10 +198,14 @@ public class DialogCreateTableStatement extends JDialog {
 		}
 		jTextFieldCommentMark.setText(frame_.ddlCommentMark);
 		jTextFieldSectionMark.setText(frame_.ddlSectionMark);
-		if (frame_.setCommentToFieldsWithAlias) {
-			jCheckBoxWithComment.setSelected(true);
-		} else {
-			jCheckBoxWithComment.setSelected(false);
+		if (frame_.ddlFieldCommentType.equals("1")) {
+			jComboBoxWithComment.setSelectedIndex(0);
+		}
+		if (frame_.ddlFieldCommentType.equals("2")) {
+			jComboBoxWithComment.setSelectedIndex(1);
+		}
+		if (frame_.ddlFieldCommentType.equals("0")) {
+			jComboBoxWithComment.setSelectedIndex(2);
 		}
 		if (frame_.ignoreForeignKeyConstraints) {
 			jCheckBoxIgnoreFKConstraints.setSelected(true);
@@ -241,10 +248,14 @@ public class DialogCreateTableStatement extends JDialog {
 		}
 		frame_.ddlCommentMark =jTextFieldCommentMark.getText();
 		frame_.ddlSectionMark = jTextFieldSectionMark.getText();
-		if (jCheckBoxWithComment.isSelected()) {
-			frame_.setCommentToFieldsWithAlias = true;
-		} else {
-			frame_.setCommentToFieldsWithAlias = false;
+		if (jComboBoxWithComment.getSelectedIndex() == 0) {
+			frame_.ddlFieldCommentType = "1";
+		}
+		if (jComboBoxWithComment.getSelectedIndex() == 1) {
+			frame_.ddlFieldCommentType = "2";
+		}
+		if (jComboBoxWithComment.getSelectedIndex() == 2) {
+			frame_.ddlFieldCommentType = "0";
 		}
 		if (jCheckBoxIgnoreFKConstraints.isSelected()) {
 			frame_.ignoreForeignKeyConstraints = true;

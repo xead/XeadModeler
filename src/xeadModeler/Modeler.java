@@ -82,6 +82,9 @@ public class Modeler extends JFrame {
 	public static final Color ACTIVE_COLOR = new Color(49,106,197);
 	public static final Color INACTIVE_COLOR = new Color(219,219,219);
 	public static final Color SELECT_COLOR = Color.magenta;
+	public static final int MAX_WIDTH_OF_DATAMODEL_S = 1500;
+	public static final int MAX_WIDTH_OF_DATAMODEL_M = 3000;
+	public static final int MAX_WIDTH_OF_DATAMODEL_L = 4500;
 	/**
 	 * Main panels and labels
 	 */
@@ -241,7 +244,7 @@ public class Modeler extends JFrame {
 	public String ddlCommentMark = "";
 	public String ddlSectionMark = "";
 	public String ddlAdditionalParms = "";
-	public boolean setCommentToFieldsWithAlias = true;
+	public String ddlFieldCommentType = "";
 	public boolean ignoreForeignKeyConstraints = false;
 	public boolean ignoreKeyDefinitionWarnings = true;
 	public boolean isToConvertCamel = true;
@@ -1595,7 +1598,7 @@ public class Modeler extends JFrame {
 				wrkStr = properties.getProperty("MainFontSize");
 				if (wrkStr != null && !wrkStr.equals("")) {
 					int size = Integer.parseInt(wrkStr);
-					if (size > 18) {
+					if (size >= 16) {
 						MAIN_FONT_SIZE = size;
 					}
 				}
@@ -6113,9 +6116,13 @@ public class Modeler extends JFrame {
 				ddlSectionMark = systemNode.getElement().getAttribute("DDLSectionMark");
 				ddlAdditionalParms = systemNode.getElement().getAttribute("DDLAdditionalParms");
 				if (systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("true")) {
-					setCommentToFieldsWithAlias = true;
+					ddlFieldCommentType = "1";
 				} else {
-					setCommentToFieldsWithAlias = false;
+					if (systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("false")) {
+						ddlFieldCommentType = "0";
+					} else {
+						ddlFieldCommentType = systemNode.getElement().getAttribute("DDLCommentWithAlias");
+					}
 				}
 				if (systemNode.getElement().getAttribute("DDLIgnoreFK").equals("true")) {
 					ignoreForeignKeyConstraints = true;
@@ -6127,11 +6134,16 @@ public class Modeler extends JFrame {
 				} else {
 					isToConvertCamel = true;
 				}
+				if (systemNode.getElement().getAttribute("UseTableNameToCreateTable").equals("false")) {
+					useTableNameAsTableNameInCreateTableStatement = false;
+				} else {
+					useTableNameAsTableNameInCreateTableStatement = true;
+				}
 			} else {
 				ddlCommentMark = "--";
 				ddlSectionMark = ";";
 				ddlAdditionalParms = "";
-				setCommentToFieldsWithAlias = true;
+				ddlFieldCommentType = "1";
 				ignoreForeignKeyConstraints = false;
 				isToConvertCamel = true;
 			}
@@ -10005,18 +10017,35 @@ public class Modeler extends JFrame {
 
 	String convertCamelNotation(String originalText) {
 		StringBuffer bf = new StringBuffer();
-		String letter = "";
+		String currLetter = "";
+		String nextLetter = "";
 		if (isToConvertCamel) {
 			if (originalText.equals(originalText.toUpperCase())) {
 				return originalText;
 			} else {
+//				for (int i = 0; i < originalText.length(); i++) {
+//					letter = originalText.substring(i, i+1);
+//					if (!letter.equals("") && !letter.equals("@")) {
+//						if (i > 0 && letter.equals(letter.toUpperCase())) {
+//							bf.append("_");
+//						}
+//						bf.append(letter.toUpperCase());
+//					}
+//				}
+//				return bf.toString();
 				for (int i = 0; i < originalText.length(); i++) {
-					letter = originalText.substring(i, i+1);
-					if (!letter.equals("") && !letter.equals("@")) {
-						if (i > 0 && letter.equals(letter.toUpperCase())) {
+					currLetter = originalText.substring(i, i+1);
+					if (i < originalText.length()-1) {
+						nextLetter = originalText.substring(i+1, i+2);
+					} else {
+						nextLetter = "";
+					}
+					if (!currLetter.equals("") && !currLetter.equals("@")) {
+						if (i > 0 && currLetter.equals(currLetter.toUpperCase())
+								&& !nextLetter.equals(nextLetter.toUpperCase())) {
 							bf.append("_");
 						}
-						bf.append(letter.toUpperCase());
+						bf.append(currLetter.toUpperCase());
 					}
 				}
 				return bf.toString();
@@ -10109,7 +10138,7 @@ public class Modeler extends JFrame {
 			}
 			if (!node3.getElement().getAttribute("Alias").equals("")
 					&& !node3.getElement().getAttribute("Alias").equals(node3.getElement().getAttribute("Name"))
-					&& setCommentToFieldsWithAlias) {
+					&& ddlFieldCommentType.equals("1")) {
 				statement = statement + " COMMENT '" + node3.getElement().getAttribute("Name") + "'";
 			}
 		}
@@ -10546,6 +10575,19 @@ public class Modeler extends JFrame {
 					}
 				}
 				statement = statement + ")"+ ddlSectionMark + "\n";
+			}
+		}
+		//
+		if (ddlFieldCommentType.equals("2")) {
+			statement = statement + "\nCOMMENT ON TABLE "
+						+ convertCamelNotation(node2.getElement().getAttribute("SortKey")) + " is '"
+						+ convertCamelNotation(node2.getElement().getAttribute("Name")) + "';\n";
+			for (int k = 0; k < node2.getChildAt(0).getChildCount(); k++) {
+				node3 = (XeadTreeNode)node2.getChildAt(0).getChildAt(k);
+				statement = statement + "COMMENT ON COLUMN "
+						+ convertCamelNotation(node2.getElement().getAttribute("SortKey"))
+						+ "." + convertCamelNotation(node3.getElement().getAttribute("Alias"))
+						+ " is '" + convertCamelNotation(node3.getElement().getAttribute("Name")) + "';\n";
 			}
 		}
 		//
@@ -16916,6 +16958,9 @@ public class Modeler extends JFrame {
 		}
 
 		public void setElementsPanelWidth(int width) {
+//			if (modelSize.equals("S") && width == MAX_WIDTH_OF_DATAMODEL_S) {
+//				xxx
+//			}
 			this.setBounds(new Rectangle(boxPosX, boxPosY, jPanel2Width + width, boxHeight));
 
 			//Resize jPanelDatamodel//
@@ -17724,7 +17769,7 @@ public class Modeler extends JFrame {
 						if (width < 189) {
 							width = 189;
 						}
-						this.setBounds(new Rectangle(this.getBounds().x, this.getBounds().y, width, boxHeight));
+						this.setBounds(new Rectangle(jPanelMoveGuide.getBounds().x, jPanelMoveGuide.getBounds().y, width, boxHeight));
 					}
 					jPanelCanvas.updateUI();
 					informationOnThisPageChanged = true;
@@ -25059,6 +25104,7 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("DDLAdditionalParms", oldElement.getAttribute("DDLAdditionalParms"));
 				domNode_.setAttribute("DDLCommentWithAlias", oldElement.getAttribute("DDLCommentWithAlias"));
 				domNode_.setAttribute("DDLIgnoreFK", oldElement.getAttribute("DDLIgnoreFK"));
+				domNode_.setAttribute("UseTableNameToCreateTable", oldElement.getAttribute("UseTableNameToCreateTable"));
 
 				if (!domNode_.getAttribute("DDLCommentMark").equals("")
 						|| !domNode_.getAttribute("DDLSectionMark").equals("")
@@ -25069,9 +25115,13 @@ public class Modeler extends JFrame {
 					ddlSectionMark = domNode_.getAttribute("DDLSectionMark");
 					ddlAdditionalParms = domNode_.getAttribute("DDLAdditionalParms");
 					if (domNode_.getAttribute("DDLCommentWithAlias").equals("true")) {
-						setCommentToFieldsWithAlias = true;
+						ddlFieldCommentType = "1";
 					} else {
-						setCommentToFieldsWithAlias = false;
+						if (domNode_.getAttribute("DDLCommentWithAlias").equals("false")) {
+							ddlFieldCommentType = "0";
+						} else {
+							ddlFieldCommentType = domNode_.getAttribute("DDLCommentWithAlias");
+						}
 					}
 					if (domNode_.getAttribute("DDLIgnoreFK").equals("true")) {
 						ignoreForeignKeyConstraints = true;
@@ -25083,13 +25133,19 @@ public class Modeler extends JFrame {
 					} else {
 						isToConvertCamel = true;
 					}
+					if (domNode_.getAttribute("UseTableNameToCreateTable").equals("false")) {
+						useTableNameAsTableNameInCreateTableStatement = false;
+					} else {
+						useTableNameAsTableNameInCreateTableStatement = true;
+					}
 				} else {
 					ddlCommentMark = "--";
 					ddlSectionMark = ";";
 					ddlAdditionalParms = "";
-					setCommentToFieldsWithAlias = true;
+					ddlFieldCommentType = "1";
 					ignoreForeignKeyConstraints = false;
 					isToConvertCamel = true;
+					useTableNameAsTableNameInCreateTableStatement = false;
 				}
 			}
 
@@ -25449,9 +25505,13 @@ public class Modeler extends JFrame {
 					ddlSectionMark = domNode_.getAttribute("DDLSectionMark");
 					ddlAdditionalParms = domNode_.getAttribute("DDLAdditionalParms");
 					if (domNode_.getAttribute("DDLCommentWithAlias").equals("true")) {
-						setCommentToFieldsWithAlias = true;
+						ddlFieldCommentType = "1";
 					} else {
-						setCommentToFieldsWithAlias = false;
+						if (domNode_.getAttribute("DDLCommentWithAlias").equals("false")) {
+							ddlFieldCommentType = "0";
+						} else {
+							ddlFieldCommentType = domNode_.getAttribute("DDLCommentWithAlias");
+						}
 					}
 					if (domNode_.getAttribute("DDLIgnoreFK").equals("true")) {
 						ignoreForeignKeyConstraints = true;
@@ -25467,7 +25527,7 @@ public class Modeler extends JFrame {
 					ddlCommentMark = "--";
 					ddlSectionMark = ";";
 					ddlAdditionalParms = "";
-					setCommentToFieldsWithAlias = true;
+					ddlFieldCommentType = "1";
 					ignoreForeignKeyConstraints = false;
 					isToConvertCamel = true;
 				}
@@ -25827,15 +25887,21 @@ public class Modeler extends JFrame {
 			if (!domNode_.getAttribute("DDLAdditionalParms").equals(ddlAdditionalParms)) {
 				valueOfFieldsChanged = true;
 			}
-			if (domNode_.getAttribute("DDLCommentWithAlias").equals("")) {
-				if (!setCommentToFieldsWithAlias) {
+			if (domNode_.getAttribute("DDLCommentWithAlias").equals("0")
+					|| domNode_.getAttribute("DDLCommentWithAlias").equals("false")) {
+				if (!ddlFieldCommentType.equals("0")) {
 					valueOfFieldsChanged = true;
 				}
-			} else {
-				if (domNode_.getAttribute("DDLCommentWithAlias").equals("true") && !setCommentToFieldsWithAlias) {
+			}
+			if (domNode_.getAttribute("DDLCommentWithAlias").equals("")
+					|| domNode_.getAttribute("DDLCommentWithAlias").equals("1")
+					|| domNode_.getAttribute("DDLCommentWithAlias").equals("true")) {
+				if (!ddlFieldCommentType.equals("1")) {
 					valueOfFieldsChanged = true;
 				}
-				if (domNode_.getAttribute("DDLCommentWithAlias").equals("false") && setCommentToFieldsWithAlias) {
+			}
+			if (domNode_.getAttribute("DDLCommentWithAlias").equals("2")) {
+				if (!ddlFieldCommentType.equals("2")) {
 					valueOfFieldsChanged = true;
 				}
 			}
@@ -25863,6 +25929,18 @@ public class Modeler extends JFrame {
 					valueOfFieldsChanged = true;
 				}
 			}
+			if (domNode_.getAttribute("UseTableNameToCreateTable").equals("")) {
+				if (!useTableNameAsTableNameInCreateTableStatement) {
+					valueOfFieldsChanged = true;
+				}
+			} else {
+				if (domNode_.getAttribute("UseTableNameToCreateTable").equals("true") && !useTableNameAsTableNameInCreateTableStatement) {
+					valueOfFieldsChanged = true;
+				}
+				if (domNode_.getAttribute("UseTableNameToCreateTable").equals("false") && useTableNameAsTableNameInCreateTableStatement) {
+					valueOfFieldsChanged = true;
+				}
+			}
 
 			if (valueOfFieldsChanged) {
 				systemName = jTextFieldSystemName.getText(); //variant for frame title//
@@ -25884,11 +25962,7 @@ public class Modeler extends JFrame {
 				domNode_.setAttribute("DDLCommentMark", ddlCommentMark);
 				domNode_.setAttribute("DDLSectionMark", ddlSectionMark);
 				domNode_.setAttribute("DDLAdditionalParms", ddlAdditionalParms);
-				if (setCommentToFieldsWithAlias) {
-					domNode_.setAttribute("DDLCommentWithAlias", "true");
-				} else {
-					domNode_.setAttribute("DDLCommentWithAlias", "false");
-				}
+				domNode_.setAttribute("DDLCommentWithAlias", ddlFieldCommentType);
 				if (ignoreForeignKeyConstraints) {
 					domNode_.setAttribute("DDLIgnoreFK", "true");
 				} else {
@@ -25898,6 +25972,11 @@ public class Modeler extends JFrame {
 					domNode_.setAttribute("DDLConvertCamel", "true");
 				} else {
 					domNode_.setAttribute("DDLConvertCamel", "false");
+				}
+				if (useTableNameAsTableNameInCreateTableStatement) {
+					domNode_.setAttribute("UseTableNameToCreateTable", "true");
+				} else {
+					domNode_.setAttribute("UseTableNameToCreateTable", "false");
 				}
 			}
 
@@ -34520,17 +34599,17 @@ public class Modeler extends JFrame {
 		if (modelSize.equals("S")) {
 			topBoxPoint = new Point(0, 400);
 			pixelRoundValue = 8;
-			maxSize = 1000;
+			maxSize = MAX_WIDTH_OF_DATAMODEL_S;
 		}
 		if (modelSize.equals("M")) {
 			topBoxPoint = new Point(0, 800);
 			pixelRoundValue = 16;
-			maxSize = 2000;
+			maxSize = MAX_WIDTH_OF_DATAMODEL_M;
 		}
 		if (modelSize.equals("L")) {
 			topBoxPoint = new Point(0, 1200);
 			pixelRoundValue = 24;
-			maxSize = 3000;
+			maxSize = MAX_WIDTH_OF_DATAMODEL_L;
 		}
 
 		for (int i = 0; i < datamodelEntityBoxArray.size(); i++) {

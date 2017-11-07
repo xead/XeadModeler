@@ -1126,7 +1126,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 				statement = statement + " NOT NULL";
 			}
 			statement = statement + " DEFAULT " + addFieldDefaultList.get(i);
-			if (!addFieldCommentList.get(i).equals("") && frame_.setCommentToFieldsWithAlias) {
+			if (!addFieldCommentList.get(i).equals("") && frame_.ddlFieldCommentType.equals("1")) {
 				statement = statement + " COMMENT '" + addFieldCommentList.get(i) + "'";
 			}
 		}
