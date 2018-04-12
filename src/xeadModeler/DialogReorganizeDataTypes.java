@@ -54,8 +54,13 @@ public class DialogReorganizeDataTypes extends JDialog {
 	private BorderLayout borderLayoutMain = new BorderLayout();
 	private JPanel panelMain = new JPanel();
 	private JSplitPane jSplitPane = new JSplitPane();
+	private JPanel jPanelFilters = new JPanel();
+	private JPanel jPanelFieldList = new JPanel();
 	private JPanel jPanelSouth = new JPanel();
 	private JPanel jPanelButtons = new JPanel();
+	private JLabel jLabelFilter = new JLabel();
+	private JButton jButtonListFields = new JButton();
+	private JTextField jTextFieldFilter = new JTextField();
 	private JLabel jLabel1 = new JLabel();
 	private JTextField jTextFieldDataTypeFrom = new JTextField();
 	private JLabel jLabel2 = new JLabel();
@@ -108,7 +113,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		panelMain.add(jSplitPane, BorderLayout.CENTER);
 		panelMain.add(jPanelSouth, BorderLayout.SOUTH);
 
-		//jPanelNorth and objects on it//
+		//Data Type List//
 		jTableDataTypeList.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTableDataTypeList.setBackground(SystemColor.control);
 		jTableDataTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -194,11 +199,39 @@ public class DialogReorganizeDataTypes extends JDialog {
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
 		jScrollPaneFieldList.getViewport().add(jTableFieldList, null);
 
+		//jSplitPane and objects on it//
 		jSplitPane.setBorder(null);
 		jSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPane.setDividerLocation(300);
 		jSplitPane.add(jScrollPaneDataTypeList, JSplitPane.TOP);
-		jSplitPane.add(jScrollPaneFieldList, JSplitPane.BOTTOM);
+		//jSplitPane.add(jScrollPaneFieldList, JSplitPane.BOTTOM);
+		jSplitPane.add(jPanelFieldList, JSplitPane.BOTTOM);
+
+		//jPanelFieldList and objects on it//
+		jPanelFieldList.setBorder(BorderFactory.createEtchedBorder());
+		jPanelFieldList.setBorder(null);
+		jPanelFieldList.setLayout(new BorderLayout());
+		//jPanelFieldList.setPreferredSize(new Dimension(800, 90));
+		jPanelFilters.setBorder(BorderFactory.createEtchedBorder());
+		jPanelFilters.setBorder(null);
+		jPanelFilters.setLayout(null);
+		jPanelFilters.setPreferredSize(new Dimension(800, 45));
+		jLabelFilter.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabelFilter.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelFilter.setText(res.getString("DialogReorganizeDataTypes07"));
+		jLabelFilter.setBounds(new Rectangle(5, 13, 200, 20));
+		jTextFieldFilter.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jTextFieldFilter.setText("");
+		jTextFieldFilter.setBounds(new Rectangle(210, 10, 300, 25));
+		jButtonListFields.setBounds(new Rectangle(510, 9, 75, 27));
+		jButtonListFields.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jButtonListFields.setText("Scan");
+		jButtonListFields.addActionListener(new DialogReorganizeDataTypes_jButtonListFields_actionAdapter(this));
+		jPanelFilters.add(jLabelFilter);
+		jPanelFilters.add(jTextFieldFilter);
+		jPanelFilters.add(jButtonListFields);
+		jPanelFieldList.add(jPanelFilters, BorderLayout.NORTH);
+		jPanelFieldList.add(jScrollPaneFieldList, BorderLayout.CENTER);
 
 		//jPanelSouth and objects on it//
 		jPanelSouth.setBorder(BorderFactory.createEtchedBorder());
@@ -233,7 +266,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		jButtonTransfer.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonTransfer.setText(res.getString("DialogReorganizeDataTypes05"));
 		jButtonTransfer.addActionListener(new DialogReorganizeDataTypes_jButtonTransfer_actionAdapter(this));
-		jButtonDeleteDataType.setBounds(new Rectangle(695, 10, 220, 27));
+		jButtonDeleteDataType.setBounds(new Rectangle(680, 10, 235, 27));
 		jButtonDeleteDataType.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonDeleteDataType.setText(res.getString("DialogReorganizeDataTypes06"));
 		jButtonDeleteDataType.setEnabled(false);
@@ -254,6 +287,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		//DialogReorganizeDataTypes//
 		this.setTitle(res.getString("DialogReorganizeDataTypes01"));
 		this.getContentPane().add(panelMain);
+		this.getRootPane().setDefaultButton(jButtonListFields);
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension dlgSize = this.getPreferredSize();
 		this.setLocation((scrSize.width - dlgSize.width)/2 , (scrSize.height - dlgSize.height)/2);
@@ -353,7 +387,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 
 	void jTableFieldList_mouseClicked(MouseEvent e) {
 		jButtonTransfer.setEnabled(false);
-		if (!targetDataTypeID.equals("")) {
+		if (!jTextFieldDataTypeInto.getText().equals("")) {
 			for (int i = 0; i < tableModelFieldList.getRowCount(); i++) {
 				if (((Boolean)tableModelFieldList.getValueAt(i, 1)).booleanValue()) {
 					jButtonTransfer.setEnabled(true);
@@ -367,7 +401,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 		this.setVisible(false);
 	}
 	
-	void jTableDataTypeList_valueChanged(ListSelectionEvent e) {
+	void jTableDataTypeList_valueChanged() {
 		String wrkStr1, wrkStr2 = "";
 
 		jButtonTransfer.setEnabled(false);
@@ -406,20 +440,24 @@ public class DialogReorganizeDataTypes extends JDialog {
 			for (int j = 0; j < sortableDomElementFieldListModel.getSize(); j++) {
 				fieldElement = (org.w3c.dom.Element)sortableDomElementFieldListModel.getElementAt(j);
 				if (fieldElement.getAttribute("DataTypeID").equals(tableRowNumber.getElement().getAttribute("ID"))) {
-					Object[] Cell = new Object[6];
-					m = m + 1;
-					Cell[0] =  new TableRowNumber(m, fieldElement);
-					Cell[1] = Boolean.FALSE;
-					Cell[2] = fieldElement.getAttribute("Alias");
-					Cell[3] = fieldElement.getAttribute("Name");
-					tableElement = (org.w3c.dom.Element)fieldElement.getParentNode();
-					Cell[4] = tableElement.getAttribute("SortKey") + " " + tableElement.getAttribute("Name");
-					subsystemNode = frame_.getSpecificXeadTreeNode("Subsystem", tableElement.getAttribute("SubsystemID"), null);
-					Cell[5] = subsystemNode.getElement().getAttribute("Name");
-					tableModelFieldList.addRow(Cell);
+					if (jTextFieldFilter.getText().equals("")
+							|| fieldElement.getAttribute("Alias").contains(jTextFieldFilter.getText())
+							|| fieldElement.getAttribute("Name").contains(jTextFieldFilter.getText())) {
+						Object[] Cell = new Object[6];
+						m = m + 1;
+						Cell[0] =  new TableRowNumber(m, fieldElement);
+						Cell[1] = Boolean.FALSE;
+						Cell[2] = fieldElement.getAttribute("Alias");
+						Cell[3] = fieldElement.getAttribute("Name");
+						tableElement = (org.w3c.dom.Element)fieldElement.getParentNode();
+						Cell[4] = tableElement.getAttribute("SortKey") + " " + tableElement.getAttribute("Name");
+						subsystemNode = frame_.getSpecificXeadTreeNode("Subsystem", tableElement.getAttribute("SubsystemID"), null);
+						Cell[5] = subsystemNode.getElement().getAttribute("Name");
+						tableModelFieldList.addRow(Cell);
+					}
 				}
 			}
-			if (tableModelFieldList.getRowCount() == 0) {
+			if (tableModelFieldList.getRowCount() == 0 && jTextFieldFilter.getText().equals("")) {
 				jButtonDeleteDataType.setEnabled(true);
 			}
 		}
@@ -438,7 +476,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 					updated = true;
 				}
 			}
-			jTableDataTypeList_valueChanged(null);
+			jTableDataTypeList_valueChanged();
 		}
 	}
 
@@ -476,10 +514,12 @@ public class DialogReorganizeDataTypes extends JDialog {
 		public void itemStateChanged(ItemEvent e) {   
 			if (rendererComponent_ != null) {
 				if (rendererComponent_.isSelected()) {
-					for (int i = 0; i < tableModelFieldList.getRowCount(); i++) {
-						tableModelFieldList.setValueAt(Boolean.TRUE, i, 1);
+					if (!jTextFieldDataTypeInto.getText().equals("")) {
+						for (int i = 0; i < tableModelFieldList.getRowCount(); i++) {
+							tableModelFieldList.setValueAt(Boolean.TRUE, i, 1);
+						}
+						jButtonTransfer.setEnabled(true);
 					}
-					jButtonTransfer.setEnabled(true);
 				} else {
 					for (int i = 0; i < tableModelFieldList.getRowCount(); i++) {
 						tableModelFieldList.setValueAt(Boolean.FALSE, i, 1);
@@ -840,7 +880,17 @@ class DialogReorganizeDataTypes_jTableDataTypeList_listSelectionAdapter  impleme
 		this.adaptee = adaptee;
 	}
 	public void valueChanged(ListSelectionEvent e) {
-		adaptee.jTableDataTypeList_valueChanged(e);
+		adaptee.jTableDataTypeList_valueChanged();
+	}
+}
+
+class DialogReorganizeDataTypes_jButtonListFields_actionAdapter implements java.awt.event.ActionListener {
+	DialogReorganizeDataTypes adaptee;
+	DialogReorganizeDataTypes_jButtonListFields_actionAdapter(DialogReorganizeDataTypes adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jTableDataTypeList_valueChanged();
 	}
 }
 

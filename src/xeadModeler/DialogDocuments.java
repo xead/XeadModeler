@@ -919,7 +919,11 @@ public class DialogDocuments extends JDialog {
 				for (int j = 0; j < tableList.getLength(); j++) {
 					workElement2 = (org.w3c.dom.Element)tableList.item(j);
 					if (workElement2.getAttribute("ID").equals(workElement1.getAttribute("TableID"))) {
-						workString = workElement2.getAttribute("SortKey") + workElement1.getAttribute("NameExtension") + " / " + workElement2.getAttribute("Name");
+						if (workElement1.getAttribute("NameExtension").equals("")) {
+							workString = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
+						} else {
+							workString = workElement2.getAttribute("SortKey") + ":" + workElement1.getAttribute("NameExtension") + " " + workElement2.getAttribute("Name");
+						}
 						break;
 					}
 				}
@@ -1079,7 +1083,7 @@ public class DialogDocuments extends JDialog {
 			for (int j = 0; j < functionList.getLength(); j++) {
 				workElement2 = (org.w3c.dom.Element)functionList.item(j);
 				if (workElement2.getAttribute("ID").equals(workElement1.getAttribute("FunctionID"))) {
-					workString1 = workElement2.getAttribute("SortKey") + " / " + workElement2.getAttribute("Name");
+					workString1 = workElement2.getAttribute("SortKey") + " " + workElement2.getAttribute("Name");
 					workString2 = workElement2.getAttribute("Parameters");
 					break;
 				}
@@ -1205,7 +1209,7 @@ public class DialogDocuments extends JDialog {
 					cellC.setCellStyle(styleValue);
 					XSSFCell cellD = nextRow.createCell(3);
 					cellD.setCellStyle(styleValue);
-					cellB.setCellValue(new XSSFRichTextString(workElement1.getAttribute("SortKey") + " / " + workElement1.getAttribute("Name")));
+					cellB.setCellValue(new XSSFRichTextString(workElement1.getAttribute("SortKey") + " " + workElement1.getAttribute("Name")));
 					sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
 					XSSFCell cellE = nextRow.createCell(4);
 					cellE.setCellStyle(styleValue);
@@ -3233,7 +3237,10 @@ public class DialogDocuments extends JDialog {
 			return str;
 		}
 		public String getName() {
-			String str = domNode_.getAttribute("SortKey") + " / " + domNode_.getAttribute("Name");
+			String str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+			if (nodeType_.equals("IOPanel") || nodeType_.equals("IOSpool") || nodeType_.equals("IOWebPage")) {
+				str = domNode_.getAttribute("Name");
+			}
 			return str;
 		}
 		public org.w3c.dom.Element getElement() {

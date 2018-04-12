@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2017 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2018 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -45,9 +45,25 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2017 DBC Ltd.";
+	public static final String COPYRIGHT = "Copyright 2018 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M38";
+	public static final String FULL_VERSION = "V1.R4.M42";
+	// 1.4.42での変更点
+	//･機能別入出力定義の並び順をドラッグして変更できるようにするとともに、それらの扱い仕様を改善した
+	//
+	// 1.4.41での変更点
+	//･「DocFileFormat」をシステム定義として指定できるようにした（xteamdl.propertiesでは漢字が使いにくいため）
+	//
+	// 1.4.40での変更点
+	//･xteamdl.propertiesで「DocFileFormat」を指定できるようにした
+	//
+	// 1.4.39での変更点
+	//・DFD上のシステム名の位置設定に関する問題を修正した
+	//・DFD上のイベントのテキストで<EOL>を使えるようにした
+	//・テーブル入出力上のテーブル名の表示仕様を改善した
+	//・「データタイプの整理」でフィールド一覧の検索条件を指定できるようにした
+	//・いくつかの警告メッセージについて「次回は表示しない」を指定できるようにした
+	//
 	// 1.4.38での変更点
 	//・テーブル名のCamel表記の変換ロジックを改善した
 	//・CreateTable文でのフィールドコメントの設定仕様を改善した
