@@ -89,10 +89,10 @@ public class DialogConfigColors extends JDialog {
 		jPanelRadioButtonsColor.setBorder(BorderFactory.createEtchedBorder());
 		jRadioButtonColor1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonColor1.setText(res.getString("DialogConfigColors03"));
-		jRadioButtonColor1.setBounds(new Rectangle(5, 9, 140, 20));
+		jRadioButtonColor1.setBounds(new Rectangle(5, 9, 150, 20));
 		jRadioButtonColor2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jRadioButtonColor2.setText(res.getString("DialogConfigColors04"));
-		jRadioButtonColor2.setBounds(new Rectangle(150, 9, 140, 20));
+		jRadioButtonColor2.setBounds(new Rectangle(155, 9, 140, 20));
 		buttonGroupColor.add(jRadioButtonColor1);
 		buttonGroupColor.add(jRadioButtonColor2);
 
@@ -149,15 +149,59 @@ public class DialogConfigColors extends JDialog {
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
 	}
 
+//	public boolean request() {
+//		buttonOKIsPressed = false;
+//
+//		// Set values of components //
+//		jCheckBox.setSelected(frame_.isToShowGridsOnDataModel);
+//		jRadioButtonColor1.setSelected(frame_.isNormalColorConfigOnDataModel);
+//		jRadioButtonSizeS.setEnabled(true);
+//		jRadioButtonSizeM.setEnabled(true);
+//		jRadioButtonSizeL.setEnabled(true);
+//		if (frame_.modelSize.equals("S")) {
+//			jRadioButtonSizeS.setSelected(true);
+//		}
+//		if (frame_.modelSize.equals("M")) {
+//			jRadioButtonSizeM.setSelected(true);
+//		}
+//		if (frame_.modelSize.equals("L")) {
+//			jRadioButtonSizeL.setSelected(true);
+//		}
+//
+//		//Setup dialog and show//
+//		Dimension dlgSize = this.getPreferredSize();
+//		Dimension frmSize = frame_.getSize();
+//		Point loc = frame_.getLocation();
+//		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
+//		this.pack();
+//		this.setVisible(true);
+//
+//		//Update and return parameter value//
+//		if (buttonOKIsPressed) {
+//			frame_.isToShowGridsOnDataModel = jCheckBox.isSelected();
+//			frame_.isNormalColorConfigOnDataModel = jRadioButtonColor1.isSelected();
+//		}
+//		if (jRadioButtonSizeS.isSelected()) {
+//			frame_.modelSize = "S";
+//		}
+//		if (jRadioButtonSizeM.isSelected()) {
+//			frame_.modelSize = "M";
+//		}
+//		if (jRadioButtonSizeL.isSelected()) {
+//			frame_.modelSize = "L";
+//		}
+//		return buttonOKIsPressed;
+//	}
+
 	public boolean requestForDataModel() {
 		buttonOKIsPressed = false;
 
 		// Set values of components //
 		jCheckBox.setSelected(frame_.isToShowGridsOnDataModel);
 		jRadioButtonColor1.setSelected(frame_.isNormalColorConfigOnDataModel);
-		jRadioButtonSizeS.setEnabled(true);
-		jRadioButtonSizeM.setEnabled(true);
-		jRadioButtonSizeL.setEnabled(true);
+//		jRadioButtonSizeS.setEnabled(true);
+//		jRadioButtonSizeM.setEnabled(true);
+//		jRadioButtonSizeL.setEnabled(true);
 		if (frame_.modelSize.equals("S")) {
 			jRadioButtonSizeS.setSelected(true);
 		}
@@ -199,10 +243,19 @@ public class DialogConfigColors extends JDialog {
 		// Set values of components //
 		jCheckBox.setSelected(frame_.isToShowGridsOnSubjectArea);
 		jRadioButtonColor1.setSelected(frame_.isNormalColorConfigOnSubjectArea);
-		jRadioButtonSizeS.setEnabled(false);
-		jRadioButtonSizeM.setEnabled(false);
-		jRadioButtonSizeL.setEnabled(false);
-		jRadioButtonSizeM.setSelected(true);
+//		jRadioButtonSizeS.setEnabled(false);
+//		jRadioButtonSizeM.setEnabled(false);
+//		jRadioButtonSizeL.setEnabled(false);
+//		jRadioButtonSizeM.setSelected(true);
+		if (frame_.modelSize.equals("S")) {
+			jRadioButtonSizeS.setSelected(true);
+		}
+		if (frame_.modelSize.equals("M")) {
+			jRadioButtonSizeM.setSelected(true);
+		}
+		if (frame_.modelSize.equals("L")) {
+			jRadioButtonSizeL.setSelected(true);
+		}
 
 		//Setup dialog and show//
 		Dimension dlgSize = this.getPreferredSize();
@@ -216,6 +269,15 @@ public class DialogConfigColors extends JDialog {
 		if (buttonOKIsPressed) {
 			frame_.isToShowGridsOnSubjectArea = jCheckBox.isSelected();
 			frame_.isNormalColorConfigOnSubjectArea = jRadioButtonColor1.isSelected();
+		}
+		if (jRadioButtonSizeS.isSelected()) {
+			frame_.modelSize = "S";
+		}
+		if (jRadioButtonSizeM.isSelected()) {
+			frame_.modelSize = "M";
+		}
+		if (jRadioButtonSizeL.isSelected()) {
+			frame_.modelSize = "L";
 		}
 		return buttonOKIsPressed;
 	}

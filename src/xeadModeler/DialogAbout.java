@@ -47,7 +47,11 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2018 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M42";
+	public static final String FULL_VERSION = "V1.R4.M43";
+	// 1.4.43での変更点
+	//･機能定義と「用語とルール」に関する外部ファイルの扱い仕様を改善した
+	//･広範囲にわたってレイアウトを改善した
+	//
 	// 1.4.42での変更点
 	//･機能別入出力定義の並び順をドラッグして変更できるようにするとともに、それらの扱い仕様を改善した
 	//

@@ -545,8 +545,11 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldSystemTermsHeadder = new KanjiTextField();
 	private JLabel jLabelSystemTermsSortKey = new JLabel();
 	private JTextField jTextFieldSystemTermsSortKey = new JTextField();
-	private JLabel jLabelSystemTermsHtmlFileName = new JLabel();
-	private JTextField jTextFieldSystemTermsHtmlFileName = new JTextField();
+	private JLabel jLabelSystemTermsHtmlFile = new JLabel();
+	private JComboBox jComboBoxSystemTermsHtmlFile = new JComboBox();
+	private String systemTermsHtmlFile = "";
+	private ArrayList<String> systemTermsHtmlFileList = new ArrayList<String>();
+	private JButton jButtonSystemTermsHtmlFileEdit = new JButton();
 	private JLabel jLabelSystemTermsDescriptions = new JLabel();
 	private JScrollPane jScrollPaneSystemTermsDescriptions = new JScrollPane();
 	private KanjiTextArea jTextAreaSystemTermsDescriptions = new KanjiTextArea();
@@ -597,7 +600,7 @@ public class Modeler extends JFrame {
 	private JComboBox jComboBoxSubjectAreaBoundarySetting = new JComboBox();
 	private boolean isChangedByUser = false;
 	private KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
-	//private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel();
+	public boolean isSlideNumberShown = false;
 	private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel() {
 		private static final long serialVersionUID = 1L;
 		public void paintComponent(Graphics g) {
@@ -1259,7 +1262,7 @@ public class Modeler extends JFrame {
 	private String functionDocFile = "";
 	private ArrayList<String> functionDocFileList = new ArrayList<String>();
 	private ArrayList<String> functionDocFileDefaultList = new ArrayList<String>();
-	private JButton jButtonFunctionDocFile = new JButton();
+	private JButton jButtonFunctionDocFileEdit = new JButton();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
 	private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
 	private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
@@ -2355,31 +2358,31 @@ public class Modeler extends JFrame {
 		jLabelSystemName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemName.setText(res.getString("S189"));
-		jLabelSystemName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemName.setBounds(new Rectangle(140, 9, 330, 25));
+		jTextFieldSystemName.setBounds(new Rectangle(140, 9, 340, 28));
 		jLabelSystemVersion.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemVersion.setRequestFocusEnabled(true);
 		jLabelSystemVersion.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemVersion.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemVersion.setText(res.getString("S192"));
-		jLabelSystemVersion.setBounds(new Rectangle(475, 12, 130, 20));
+		jLabelSystemVersion.setBounds(new Rectangle(485, 9, 120, 28));
 		jTextFieldSystemVersion.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemVersion.setBounds(new Rectangle(610, 9, 105, 25));
+		jTextFieldSystemVersion.setBounds(new Rectangle(610, 9, 105, 28));
 		jLabelSystemReferingModelFiles.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemReferingModelFiles.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemReferingModelFiles.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemReferingModelFiles.setText(res.getString("S193"));
-		jLabelSystemReferingModelFiles.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemReferingModelFiles.setBounds(new Rectangle(5, 40, 130, 28));
 		jTextFieldSystemReferingModelFiles.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemReferingModelFiles.setBounds(new Rectangle(140, 40, 470, 25));
+		jTextFieldSystemReferingModelFiles.setBounds(new Rectangle(140, 40, 470, 28));
 		jLabelSystemDocFileFormat.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDocFileFormat.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDocFileFormat.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDocFileFormat.setText(res.getString("S194"));
-		jLabelSystemDocFileFormat.setBounds(new Rectangle(615, 43, 170, 20));
+		jLabelSystemDocFileFormat.setBounds(new Rectangle(615, 40, 170, 28));
 		jTextFieldSystemDocFileFormat.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDocFileFormat.setBounds(new Rectangle(790, 40, 500, 25));
+		jTextFieldSystemDocFileFormat.setBounds(new Rectangle(790, 40, 500, 28));
 		jPanelSystem.add(jPanelSystem6, BorderLayout.NORTH);
 		jPanelSystem6.add(jLabelSystemName, null);
 		jPanelSystem6.add(jLabelSystemVersion, null);
@@ -2415,22 +2418,22 @@ public class Modeler extends JFrame {
 		jLabelSystemDepartmentName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDepartmentName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDepartmentName.setText(res.getString("S198"));
-		jLabelSystemDepartmentName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemDepartmentName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemDepartmentName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDepartmentName.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemDepartmentName.setBounds(new Rectangle(140, 9, 350, 28));
 		jLabelSystemDepartmentSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDepartmentSortKey.setRequestFocusEnabled(true);
 		jLabelSystemDepartmentSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDepartmentSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDepartmentSortKey.setText(res.getString("S201"));
-		jLabelSystemDepartmentSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemDepartmentSortKey.setBounds(new Rectangle(510, 9, 130, 28));
 		jTextFieldSystemDepartmentSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDepartmentSortKey.setBounds(new Rectangle(585, 9, 105, 25));
+		jTextFieldSystemDepartmentSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemDepartmentDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDepartmentDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDepartmentDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDepartmentDescriptions.setText(res.getString("S204"));
-		jLabelSystemDepartmentDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemDepartmentDescriptions.setBounds(new Rectangle(5, 40, 130, 28));
 		jTextAreaSystemDepartmentDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemDepartmentDescriptions.setLineWrap(true);
 		jScrollPaneSystemDepartmentDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
@@ -2468,22 +2471,22 @@ public class Modeler extends JFrame {
 		jLabelSystemTaskTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTaskTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTaskTypeName.setText(res.getString("S210"));
-		jLabelSystemTaskTypeName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemTaskTypeName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemTaskTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTaskTypeName.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemTaskTypeName.setBounds(new Rectangle(140, 9, 350, 28));
 		jLabelSystemTaskTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTaskTypeSortKey.setRequestFocusEnabled(true);
 		jLabelSystemTaskTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTaskTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTaskTypeSortKey.setText(res.getString("S201"));
-		jLabelSystemTaskTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemTaskTypeSortKey.setBounds(new Rectangle(510, 9, 130, 28));
 		jTextFieldSystemTaskTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTaskTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
+		jTextFieldSystemTaskTypeSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemTaskTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTaskTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTaskTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTaskTypeDescriptions.setText(res.getString("S204"));
-		jLabelSystemTaskTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemTaskTypeDescriptions.setBounds(new Rectangle(5, 40, 130, 28));
 		jTextAreaSystemTaskTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemTaskTypeDescriptions.setLineWrap(true);
 		jScrollPaneSystemTaskTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
@@ -2520,22 +2523,22 @@ public class Modeler extends JFrame {
 		jLabelSystemTableTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTableTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTableTypeName.setText(res.getString("S208"));
-		jLabelSystemTableTypeName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemTableTypeName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemTableTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTableTypeName.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemTableTypeName.setBounds(new Rectangle(140, 9, 350, 28));
 		jLabelSystemTableTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTableTypeSortKey.setRequestFocusEnabled(true);
 		jLabelSystemTableTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTableTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTableTypeSortKey.setText(res.getString("S201"));
-		jLabelSystemTableTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemTableTypeSortKey.setBounds(new Rectangle(510, 9, 130, 28));
 		jTextFieldSystemTableTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTableTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
+		jTextFieldSystemTableTypeSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemTableTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTableTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTableTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTableTypeDescriptions.setText(res.getString("S204"));
-		jLabelSystemTableTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemTableTypeDescriptions.setBounds(new Rectangle(5, 40, 130, 28));
 		jTextAreaSystemTableTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemTableTypeDescriptions.setLineWrap(true);
 		jScrollPaneSystemTableTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
@@ -2572,31 +2575,31 @@ public class Modeler extends JFrame {
 		jLabelSystemDataTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDataTypeName.setText(res.getString("S218"));
-		jLabelSystemDataTypeName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemDataTypeName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemDataTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDataTypeName.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemDataTypeName.setBounds(new Rectangle(140, 9, 300, 28));
 		jLabelSystemDataTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDataTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDataTypeSortKey.setText(res.getString("S201"));
-		jLabelSystemDataTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemDataTypeSortKey.setBounds(new Rectangle(450, 9, 130, 28));
 		jTextFieldSystemDataTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDataTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
+		jTextFieldSystemDataTypeSortKey.setBounds(new Rectangle(585, 9, 105, 28));
 		jLabelSystemSQLExpression.setText(res.getString("S223"));
 		jLabelSystemSQLExpression.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemSQLExpression.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemSQLExpression.setHorizontalTextPosition(SwingConstants.LEADING);
-		jLabelSystemSQLExpression.setBounds(new Rectangle(700, 12, 130, 20));
+		jLabelSystemSQLExpression.setBounds(new Rectangle(700, 9, 130, 28));
 		jTextFieldSystemSQLExpression.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemSQLExpression.setBounds(new Rectangle(835, 9, 105, 25));
+		jTextFieldSystemSQLExpression.setBounds(new Rectangle(835, 9, 105, 28));
 		jLabelSystemDataTypeBasicType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDataTypeBasicType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeBasicType.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDataTypeBasicType.setText(res.getString("S227"));
-		jLabelSystemDataTypeBasicType.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemDataTypeBasicType.setBounds(new Rectangle(5, 40, 130, 28));
 		jComboBoxSystemDataTypeBasicType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxSystemDataTypeBasicType.setActionCommand("comboBoxChanged");
-		jComboBoxSystemDataTypeBasicType.setBounds(new Rectangle(140, 40, 180, 25));
+		jComboBoxSystemDataTypeBasicType.setBounds(new Rectangle(140, 40, 180, 28));
 		comboBoxModelDataTypeBasicType.addElement("SignedNumber");
 		comboBoxModelDataTypeBasicType.addElement("UnsignedNumber");
 		comboBoxModelDataTypeBasicType.addElement("String");
@@ -2608,18 +2611,18 @@ public class Modeler extends JFrame {
 		jLabelSystemDataTypeLength.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeLength.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDataTypeLength.setText(res.getString("S237"));
-		jLabelSystemDataTypeLength.setBounds(new Rectangle(450, 43, 130, 20));
+		jLabelSystemDataTypeLength.setBounds(new Rectangle(450, 40, 130, 28));
 		jTextFieldSystemDataTypeLength.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDataTypeLength.setBounds(new Rectangle(585, 40, 40, 25));
+		jTextFieldSystemDataTypeLength.setBounds(new Rectangle(585, 40, 40, 28));
 		jTextFieldSystemDataTypeLength.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeDecimal.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemDataTypeDecimal.setRequestFocusEnabled(true);
 		jLabelSystemDataTypeDecimal.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemDataTypeDecimal.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemDataTypeDecimal.setText(res.getString("S240"));
-		jLabelSystemDataTypeDecimal.setBounds(new Rectangle(700, 43, 130, 20));
+		jLabelSystemDataTypeDecimal.setBounds(new Rectangle(700, 40, 130, 28));
 		jTextFieldSystemDataTypeDecimal.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemDataTypeDecimal.setBounds(new Rectangle(835, 40, 40, 25));
+		jTextFieldSystemDataTypeDecimal.setBounds(new Rectangle(835, 40, 40, 28));
 		jTextFieldSystemDataTypeDecimal.setHorizontalAlignment(SwingConstants.RIGHT);
 		jPanelSystemDataType1.add(jLabelSystemDataTypeName, null);
 		jPanelSystemDataType1.add(jTextFieldSystemDataTypeName, null);
@@ -2659,22 +2662,22 @@ public class Modeler extends JFrame {
 		jLabelSystemFunctionTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemFunctionTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemFunctionTypeName.setText(res.getString("S244"));
-		jLabelSystemFunctionTypeName.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemFunctionTypeName.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemFunctionTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemFunctionTypeName.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemFunctionTypeName.setBounds(new Rectangle(140, 9, 350, 28));
 		jLabelSystemFunctionTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemFunctionTypeSortKey.setRequestFocusEnabled(true);
 		jLabelSystemFunctionTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemFunctionTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemFunctionTypeSortKey.setText(res.getString("S201"));
-		jLabelSystemFunctionTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
+		jLabelSystemFunctionTypeSortKey.setBounds(new Rectangle(510, 9, 130, 28));
 		jTextFieldSystemFunctionTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemFunctionTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
+		jTextFieldSystemFunctionTypeSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemFunctionTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemFunctionTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemFunctionTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemFunctionTypeDescriptions.setText(res.getString("S204"));
-		jLabelSystemFunctionTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
+		jLabelSystemFunctionTypeDescriptions.setBounds(new Rectangle(5, 40, 130, 28));
 		jTextAreaSystemFunctionTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemFunctionTypeDescriptions.setLineWrap(true);
 		jScrollPaneSystemFunctionTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
@@ -2706,7 +2709,7 @@ public class Modeler extends JFrame {
 		jPanelSystemTermsList.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSystemTermsList1.setLayout(null);
 		jPanelSystemTermsList1.setBorder(null);
-		jPanelSystemTermsList1.setPreferredSize(new Dimension(10, 42));
+		jPanelSystemTermsList1.setPreferredSize(new Dimension(10, 73));
 		jPanelSystemTermsList2.setLayout(new BorderLayout());
 		jPanelSystemTermsList2.setBorder(null);
 		jPanelSystemTermsList3.setLayout(null);
@@ -2715,29 +2718,34 @@ public class Modeler extends JFrame {
 		jLabelSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-		jLabelSystemTermsSortKey.setText(res.getString("S248"));
-		jLabelSystemTermsSortKey.setBounds(new Rectangle(460, 12, 130, 20));
+		jLabelSystemTermsSortKey.setText(res.getString("S201"));
+		jLabelSystemTermsSortKey.setBounds(new Rectangle(510, 9, 130, 28));
 		jTextFieldSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(595, 9, 150, 25));
+		jTextFieldSystemTermsSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsHeadder.setText(res.getString("S246"));
-		jLabelSystemTermsHeadder.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemTermsHeadder.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 300, 25));
-		jLabelSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelSystemTermsHtmlFileName.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelSystemTermsHtmlFileName.setHorizontalTextPosition(SwingConstants.LEADING);
-		jLabelSystemTermsHtmlFileName.setText(res.getString("S249"));
-		jLabelSystemTermsHtmlFileName.setBounds(new Rectangle(750, 12, 130, 20));
-		jTextFieldSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemTermsHtmlFileName.setBounds(new Rectangle(885, 9, 300, 25));
+		jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 350, 28));
+		jLabelSystemTermsHtmlFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jLabelSystemTermsHtmlFile.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabelSystemTermsHtmlFile.setHorizontalTextPosition(SwingConstants.LEADING);
+		jLabelSystemTermsHtmlFile.setText(res.getString("S249"));
+		jLabelSystemTermsHtmlFile.setBounds(new Rectangle(5, 40, 130, 28));
+		jComboBoxSystemTermsHtmlFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jComboBoxSystemTermsHtmlFile.setBounds(new Rectangle(140, 40, 700, 28));
+		jComboBoxSystemTermsHtmlFile.addMouseListener(new Modeler_jComboBoxSystemTermsHtmlFile_mouseAdapter(this));
+		jButtonSystemTermsHtmlFileEdit.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jButtonSystemTermsHtmlFileEdit.setBounds(new Rectangle(840, 40, 70, 28));
+		jButtonSystemTermsHtmlFileEdit.setText("Edit");
+		jButtonSystemTermsHtmlFileEdit.addActionListener(new Modeler_jButtonSystemTermsHtmlFileEdit_actionAdapter(this));
 		jLabelSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemTermsDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemTermsDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemTermsDescriptions.setText(res.getString("S247"));
-		jLabelSystemTermsDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
+		jLabelSystemTermsDescriptions.setBounds(new Rectangle(5, 0, 130, 28));
 		jTextAreaSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemTermsDescriptions.setLineWrap(true);
 		jEditorPaneSystemTermsDescriptions.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -2751,8 +2759,9 @@ public class Modeler extends JFrame {
 		jPanelSystemTermsList1.add(jTextFieldSystemTermsHeadder, null);
 		jPanelSystemTermsList1.add(jLabelSystemTermsSortKey, null);
 		jPanelSystemTermsList1.add(jTextFieldSystemTermsSortKey, null);
-		jPanelSystemTermsList1.add(jLabelSystemTermsHtmlFileName, null);
-		jPanelSystemTermsList1.add(jTextFieldSystemTermsHtmlFileName, null);
+		jPanelSystemTermsList1.add(jLabelSystemTermsHtmlFile, null);
+		jPanelSystemTermsList1.add(jComboBoxSystemTermsHtmlFile, null);
+		jPanelSystemTermsList1.add(jButtonSystemTermsHtmlFileEdit, null);
 		jPanelSystemTermsList2.add(jPanelSystemTermsList3, BorderLayout.WEST);
 		jPanelSystemTermsList2.add(jScrollPaneSystemTermsDescriptions, BorderLayout.CENTER);
 		jPanelSystemTermsList3.add(jLabelSystemTermsDescriptions, null);
@@ -2782,22 +2791,22 @@ public class Modeler extends JFrame {
 		jLabelSystemMaintenanceLogHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemMaintenanceLogHeadder.setText(res.getString("S254"));
-		jLabelSystemMaintenanceLogHeadder.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelSystemMaintenanceLogHeadder.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldSystemMaintenanceLogHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemMaintenanceLogHeadder.setBounds(new Rectangle(140, 9, 300, 25));
+		jTextFieldSystemMaintenanceLogHeadder.setBounds(new Rectangle(140, 9, 330, 28));
 		jLabelSystemMaintenanceLogSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemMaintenanceLogSortKey.setRequestFocusEnabled(true);
 		jLabelSystemMaintenanceLogSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemMaintenanceLogSortKey.setText(res.getString("S257"));
-		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(450, 12, 150, 20));
+		jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(490, 9, 150, 28));
 		jTextFieldSystemMaintenanceLogSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(605, 9, 180, 25));
+		jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(645, 9, 195, 28));
 		jLabelSystemMaintenanceLogDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSystemMaintenanceLogDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
 		jLabelSystemMaintenanceLogDescriptions.setText(res.getString("S260"));
-		jLabelSystemMaintenanceLogDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
+		jLabelSystemMaintenanceLogDescriptions.setBounds(new Rectangle(5, 0, 130, 28));
 		jTextAreaSystemMaintenanceLogDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSystemMaintenanceLogDescriptions.setLineWrap(true);
 		jScrollPaneSystemMaintenanceLogDescriptions.setBounds(new Rectangle(140, 40, 600, 42));
@@ -3146,8 +3155,8 @@ public class Modeler extends JFrame {
 		column0.setPreferredWidth(40);
 		column1.setPreferredWidth(150);
 		column2.setPreferredWidth(300);
-		column3.setPreferredWidth(550);
-		column4.setPreferredWidth(300);
+		column3.setPreferredWidth(400);
+		column4.setPreferredWidth(400);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
@@ -3245,11 +3254,11 @@ public class Modeler extends JFrame {
 		jLabelSubjectAreaName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubjectAreaName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaName.setText(res.getString("S324"));
-		jLabelSubjectAreaName.setBounds(new Rectangle(5, 6, 130, 20));
+		jLabelSubjectAreaName.setBounds(new Rectangle(5, 6, 130, 28));
 		jLabelSubjectAreaDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubjectAreaDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaDescriptions.setText(res.getString("S204"));
-		jLabelSubjectAreaDescriptions.setBounds(new Rectangle(5, 37, 130, 20));
+		jLabelSubjectAreaDescriptions.setBounds(new Rectangle(5, 37, 130, 28));
 		jPanelSubjectArea2.setLayout(new BorderLayout());
 		jPanelSubjectArea3.setPreferredSize(new Dimension(10, 38));
 		jPanelSubjectArea3.setLayout(null);
@@ -3261,20 +3270,21 @@ public class Modeler extends JFrame {
 		jPanelSubjectAreaDataflowEditor2.setBounds(new Rectangle(0,0,2000,1500));
 		jPanelSubjectAreaDataflowEditor2.addMouseListener(new Modeler_jPanelSubjectAreaDataflowEditor2_mouseAdapter(this));
 		jPanelSubjectAreaDataflowEditor2.addMouseMotionListener(new Modeler_jPanelSubjectAreaDataflowEditor2_mouseMotionAdapter(this));
+		jPanelSubjectAreaDataflowEditor2.addMouseWheelListener(new Modeler_MouseWheelAdapter(this));
 		jTextFieldSubjectAreaName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubjectAreaName.setBounds(new Rectangle(0, 6, 300, 25));
+		jTextFieldSubjectAreaName.setBounds(new Rectangle(0, 6, 300, 28));
 		jLabelSubjectAreaSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubjectAreaSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaSortKey.setText(res.getString("S201"));
-		jLabelSubjectAreaSortKey.setBounds(new Rectangle(310, 10, 130, 20));
+		jLabelSubjectAreaSortKey.setBounds(new Rectangle(310, 6, 130, 28));
 		jTextFieldSubjectAreaSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubjectAreaSortKey.setBounds(new Rectangle(445, 6, 100, 25));
+		jTextFieldSubjectAreaSortKey.setBounds(new Rectangle(445, 6, 100, 28));
 		jLabelSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubjectAreaBoundarySetting.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaBoundarySetting.setText(res.getString("S381"));
-		jLabelSubjectAreaBoundarySetting.setBounds(new Rectangle(555, 10, 160, 20));
+		jLabelSubjectAreaBoundarySetting.setBounds(new Rectangle(555, 6, 180, 28));
 		jComboBoxSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jComboBoxSubjectAreaBoundarySetting.setBounds(new Rectangle(720, 6, 170, 25));
+		jComboBoxSubjectAreaBoundarySetting.setBounds(new Rectangle(740, 6, 170, 28));
 		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S382")); //0:Hidden//
 		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S383")); //1:Top-Left//
 		jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S384")); //2:Top-Right//
@@ -3398,27 +3408,27 @@ public class Modeler extends JFrame {
 		jLabelRoleName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelRoleName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelRoleName.setText(res.getString("S348"));
-		jLabelRoleName.setBounds(new Rectangle(5, 6, 130, 20));
+		jLabelRoleName.setBounds(new Rectangle(5, 6, 130, 28));
 		jTextFieldRoleName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldRoleName.setBounds(new Rectangle(0, 6, 300, 25));
+		jTextFieldRoleName.setBounds(new Rectangle(0, 6, 300, 28));
 		jLabelRoleSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelRoleSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelRoleSortKey.setText(res.getString("S201"));
-		jLabelRoleSortKey.setBounds(new Rectangle(310, 6, 130, 20));
+		jLabelRoleSortKey.setBounds(new Rectangle(310, 6, 130, 28));
 		jTextFieldRoleSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldRoleSortKey.setBounds(new Rectangle(445, 6, 100, 25));
+		jTextFieldRoleSortKey.setBounds(new Rectangle(445, 6, 100, 28));
 		jLabelDepartment.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelDepartment.setRequestFocusEnabled(true);
 		jLabelDepartment.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelDepartment.setText(res.getString("S356"));
-		jLabelDepartment.setBounds(new Rectangle(555, 6, 130, 20));
+		jLabelDepartment.setBounds(new Rectangle(555, 6, 130, 28));
 		jComboBoxDepartment.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxDepartment.setActionCommand("comboBoxChanged");
-		jComboBoxDepartment.setBounds(new Rectangle(690, 6, 200, 25));
+		jComboBoxDepartment.setBounds(new Rectangle(690, 6, 200, 28));
 		jLabelRoleDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelRoleDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelRoleDescriptions.setText(res.getString("S204"));
-		jLabelRoleDescriptions.setBounds(new Rectangle(5, 37, 130, 20));
+		jLabelRoleDescriptions.setBounds(new Rectangle(5, 37, 130, 28));
 		jTextAreaRoleDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaRoleDescriptions.setLineWrap(true);
 		jPanelRole.add(jSplitPaneRole, BorderLayout.CENTER);
@@ -3491,41 +3501,41 @@ public class Modeler extends JFrame {
 		jScrollPaneTask1.setBorder(null);
 		jScrollPaneTask1.getViewport().add(jPanelTask1);
 		jPanelTask1.setBorder(BorderFactory.createEtchedBorder());
-		jPanelTask1.setPreferredSize(new Dimension(1230, 120));
+		jPanelTask1.setPreferredSize(new Dimension(1130, 120));
 		jPanelTask1.setLayout(new BorderLayout());
 		jPanelTask3.setPreferredSize(new Dimension(10, 69));
 		jPanelTask3.setLayout(null);
 		jLabelTaskName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskName.setText(res.getString("S372"));
-		jLabelTaskName.setBounds(new Rectangle(5, 6, 130, 20));
+		jLabelTaskName.setBounds(new Rectangle(5, 6, 130, 28));
 		jTextFieldTaskName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskName.setBounds(new Rectangle(0, 6, 300, 25));
+		jTextFieldTaskName.setBounds(new Rectangle(0, 6, 300, 28));
 		jLabelTaskSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskSortKey.setText(res.getString("S201"));
-		jLabelTaskSortKey.setBounds(new Rectangle(310, 6, 130, 20));
+		jLabelTaskSortKey.setBounds(new Rectangle(310, 6, 130, 28));
 		jTextFieldTaskSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskSortKey.setBounds(new Rectangle(445, 6, 100, 25));
+		jTextFieldTaskSortKey.setBounds(new Rectangle(445, 6, 100, 28));
 		jLabelTaskEvent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskEvent.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskEvent.setText(res.getString("S361"));
 		jLabelTaskEvent.setToolTipText(res.getString("S368"));
-		jLabelTaskEvent.setBounds(new Rectangle(5, 37, 130, 20));
+		jLabelTaskEvent.setBounds(new Rectangle(5, 37, 130, 28));
 		jTextFieldTaskEvent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskEvent.setBounds(new Rectangle(0, 37, 300, 25));
+		jTextFieldTaskEvent.setBounds(new Rectangle(0, 37, 300, 28));
 		jTextFieldTaskEvent.setToolTipText(res.getString("S368"));
 		jLabelTaskType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskType.setText(res.getString("S362"));
-		jLabelTaskType.setBounds(new Rectangle(310, 37, 130, 20));
+		jLabelTaskType.setBounds(new Rectangle(310, 37, 130, 28));
 		jComboBoxTaskType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxTaskType.setActionCommand("comboBoxChanged");
-		jComboBoxTaskType.setBounds(new Rectangle(445, 37, 200, 25));
+		jComboBoxTaskType.setBounds(new Rectangle(445, 37, 200, 28));
 		jLabelSubjectAreaWithThisTask.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubjectAreaWithThisTask.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubjectAreaWithThisTask.setText(res.getString("S380"));
-		jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(575, 6, 200, 20));
+		jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(555, 6, 130, 28));
 		jListSubjectAreaWithThisTask.setBorder(null);
 		jListSubjectAreaWithThisTask.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jListSubjectAreaWithThisTask.setSelectionBackground(jPanelTask.getBackground());
@@ -3533,12 +3543,12 @@ public class Modeler extends JFrame {
 		jListSubjectAreaWithThisTask.addMouseListener(new Modeler_jListSubjectAreaWithThisTask_mouseAdapter(this));
 		jListSubjectAreaWithThisTask.addMouseMotionListener(new Modeler_jListSubjectAreaWithThisTask_mouseMotionAdapter(this));
 		jScrollPaneSubjectAreaWithThisTask.setBorder(BorderFactory.createEtchedBorder());
-		jScrollPaneSubjectAreaWithThisTask.setBounds(new Rectangle(780, 6, 300, 56));
+		jScrollPaneSubjectAreaWithThisTask.setBounds(new Rectangle(690, 6, 300, 57));
 		jScrollPaneSubjectAreaWithThisTask.getViewport().add(jListSubjectAreaWithThisTask, null);
 		jLabelTaskDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskDescriptions.setText(res.getString("S204"));
-		jLabelTaskDescriptions.setBounds(new Rectangle(5, 68, 130, 25));
+		jLabelTaskDescriptions.setBounds(new Rectangle(5, 68, 130, 28));
 		jTextAreaTaskDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTaskDescriptions.setLineWrap(true);
 		jPanelTask2.setLayout(new BorderLayout());
@@ -3549,10 +3559,10 @@ public class Modeler extends JFrame {
 		jPanelTask5.setPreferredSize(new Dimension(10, 10));
 		jPanelTask5.setLayout(new BorderLayout());
 		jPanelTask6.setLayout(null);
-		jPanelTask6.setPreferredSize(new Dimension(1, 20));
+		jPanelTask6.setPreferredSize(new Dimension(1, 28));
 		jLabelTaskActions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskActions.setText(res.getString("S375"));
-		jLabelTaskActions.setBounds(new Rectangle(5, 0, 130, 20));
+		jLabelTaskActions.setBounds(new Rectangle(5, 0, 130, 28));
 		jSplitPaneTask2.setDividerLocation(150);
 		jSplitPaneTask3.setDividerLocation(800);
 		jSplitPaneTask4.setDividerLocation(200);
@@ -3600,24 +3610,24 @@ public class Modeler extends JFrame {
 		jLabelTaskActionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskActionDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskActionDescriptions.setText(res.getString("S390"));
-		jLabelTaskActionDescriptions.setBounds(new Rectangle(5, 0, 130, 20));
-		jLabelTaskActionExecuteIf.setBounds(new Rectangle(5, 9, 130, 20));
+		jLabelTaskActionDescriptions.setBounds(new Rectangle(5, 0, 130, 28));
+		jLabelTaskActionExecuteIf.setBounds(new Rectangle(5, 6, 130, 28));
 		jLabelTaskActionExecuteIf.setText(res.getString("S391"));
 		jLabelTaskActionExecuteIf.setToolTipText(res.getString("S392"));
 		jLabelTaskActionExecuteIf.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskActionExecuteIf.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskActionLabel.setBounds(new Rectangle(5, 40, 130, 20));
+		jLabelTaskActionLabel.setBounds(new Rectangle(5, 37, 130, 28));
 		jLabelTaskActionLabel.setText(res.getString("S394"));
 		jLabelTaskActionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTaskActionLabel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTaskActionExecuteIf.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskActionExecuteIf.setBounds(new Rectangle(140, 6, 600, 25));
+		jTextFieldTaskActionExecuteIf.setBounds(new Rectangle(140, 6, 600, 28));
 		jTextFieldTaskActionExecuteIf.setToolTipText(res.getString("S392"));
 		jTextFieldTaskActionExecuteIf.addFocusListener(new TaskActionTextFieldListener());
 		jTextFieldTaskActionLabel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskActionLabel.setBounds(new Rectangle(140, 37, 600, 25));
+		jTextFieldTaskActionLabel.setBounds(new Rectangle(140, 37, 600, 28));
 		jTextFieldTaskActionLabel.addFocusListener(new TaskActionTextFieldListener());
-		jPanelTask20.setPreferredSize(new Dimension(10, 20));
+		jPanelTask20.setPreferredSize(new Dimension(10, 28));
 		jPanelTask20.setLayout(null);
 		jPanelTask19.setBorder(BorderFactory.createEtchedBorder());
 		jLabelTaskFunctionIOSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -3625,15 +3635,15 @@ public class Modeler extends JFrame {
 		jLabelTaskFunctionIOSortKey.setForeground(Color.WHITE);
 		jLabelTaskFunctionIOOperations.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIOOperations.setText(res.getString("S400"));
-		jLabelTaskFunctionIOOperations.setBounds(new Rectangle(5, 0, 180, 20));
+		jLabelTaskFunctionIOOperations.setBounds(new Rectangle(5, 0, 180, 28));
 		jTextAreaTaskFunctionIOOperations.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTaskFunctionIOOperations.setLineWrap(true);
 		jPanelTask22.setBorder(BorderFactory.createEtchedBorder());
-		jPanelTask23.setPreferredSize(new Dimension(10, 20));
+		jPanelTask23.setPreferredSize(new Dimension(10, 28));
 		jPanelTask23.setLayout(null);
 		jLabelTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTaskFunctionIODescriptions.setText(res.getString("S403"));
-		jLabelTaskFunctionIODescriptions.setBounds(new Rectangle(5, 0, 200, 20));
+		jLabelTaskFunctionIODescriptions.setBounds(new Rectangle(5, 0, 200, 28));
 		jTextAreaTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTaskFunctionIODescriptions.setLineWrap(true);
 		jTextAreaTaskFunctionIODescriptions.setEditable(false);
@@ -3697,37 +3707,37 @@ public class Modeler extends JFrame {
 		jScrollPaneTaskFunctionIODescriptions.getViewport().add(jTextAreaTaskFunctionIODescriptions);
 		//
 		jLabelTaskFunctionIOImageFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageFunction.setBounds(new Rectangle(5, 6, 130, 20));
+		jLabelTaskFunctionIOImageFunction.setBounds(new Rectangle(5, 6, 130, 28));
 		jLabelTaskFunctionIOImageFunction.setText(res.getString("S643"));
 		jLabelTaskFunctionIOImageFunction.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunction.setBounds(new Rectangle(140, 6, 720, 25));
+		jTextFieldTaskFunctionIOImageFunction.setBounds(new Rectangle(140, 6, 720, 28));
 		jTextFieldTaskFunctionIOImageFunction.setOpaque(false);
 		jTextFieldTaskFunctionIOImageFunction.setEditable(false);
 		jTextFieldTaskFunctionIOImageFunction.setFocusable(false);
 		jTextFieldTaskFunctionIOImageFunction.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageFunctionRemarks.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageFunctionRemarks.setBounds(new Rectangle(5, 37, 130, 20));
+		jLabelTaskFunctionIOImageFunctionRemarks.setBounds(new Rectangle(5, 37, 130, 28));
 		jLabelTaskFunctionIOImageFunctionRemarks.setText(res.getString("S644"));
 		jLabelTaskFunctionIOImageFunctionRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunctionSummary.setBounds(new Rectangle(140, 37, 720, 25));
+		jTextFieldTaskFunctionIOImageFunctionSummary.setBounds(new Rectangle(140, 37, 720, 28));
 		jTextFieldTaskFunctionIOImageFunctionSummary.setOpaque(false);
 		jTextFieldTaskFunctionIOImageFunctionSummary.setEditable(false);
 		jTextFieldTaskFunctionIOImageFunctionSummary.setFocusable(false);
 		jTextFieldTaskFunctionIOImageFunctionSummary.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageTable.setBounds(new Rectangle(5, 68, 130, 20));
+		jLabelTaskFunctionIOImageTable.setBounds(new Rectangle(5, 68, 130, 28));
 		jLabelTaskFunctionIOImageTable.setText(res.getString("S645"));
 		jLabelTaskFunctionIOImageTable.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageTable.setBounds(new Rectangle(140, 68, 720, 25));
+		jTextFieldTaskFunctionIOImageTable.setBounds(new Rectangle(140, 68, 720, 28));
 		jTextFieldTaskFunctionIOImageTable.setOpaque(false);
 		jTextFieldTaskFunctionIOImageTable.setEditable(false);
 		jTextFieldTaskFunctionIOImageTable.setFocusable(false);
 		jTextFieldTaskFunctionIOImageTable.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageTableRemarks.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(5, 99, 130, 20));
+		jLabelTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(5, 99, 130, 28));
 		jLabelTaskFunctionIOImageTableRemarks.setText(res.getString("S646"));
 		jLabelTaskFunctionIOImageTableRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
 		jScrollPaneTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(140, 99, 720, 150));
@@ -3741,21 +3751,21 @@ public class Modeler extends JFrame {
 		jTextAreaTaskFunctionIOImageTableRemarks.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		//
 		jLabelTaskFunctionIOImageFunctionParms.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(5, 68, 130, 20));
+		jLabelTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(5, 68, 130, 28));
 		jLabelTaskFunctionIOImageFunctionParms.setText(res.getString("S313"));
 		jLabelTaskFunctionIOImageFunctionParms.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunctionParms.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(140, 68, 720, 25));
+		jTextFieldTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(140, 68, 720, 28));
 		jTextFieldTaskFunctionIOImageFunctionParms.setOpaque(false);
 		jTextFieldTaskFunctionIOImageFunctionParms.setEditable(false);
 		jTextFieldTaskFunctionIOImageFunctionParms.setFocusable(false);
 		jTextFieldTaskFunctionIOImageFunctionParms.addMouseListener(new Modeler_jTextPaneTaskFunctionIOImage_mouseAdapter(this));
 		jLabelTaskFunctionIOImageFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jLabelTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(5, 99, 130, 20));
+		jLabelTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(5, 99, 130, 28));
 		jLabelTaskFunctionIOImageFunctionReturn.setText(res.getString("S642"));
 		jLabelTaskFunctionIOImageFunctionReturn.setHorizontalAlignment(SwingConstants.RIGHT);
 		jTextFieldTaskFunctionIOImageFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(140, 99, 720, 25));
+		jTextFieldTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(140, 99, 720, 28));
 		jTextFieldTaskFunctionIOImageFunctionReturn.setOpaque(false);
 		jTextFieldTaskFunctionIOImageFunctionReturn.setEditable(false);
 		jTextFieldTaskFunctionIOImageFunctionReturn.setFocusable(false);
@@ -3818,53 +3828,53 @@ public class Modeler extends JFrame {
 		jLabelFunctionsStructure1.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure1.setText(res.getString("S411"));
 		jLabelFunctionsStructure1.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure1.setBounds(new Rectangle(7, 9, 130, 20));
+		jLabelFunctionsStructure1.setBounds(new Rectangle(7, 6, 130, 28));
 		jLabelFunctionsStructure2.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure2.setText(res.getString("S413"));
 		jLabelFunctionsStructure2.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure2.setBounds(new Rectangle(7, 40, 130, 20));
+		jLabelFunctionsStructure2.setBounds(new Rectangle(7, 37, 130, 28));
 		jLabelFunctionsStructure3.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure3.setText(res.getString("S415"));
 		jLabelFunctionsStructure3.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure3.setBounds(new Rectangle(7, 71, 130, 20));
+		jLabelFunctionsStructure3.setBounds(new Rectangle(7, 68, 130, 28));
 		jLabelFunctionsStructure4.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure4.setText(res.getString("S417"));
 		jLabelFunctionsStructure4.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure4.setBounds(new Rectangle(7, 102, 130, 20));
+		jLabelFunctionsStructure4.setBounds(new Rectangle(7, 99, 130, 28));
 		jLabelFunctionsStructure5.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure5.setText(res.getString("S419"));
 		jLabelFunctionsStructure5.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure5.setBounds(new Rectangle(7, 133, 130, 20));
+		jLabelFunctionsStructure5.setBounds(new Rectangle(7, 130, 130, 28));
 		jLabelFunctionsStructure6.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionsStructure6.setText(res.getString("S421"));
 		jLabelFunctionsStructure6.setHorizontalAlignment(SwingConstants.RIGHT);
-		jLabelFunctionsStructure6.setBounds(new Rectangle(7, 164, 130, 20));
+		jLabelFunctionsStructure6.setBounds(new Rectangle(7, 161, 130, 28));
 		jTextFieldFunctionsStructureLaunchEvent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureLaunchEvent.setBounds(new Rectangle(143, 8, 600, 25));
+		jTextFieldFunctionsStructureLaunchEvent.setBounds(new Rectangle(143, 8, 600, 28));
 		jTextFieldFunctionsStructureLaunchEvent.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureLaunchEvent.setEditable(false);
 		jTextFieldFunctionsStructureSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureSubsystemName.setBounds(new Rectangle(143, 39, 400, 25));
+		jTextFieldFunctionsStructureSubsystemName.setBounds(new Rectangle(143, 39, 400, 28));
 		jTextFieldFunctionsStructureSubsystemName.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureSubsystemName.setEditable(false);
 		jTextFieldFunctionsStructureFunctionName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureFunctionName.setBounds(new Rectangle(143, 70, 400, 25));
+		jTextFieldFunctionsStructureFunctionName.setBounds(new Rectangle(143, 70, 400, 28));
 		jTextFieldFunctionsStructureFunctionName.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureFunctionName.setEditable(false);
 		jTextFieldFunctionsStructureFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureFunctionType.setBounds(new Rectangle(143, 101, 300, 25));
+		jTextFieldFunctionsStructureFunctionType.setBounds(new Rectangle(143, 101, 300, 28));
 		jTextFieldFunctionsStructureFunctionType.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureFunctionType.setEditable(false);
 		jTextFieldFunctionsStructureFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureFunctionSummary.setBounds(new Rectangle(143, 132, 757, 25));
+		jTextFieldFunctionsStructureFunctionSummary.setBounds(new Rectangle(143, 132, 757, 28));
 		jTextFieldFunctionsStructureFunctionSummary.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureFunctionSummary.setEditable(false);
 		jTextFieldFunctionsStructureFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureFunctionParameters.setBounds(new Rectangle(143, 163, 500, 25));
+		jTextFieldFunctionsStructureFunctionParameters.setBounds(new Rectangle(143, 163, 500, 28));
 		jTextFieldFunctionsStructureFunctionParameters.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureFunctionParameters.setEditable(false);
 		jTextFieldFunctionsStructureFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionsStructureFunctionReturn.setBounds(new Rectangle(650, 163, 250, 25));
+		jTextFieldFunctionsStructureFunctionReturn.setBounds(new Rectangle(650, 163, 250, 28));
 		jTextFieldFunctionsStructureFunctionReturn.setBackground(SystemColor.control);
 		jTextFieldFunctionsStructureFunctionReturn.setEditable(false);
 		jSplitPaneFunctionsStructure1.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
@@ -4064,24 +4074,24 @@ public class Modeler extends JFrame {
 		jPanelSubsystem.setLayout(new BorderLayout());
 		jPanelSubsystem3.setLayout(null);
 		jTextFieldSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubsystemName.setBounds(new Rectangle(150, 6, 350, 25));
+		jTextFieldSubsystemName.setBounds(new Rectangle(150, 6, 350, 28));
 		jLabelSubsystemDescriptions1.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsystemDescriptions1.setMaximumSize(new Dimension(70, 15));
 		jLabelSubsystemDescriptions1.setMinimumSize(new Dimension(70, 15));
 		jLabelSubsystemDescriptions1.setPreferredSize(new Dimension(70, 15));
 		jLabelSubsystemDescriptions1.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabelSubsystemDescriptions1.setText(res.getString("S204"));
-		jLabelSubsystemDescriptions1.setBounds(new Rectangle(7, 0, 130, 22));
+		jLabelSubsystemDescriptions1.setBounds(new Rectangle(7, 0, 130, 28));
 		jLabelSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsystemName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubsystemName.setText(res.getString("S436"));
-		jLabelSubsystemName.setBounds(new Rectangle(5, 9, 140, 20));
+		jLabelSubsystemName.setBounds(new Rectangle(5, 6, 140, 28));
 		jPanelSubsystem3.setPreferredSize(new Dimension(10, 37));
 		jPanelSubsystem1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelSubsystem1.setPreferredSize(new Dimension(10, 80));
 		jPanelSubsystem1.setLayout(new BorderLayout());
 		jPanelSubsystem2.setLayout(null);
-		jPanelSubsystem2.setPreferredSize(new Dimension(10, 22));
+		jPanelSubsystem2.setPreferredSize(new Dimension(10, 28));
 		jPanelSubsystem2.setMinimumSize(new Dimension(100, 10));
 		jPanelSubsystem.add(jPanelSubsystem3, BorderLayout.NORTH);
 		jPanelSubsystem3.add(jTextFieldSubsystemName, null);
@@ -4094,9 +4104,9 @@ public class Modeler extends JFrame {
 		jLabelSubsysytemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelSubsysytemSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelSubsysytemSortKey.setText(res.getString("S201"));
-		jLabelSubsysytemSortKey.setBounds(new Rectangle(510, 9, 130, 20));
+		jLabelSubsysytemSortKey.setBounds(new Rectangle(510, 6, 130, 28));
 		jTextFieldSubsystemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldSubsystemSortKey.setBounds(new Rectangle(645, 6, 100, 25));
+		jTextFieldSubsystemSortKey.setBounds(new Rectangle(645, 6, 100, 28));
 		jTextAreaSubsystemDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaSubsystemDescriptions.setLineWrap(true);
 		jPanelSubsystem1.add(jScrollPaneSubsystemDescriptions,  BorderLayout.CENTER);
@@ -4275,11 +4285,11 @@ public class Modeler extends JFrame {
 		jPanelDatamodelTop.add(jPanelDatamodelDescriptions,  BorderLayout.NORTH);
 		jPanelDatamodelTop.add(jScrollPaneDatamodelDescriptions, BorderLayout.CENTER);
 		jPanelDatamodelDescriptions.setLayout(null);
-		jPanelDatamodelDescriptions.setPreferredSize(new Dimension(500, 20));
+		jPanelDatamodelDescriptions.setPreferredSize(new Dimension(500, 28));
 		jPanelDatamodelDescriptions.add(jLabelDatamodelDescriptions, null);
 		jLabelDatamodelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelDatamodelDescriptions.setText(res.getString("S467"));
-		jLabelDatamodelDescriptions.setBounds(new Rectangle(5, 0, 300, 20));
+		jLabelDatamodelDescriptions.setBounds(new Rectangle(5, 0, 300, 28));
 		jTextAreaDatamodelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaDatamodelDescriptions.setLineWrap(true);
 		jScrollPaneDatamodelDescriptions.getViewport().add(jTextAreaDatamodelDescriptions, null);
@@ -4323,51 +4333,51 @@ public class Modeler extends JFrame {
 		jLabelTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableName.setText(res.getString("S471"));
-		jLabelTableName.setBounds(new Rectangle(5, 9, 130, 20));
+		jLabelTableName.setBounds(new Rectangle(5, 6, 130, 28));
 		jTextFieldTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableName.setBounds(new Rectangle(0, 6, 350, 25));
+		jTextFieldTableName.setBounds(new Rectangle(0, 6, 350, 28));
 		jLabelTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableSortKey.setText(res.getString("S201"));
-		jLabelTableSortKey.setBounds(new Rectangle(360, 9, 130, 20));
+		jLabelTableSortKey.setBounds(new Rectangle(360, 6, 130, 28));
 		jTextFieldTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableSortKey.setBounds(new Rectangle(495, 6, 245, 25));
+		jTextFieldTableSortKey.setBounds(new Rectangle(495, 6, 245, 28));
 		jLabelTableAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableAlias.setText(res.getString("S473"));
-		jLabelTableAlias.setBounds(new Rectangle(745, 9, 100, 20));
+		jLabelTableAlias.setBounds(new Rectangle(745, 6, 100, 28));
 		jTextFieldTableAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableAlias.setBounds(new Rectangle(850, 6, 200, 25));
+		jTextFieldTableAlias.setBounds(new Rectangle(850, 6, 200, 28));
 		jLabelTableType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableType.setRequestFocusEnabled(true);
 		jLabelTableType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableType.setText(res.getString("S502"));
-		jLabelTableType.setBounds(new Rectangle(745, 40, 100, 20));
+		jLabelTableType.setBounds(new Rectangle(745, 37, 100, 28));
 		jComboBoxTableType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxTableType.setActionCommand("comboBoxChanged");
-		jComboBoxTableType.setBounds(new Rectangle(850, 37, 200, 25));
+		jComboBoxTableType.setBounds(new Rectangle(850, 37, 200, 28));
 		jLabelTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTablePK.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTablePK.setText(res.getString("S508"));
-		jLabelTablePK.setBounds(new Rectangle(5, 40, 130, 20));
+		jLabelTablePK.setBounds(new Rectangle(5, 37, 130, 28));
 		jTextFieldTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTablePK.setEditable(false);
-		jTextFieldTablePK.setBounds(new Rectangle(0, 37, 740, 25));
+		jTextFieldTablePK.setBounds(new Rectangle(0, 37, 740, 28));
 		jLabelTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableSynchronize.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableSynchronize.setText(res.getString("S510"));
-		jLabelTableSynchronize.setBounds(new Rectangle(5, 71, 130, 20));
+		jLabelTableSynchronize.setBounds(new Rectangle(5, 68, 130, 28));
 		jTextFieldTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableSynchronize.setBounds(new Rectangle(0, 68, 740, 25));
+		jTextFieldTableSynchronize.setBounds(new Rectangle(0, 68, 740, 28));
 		jTextFieldTableSynchronize.addKeyListener(new Modeler_jTextFieldTableSynchronize_keyAdapter(this));
 		jButtonTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jButtonTableSynchronize.setText(res.getString("S511"));
-		jButtonTableSynchronize.setBounds(new Rectangle(745, 67, 180, 27));
+		jButtonTableSynchronize.setBounds(new Rectangle(740, 68, 180, 28));
 		jButtonTableSynchronize.addActionListener(new Modeler_jButtonTableSynchronize_actionAdapter(this));
 		jLabelTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableDescriptions.setText(res.getString("S204"));
-		jLabelTableDescriptions.setBounds(new Rectangle(5, 99, 130, 20));
+		jLabelTableDescriptions.setBounds(new Rectangle(5, 96, 130, 28));
 		jTextAreaTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaTableDescriptions.setLineWrap(true);
 		jTextAreaTableCreateStatement.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -4619,73 +4629,71 @@ public class Modeler extends JFrame {
 		jSplitPaneTableField1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneTableField1.setBorder(null);
 		jSplitPaneTableField1.setDividerLocation(190);
-		//jScrollPaneTask1.setBorder(null);
-		//jScrollPaneTask1.getViewport().add(jPanelTask1);
 		jLabelTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldName.setText(res.getString("S577"));
-		jLabelTableFieldName.setBounds(new Rectangle(5, 9, 130, 20));
+		jLabelTableFieldName.setBounds(new Rectangle(5, 6, 130, 28));
 		jTextFieldTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableFieldName.setBounds(new Rectangle(140, 6, 250, 25));
+		jTextFieldTableFieldName.setBounds(new Rectangle(140, 6, 320, 28));
 		jLabelTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAlias.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAlias.setText(res.getString("S297"));
-		jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 20));
+		jLabelTableFieldAlias.setBounds(new Rectangle(465, 6, 130, 28));
 		jTextFieldTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 300, 25));
-		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 120, 25));
-		jCheckBoxTableFieldNotNull.setText("Not Null");
-		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1060, 8, 130, 25));
-		jCheckBoxTableFieldNoUpdate.setText(res.getString("S582"));
-		jCheckBoxTableFieldNoUpdate.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1190, 8, 160, 25));
-		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
-		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
+		jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 410, 28));
 		jLabelTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldDataType.setRequestFocusEnabled(true);
 		jLabelTableFieldDataType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldDataType.setText(res.getString("S556"));
-		jLabelTableFieldDataType.setBounds(new Rectangle(5, 40, 130, 20));
-		jTextFieldTableFieldDataType.setBounds(new Rectangle(140, 37, 250, 25));
+		jLabelTableFieldDataType.setBounds(new Rectangle(5, 37, 130, 28));
+		jTextFieldTableFieldDataType.setBounds(new Rectangle(140, 37, 250, 28));
 		jTextFieldTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableFieldDataType.setBackground(SystemColor.control);
 		jTextFieldTableFieldDataType.setEditable(false);
 		jButtonTableFieldDataTypeChange.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jButtonTableFieldDataTypeChange.setText("Edit");
-		jButtonTableFieldDataTypeChange.setBounds(new Rectangle(390, 36, 70, 27));
+		jButtonTableFieldDataTypeChange.setBounds(new Rectangle(390, 37, 70, 28));
 		jButtonTableFieldDataTypeChange.addActionListener(new Modeler_jButtonTableFieldDataTypeChange_actionAdapter(this));
 		jMenuItemAddDataType.setText(res.getString("S550"));
 		jMenuItemAddDataType.addActionListener(new Modeler_jMenuItemAddDataType_actionAdapter(this));
 		jLabelTableFieldAttributeType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldAttributeType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldAttributeType.setText(res.getString("S554"));
-		jLabelTableFieldAttributeType.setBounds(new Rectangle(465, 40, 130, 20));
+		jLabelTableFieldAttributeType.setBounds(new Rectangle(465, 37, 130, 28));
 		jPanelTableField3.setBorder(BorderFactory.createEtchedBorder());
-		jPanelTableField3.setBounds(new Rectangle(600, 36, 410, 27));
+		jPanelTableField3.setBounds(new Rectangle(600, 37, 410, 31));
 		jPanelTableField3.setLayout(null);
 		jRadioButtonTableFieldAttributeTypeNATIVE.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jRadioButtonTableFieldAttributeTypeNATIVE.setText(res.getString("S558"));
 		jRadioButtonTableFieldAttributeTypeNATIVE.setToolTipText(res.getString("S559"));
-		jRadioButtonTableFieldAttributeTypeNATIVE.setBounds(new Rectangle(2, 2, 130, 22));
+		jRadioButtonTableFieldAttributeTypeNATIVE.setBounds(new Rectangle(2, 2, 130, 27));
 		jRadioButtonTableFieldAttributeTypeINHERITED.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jRadioButtonTableFieldAttributeTypeINHERITED.setText(res.getString("S561"));
 		jRadioButtonTableFieldAttributeTypeINHERITED.setToolTipText(res.getString("S562"));
-		jRadioButtonTableFieldAttributeTypeINHERITED.setBounds(new Rectangle(135, 2, 130, 22));
+		jRadioButtonTableFieldAttributeTypeINHERITED.setBounds(new Rectangle(135, 2, 130, 27));
 		jRadioButtonTableFieldAttributeTypeDERIVABLE.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jRadioButtonTableFieldAttributeTypeDERIVABLE.setText(res.getString("S564"));
 		jRadioButtonTableFieldAttributeTypeDERIVABLE.setToolTipText(res.getString("S565"));
-		jRadioButtonTableFieldAttributeTypeDERIVABLE.setBounds(new Rectangle(268, 2, 130, 22));
+		jRadioButtonTableFieldAttributeTypeDERIVABLE.setBounds(new Rectangle(268, 2, 130, 27));
 		buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeNATIVE);
 		buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeINHERITED);
 		buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeDERIVABLE);
 		jLabelTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableFieldDefault.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldDefault.setText(res.getString("S569"));
-		jLabelTableFieldDefault.setBounds(new Rectangle(1010, 40, 100, 20));
+		jLabelTableFieldDefault.setBounds(new Rectangle(5, 68, 130, 28));
 		jTextFieldTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableFieldDefault.setBounds(new Rectangle(1115, 37, 70, 25));
+		jTextFieldTableFieldDefault.setBounds(new Rectangle(140, 68, 70, 28));
+		jCheckBoxTableFieldNotNull.setBounds(new Rectangle(260, 68, 120, 28));
+		jCheckBoxTableFieldNotNull.setText("Not Null");
+		jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(430, 68, 130, 28));
+		jCheckBoxTableFieldNoUpdate.setText(res.getString("S582"));
+		jCheckBoxTableFieldNoUpdate.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(610, 68, 180, 28));
+		jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
+		jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
 		jLabelTableFieldDescriptions.setText(res.getString("S204"));
 		jLabelTableFieldDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableFieldDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -4699,7 +4707,7 @@ public class Modeler extends JFrame {
 		jPanelTableField5.setLayout(null);
 		jPanelTableField6.setLayout(new BorderLayout());
 		jPanelTableField6.setBorder(null);
-		jLabelTableFieldDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
+		jLabelTableFieldDescriptions.setBounds(new Rectangle(5, 2, 130, 28));
 		jPanelTableField.setLayout(new BorderLayout());
 		jTableTableFieldUsageList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTableTableFieldUsageList.setBackground(SystemColor.control);
@@ -4716,13 +4724,13 @@ public class Modeler extends JFrame {
 		jTableTableFieldForeignUsageList.addMouseListener(new Modeler_jTableTableFieldForeignUsageList_mouseAdapter(this));
 		jTableTableFieldForeignUsageList.addFocusListener(new Modeler_FocusListener());
 		jTableTableFieldForeignUsageList.setRowHeight(TABLE_ROW_HEIGHT);
-		jPanelTableField2.setPreferredSize(new Dimension(10, 68));
+		jPanelTableField2.setPreferredSize(new Dimension(10, 99));
 		jPanelTableField2.setLayout(null);
 		jScrollPaneTableField1.setBorder(null);
 		jScrollPaneTableField1.getViewport().add(jPanelTableField1);
 		jPanelTableField1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelTableField1.setMinimumSize(new Dimension(100, 38));
-		jPanelTableField1.setPreferredSize(new Dimension(1330, 130));
+		jPanelTableField1.setPreferredSize(new Dimension(1013, 130));
 		jPanelTableField1.setLayout(new BorderLayout());
 		jTabbedPaneTableField.addTab(res.getString("S519"), imageIconFunction, jScrollPaneTableFieldUsageList);
 		jTabbedPaneTableField.addTab(res.getString("S520"), imageIconForeignFunction, jScrollPaneTableFieldForeignUsageList);
@@ -4895,23 +4903,23 @@ public class Modeler extends JFrame {
 		jLabelKeyType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelKeyType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelKeyType.setText(res.getString("S616"));
-		jLabelKeyType.setBounds(new Rectangle(5, 12, 130, 20));
+		jLabelKeyType.setBounds(new Rectangle(5, 9, 130, 28));
 		jTextFieldTableKeyType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldTableKeyType.setEditable(false);
-		jTextFieldTableKeyType.setBounds(new Rectangle(140, 10, 200, 25));
+		jTextFieldTableKeyType.setBounds(new Rectangle(140, 9, 200, 28));
 		jLabelTableKeySortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableKeySortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelTableKeySortKey.setText(res.getString("S540"));
-		jLabelTableKeySortKey.setBounds(new Rectangle(350, 11, 130, 15));
+		jLabelTableKeySortKey.setBounds(new Rectangle(350, 9, 130, 28));
 		jTextFieldTableKeySortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldTableKeySortKey.setBounds(new Rectangle(485, 10, 90, 25));
+		jTextFieldTableKeySortKey.setBounds(new Rectangle(485, 9, 90, 28));
 		jScrollPaneTableKeyFieldList.setBorder(null);
 		jLabelTableKeyFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelTableKeyFieldList.setText(res.getString("S613"));
-		jLabelTableKeyFieldList.setBounds(new Rectangle(5, 1, 130, 20));
+		jLabelTableKeyFieldList.setBounds(new Rectangle(5, 0, 130, 28));
 		jLabelRelationshipList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelRelationshipList.setText(res.getString("S624"));
-		jLabelRelationshipList.setBounds(new Rectangle(5, 1, 130, 20));
+		jLabelRelationshipList.setBounds(new Rectangle(5, 0, 130, 28));
 		jScrollPaneRelationshipList.setBorder(null);
 		jSplitPaneTableKey.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneTableKey.setBorder(null);
@@ -4922,8 +4930,8 @@ public class Modeler extends JFrame {
 		jPanelTableKey3.setPreferredSize(new Dimension(10, 300));
 		jPanelTableKey3.setLayout(new BorderLayout());
 		jPanelTableKey4.setLayout(null);
-		jPanelTableKey4.setPreferredSize(new Dimension(1, 22));
-		jPanelTableKey5.setPreferredSize(new Dimension(1, 22));
+		jPanelTableKey4.setPreferredSize(new Dimension(1, 28));
+		jPanelTableKey5.setPreferredSize(new Dimension(1, 28));
 		jPanelTableKey5.setLayout(null);
 		jPanelTableKey6.setLayout(new BorderLayout());
 		jSplitPaneTableKey.add(jPanelTableKey2, JSplitPane.TOP);
@@ -5102,54 +5110,54 @@ public class Modeler extends JFrame {
 		jLabelFunctionName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionName.setText(res.getString("S664"));
-		jLabelFunctionName.setBounds(new Rectangle(5, 8, 130, 20));
+		jLabelFunctionName.setBounds(new Rectangle(5, 5, 130, 28));
 		jTextFieldFunctionName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionName.setBounds(new Rectangle(0, 5, 300, 25));
+		jTextFieldFunctionName.setBounds(new Rectangle(0, 5, 350, 28));
 		jLabelFunctionSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionSortKey.setText(res.getString("S201"));
-		jLabelFunctionSortKey.setBounds(new Rectangle(310, 8, 130, 20));
+		jLabelFunctionSortKey.setBounds(new Rectangle(360, 5, 110, 28));
 		jTextFieldFunctionSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionSortKey.setBounds(new Rectangle(445, 5, 200, 25));
+		jTextFieldFunctionSortKey.setBounds(new Rectangle(475, 5, 150, 28));
 		jLabelFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionType.setRequestFocusEnabled(true);
 		jLabelFunctionType.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionType.setText(res.getString("S662"));
-		jLabelFunctionType.setBounds(new Rectangle(650, 8, 110, 20));
+		jLabelFunctionType.setBounds(new Rectangle(630, 5, 80, 28));
 		jComboBoxFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxFunctionType.setActionCommand("comboBoxChanged");
 		jComboBoxFunctionType.setModel(sortableComboBoxModelFunctionType);
-		jComboBoxFunctionType.setBounds(new Rectangle(765, 6, 250, 25));
+		jComboBoxFunctionType.setBounds(new Rectangle(715, 5, 270, 28));
 		jComboBoxFunctionType.setMaximumRowCount(40);
 		jLabelFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionSummary.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionSummary.setText(res.getString("S668"));
-		jLabelFunctionSummary.setBounds(new Rectangle(5, 39, 130, 20));
+		jLabelFunctionSummary.setBounds(new Rectangle(5, 36, 130, 28));
 		jTextFieldFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionSummary.setBounds(new Rectangle(0, 36, 1015, 25));
+		jTextFieldFunctionSummary.setBounds(new Rectangle(0, 36, 985, 28));
 		jLabelFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionParameters.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionParameters.setText(res.getString("S666"));
-		jLabelFunctionParameters.setBounds(new Rectangle(5, 70, 130, 20));
+		jLabelFunctionParameters.setBounds(new Rectangle(5, 67, 130, 28));
 		jTextFieldFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionParameters.setBounds(new Rectangle(0, 67, 360, 25));
+		jTextFieldFunctionParameters.setBounds(new Rectangle(0, 67, 625, 28)); //550
 		jTextFieldFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldFunctionReturn.setBounds(new Rectangle(365, 67, 280, 25));
+		jTextFieldFunctionReturn.setBounds(new Rectangle(630, 67, 355, 28));
 		jLabelFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionDocFile.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionDocFile.setText(res.getString("S667"));
-		jLabelFunctionDocFile.setBounds(new Rectangle(650, 70, 110, 20));
-		jComboBoxFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, 12));
-		jComboBoxFunctionDocFile.setBounds(new Rectangle(765, 67, 340, 25));
+		jLabelFunctionDocFile.setBounds(new Rectangle(5, 98, 130, 28));
+		jComboBoxFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jComboBoxFunctionDocFile.setBounds(new Rectangle(0, 98, 915, 28));
 		jComboBoxFunctionDocFile.addMouseListener(new Modeler_jComboBoxFunctionDocFile_mouseAdapter(this));
-		jButtonFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jButtonFunctionDocFile.setBounds(new Rectangle(1105, 66, 70, 27));
-		jButtonFunctionDocFile.setText("Edit");
-		jButtonFunctionDocFile.addActionListener(new Modeler_jButtonFunctionDocFile_actionAdapter(this));
+		jButtonFunctionDocFileEdit.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+		jButtonFunctionDocFileEdit.setBounds(new Rectangle(915, 98, 70, 28));
+		jButtonFunctionDocFileEdit.setText("Edit");
+		jButtonFunctionDocFileEdit.addActionListener(new Modeler_jButtonFunctionDocFileEdit_actionAdapter(this));
 		jPanelFunction3.setLayout(null);
 		jPanelFunction3.setMinimumSize(new Dimension(100, 99));
-		jPanelFunction3.setPreferredSize(new Dimension(10, 99));
-		jLabelFunctionDescriptions.setBounds(new Rectangle(5, 101, 130, 20));
+		jPanelFunction3.setPreferredSize(new Dimension(10, 130));
+		jLabelFunctionDescriptions.setBounds(new Rectangle(5, 129, 130, 28));
 		jLabelFunctionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelFunctionDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelFunctionDescriptions.setText(res.getString("S204"));
@@ -5165,7 +5173,7 @@ public class Modeler extends JFrame {
 		jPanelFunction1.setLayout(new BorderLayout());
 		jPanelFunction1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelFunction1.setMinimumSize(new Dimension(100, 30));
-		jPanelFunction1.setPreferredSize(new Dimension(1330, 80));
+		jPanelFunction1.setPreferredSize(new Dimension(1130, 80));
 		jPanelFunction.setLayout(new BorderLayout());
 		jPanelFunction.add(jSplitPaneFunction,  BorderLayout.CENTER);
 		jPanelFunction1.add(jPanelFunction4,  BorderLayout.WEST);
@@ -5180,14 +5188,14 @@ public class Modeler extends JFrame {
 		jPanelFunction3.add(jTextFieldFunctionParameters, null);
 		jPanelFunction3.add(jTextFieldFunctionReturn, null);
 		jPanelFunction3.add(jComboBoxFunctionDocFile, null);
-		jPanelFunction3.add(jButtonFunctionDocFile, null);
+		jPanelFunction3.add(jButtonFunctionDocFileEdit, null);
 		jPanelFunction3.add(jTextFieldFunctionName, null);
 		jPanelFunction3.add(jLabelFunctionSortKey, null);
 		jPanelFunction3.add(jTextFieldFunctionSortKey, null);
-		jPanelFunction3.add(jLabelFunctionDocFile, null);
 		jPanelFunction4.add(jLabelFunctionName, null);
 		jPanelFunction4.add(jLabelFunctionParameters, null);
 		jPanelFunction4.add(jLabelFunctionSummary, null);
+		jPanelFunction4.add(jLabelFunctionDocFile, null);
 		jPanelFunction4.add(jLabelFunctionDescriptions, null);
 		jTabbedPaneFunction.addTab(res.getString("S673"), imageIconIOPanel, jScrollPaneFunctionIOList);
 		jTabbedPaneFunction.addTab(res.getString("S674"), imageIconFunction, jScrollPaneFunctionsUsedByThis);
@@ -5216,21 +5224,17 @@ public class Modeler extends JFrame {
 		jTableFunctionIOList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jTableFunctionIOList.setRowHeight(TABLE_ROW_HEIGHT);
 		tableModelFunctionIOList.addColumn("No.");
-		//tableModelFunctionIOList.addColumn(res.getString("S201"));
 		tableModelFunctionIOList.addColumn(res.getString("S680"));
 		tableModelFunctionIOList.addColumn(res.getString("S204"));
 		column0 = jTableFunctionIOList.getColumnModel().getColumn(0);
 		column1 = jTableFunctionIOList.getColumnModel().getColumn(1);
 		column2 = jTableFunctionIOList.getColumnModel().getColumn(2);
-		//column3 = jTableFunctionIOList.getColumnModel().getColumn(3);
 		column0.setPreferredWidth(40);
-		//column1.setPreferredWidth(90);
 		column1.setPreferredWidth(400);
 		column2.setPreferredWidth(450);
 		column0.setCellRenderer(rendererAlignmentCenter);
 		column1.setCellRenderer(rendererAlignmentLeft);
 		column2.setCellRenderer(rendererAlignmentLeft);
-		//column3.setCellRenderer(rendererAlignmentLeft);
 		jTableFunctionIOList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		rendererTableHeader = (DefaultTableCellRenderer)jTableFunctionIOList.getTableHeader().getDefaultRenderer();
 		rendererTableHeader.setHorizontalAlignment(2); //LEFT//
@@ -5362,15 +5366,9 @@ public class Modeler extends JFrame {
 		jLabelIOPanelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOPanelName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOPanelName.setText(res.getString("S703"));
-		jLabelIOPanelName.setBounds(new Rectangle(5, 8, 130, 20));
+		jLabelIOPanelName.setBounds(new Rectangle(5, 5, 130, 28));
 		jTextFieldIOPanelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOPanelName.setBounds(new Rectangle(0, 5, 250, 25));
-		//jLabelIOPanelSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jLabelIOPanelSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-		//jLabelIOPanelSortKey.setText(res.getString("S201"));
-		//jLabelIOPanelSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-		//jTextFieldIOPanelSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOPanelSortKey.setBounds(new Rectangle(395, 5, 100, 25));
+		jTextFieldIOPanelName.setBounds(new Rectangle(0, 5, 250, 28));
 		jPanelIOPanel1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelIOPanel1.setPreferredSize(new Dimension(10, 100));
 		jPanelIOPanel1.setLayout(new BorderLayout());
@@ -5385,7 +5383,7 @@ public class Modeler extends JFrame {
 		jLabelIOPanelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOPanelDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOPanelDescriptions.setText(res.getString("S204"));
-		jLabelIOPanelDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
+		jLabelIOPanelDescriptions.setBounds(new Rectangle(5, 36, 130, 28));
 		jTextAreaIOPanelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaIOPanelDescriptions.setLineWrap(true);
 		jScrollPaneIOPanelFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -5396,8 +5394,6 @@ public class Modeler extends JFrame {
 		jPanelIOPanel3.add(jPanelIOPanel4, BorderLayout.NORTH);
 		jScrollPaneIOPanelDescriptions.getViewport().add(jTextAreaIOPanelDescriptions, null);
 		jPanelIOPanel4.add(jTextFieldIOPanelName, null);
-		//jPanelIOPanel4.add(jTextFieldIOPanelSortKey, null);
-		//jPanelIOPanel4.add(jLabelIOPanelSortKey, null);
 		jPanelIOPanel1.add(jPanelIOPanel2, BorderLayout.WEST);
 		jPanelIOPanel1.add(jPanelIOPanel3, BorderLayout.CENTER);
 		jPanelIOPanel2.add(jLabelIOPanelName, null);
@@ -5452,18 +5448,12 @@ public class Modeler extends JFrame {
 		Keymap keymapIOSpoolImage = jTextPaneIOSpoolImage.getKeymap();
 		JTextComponent.loadKeymap(keymapIOSpoolImage, customBindings, jTextPaneIOSpoolImage.getActions());
 		jPanelIOSpool.setLayout(new BorderLayout());
-		jLabelIOSpoolName.setBounds(new Rectangle(5, 8, 130, 25));
+		jLabelIOSpoolName.setBounds(new Rectangle(5, 5, 130, 28));
 		jLabelIOSpoolName.setText(res.getString("S717"));
 		jLabelIOSpoolName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOSpoolName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOSpoolName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOSpoolName.setBounds(new Rectangle(0, 5, 250, 25));
-		//jLabelIOSpoolSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jLabelIOSpoolSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-		//jLabelIOSpoolSortKey.setText(res.getString("S201"));
-		//jLabelIOSpoolSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-		//jTextFieldIOSpoolSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOSpoolSortKey.setBounds(new Rectangle(395, 5, 100, 25));
+		jTextFieldIOSpoolName.setBounds(new Rectangle(0, 5, 250, 28));
 		jPanelIOSpool1.setLayout(new BorderLayout());
 		jPanelIOSpool1.setPreferredSize(new Dimension(10, 100));
 		jPanelIOSpool1.setBorder(BorderFactory.createEtchedBorder());
@@ -5478,7 +5468,7 @@ public class Modeler extends JFrame {
 		jLabelIOSpoolDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOSpoolDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOSpoolDescriptions.setText(res.getString("S204"));
-		jLabelIOSpoolDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
+		jLabelIOSpoolDescriptions.setBounds(new Rectangle(5, 36, 130, 28));
 		jTextAreaIOSpoolDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaIOSpoolDescriptions.setLineWrap(true);
 		jScrollPaneIOSpoolFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -5511,8 +5501,6 @@ public class Modeler extends JFrame {
 		jPanelIOSpool3.add(jPanelIOSpool4, BorderLayout.NORTH);
 		jScrollPaneIOSpoolDescriptions.getViewport().add(jTextAreaIOSpoolDescriptions, null);
 		jPanelIOSpool4.add(jTextFieldIOSpoolName, null);
-		//jPanelIOSpool4.add(jTextFieldIOSpoolSortKey, null);
-		//jPanelIOSpool4.add(jLabelIOSpoolSortKey, null);
 		jPanelIOSpool.add(jSplitPaneIOSpool1, BorderLayout.CENTER);
 		jSplitPaneIOSpool1.add(jSplitPaneIOSpool2, JSplitPane.TOP);
 		jSplitPaneIOSpool1.add(jScrollPaneIOSpoolFieldList, JSplitPane.BOTTOM);
@@ -5550,39 +5538,27 @@ public class Modeler extends JFrame {
 		jSplitPaneIOTable.add(jPanelIOTable1, JSplitPane.TOP);
 		jSplitPaneIOTable.add(jScrollPaneIOTableFieldList, JSplitPane.BOTTOM);
 		jSplitPaneIOTable.setDividerLocation(160);
-		jLabelIOTableName.setBounds(new Rectangle(5, 8, 130, 20));
+		jLabelIOTableName.setBounds(new Rectangle(5, 5, 130, 28));
 		jLabelIOTableName.setText(res.getString("S471"));
 		jLabelIOTableName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOTableName.setEditable(false);
 		jTextFieldIOTableName.setBorder(jTextFieldIOTablePK.getBorder());
 		jTextFieldIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 535, 25));
+		jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 535, 28));
 		jTextFieldIOTableName.addMouseListener(new Modeler_jTextFieldIOTableName_mouseAdapter(this));
-		//jLabelIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jLabelIOTableID.setHorizontalAlignment(SwingConstants.RIGHT);
-		//jLabelIOTableID.setText("ID");
-		//jLabelIOTableID.setBounds(new Rectangle(360, 8, 70, 20));
-		//jTextFieldIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOTableID.setEditable(false);
-		//jTextFieldIOTableID.setBounds(new Rectangle(435, 5, 170, 25));
-		//jButtonIOTableJump.setBounds(new Rectangle(610, 4, 291, 26));
-		//jButtonIOTableJump.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jButtonIOTableJump.setText(res.getString("S761"));
-		//jButtonIOTableJump.addActionListener(new Modeler_jButtonIOTableJump_actionAdapter(this));
 		jLabelIOTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTablePK.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTablePK.setText(res.getString("S739"));
-		jLabelIOTablePK.setBounds(new Rectangle(5, 39, 130, 20));
+		jLabelIOTablePK.setBounds(new Rectangle(5, 36, 130, 28));
 		jTextFieldIOTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextFieldIOTablePK.setPreferredSize(new Dimension(81, 22));
 		jTextFieldIOTablePK.setEditable(false);
-		jTextFieldIOTablePK.setBounds(new Rectangle(0, 36, 685, 25));
+		jTextFieldIOTablePK.setBounds(new Rectangle(0, 36, 685, 28));
 		jLabelIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTablePosition.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTablePosition.setText(res.getString("S750"));
-		jLabelIOTablePosition.setBounds(new Rectangle(420, 70, 110, 20));
-		jComboBoxIOTablePosition.setBounds(new Rectangle(535, 67, 150, 25));
+		jLabelIOTablePosition.setBounds(new Rectangle(420, 67, 110, 28));
+		jComboBoxIOTablePosition.setBounds(new Rectangle(535, 67, 150, 28));
 		jComboBoxIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jComboBoxIOTablePosition.addItem(res.getString("S751")); //0:Primary Table//
 		jComboBoxIOTablePosition.addItem(res.getString("S752")); //1:Header Table//
@@ -5592,41 +5568,35 @@ public class Modeler extends JFrame {
 		jLabelIOTableCRUD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableCRUD.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableCRUD.setText(res.getString("S745"));
-		jLabelIOTableCRUD.setBounds(new Rectangle(5, 70, 130, 20));
+		jLabelIOTableCRUD.setBounds(new Rectangle(5, 67, 130, 28));
 		jPanelIOTable4.setLayout(null);
-		jPanelIOTable4.setBounds(new Rectangle(0, 67, 417, 26));
+		jPanelIOTable4.setBounds(new Rectangle(0, 67, 417, 28));
 		jPanelIOTable4.setBorder(BorderFactory.createEtchedBorder());
 		jCheckBoxIOTableC.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableC.setText("Create");
-		jCheckBoxIOTableC.setBounds(new Rectangle(2, 1, 100, 23));
+		jCheckBoxIOTableC.setBounds(new Rectangle(2, 1, 100, 28));
 		jCheckBoxIOTableC.addActionListener(new Modeler_jCheckBoxIOTableC_actionAdapter(this));
 		jCheckBoxIOTableR.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableR.setText("Read");
-		jCheckBoxIOTableR.setBounds(new Rectangle(102, 1, 100, 23));
+		jCheckBoxIOTableR.setBounds(new Rectangle(102, 1, 100, 28));
 		jCheckBoxIOTableU.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableU.setText("Update");
-		jCheckBoxIOTableU.setBounds(new Rectangle(202, 1, 105, 23));
+		jCheckBoxIOTableU.setBounds(new Rectangle(202, 1, 105, 28));
 		jCheckBoxIOTableU.addActionListener(new Modeler_jCheckBoxIOTableU_actionAdapter(this));
 		jCheckBoxIOTableD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jCheckBoxIOTableD.setText("Delete");
-		jCheckBoxIOTableD.setBounds(new Rectangle(307, 1, 100, 23));
+		jCheckBoxIOTableD.setBounds(new Rectangle(307, 1, 100, 28));
 		jCheckBoxIOTableD.addActionListener(new Modeler_jCheckBoxIOTableD_actionAdapter(this));
-		//jLabelIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jLabelIOTableSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-		//jLabelIOTableSortKey.setText(res.getString("S540"));
-		//jLabelIOTableSortKey.setBounds(new Rectangle(420, 70, 90, 20));
-		//jTextFieldIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOTableSortKey.setBounds(new Rectangle(515, 67, 80, 25));
 		jLabelIOTableNameExtension.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableNameExtension.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableNameExtension.setText(res.getString("S742"));
-		jLabelIOTableNameExtension.setBounds(new Rectangle(540, 8, 80, 20));
-		jTextFieldIOTableNameExtension.setBounds(new Rectangle(625, 5, 60, 25));
+		jLabelIOTableNameExtension.setBounds(new Rectangle(540, 5, 80, 28));
+		jTextFieldIOTableNameExtension.setBounds(new Rectangle(625, 5, 60, 28));
 		jTextFieldIOTableNameExtension.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOTableDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOTableDescriptions.setText(res.getString("S204"));
-		jLabelIOTableDescriptions.setBounds(new Rectangle(5, 101, 130, 20));
+		jLabelIOTableDescriptions.setBounds(new Rectangle(5, 98, 130, 28));
 		jTextAreaIOTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaIOTableDescriptions.setLineWrap(true);
 		jScrollPaneIOTableDescriptions.getViewport().add(jTextAreaIOTableDescriptions, null);
@@ -5655,8 +5625,6 @@ public class Modeler extends JFrame {
 		jPanelIOTable1.add(jPanelIOTable2, BorderLayout.CENTER);
 		jPanelIOTable.add(jSplitPaneIOTable,  BorderLayout.CENTER);
 		jScrollPaneIOTableFieldList.getViewport().add(jTableIOTableFieldList, null);
-		//jPanelIOTable3.add(jLabelIOTableID, null);
-		//jPanelIOTable3.add(jTextFieldIOTableID, null);
 		jPanelIOTable3.add(jTextFieldIOTablePK, null);
 		jPanelIOTable3.add(jComboBoxIOTablePosition, null);
 		jPanelIOTable3.add(jLabelIOTablePosition, null);
@@ -5667,9 +5635,6 @@ public class Modeler extends JFrame {
 		jPanelIOTable4.add(jCheckBoxIOTableR, null);
 		jPanelIOTable4.add(jCheckBoxIOTableU, null);
 		jPanelIOTable4.add(jCheckBoxIOTableD, null);
-		//jPanelIOTable3.add(jLabelIOTableSortKey, null);
-		//jPanelIOTable3.add(jTextFieldIOTableSortKey, null);
-		//jPanelIOTable3.add(jButtonIOTableJump, null);
 		//(jTableIOTableFieldList)//
 		jTableIOTableFieldList.addFocusListener(new Modeler_FocusListener());
 		jTableIOTableFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -5707,21 +5672,15 @@ public class Modeler extends JFrame {
 		jLabelIOWebPageName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOWebPageName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOWebPageName.setText(res.getString("S768"));
-		jLabelIOWebPageName.setBounds(new Rectangle(5, 8, 130, 25));
+		jLabelIOWebPageName.setBounds(new Rectangle(5, 5, 130, 28));
 		jTextFieldIOWebPageName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOWebPageName.setBounds(new Rectangle(0, 5, 250, 25));
-		//jLabelIOWebPageSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jLabelIOWebPageSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-		//jLabelIOWebPageSortKey.setText(res.getString("S201"));
-		//jLabelIOWebPageSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-		//jTextFieldIOWebPageSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		//jTextFieldIOWebPageSortKey.setBounds(new Rectangle(395, 5, 100, 25));
+		jTextFieldIOWebPageName.setBounds(new Rectangle(0, 5, 250, 28));
 		jLabelIOWebPageFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOWebPageFileName.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOWebPageFileName.setText(res.getString("S774"));
-		jLabelIOWebPageFileName.setBounds(new Rectangle(505, 8, 130, 20));
+		jLabelIOWebPageFileName.setBounds(new Rectangle(505, 5, 130, 28));
 		jTextFieldIOWebPageFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-		jTextFieldIOWebPageFileName.setBounds(new Rectangle(640, 5, 250, 25));
+		jTextFieldIOWebPageFileName.setBounds(new Rectangle(640, 5, 250, 28));
 		jPanelIOWebPage1.setBorder(BorderFactory.createEtchedBorder());
 		jPanelIOWebPage1.setPreferredSize(new Dimension(10, 100));
 		jPanelIOWebPage1.setLayout(new BorderLayout());
@@ -5736,7 +5695,7 @@ public class Modeler extends JFrame {
 		jLabelIOWebPageDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jLabelIOWebPageDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabelIOWebPageDescriptions.setText(res.getString("S204"));
-		jLabelIOWebPageDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
+		jLabelIOWebPageDescriptions.setBounds(new Rectangle(5, 36, 130, 28));
 		jTextAreaIOWebPageDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 		jTextAreaIOWebPageDescriptions.setLineWrap(true);
 		jScrollPaneIOWebPageFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -5747,8 +5706,6 @@ public class Modeler extends JFrame {
 		jPanelIOWebPage3.add(jPanelIOWebPage4, BorderLayout.NORTH);
 		jScrollPaneIOWebPageDescriptions.getViewport().add(jTextAreaIOWebPageDescriptions, null);
 		jPanelIOWebPage4.add(jTextFieldIOWebPageName, null);
-		//jPanelIOWebPage4.add(jTextFieldIOWebPageSortKey, null);
-		//jPanelIOWebPage4.add(jLabelIOWebPageSortKey, null);
 		jPanelIOWebPage4.add(jTextFieldIOWebPageFileName, null);
 		jPanelIOWebPage4.add(jLabelIOWebPageFileName, null);
 		jPanelIOWebPage1.add(jPanelIOWebPage2, BorderLayout.WEST);
@@ -11296,16 +11253,28 @@ public class Modeler extends JFrame {
 					if (isUpdated) {
 						currentMainTreeNode.activateContentsPane();
 					} else {
-						resizeDatamodel();
+						if (currentMainTreeNode.nodeType_.equals("TableList")) {
+							resizeDatamodel();
+						}
+						if (currentMainTreeNode.nodeType_.equals("SubjectArea")) {
+							resizeDataflow();
+						}
 					}
 				}
 			} finally {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		} else {
-			int value = jScrollPaneDatamodel.getVerticalScrollBar().getValue();
-			int unit = jScrollPaneDatamodel.getVerticalScrollBar().getUnitIncrement();
-			jScrollPaneDatamodel.getVerticalScrollBar().setValue(value + e.getWheelRotation() * unit);
+			if (currentMainTreeNode.nodeType_.equals("TableList")) {
+				int value = jScrollPaneDatamodel.getVerticalScrollBar().getValue();
+				int unit = jScrollPaneDatamodel.getVerticalScrollBar().getUnitIncrement();
+				jScrollPaneDatamodel.getVerticalScrollBar().setValue(value + e.getWheelRotation() * unit);
+			}
+			if (currentMainTreeNode.nodeType_.equals("SubjectArea")) {
+				int value = jScrollPaneSubjectArea.getVerticalScrollBar().getValue();
+				int unit = jScrollPaneSubjectArea.getVerticalScrollBar().getUnitIncrement();
+				jScrollPaneSubjectArea.getVerticalScrollBar().setValue(value + e.getWheelRotation() * unit);
+			}
 		}
 	}
 	/**
@@ -11657,7 +11626,7 @@ public class Modeler extends JFrame {
 		private JPanel jPanelCanvas2;
 		private JPanel jPanelMoveGuide = new JPanel();
 		private JPanel jPanelMouseActionSensor = new JPanel();
-		private JSpinner jSpinnerSlideNumber = new JSpinner();
+		//private JSpinner jSpinnerSlideNumber = new JSpinner();
 		private int NODE_WIDTH;
 		private int NODE_HEIGHT;
 		private int mousePosX = 0;
@@ -11667,6 +11636,7 @@ public class Modeler extends JFrame {
 		private int originalGuidePosX = 0;
 		private int originalGuidePosY = 0;
 		private int slideNumber = 0;
+		private int processNumber =0;
 		private String taskID = "";
 		private JPopupMenu jPopupMenuDataflowNode = new JPopupMenu();
 		private JMenuItem jMenuItemDataflowNodeJump = new JMenuItem(res.getString("S2870"));
@@ -11674,7 +11644,7 @@ public class Modeler extends JFrame {
 		private JMenuItem jMenuItemDataflowNodeChange = new JMenuItem(res.getString("S2872"));
 		private JMenuItem jMenuItemDataflowNodeCopy = new JMenuItem(res.getString("S2873"));
 		private JMenuItem jMenuItemDataflowNodeRemove = new JMenuItem();
-		private boolean slideNumberIsShown = false;
+		//private boolean slideNumberIsShown = false;
 		private boolean clickable_;
 		private String eventPos = "";
 		private boolean isSelected_ = false;
@@ -11701,13 +11671,13 @@ public class Modeler extends JFrame {
 			StringTokenizer workTokenizer = new StringTokenizer(dataflowNodeElement_.getAttribute("Position"), "," );
 			nodePosX = Integer.parseInt(workTokenizer.nextToken());
 			nodePosY = Integer.parseInt(workTokenizer.nextToken());
-			jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 			jTextFieldNodeName.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldNodeName.setForeground(Color.WHITE);
 			jTextFieldNodeName.setText(dataflowNodeElement_.getAttribute("Name"));
 			jTextFieldNodeName.setBorder(null);
 			jTextFieldNodeName.setOpaque(false);
 			jTextFieldNodeName.setName("jTextFieldNodeName");
+			this.add(jTextFieldNodeName, null);
 			jTextFieldNodeNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			jTextFieldNodeNameExt.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldNodeNameExt.setForeground(Color.WHITE);
@@ -11717,23 +11687,20 @@ public class Modeler extends JFrame {
 			jTextFieldNodeNameExt.setName("jTextFieldNodeNameExt");
 			Integer num = new Integer(dataflowNodeElement_.getAttribute("SlideNumber"));
 			slideNumber = num.intValue();
-			jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
-			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-			jSpinnerSlideNumber.setModel(spinnerNumberModel);
+//			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
+//			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
+//			jSpinnerSlideNumber.setModel(spinnerNumberModel);
 			boolean validNodeType = false;
 			String strwork = dataflowNodeElement_.getAttribute("Descriptions");
 			if (strwork.equals("")) {
 				jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 			} else {
-//				if ((strwork.getBytes().length) == strwork.length()) {
-//					strwork = getLayoutedString(strwork, 40, "<br>");
-//				} else {
-//					strwork = getLayoutedString(strwork, 30, "<br>");
-//				}
 				strwork = getLayoutedString(strwork, "<br>");
 				jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 			}
+			jLabelNumber.setHorizontalAlignment(SwingConstants.CENTER);
+			jLabelNumber.setForeground(Color.lightGray);
+			this.add(jLabelNumber,null);
 
 			///////////////////////////////////////
 			// Setup components by its node-type //
@@ -11742,7 +11709,6 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				NODE_WIDTH = 145;
 				NODE_HEIGHT = 128;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				taskID = dataflowNodeElement_.getAttribute("TaskID");
 				XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", taskID, null);
 				XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", taskNode.getElement().getAttribute("RoleID"), null);
@@ -11751,144 +11717,40 @@ public class Modeler extends JFrame {
 					eventPos = "L";
 				}
 
-				jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 				jLabelID.setForeground(Color.lightGray);
 				jLabelID.setText(taskNode.getElement().getAttribute("SortKey"));
-				if (eventPos.equals("L")) {
-					jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
-					jLabelID.setBounds(new Rectangle(63, 44, 50, 15));
-				}
-				if (eventPos.equals("R")) {
-					jLabelID.setHorizontalAlignment(SwingConstants.LEFT);
-					jLabelID.setBounds(new Rectangle(33, 44, 50, 15));
-				}
 				this.add(jLabelID,null);
-
 				jTextFieldNodeName.setText(taskNode.getElement().getAttribute("Name"));
-				jTextFieldNodeName.setBounds(new Rectangle(8, 78, 135, 19));
-				adjustFontSizeOfTextField(jTextFieldNodeName);
-				this.add(jTextFieldNodeName,null);
-
-				jLabelRole.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 				jLabelRole.setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelRole.setForeground(Color.lightGray);
 				jLabelRole.setText(roleNode.getElement().getAttribute("Name"));
-				jLabelRole.setBounds(new Rectangle(8, 59, 135, 19));
-				adjustFontSizeOfTextField(jLabelRole);
 				this.add(jLabelRole,null);
 
-				jLabelNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				jLabelNumber.setHorizontalAlignment(SwingConstants.CENTER);
-				jLabelNumber.setForeground(Color.lightGray);
-				jLabelNumber.setBounds(new Rectangle(8, 99, 135, 15));
-				this.add(jLabelNumber,null);
-
 				jLabelEvent[0] = new JLabel();
-				jLabelEvent[0].setFont(new java.awt.Font(mainFontName, 0, 11));
-				jLabelEvent[0].setForeground(Color.DARK_GRAY);
+				jLabelEvent[0].setForeground(Color.BLACK);
 				jLabelEvent[0].setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelEvent[0].setOpaque(false);
 				jLabelEvent[1] = new JLabel();
-				jLabelEvent[1].setFont(new java.awt.Font(mainFontName, 0, 11));
-				jLabelEvent[1].setForeground(Color.DARK_GRAY);
+				jLabelEvent[1].setForeground(Color.BLACK);
 				jLabelEvent[1].setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelEvent[1].setOpaque(false);
 				jLabelEvent[2] = new JLabel();
-				jLabelEvent[2].setFont(new java.awt.Font(mainFontName, 0, 11));
-				jLabelEvent[2].setForeground(Color.DARK_GRAY);
+				jLabelEvent[2].setForeground(Color.BLACK);
 				jLabelEvent[2].setHorizontalAlignment(SwingConstants.CENTER);
 				jLabelEvent[2].setOpaque(false);
-				FontMetrics metrics = jLabelEvent[0].getFontMetrics(jLabelEvent[0].getFont());
 				String event = taskNode.getElement().getAttribute("Event");
-				int textWidth;
-				String wrkStr1 = "";
-				String wrkStr2 = "";
-				int j = 0;
-				for (int i=0;i<event.length();i++) {
-//					JOptionPane.showMessageDialog(null, event.substring(i, i+1) + "@"+j);
-//					if (i+6 < event.length() && event.substring(i+1, i+6).equals("<EOL>")) {
-//						i = i+5;
-//						j++;
-//						if (j > 2) {
-//							break;
-//						}
-//					} else {
-						if (i+5 < event.length() && event.substring(i, i+5).equals("<EOL>")) {
-							i = i + 5;
-							jLabelEvent[j].setText(wrkStr1);
-							wrkStr1 = "";
-							j++;
-							if (j > 2) {
-								break;
-							}
-						}
-						wrkStr2 = wrkStr1 + event.substring(i, i+1);
-						textWidth = metrics.stringWidth(wrkStr2);
-						if (textWidth > 56) {
-							jLabelEvent[j].setText(wrkStr1);
-							wrkStr1 = event.substring(i, i+1);
-							j++;
-							if (j > 2) {
-								break;
-							}
-							if (i+1==event.length()) {
-								jLabelEvent[j].setText(event.substring(i, i+1));
-							}
-						} else {
-							if (i+1==event.length()) {
-								jLabelEvent[j].setText(wrkStr2);
-							}
-							wrkStr1 = wrkStr2;
-						}
-						if (j > 2) {
-							break;
-						}
-					//}
-				}
-				int xPosOfEvent = 7;
-				if (eventPos.equals("R")) {
-					xPosOfEvent = 82;
-				}
-				if (jLabelEvent[2].getText().equals("")) {
-					if (jLabelEvent[1].getText().equals("")) {
-						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 22, 56, 15));
-						this.add(jLabelEvent[0], null);
-					} else {
-						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 14));
-						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 14));
-						this.add(jLabelEvent[0], null);
-						this.add(jLabelEvent[1], null);
-					}
-				} else {
-					jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 11, 56, 13));
-					jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 24, 56, 13));
-					jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 13));
-					this.add(jLabelEvent[0], null);
-					this.add(jLabelEvent[1], null);
-					this.add(jLabelEvent[2], null);
-				}
-
-				jSpinnerSlideNumber.setBounds(new Rectangle(55, 37, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(25, 53, 100, 50));
-
 				strwork = taskNode.getElement().getAttribute("Descriptions");
 				if (strwork.equals("")) {
-					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + res.getString("S586"));
+					jPanelMouseActionSensor.setToolTipText("<html>Event:" + event + "<br>" + res.getString("S586"));
 				} else {
-//					if ((strwork.getBytes().length) == strwork.length()) {
-//						strwork = getLayoutedString(strwork, 40, "<br>");
-//					} else {
-//						strwork = getLayoutedString(strwork, 20, "<br>");
-//					}
 					strwork = getLayoutedString(strwork, "<br>");
-					jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + strwork);
+					jPanelMouseActionSensor.setToolTipText("<html>Event:" + event + "<br>" + strwork);
 				}
 			}
 			if (nodeType.equals("Subject")) {
 				validNodeType = true;
 				NODE_WIDTH = 171;
 				NODE_HEIGHT = 41;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
 				if (!dataflowNodeElement_.getAttribute("RoleID").equals("")) {
 					XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", dataflowNodeElement_.getAttribute("RoleID"), null);
 					if (roleNode != null) {
@@ -11897,250 +11759,65 @@ public class Modeler extends JFrame {
 						if (strwork.equals("")) {
 							jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
 						} else {
-//							if ((strwork.getBytes().length) == strwork.length()) {
-//								strwork = getLayoutedString(strwork, 40, "<br>");
-//							} else {
-//								strwork = getLayoutedString(strwork, 20, "<br>");
-//							}
 							strwork = getLayoutedString(strwork, "<br>");
 							jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 						}
 					}
 				}
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(1, 12, 170, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(1, 1, 170, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(1, 20, 170, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(64, 0, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(9, 15, 150, 25));
 			}
 			if (nodeType.equals("Folder")) {
 				validNodeType = true;
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 95;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 29, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(18, 15, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(3, 31, 71, 33));
 			}
 			if (nodeType.equals("Ledger")) {
 				validNodeType = true;
 				NODE_WIDTH = 105;
 				NODE_HEIGHT = 76;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 0, 27, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName,null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 15, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(25, 20, 50, 30));
 			}
 			if (nodeType.equals("Drum")) {
 				validNodeType = true;
 				NODE_WIDTH = 105;
 				NODE_HEIGHT = 76;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 0, 32, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName,null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 22, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 41, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(15, 21, 70, 40));
 			}
 			if (nodeType.equals("Store1")) {
 				validNodeType = true;
 				NODE_WIDTH = 102;
 				NODE_HEIGHT = 145;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle( 10, 70, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(10, 58, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(31, 17, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(2, 33, 98, 70));
 			}
 			if (nodeType.equals("Store2")) {
 				validNodeType = true;
 				NODE_WIDTH = 140;
 				NODE_HEIGHT = 115;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(35, 47, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 66, 100, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(50, 4, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 100, 60));
 			}
 			if (nodeType.equals("Tray")) {
 				validNodeType = true;
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 31, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 50, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(19, 35, 37, 35));
 			}
 			if (nodeType.equals("Casher")) {
 				validNodeType = true;
 				NODE_WIDTH = 100;
 				NODE_HEIGHT = 90;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(5, 32, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(30, 14, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(25, 30, 50, 40));
 			}
 			if (nodeType.equals("Safe")) {
 				validNodeType = true;
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 80;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 49, 70, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 30, 70, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 49, 70, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(12, 11, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(10, 27, 45, 35));
 			}
 			if (nodeType.equals("Sofa")) {
 				validNodeType = true;
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 85;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(0, 25, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 44, 90, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(28, 14, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(15, 30, 65, 30));
 			}
 			if (nodeType.equals("Basket")) {
 				validNodeType = true;
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					this.add(jTextFieldNodeName, null);
-				} else {
-					jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
-					jTextFieldNodeName.setBounds(new Rectangle(10, 24, 77, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeName);
-					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 43, 77, 19));
-					adjustFontSizeOfTextField(jTextFieldNodeNameExt);
-					this.add(jTextFieldNodeName, null);
-					this.add(jTextFieldNodeNameExt, null);
-				}
-				jSpinnerSlideNumber.setBounds(new Rectangle(30, 10, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(17, 27, 58, 45));
 			}
 			if (!validNodeType) {
 				NODE_WIDTH = 90;
 				NODE_HEIGHT = 90;
-				this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
-				this.add(jTextFieldNodeName, null);
-				jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
-				jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 50, 50));
 			}
 
 			///////////////////////////////////
@@ -12179,11 +11856,482 @@ public class Modeler extends JFrame {
 				jMenuItemDataflowNodeRemove.setText(res.getString("S2874"));
 				jPopupMenuDataflowNode.add(jMenuItemDataflowNodeRemove);
 			}
+		}
 
-			//////////////////////////////////////////
-			// Set colors according to color config //
-			//////////////////////////////////////////
+		public Rectangle setSizeAndColors() {
+			boolean validNodeType = false;
+
+			////////////////////////////////
+			// Update size of node itself //
+			////////////////////////////////
+			int posX = nodePosX;
+			int posY = nodePosY;
+			int width = NODE_WIDTH;
+			int height = NODE_HEIGHT;
+			if (modelSize.equals("S")) {
+				posX = Math.round(posX /2);
+				posY = Math.round(posY /2);
+				width = Math.round(width /2);
+				height = Math.round(height /2);
+			}
+			if (modelSize.equals("L")) {
+				posX = Math.round(posX * 3 / 2);
+				posY = Math.round(posY * 3 / 2);
+				width = Math.round(width * 3 / 2);
+				height = Math.round(height * 3 / 2);
+			}
+			Rectangle rec = new Rectangle(posX, posY, width, height);
+			this.setBounds(rec);
+
+			if (nodeType.equals("Process")) {
+				validNodeType = true;
+
+				/////////////////////////////////////////
+				// Update bounds of components on node //
+				/////////////////////////////////////////
+				jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
+				if (eventPos.equals("L")) {
+					jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
+					jLabelID.setBounds(new Rectangle(63, 44, 50, 15));
+				}
+				if (eventPos.equals("R")) {
+					jLabelID.setHorizontalAlignment(SwingConstants.LEFT);
+					jLabelID.setBounds(new Rectangle(33, 44, 50, 15));
+				}
+				jTextFieldNodeName.setBounds(new Rectangle(8, 78, 135, 19));
+				adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				jLabelRole.setBounds(new Rectangle(8, 59, 135, 19));
+				adjustFontSizeOfTextField(jLabelRole, MAIN_FONT_SIZE);
+				jLabelNumber.setBounds(new Rectangle(8, 99, 135, 15));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(55, 37, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(12, 26, 50, 25));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(25, 53, 100, 50));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(37, 79, 150, 75));
+				}
+
+				/////////////////////////////////
+				// Update event labels on node //
+				/////////////////////////////////
+				jLabelEvent[0].setText("");
+				jLabelEvent[1].setText("");
+				jLabelEvent[2].setText("");
+				this.remove(jLabelEvent[0]);
+				this.remove(jLabelEvent[1]);
+				this.remove(jLabelEvent[2]);
+				if (modelSize.equals("M") || modelSize.equals("L")) {
+					jLabelEvent[0].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-4));
+					jLabelEvent[1].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-4));
+					jLabelEvent[2].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-4));
+
+					XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", taskID, null);
+					FontMetrics metrics = jLabelEvent[0].getFontMetrics(jLabelEvent[0].getFont());
+					String event = taskNode.getElement().getAttribute("Event");
+					int textWidth = metrics.stringWidth(event);
+					if (textWidth > 160 && modelSize.equals("L")) {
+						jLabelEvent[0].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-7));
+						jLabelEvent[1].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-7));
+						jLabelEvent[2].setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-7));
+						metrics = jLabelEvent[0].getFontMetrics(jLabelEvent[0].getFont());
+					}
+					String wrkStr1 = "";
+					String wrkStr2 = "";
+					int j = 0;
+					for (int i=0;i<event.length();i++) {
+						if (i+5 < event.length() && event.substring(i, i+5).equals("<EOL>")) {
+							i = i + 5;
+							jLabelEvent[j].setText(wrkStr1);
+							wrkStr1 = "";
+							j++;
+							if (j > 2) {
+								break;
+							}
+						}
+						wrkStr2 = wrkStr1 + event.substring(i, i+1);
+						textWidth = metrics.stringWidth(wrkStr2);
+						if (textWidth > 56) {
+							jLabelEvent[j].setText(wrkStr1);
+							wrkStr1 = event.substring(i, i+1);
+							j++;
+							if (j > 2) {
+								break;
+							}
+							if (i+1==event.length()) {
+								jLabelEvent[j].setText(event.substring(i, i+1));
+							}
+						} else {
+							if (i+1==event.length()) {
+								jLabelEvent[j].setText(wrkStr2);
+							}
+							wrkStr1 = wrkStr2;
+						}
+						if (j > 2) {
+							break;
+						}
+					}
+					int xPosOfEvent = 7;
+					if (eventPos.equals("R")) {
+						xPosOfEvent = 82;
+					}
+					if (jLabelEvent[2].getText().equals("")) {
+						if (jLabelEvent[1].getText().equals("")) {
+							jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 22, 56, 15));
+							this.add(jLabelEvent[0], null);
+						} else {
+							jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 15, 56, 14));
+							jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 29, 56, 14));
+							this.add(jLabelEvent[0], null);
+							this.add(jLabelEvent[1], null);
+						}
+					} else {
+						jLabelEvent[0].setBounds(new Rectangle(xPosOfEvent, 11, 56, 13));
+						jLabelEvent[1].setBounds(new Rectangle(xPosOfEvent, 24, 56, 13));
+						jLabelEvent[2].setBounds(new Rectangle(xPosOfEvent, 37, 56, 13));
+						this.add(jLabelEvent[0], null);
+						this.add(jLabelEvent[1], null);
+						this.add(jLabelEvent[2], null);
+					}
+				} else {
+					jLabelEvent[0].setText("");
+					jLabelEvent[1].setText("");
+					jLabelEvent[2].setText("");
+				}
+			}
+
+			if (nodeType.equals("Subject")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				jLabelNumber.setForeground(Color.black);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(140, 10, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(11, 12, 150, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(140, 10, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(11, 1, 150, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(11, 20, 150, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(64, 0, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(4, 7, 75, 12));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(9, 15, 150, 25));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(13, 22, 225, 37));
+				}
+			}
+
+			if (nodeType.equals("Folder")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(60, 20, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(60, 10, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 29, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 15, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(1, 15, 35, 16));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(3, 31, 71, 33));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(4, 46, 106, 49));
+				}
+			}
+
+			if (nodeType.equals("Ledger")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(10, 10, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 27, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(10, 0, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 15, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(12, 10, 25, 15));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(25, 20, 50, 30));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(37, 30, 75, 45));
+				}
+			}
+
+			if (nodeType.equals("Drum")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				jLabelNumber.setForeground(Color.darkGray);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(0, 3, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 32, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(0, 3, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 22, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 41, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(7, 10, 35, 20));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(15, 21, 70, 40));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(22, 31, 105, 60));
+				}
+			}
+
+			if (nodeType.equals("Store1")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(5, 52, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 70, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(5, 40, 100, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 58, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(31, 17, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(1, 16, 49, 35));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(2, 33, 98, 70));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(3, 49, 147, 105));
+				}
+			}
+
+			if (nodeType.equals("Store2")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(100, 35, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(100, 30, 30, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(35, 47, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 66, 100, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(50, 4, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(10, 10, 25, 30));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 100, 60));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(30, 30, 125, 90));
+				}
+			}
+
+			if (nodeType.equals("Tray")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(0, 24, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(0, 12, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 31, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 50, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(9, 17, 18, 17));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(19, 35, 37, 35));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(28, 52, 55, 52));
+				}
+			}
+
+			if (nodeType.equals("Casher")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				jLabelNumber.setForeground(Color.darkGray);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(5, 10, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(5, 10, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(5, 32, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 14, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(12, 15, 25, 20));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(25, 30, 50, 40));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(37, 45, 75, 60));
+				}
+			}
+
+			if (nodeType.equals("Safe")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				jLabelNumber.setForeground(Color.darkGray);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(30, 30, 40, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 49, 70, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(30, 20, 40, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 30, 70, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 49, 70, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(12, 11, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(5, 13, 22, 17));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(10, 27, 45, 35));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(15, 40, 67, 52));
+				}
+			}
+			if (nodeType.equals("Sofa")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				jLabelNumber.setForeground(Color.black);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(0, 17, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(0, 5, 90, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(0, 25, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 44, 90, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(28, 14, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(7, 15, 32, 15));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(15, 30, 65, 30));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(22, 45, 97, 45));
+				}
+			}
+			if (nodeType.equals("Basket")) {
+				validNodeType = true;
+				this.remove(jTextFieldNodeNameExt);
+				if (jTextFieldNodeNameExt.getText().equals("")) {
+					jLabelNumber.setBounds(new Rectangle(5, 20, 77, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+				} else {
+					jLabelNumber.setBounds(new Rectangle(5, 5, 77, 15));
+					jTextFieldNodeName.setBounds(new Rectangle(10, 24, 77, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
+					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 43, 77, 19));
+					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
+					this.add(jTextFieldNodeNameExt, null);
+				}
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 10, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(9, 13, 29, 22));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(17, 27, 58, 45));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(26, 40, 87, 67));
+				}
+			}
+			if (!validNodeType) {
+				jLabelNumber.setBounds(new Rectangle(0, 30, 90, 15));
+				jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
+				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
+				if (modelSize.equals("S")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(10, 10, 25, 25));
+				}
+				if (modelSize.equals("M")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(20, 20, 50, 50));
+				}
+				if (modelSize.equals("L")) {
+					jPanelMouseActionSensor.setBounds(new Rectangle(30, 30, 75, 75));
+				}
+			}
+			
 			updateColors();
+
+			return rec;
 		}
 
 		public String getID() {
@@ -12210,6 +12358,7 @@ public class Modeler extends JFrame {
 		}
 
 		public void setNumber(int number) {
+			processNumber = number;
 			jLabelNumber.setText(Integer.toString(number));
 		}
 
@@ -12217,25 +12366,37 @@ public class Modeler extends JFrame {
 			return dataflowNodeElement_;
 		}
 
-		public void setShowSlideNumber() {
-			if (!slideNumberIsShown) {
-				this.add(jSpinnerSlideNumber,null);
-				this.updateUI();
-				slideNumberIsShown = true;
+		public void setShowSlideNumber(boolean isToShow) {
+//			if (!slideNumberIsShown) {
+//				this.add(jSpinnerSlideNumber,null);
+//				this.updateUI();
+//				jSpinnerSlideNumber.paintImmediately(new Rectangle(0,0,jSpinnerSlideNumber.getWidth(), jSpinnerSlideNumber.getHeight()));
+//				slideNumberIsShown = true;
+//			}
+			if (isToShow) {
+				if (nodeType.equals("Process")) {
+					jLabelNumber.setText(slideNumber+"");
+				} else {
+					jLabelNumber.setText(slideNumber+"");
+					this.add(jLabelNumber);
+				}
+			} else {
+				if (nodeType.equals("Process")) {
+					jLabelNumber.setText(processNumber+"");
+				} else {
+					this.remove(jLabelNumber);
+				}
 			}
+			this.updateUI();
 		}
 
-		public void setHideSlideNumber() {
-			if (slideNumberIsShown) {
-				this.remove(jSpinnerSlideNumber);
-				this.updateUI();
-				slideNumberIsShown = false;
-			}
-		}
-
-		public boolean hasSlideNumberShown() {
-			return slideNumberIsShown;
-		}
+//		public void setHideSlideNumber() {
+//			if (slideNumberIsShown) {
+//				this.remove(jSpinnerSlideNumber);
+//				this.updateUI();
+//				slideNumberIsShown = false;
+//			}
+//		}
 
 		public int getSlideNumber() {
 			return slideNumber;
@@ -12281,7 +12442,17 @@ public class Modeler extends JFrame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			boolean painted = false;
+
 			Graphics2D g2 = (Graphics2D)g;
+			if (modelSize.equals("S")) {
+				g2.scale(0.5d,0.5d);
+			}
+			if (modelSize.equals("M")) {
+				g2.scale(1.0d,1.0d);
+			}
+			if (modelSize.equals("L")) {
+				g2.scale(1.5d,1.5d);
+			}
 
 			if (nodeType.equals("Process")) {
 				painted = true;
@@ -12296,9 +12467,9 @@ public class Modeler extends JFrame {
 					g2.fillOval( 8, 35, 130, 86);
 					g2.setColor(Color.WHITE);
 					g2.drawOval( 8, 35, 130, 86);
-					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 					g2.setColor(Color.YELLOW);
-					if (!jLabelEvent[0].getText().equals("")) {
+					//if (!jLabelEvent[0].getText().equals("")) {
 						if (eventPos.equals("L")) {
 							g2.fillPolygon(xs0,ys0,28);
 							g2.setColor(Color.WHITE);
@@ -12309,14 +12480,14 @@ public class Modeler extends JFrame {
 							g2.setColor(Color.WHITE);
 							g2.drawPolygon(xs1,ys1,28);
 						}
-					}
+					//}
 				} else {
 					g2.setPaint(new GradientPaint(20, 90, new Color(145, 255, 255), 30, 0, Color.WHITE));
 					g2.fillOval( 8, 35, 130, 86);
 					g2.setColor(Color.black);
 					g2.drawOval( 8, 35, 130, 86);
 					g2.setColor(Color.WHITE);
-					if (!jLabelEvent[0].getText().equals("")) {
+					//if (!jLabelEvent[0].getText().equals("")) {
 						if (eventPos.equals("L")) {
 							g2.fillPolygon(xs0,ys0,28);
 							g2.setColor(Color.BLACK);
@@ -12327,7 +12498,7 @@ public class Modeler extends JFrame {
 							g2.setColor(Color.BLACK);
 							g2.drawPolygon(xs1,ys1,28);
 						}
-					}
+					//}
 				}
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -12903,6 +13074,8 @@ public class Modeler extends JFrame {
 				g2.setColor(Color.WHITE);
 				g2.drawRect(20, 20, 50, 50);
 			}
+
+			g2.scale(1.0d,1.0d);
 		}
 
 		public Point[] getArrowCordinates() {
@@ -12910,154 +13083,478 @@ public class Modeler extends JFrame {
 			Point pointNode = this.getLocation();
 
 			if (nodeType.equals("Process")) {
-				if (eventPos.equals("L")) {
-					pointArray[0] = new Point(pointNode.x + 65, pointNode.y + 19);
-					pointArray[1] = new Point(pointNode.x + 105, pointNode.y + 25);
+				if (modelSize.equals("S")) {
+					if (eventPos.equals("L")) {
+						pointArray[0] = new Point(pointNode.x + 32, pointNode.y + 9);
+						pointArray[1] = new Point(pointNode.x + 52, pointNode.y + 12);
+					}
+					if (eventPos.equals("R")) {
+						pointArray[0] = new Point(pointNode.x + 12, pointNode.y + 12);
+						pointArray[1] = new Point(pointNode.x + 32, pointNode.y + 9);
+					}
+					pointArray[2] = new Point(pointNode.x + 65, pointNode.y + 20);
+					pointArray[3] = new Point(pointNode.x + 70, pointNode.y + 35);
+					pointArray[4] = new Point(pointNode.x + 65, pointNode.y + 50);
+					pointArray[5] = new Point(pointNode.x + 51, pointNode.y + 59);
+					pointArray[6] = new Point(pointNode.x + 15, pointNode.y + 59);
+					pointArray[7] = new Point(pointNode.x +  1, pointNode.y + 50);
+					pointArray[8] = new Point(pointNode.x - 4, pointNode.y + 35);
+					pointArray[9] = new Point(pointNode.x +  0, pointNode.y + 21);
 				}
-				if (eventPos.equals("R")) {
-					pointArray[0] = new Point(pointNode.x + 25, pointNode.y + 25);
-					pointArray[1] = new Point(pointNode.x + 65, pointNode.y + 19);
+				if (modelSize.equals("M")) {
+					if (eventPos.equals("L")) {
+						pointArray[0] = new Point(pointNode.x + 65, pointNode.y + 19);
+						pointArray[1] = new Point(pointNode.x + 105, pointNode.y + 25);
+					}
+					if (eventPos.equals("R")) {
+						pointArray[0] = new Point(pointNode.x + 25, pointNode.y + 25);
+						pointArray[1] = new Point(pointNode.x + 65, pointNode.y + 19);
+					}
+					pointArray[2] = new Point(pointNode.x + 131, pointNode.y + 41);
+					pointArray[3] = new Point(pointNode.x + 140, pointNode.y + 71);
+					pointArray[4] = new Point(pointNode.x + 131, pointNode.y + 101);
+					pointArray[5] = new Point(pointNode.x + 103, pointNode.y + 118);
+					pointArray[6] = new Point(pointNode.x + 31, pointNode.y + 119);
+					pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 101);
+					pointArray[8] = new Point(pointNode.x - 8, pointNode.y + 71);
+					pointArray[9] = new Point(pointNode.x +  1, pointNode.y + 43);
 				}
-				pointArray[2] = new Point(pointNode.x + 131, pointNode.y + 41);
-				pointArray[3] = new Point(pointNode.x + 140, pointNode.y + 71);
-				pointArray[4] = new Point(pointNode.x + 131, pointNode.y + 101);
-				pointArray[5] = new Point(pointNode.x + 103, pointNode.y + 118);
-				pointArray[6] = new Point(pointNode.x + 31, pointNode.y + 119);
-				pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 101);
-				pointArray[8] = new Point(pointNode.x - 8, pointNode.y + 71);
-				pointArray[9] = new Point(pointNode.x +  1, pointNode.y + 43);
+				if (modelSize.equals("L")) {
+					if (eventPos.equals("L")) {
+						pointArray[0] = new Point(pointNode.x + 98, pointNode.y + 29);
+						pointArray[1] = new Point(pointNode.x + 158, pointNode.y + 38);
+					}
+					if (eventPos.equals("R")) {
+						pointArray[0] = new Point(pointNode.x + 38, pointNode.y + 38);
+						pointArray[1] = new Point(pointNode.x + 98, pointNode.y + 29);
+					}
+					pointArray[2] = new Point(pointNode.x + 197, pointNode.y + 62);
+					pointArray[3] = new Point(pointNode.x + 210, pointNode.y + 107);
+					pointArray[4] = new Point(pointNode.x + 197, pointNode.y + 153);
+					pointArray[5] = new Point(pointNode.x + 155, pointNode.y + 177);
+					pointArray[6] = new Point(pointNode.x + 47, pointNode.y + 179);
+					pointArray[7] = new Point(pointNode.x +  5, pointNode.y + 153);
+					pointArray[8] = new Point(pointNode.x - 12, pointNode.y + 107);
+					pointArray[9] = new Point(pointNode.x +  2, pointNode.y + 65);
+				}
 			}
 			if (nodeType.equals("Subject")) {
-				pointArray[0] = new Point(pointNode.x + 40, pointNode.y - 15);
-				pointArray[1] = new Point(pointNode.x + 80, pointNode.y - 15);
-				pointArray[2] = new Point(pointNode.x + 120, pointNode.y - 15);
-				pointArray[3] = new Point(pointNode.x + 166, pointNode.y - 8);
-				pointArray[4] = new Point(pointNode.x + 167, pointNode.y + 30);
-				pointArray[5] = new Point(pointNode.x + 120, pointNode.y + 40);
-				pointArray[6] = new Point(pointNode.x + 80, pointNode.y + 40);
-				pointArray[7] = new Point(pointNode.x + 40, pointNode.y + 40);
-				pointArray[8] = new Point(pointNode.x - 10, pointNode.y + 30);
-				pointArray[9] = new Point(pointNode.x - 9, pointNode.y - 8);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 20, pointNode.y - 8);
+					pointArray[1] = new Point(pointNode.x + 40, pointNode.y - 8);
+					pointArray[2] = new Point(pointNode.x + 60, pointNode.y - 8);
+					pointArray[3] = new Point(pointNode.x + 83, pointNode.y - 4);
+					pointArray[4] = new Point(pointNode.x + 84, pointNode.y + 15);
+					pointArray[5] = new Point(pointNode.x + 60, pointNode.y + 20);
+					pointArray[6] = new Point(pointNode.x + 40, pointNode.y + 20);
+					pointArray[7] = new Point(pointNode.x + 20, pointNode.y + 20);
+					pointArray[8] = new Point(pointNode.x - 5, pointNode.y + 15);
+					pointArray[9] = new Point(pointNode.x - 5, pointNode.y - 4);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 40, pointNode.y - 15);
+					pointArray[1] = new Point(pointNode.x + 80, pointNode.y - 15);
+					pointArray[2] = new Point(pointNode.x + 120, pointNode.y - 15);
+					pointArray[3] = new Point(pointNode.x + 166, pointNode.y - 8);
+					pointArray[4] = new Point(pointNode.x + 167, pointNode.y + 30);
+					pointArray[5] = new Point(pointNode.x + 120, pointNode.y + 40);
+					pointArray[6] = new Point(pointNode.x + 80, pointNode.y + 40);
+					pointArray[7] = new Point(pointNode.x + 40, pointNode.y + 40);
+					pointArray[8] = new Point(pointNode.x - 10, pointNode.y + 30);
+					pointArray[9] = new Point(pointNode.x - 9, pointNode.y - 8);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 60, pointNode.y - 23);
+					pointArray[1] = new Point(pointNode.x + 120, pointNode.y - 23);
+					pointArray[2] = new Point(pointNode.x + 180, pointNode.y - 23);
+					pointArray[3] = new Point(pointNode.x + 249, pointNode.y - 12);
+					pointArray[4] = new Point(pointNode.x + 251, pointNode.y + 45);
+					pointArray[5] = new Point(pointNode.x + 180, pointNode.y + 60);
+					pointArray[6] = new Point(pointNode.x + 120, pointNode.y + 60);
+					pointArray[7] = new Point(pointNode.x + 60, pointNode.y + 60);
+					pointArray[8] = new Point(pointNode.x - 15, pointNode.y + 45);
+					pointArray[9] = new Point(pointNode.x - 14, pointNode.y - 12);
+				}
 			}
 			if (nodeType.equals("Folder")) {
-				pointArray[0] = new Point(pointNode.x + 85, pointNode.y + 18);
-				pointArray[1] = new Point(pointNode.x + 85, pointNode.y + 33);
-				pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 65);
-				pointArray[3] = new Point(pointNode.x + 50, pointNode.y + 75);
-				pointArray[4] = new Point(pointNode.x + 30, pointNode.y + 85);
-				pointArray[5] = new Point(pointNode.x - 15, pointNode.y + 58);
-				pointArray[6] = new Point(pointNode.x - 15, pointNode.y + 37);
-				pointArray[7] = new Point(pointNode.x -  5, pointNode.y +  5);
-				pointArray[8] = new Point(pointNode.x + 17, pointNode.y -  3);
-				pointArray[9] = new Point(pointNode.x + 40, pointNode.y - 10);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 43, pointNode.y + 9);
+					pointArray[1] = new Point(pointNode.x + 43, pointNode.y + 16);
+					pointArray[2] = new Point(pointNode.x + 35, pointNode.y + 32);
+					pointArray[3] = new Point(pointNode.x + 25, pointNode.y + 37);
+					pointArray[4] = new Point(pointNode.x + 15, pointNode.y + 42);
+					pointArray[5] = new Point(pointNode.x - 8, pointNode.y + 29);
+					pointArray[6] = new Point(pointNode.x - 8, pointNode.y + 18);
+					pointArray[7] = new Point(pointNode.x -  3, pointNode.y +  2);
+					pointArray[8] = new Point(pointNode.x + 8, pointNode.y -  2);
+					pointArray[9] = new Point(pointNode.x + 20, pointNode.y - 5);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 85, pointNode.y + 18);
+					pointArray[1] = new Point(pointNode.x + 85, pointNode.y + 33);
+					pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 65);
+					pointArray[3] = new Point(pointNode.x + 50, pointNode.y + 75);
+					pointArray[4] = new Point(pointNode.x + 30, pointNode.y + 85);
+					pointArray[5] = new Point(pointNode.x - 15, pointNode.y + 58);
+					pointArray[6] = new Point(pointNode.x - 15, pointNode.y + 37);
+					pointArray[7] = new Point(pointNode.x -  5, pointNode.y +  5);
+					pointArray[8] = new Point(pointNode.x + 17, pointNode.y -  3);
+					pointArray[9] = new Point(pointNode.x + 40, pointNode.y - 10);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 128, pointNode.y + 27);
+					pointArray[1] = new Point(pointNode.x + 128, pointNode.y + 49);
+					pointArray[2] = new Point(pointNode.x + 105, pointNode.y + 97);
+					pointArray[3] = new Point(pointNode.x + 75, pointNode.y + 112);
+					pointArray[4] = new Point(pointNode.x + 45, pointNode.y + 127);
+					pointArray[5] = new Point(pointNode.x - 23, pointNode.y + 87);
+					pointArray[6] = new Point(pointNode.x - 23, pointNode.y + 55);
+					pointArray[7] = new Point(pointNode.x -  8, pointNode.y +  7);
+					pointArray[8] = new Point(pointNode.x + 25, pointNode.y -  5);
+					pointArray[9] = new Point(pointNode.x + 60, pointNode.y - 15);
+				}
 			}
 			if (nodeType.equals("Ledger")) {
-				pointArray[0] = new Point(pointNode.x + 71, pointNode.y - 6);
-				pointArray[1] = new Point(pointNode.x + 89, pointNode.y + 4);
-				pointArray[2] = new Point(pointNode.x + 90, pointNode.y + 42);
-				pointArray[3] = new Point(pointNode.x + 74, pointNode.y + 55);
-				pointArray[4] = new Point(pointNode.x + 58, pointNode.y + 67);
-				pointArray[5] = new Point(pointNode.x + 15, pointNode.y + 65);
-				pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 53);
-				pointArray[7] = new Point(pointNode.x -  3, pointNode.y + 13);
-				pointArray[8] = new Point(pointNode.x + 12, pointNode.y +  2);
-				pointArray[9] = new Point(pointNode.x + 27, pointNode.y -  7);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 35, pointNode.y - 3);
+					pointArray[1] = new Point(pointNode.x + 44, pointNode.y + 2);
+					pointArray[2] = new Point(pointNode.x + 45, pointNode.y + 21);
+					pointArray[3] = new Point(pointNode.x + 37, pointNode.y + 27);
+					pointArray[4] = new Point(pointNode.x + 29, pointNode.y + 33);
+					pointArray[5] = new Point(pointNode.x + 7, pointNode.y + 32);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 26);
+					pointArray[7] = new Point(pointNode.x -  2, pointNode.y + 6);
+					pointArray[8] = new Point(pointNode.x + 6, pointNode.y + 1);
+					pointArray[9] = new Point(pointNode.x + 13, pointNode.y - 4);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 71, pointNode.y - 6);
+					pointArray[1] = new Point(pointNode.x + 89, pointNode.y + 4);
+					pointArray[2] = new Point(pointNode.x + 90, pointNode.y + 42);
+					pointArray[3] = new Point(pointNode.x + 74, pointNode.y + 55);
+					pointArray[4] = new Point(pointNode.x + 58, pointNode.y + 67);
+					pointArray[5] = new Point(pointNode.x + 15, pointNode.y + 65);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 53);
+					pointArray[7] = new Point(pointNode.x -  3, pointNode.y + 13);
+					pointArray[8] = new Point(pointNode.x + 12, pointNode.y +  2);
+					pointArray[9] = new Point(pointNode.x + 27, pointNode.y -  7);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 106, pointNode.y - 9);
+					pointArray[1] = new Point(pointNode.x + 133, pointNode.y + 6);
+					pointArray[2] = new Point(pointNode.x + 135, pointNode.y + 63);
+					pointArray[3] = new Point(pointNode.x + 101, pointNode.y + 82);
+					pointArray[4] = new Point(pointNode.x + 87, pointNode.y + 100);
+					pointArray[5] = new Point(pointNode.x + 22, pointNode.y + 97);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 79);
+					pointArray[7] = new Point(pointNode.x -  5, pointNode.y + 19);
+					pointArray[8] = new Point(pointNode.x + 18, pointNode.y +  3);
+					pointArray[9] = new Point(pointNode.x + 40, pointNode.y -  11);
+				}
 			}
 			if (nodeType.equals("Drum")) {
-				pointArray[0] = new Point(pointNode.x + 41, pointNode.y - 15);
-				pointArray[1] = new Point(pointNode.x + 70, pointNode.y - 13);
-				pointArray[2] = new Point(pointNode.x + 91, pointNode.y + 15);
-				pointArray[3] = new Point(pointNode.x + 91, pointNode.y + 38);
-				pointArray[4] = new Point(pointNode.x + 70, pointNode.y + 74);
-				pointArray[5] = new Point(pointNode.x + 41, pointNode.y + 76);
-				pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 73);
-				pointArray[7] = new Point(pointNode.x -  5, pointNode.y + 38);
-				pointArray[8] = new Point(pointNode.x -  5, pointNode.y + 15);
-				pointArray[9] = new Point(pointNode.x + 12, pointNode.y - 13);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 20, pointNode.y - 8);
+					pointArray[1] = new Point(pointNode.x + 35, pointNode.y - 7);
+					pointArray[2] = new Point(pointNode.x + 45, pointNode.y + 7);
+					pointArray[3] = new Point(pointNode.x + 45, pointNode.y + 19);
+					pointArray[4] = new Point(pointNode.x + 35, pointNode.y + 37);
+					pointArray[5] = new Point(pointNode.x + 20, pointNode.y + 38);
+					pointArray[6] = new Point(pointNode.x + 6, pointNode.y + 36);
+					pointArray[7] = new Point(pointNode.x -  3, pointNode.y + 19);
+					pointArray[8] = new Point(pointNode.x -  3, pointNode.y + 7);
+					pointArray[9] = new Point(pointNode.x + 6, pointNode.y - 7);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 41, pointNode.y - 15);
+					pointArray[1] = new Point(pointNode.x + 70, pointNode.y - 13);
+					pointArray[2] = new Point(pointNode.x + 91, pointNode.y + 15);
+					pointArray[3] = new Point(pointNode.x + 91, pointNode.y + 38);
+					pointArray[4] = new Point(pointNode.x + 70, pointNode.y + 74);
+					pointArray[5] = new Point(pointNode.x + 41, pointNode.y + 76);
+					pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 73);
+					pointArray[7] = new Point(pointNode.x -  5, pointNode.y + 38);
+					pointArray[8] = new Point(pointNode.x -  5, pointNode.y + 15);
+					pointArray[9] = new Point(pointNode.x + 12, pointNode.y - 13);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 61, pointNode.y - 23);
+					pointArray[1] = new Point(pointNode.x + 105, pointNode.y - 20);
+					pointArray[2] = new Point(pointNode.x + 136, pointNode.y + 22);
+					pointArray[3] = new Point(pointNode.x + 136, pointNode.y + 57);
+					pointArray[4] = new Point(pointNode.x + 105, pointNode.y + 112);
+					pointArray[5] = new Point(pointNode.x + 61, pointNode.y + 114);
+					pointArray[6] = new Point(pointNode.x + 18, pointNode.y + 109);
+					pointArray[7] = new Point(pointNode.x -  8, pointNode.y + 57);
+					pointArray[8] = new Point(pointNode.x -  8, pointNode.y + 22);
+					pointArray[9] = new Point(pointNode.x + 18, pointNode.y - 20);
+				}
 			}
 			if (nodeType.equals("Store1")) {
-				pointArray[0] = new Point(pointNode.x + 88, pointNode.y - 3);
-				pointArray[1] = new Point(pointNode.x + 102, pointNode.y + 44);
-				pointArray[2] = new Point(pointNode.x + 102, pointNode.y + 74);
-				pointArray[3] = new Point(pointNode.x + 80, pointNode.y + 115);
-				pointArray[4] = new Point(pointNode.x + 45, pointNode.y + 133);
-				pointArray[5] = new Point(pointNode.x +  0, pointNode.y + 133);
-				pointArray[6] = new Point(pointNode.x - 15, pointNode.y + 80);
-				pointArray[7] = new Point(pointNode.x - 15, pointNode.y + 50);
-				pointArray[8] = new Point(pointNode.x +  5, pointNode.y + 8);
-				pointArray[9] = new Point(pointNode.x + 33, pointNode.y - 2);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 44, pointNode.y - 2);
+					pointArray[1] = new Point(pointNode.x + 51, pointNode.y + 22);
+					pointArray[2] = new Point(pointNode.x + 51, pointNode.y + 37);
+					pointArray[3] = new Point(pointNode.x + 40, pointNode.y + 57);
+					pointArray[4] = new Point(pointNode.x + 22, pointNode.y + 66);
+					pointArray[5] = new Point(pointNode.x +  0, pointNode.y + 66);
+					pointArray[6] = new Point(pointNode.x - 8, pointNode.y + 40);
+					pointArray[7] = new Point(pointNode.x - 8, pointNode.y + 25);
+					pointArray[8] = new Point(pointNode.x +  2, pointNode.y + 4);
+					pointArray[9] = new Point(pointNode.x + 16, pointNode.y - 1);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 88, pointNode.y - 3);
+					pointArray[1] = new Point(pointNode.x + 102, pointNode.y + 44);
+					pointArray[2] = new Point(pointNode.x + 102, pointNode.y + 74);
+					pointArray[3] = new Point(pointNode.x + 80, pointNode.y + 115);
+					pointArray[4] = new Point(pointNode.x + 45, pointNode.y + 133);
+					pointArray[5] = new Point(pointNode.x +  0, pointNode.y + 133);
+					pointArray[6] = new Point(pointNode.x - 15, pointNode.y + 80);
+					pointArray[7] = new Point(pointNode.x - 15, pointNode.y + 50);
+					pointArray[8] = new Point(pointNode.x +  5, pointNode.y + 8);
+					pointArray[9] = new Point(pointNode.x + 33, pointNode.y - 2);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 132, pointNode.y - 5);
+					pointArray[1] = new Point(pointNode.x + 153, pointNode.y + 66);
+					pointArray[2] = new Point(pointNode.x + 153, pointNode.y + 111);
+					pointArray[3] = new Point(pointNode.x + 120, pointNode.y + 172);
+					pointArray[4] = new Point(pointNode.x + 67, pointNode.y + 199);
+					pointArray[5] = new Point(pointNode.x +  0, pointNode.y + 199);
+					pointArray[6] = new Point(pointNode.x - 23, pointNode.y + 120);
+					pointArray[7] = new Point(pointNode.x - 23, pointNode.y + 75);
+					pointArray[8] = new Point(pointNode.x +  7, pointNode.y + 12);
+					pointArray[9] = new Point(pointNode.x + 49, pointNode.y - 3);
+				}
 			}
 			if (nodeType.equals("Store2")) {
-				pointArray[0] = new Point(pointNode.x + 90, pointNode.y - 5);
-				pointArray[1] = new Point(pointNode.x + 112, pointNode.y + 4);
-				pointArray[2] = new Point(pointNode.x + 126, pointNode.y + 35);
-				pointArray[3] = new Point(pointNode.x + 118, pointNode.y + 83);
-				pointArray[4] = new Point(pointNode.x + 87, pointNode.y + 99);
-				pointArray[5] = new Point(pointNode.x + 26, pointNode.y + 99);
-				pointArray[6] = new Point(pointNode.x + 3, pointNode.y + 82);
-				pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 35);
-				pointArray[8] = new Point(pointNode.x + 15, pointNode.y + 3);
-				pointArray[9] = new Point(pointNode.x + 45, pointNode.y - 7);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 45, pointNode.y - 3);
+					pointArray[1] = new Point(pointNode.x + 56, pointNode.y + 2);
+					pointArray[2] = new Point(pointNode.x + 63, pointNode.y + 17);
+					pointArray[3] = new Point(pointNode.x + 59, pointNode.y + 41);
+					pointArray[4] = new Point(pointNode.x + 43, pointNode.y + 49);
+					pointArray[5] = new Point(pointNode.x + 13, pointNode.y + 49);
+					pointArray[6] = new Point(pointNode.x + 1, pointNode.y + 41);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 17);
+					pointArray[8] = new Point(pointNode.x + 7, pointNode.y + 1);
+					pointArray[9] = new Point(pointNode.x + 22, pointNode.y - 4);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 90, pointNode.y - 5);
+					pointArray[1] = new Point(pointNode.x + 112, pointNode.y + 4);
+					pointArray[2] = new Point(pointNode.x + 126, pointNode.y + 35);
+					pointArray[3] = new Point(pointNode.x + 118, pointNode.y + 83);
+					pointArray[4] = new Point(pointNode.x + 87, pointNode.y + 99);
+					pointArray[5] = new Point(pointNode.x + 26, pointNode.y + 99);
+					pointArray[6] = new Point(pointNode.x + 3, pointNode.y + 82);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 35);
+					pointArray[8] = new Point(pointNode.x + 15, pointNode.y + 3);
+					pointArray[9] = new Point(pointNode.x + 45, pointNode.y - 7);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 135, pointNode.y - 8);
+					pointArray[1] = new Point(pointNode.x + 168, pointNode.y + 6);
+					pointArray[2] = new Point(pointNode.x + 189, pointNode.y + 52);
+					pointArray[3] = new Point(pointNode.x + 177, pointNode.y + 124);
+					pointArray[4] = new Point(pointNode.x + 130, pointNode.y + 148);
+					pointArray[5] = new Point(pointNode.x + 39, pointNode.y + 148);
+					pointArray[6] = new Point(pointNode.x + 4, pointNode.y + 123);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 52);
+					pointArray[8] = new Point(pointNode.x + 22, pointNode.y + 4);
+					pointArray[9] = new Point(pointNode.x + 67, pointNode.y - 11);
+				}
 			}
 			if (nodeType.equals("Tray")) {
-				pointArray[0] = new Point(pointNode.x + 66, pointNode.y + 11);
-				pointArray[1] = new Point(pointNode.x + 83, pointNode.y + 18);
-				pointArray[2] = new Point(pointNode.x + 77, pointNode.y + 61);
-				pointArray[3] = new Point(pointNode.x + 61, pointNode.y + 68);
-				pointArray[4] = new Point(pointNode.x + 45, pointNode.y + 75);
-				pointArray[5] = new Point(pointNode.x + 7, pointNode.y + 72);
-				pointArray[6] = new Point(pointNode.x - 9, pointNode.y + 61);
-				pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 20);
-				pointArray[8] = new Point(pointNode.x + 15, pointNode.y + 15);
-				pointArray[9] = new Point(pointNode.x + 30, pointNode.y + 10);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 33, pointNode.y + 5);
+					pointArray[1] = new Point(pointNode.x + 41, pointNode.y + 9);
+					pointArray[2] = new Point(pointNode.x + 38, pointNode.y + 30);
+					pointArray[3] = new Point(pointNode.x + 30, pointNode.y + 34);
+					pointArray[4] = new Point(pointNode.x + 22, pointNode.y + 37);
+					pointArray[5] = new Point(pointNode.x + 3, pointNode.y + 36);
+					pointArray[6] = new Point(pointNode.x - 5, pointNode.y + 30);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 10);
+					pointArray[8] = new Point(pointNode.x + 7, pointNode.y + 7);
+					pointArray[9] = new Point(pointNode.x + 15, pointNode.y + 5);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 66, pointNode.y + 11);
+					pointArray[1] = new Point(pointNode.x + 83, pointNode.y + 18);
+					pointArray[2] = new Point(pointNode.x + 77, pointNode.y + 61);
+					pointArray[3] = new Point(pointNode.x + 61, pointNode.y + 68);
+					pointArray[4] = new Point(pointNode.x + 45, pointNode.y + 75);
+					pointArray[5] = new Point(pointNode.x + 7, pointNode.y + 72);
+					pointArray[6] = new Point(pointNode.x - 9, pointNode.y + 61);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 20);
+					pointArray[8] = new Point(pointNode.x + 15, pointNode.y + 15);
+					pointArray[9] = new Point(pointNode.x + 30, pointNode.y + 10);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 99, pointNode.y + 16);
+					pointArray[1] = new Point(pointNode.x + 124, pointNode.y + 27);
+					pointArray[2] = new Point(pointNode.x + 115, pointNode.y + 91);
+					pointArray[3] = new Point(pointNode.x + 91, pointNode.y + 102);
+					pointArray[4] = new Point(pointNode.x + 67, pointNode.y + 112);
+					pointArray[5] = new Point(pointNode.x + 10, pointNode.y + 108);
+					pointArray[6] = new Point(pointNode.x - 14, pointNode.y + 91);
+					pointArray[7] = new Point(pointNode.x + 0, pointNode.y + 30);
+					pointArray[8] = new Point(pointNode.x + 22, pointNode.y + 22);
+					pointArray[9] = new Point(pointNode.x + 45, pointNode.y + 15);
+				}
 			}
 			if (nodeType.equals("Casher")) {
-				pointArray[0] = new Point(pointNode.x + 57, pointNode.y - 6);
-				pointArray[1] = new Point(pointNode.x + 75, pointNode.y + 0);
-				pointArray[2] = new Point(pointNode.x + 89, pointNode.y + 15);
-				pointArray[3] = new Point(pointNode.x + 89, pointNode.y + 39);
-				pointArray[4] = new Point(pointNode.x + 80, pointNode.y + 65);
-				pointArray[5] = new Point(pointNode.x + 60, pointNode.y + 76);
-				pointArray[6] = new Point(pointNode.x + 19, pointNode.y + 79);
-				pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 69);
-				pointArray[8] = new Point(pointNode.x +  3, pointNode.y + 20);
-				pointArray[9] = new Point(pointNode.x + 20, pointNode.y + 0);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 28, pointNode.y - 3);
+					pointArray[1] = new Point(pointNode.x + 37, pointNode.y + 0);
+					pointArray[2] = new Point(pointNode.x + 44, pointNode.y + 7);
+					pointArray[3] = new Point(pointNode.x + 44, pointNode.y + 19);
+					pointArray[4] = new Point(pointNode.x + 40, pointNode.y + 32);
+					pointArray[5] = new Point(pointNode.x + 30, pointNode.y + 38);
+					pointArray[6] = new Point(pointNode.x + 9, pointNode.y + 39);
+					pointArray[7] = new Point(pointNode.x +  1, pointNode.y + 34);
+					pointArray[8] = new Point(pointNode.x +  1, pointNode.y + 10);
+					pointArray[9] = new Point(pointNode.x + 10, pointNode.y + 0);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 57, pointNode.y - 6);
+					pointArray[1] = new Point(pointNode.x + 75, pointNode.y + 0);
+					pointArray[2] = new Point(pointNode.x + 89, pointNode.y + 15);
+					pointArray[3] = new Point(pointNode.x + 89, pointNode.y + 39);
+					pointArray[4] = new Point(pointNode.x + 80, pointNode.y + 65);
+					pointArray[5] = new Point(pointNode.x + 60, pointNode.y + 76);
+					pointArray[6] = new Point(pointNode.x + 19, pointNode.y + 79);
+					pointArray[7] = new Point(pointNode.x +  3, pointNode.y + 69);
+					pointArray[8] = new Point(pointNode.x +  3, pointNode.y + 20);
+					pointArray[9] = new Point(pointNode.x + 20, pointNode.y + 0);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 85, pointNode.y - 9);
+					pointArray[1] = new Point(pointNode.x + 112, pointNode.y + 0);
+					pointArray[2] = new Point(pointNode.x + 133, pointNode.y + 22);
+					pointArray[3] = new Point(pointNode.x + 133, pointNode.y + 58);
+					pointArray[4] = new Point(pointNode.x + 120, pointNode.y + 97);
+					pointArray[5] = new Point(pointNode.x + 90, pointNode.y + 114);
+					pointArray[6] = new Point(pointNode.x + 28, pointNode.y + 118);
+					pointArray[7] = new Point(pointNode.x +  4, pointNode.y + 103);
+					pointArray[8] = new Point(pointNode.x +  4, pointNode.y + 30);
+					pointArray[9] = new Point(pointNode.x + 30, pointNode.y + 0);
+				}
 			}
 			if (nodeType.equals("Safe")) {
-				pointArray[0] = new Point(pointNode.x + 34, pointNode.y + 2);
-				pointArray[1] = new Point(pointNode.x + 55, pointNode.y + 8);
-				pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 40);
-				pointArray[3] = new Point(pointNode.x + 65, pointNode.y + 60);
-				pointArray[4] = new Point(pointNode.x + 50, pointNode.y + 75);
-				pointArray[5] = new Point(pointNode.x + 20, pointNode.y + 75);
-				pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 64);
-				pointArray[7] = new Point(pointNode.x - 15, pointNode.y + 30);
-				pointArray[8] = new Point(pointNode.x -  8, pointNode.y + 10);
-				pointArray[9] = new Point(pointNode.x +  5, pointNode.y +  2);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 17, pointNode.y + 1);
+					pointArray[1] = new Point(pointNode.x + 27, pointNode.y + 4);
+					pointArray[2] = new Point(pointNode.x + 35, pointNode.y + 20);
+					pointArray[3] = new Point(pointNode.x + 32, pointNode.y + 30);
+					pointArray[4] = new Point(pointNode.x + 25, pointNode.y + 37);
+					pointArray[5] = new Point(pointNode.x + 10, pointNode.y + 37);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 32);
+					pointArray[7] = new Point(pointNode.x - 8, pointNode.y + 15);
+					pointArray[8] = new Point(pointNode.x -  4, pointNode.y + 5);
+					pointArray[9] = new Point(pointNode.x +  2, pointNode.y +  1);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 34, pointNode.y + 2);
+					pointArray[1] = new Point(pointNode.x + 55, pointNode.y + 8);
+					pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 40);
+					pointArray[3] = new Point(pointNode.x + 65, pointNode.y + 60);
+					pointArray[4] = new Point(pointNode.x + 50, pointNode.y + 75);
+					pointArray[5] = new Point(pointNode.x + 20, pointNode.y + 75);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 64);
+					pointArray[7] = new Point(pointNode.x - 15, pointNode.y + 30);
+					pointArray[8] = new Point(pointNode.x -  8, pointNode.y + 10);
+					pointArray[9] = new Point(pointNode.x +  5, pointNode.y +  2);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 51, pointNode.y + 3);
+					pointArray[1] = new Point(pointNode.x + 82, pointNode.y + 12);
+					pointArray[2] = new Point(pointNode.x + 105, pointNode.y + 30);
+					pointArray[3] = new Point(pointNode.x + 97, pointNode.y + 90);
+					pointArray[4] = new Point(pointNode.x + 75, pointNode.y + 112);
+					pointArray[5] = new Point(pointNode.x + 30, pointNode.y + 112);
+					pointArray[6] = new Point(pointNode.x +  0, pointNode.y + 96);
+					pointArray[7] = new Point(pointNode.x - 23, pointNode.y + 45);
+					pointArray[8] = new Point(pointNode.x - 12, pointNode.y + 15);
+					pointArray[9] = new Point(pointNode.x +  7, pointNode.y +  3);
+				}
 			}
 			if (nodeType.equals("Sofa")) {
-				pointArray[0] = new Point(pointNode.x + 35, pointNode.y - 6);
-				pointArray[1] = new Point(pointNode.x + 52, pointNode.y - 1);
-				pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 5);
-				pointArray[3] = new Point(pointNode.x + 82, pointNode.y + 40);
-				pointArray[4] = new Point(pointNode.x + 71, pointNode.y + 70);
-				pointArray[5] = new Point(pointNode.x + 32, pointNode.y + 78);
-				pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 68);
-				pointArray[7] = new Point(pointNode.x -  7, pointNode.y + 57);
-				pointArray[8] = new Point(pointNode.x -  9, pointNode.y + 20);
-				pointArray[9] = new Point(pointNode.x +  5, pointNode.y + 10);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 17, pointNode.y - 3);
+					pointArray[1] = new Point(pointNode.x + 26, pointNode.y - 1);
+					pointArray[2] = new Point(pointNode.x + 35, pointNode.y + 2);
+					pointArray[3] = new Point(pointNode.x + 41, pointNode.y + 20);
+					pointArray[4] = new Point(pointNode.x + 35, pointNode.y + 35);
+					pointArray[5] = new Point(pointNode.x + 16, pointNode.y + 39);
+					pointArray[6] = new Point(pointNode.x + 6, pointNode.y + 34);
+					pointArray[7] = new Point(pointNode.x -  4, pointNode.y + 28);
+					pointArray[8] = new Point(pointNode.x -  5, pointNode.y + 10);
+					pointArray[9] = new Point(pointNode.x +  2, pointNode.y + 5);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 35, pointNode.y - 6);
+					pointArray[1] = new Point(pointNode.x + 52, pointNode.y - 1);
+					pointArray[2] = new Point(pointNode.x + 70, pointNode.y + 5);
+					pointArray[3] = new Point(pointNode.x + 82, pointNode.y + 40);
+					pointArray[4] = new Point(pointNode.x + 71, pointNode.y + 70);
+					pointArray[5] = new Point(pointNode.x + 32, pointNode.y + 78);
+					pointArray[6] = new Point(pointNode.x + 12, pointNode.y + 68);
+					pointArray[7] = new Point(pointNode.x -  7, pointNode.y + 57);
+					pointArray[8] = new Point(pointNode.x -  9, pointNode.y + 20);
+					pointArray[9] = new Point(pointNode.x +  5, pointNode.y + 10);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 52, pointNode.y - 9);
+					pointArray[1] = new Point(pointNode.x + 78, pointNode.y - 2);
+					pointArray[2] = new Point(pointNode.x + 105, pointNode.y + 7);
+					pointArray[3] = new Point(pointNode.x + 123, pointNode.y + 60);
+					pointArray[4] = new Point(pointNode.x + 106, pointNode.y + 105);
+					pointArray[5] = new Point(pointNode.x + 48, pointNode.y + 117);
+					pointArray[6] = new Point(pointNode.x + 18, pointNode.y + 102);
+					pointArray[7] = new Point(pointNode.x -  11, pointNode.y + 85);
+					pointArray[8] = new Point(pointNode.x -  14, pointNode.y + 30);
+					pointArray[9] = new Point(pointNode.x +  7, pointNode.y + 15);
+				}
 			}
 			if (nodeType.equals("Basket")) {
-				pointArray[0] = new Point(pointNode.x + 58, pointNode.y - 9);
-				pointArray[1] = new Point(pointNode.x + 78, pointNode.y - 1);
-				pointArray[2] = new Point(pointNode.x + 89, pointNode.y + 27);
-				pointArray[3] = new Point(pointNode.x + 85, pointNode.y + 51);
-				pointArray[4] = new Point(pointNode.x + 68, pointNode.y + 77);
-				pointArray[5] = new Point(pointNode.x + 12, pointNode.y + 77);
-				pointArray[6] = new Point(pointNode.x - 6, pointNode.y + 55);
-				pointArray[7] = new Point(pointNode.x - 11, pointNode.y + 35);
-				pointArray[8] = new Point(pointNode.x + 0, pointNode.y + 0);
-				pointArray[9] = new Point(pointNode.x + 20, pointNode.y - 10);
+				if (modelSize.equals("S")) {
+					pointArray[0] = new Point(pointNode.x + 29, pointNode.y - 5);
+					pointArray[1] = new Point(pointNode.x + 39, pointNode.y - 1);
+					pointArray[2] = new Point(pointNode.x + 44, pointNode.y + 13);
+					pointArray[3] = new Point(pointNode.x + 42, pointNode.y + 25);
+					pointArray[4] = new Point(pointNode.x + 34, pointNode.y + 38);
+					pointArray[5] = new Point(pointNode.x + 6, pointNode.y + 38);
+					pointArray[6] = new Point(pointNode.x - 3, pointNode.y + 27);
+					pointArray[7] = new Point(pointNode.x - 6, pointNode.y + 17);
+					pointArray[8] = new Point(pointNode.x + 0, pointNode.y + 0);
+					pointArray[9] = new Point(pointNode.x + 10, pointNode.y - 5);
+				}
+				if (modelSize.equals("M")) {
+					pointArray[0] = new Point(pointNode.x + 58, pointNode.y - 9);
+					pointArray[1] = new Point(pointNode.x + 78, pointNode.y - 1);
+					pointArray[2] = new Point(pointNode.x + 89, pointNode.y + 27);
+					pointArray[3] = new Point(pointNode.x + 85, pointNode.y + 51);
+					pointArray[4] = new Point(pointNode.x + 68, pointNode.y + 77);
+					pointArray[5] = new Point(pointNode.x + 12, pointNode.y + 77);
+					pointArray[6] = new Point(pointNode.x - 6, pointNode.y + 55);
+					pointArray[7] = new Point(pointNode.x - 11, pointNode.y + 35);
+					pointArray[8] = new Point(pointNode.x + 0, pointNode.y + 0);
+					pointArray[9] = new Point(pointNode.x + 20, pointNode.y - 10);
+				}
+				if (modelSize.equals("L")) {
+					pointArray[0] = new Point(pointNode.x + 87, pointNode.y - 14);
+					pointArray[1] = new Point(pointNode.x + 117, pointNode.y - 2);
+					pointArray[2] = new Point(pointNode.x + 133, pointNode.y + 40);
+					pointArray[3] = new Point(pointNode.x + 127, pointNode.y + 76);
+					pointArray[4] = new Point(pointNode.x + 102, pointNode.y + 115);
+					pointArray[5] = new Point(pointNode.x + 18, pointNode.y + 115);
+					pointArray[6] = new Point(pointNode.x - 9, pointNode.y + 82);
+					pointArray[7] = new Point(pointNode.x - 17, pointNode.y + 52);
+					pointArray[8] = new Point(pointNode.x + 0, pointNode.y + 0);
+					pointArray[9] = new Point(pointNode.x + 30, pointNode.y - 15);
+				}
 			}
 			return pointArray;
 		}
@@ -13225,12 +13722,20 @@ public class Modeler extends JFrame {
 			}
 		}
 
-		public void updateSlideNumber() {
-			dataflowNodeElement_.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
-		}
+//		public void updateSlideNumber() {
+//			dataflowNodeElement_.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+//		}
 
 		public void updatePosition() {
-			dataflowNodeElement_.setAttribute("Position", this.getLocation().x + "," + this.getLocation().y);
+			if (modelSize.equals("S")) {
+				dataflowNodeElement_.setAttribute("Position", (this.getLocation().x *2) + "," + (this.getLocation().y *2));
+			}
+			if (modelSize.equals("M")) {
+				dataflowNodeElement_.setAttribute("Position", this.getLocation().x + "," + this.getLocation().y);
+			}
+			if (modelSize.equals("L")) {
+				dataflowNodeElement_.setAttribute("Position", Math.round(this.getLocation().x *2 /3) + "," + Math.round(this.getLocation().y *2 /3));
+			}
 		}
 
 		class jPanel_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -13353,20 +13858,20 @@ public class Modeler extends JFrame {
 			}
 		}
 
-		class jSpinnerSlideNumber_changeAdapter  implements ChangeListener {
-			DataflowNode adaptee;
-			jSpinnerSlideNumber_changeAdapter(DataflowNode adaptee) {
-				this.adaptee = adaptee;
-			}
-			public void stateChanged(ChangeEvent e) {
-				adaptee.jSpinnerSlideNumber_stateChanged(e);
-			}
-		}
-
-		void jSpinnerSlideNumber_stateChanged(ChangeEvent e) {
-			informationOnThisPageChanged = true;
-			updateSlideNumber();
-		}
+//		class jSpinnerSlideNumber_changeAdapter  implements ChangeListener {
+//			DataflowNode adaptee;
+//			jSpinnerSlideNumber_changeAdapter(DataflowNode adaptee) {
+//				this.adaptee = adaptee;
+//			}
+//			public void stateChanged(ChangeEvent e) {
+//				adaptee.jSpinnerSlideNumber_stateChanged(e);
+//			}
+//		}
+//
+//		void jSpinnerSlideNumber_stateChanged(ChangeEvent e) {
+//			informationOnThisPageChanged = true;
+//			updateSlideNumber();
+//		}
 
 		class jMenuItemDataflowNodeRemove_actionAdapter implements java.awt.event.ActionListener {
 			DataflowNode adaptee;
@@ -13448,6 +13953,7 @@ public class Modeler extends JFrame {
 					int nodeRightEdgeLocation = 0;
 					int nodeBottomEdgeLocation = 0;
 					int distanceX, distanceY;
+					int width, height, posX, posY;
 					Point originalPosition;
 
 					jPanelCanvas2.remove(jPanelMoveGuide);
@@ -13467,18 +13973,31 @@ public class Modeler extends JFrame {
 
 									//Change position of the specific node//
 									originalPosition = dataflowNodeEditorArray.get(i).getLocation();
-									dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
-											originalPosition.x + distanceX,
-											originalPosition.y + distanceY,
-											dataflowNodeEditorArray.get(i).NODE_WIDTH,
-											dataflowNodeEditorArray.get(i).NODE_HEIGHT));
-									if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
-										nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
+									width = dataflowNodeEditorArray.get(i).NODE_WIDTH;
+									height = dataflowNodeEditorArray.get(i).NODE_HEIGHT;
+									if (modelSize.equals("S")) {
+										width = Math.round(width/2);
+										height = Math.round(height/2);
 									}
-									if (dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation() > nodeBottomEdgeLocation) {
-										nodeBottomEdgeLocation = dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation();
+									if (modelSize.equals("L")) {
+										width = Math.round(width*3/2);
+										height = Math.round(height*3/2);
+									}
+//									dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
+//											originalPosition.x + distanceX,
+//											originalPosition.y + distanceY,
+//											dataflowNodeEditorArray.get(i).NODE_WIDTH,
+//											dataflowNodeEditorArray.get(i).NODE_HEIGHT));
+									dataflowNodeEditorArray.get(i).setBounds(
+										new Rectangle(originalPosition.x + distanceX, originalPosition.y + distanceY, width, height));
+									if ((originalPosition.x + distanceX + width) > nodeRightEdgeLocation) {
+										nodeRightEdgeLocation = originalPosition.x + distanceX + width;
+									}
+									if ((originalPosition.y + distanceY + height) > nodeBottomEdgeLocation) {
+										nodeBottomEdgeLocation = originalPosition.y + distanceY + height;
 									}
 									dataflowNodeEditorArray.get(i).setSelected(false);
+									dataflowNodeEditorArray.get(i).updatePosition();
 									
 									//Update DataflowLines//
 									for (int j = 0; j < dataflowLineEditorArray.size(); j++) {
@@ -13501,17 +14020,36 @@ public class Modeler extends JFrame {
 
 								//Change position of the specific node//
 								originalPosition = dataflowNodeEditorArray.get(i).getLocation();
-								dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
-										originalPosition.x + distanceX,
-										originalPosition.y + distanceY,
-										dataflowNodeEditorArray.get(i).NODE_WIDTH,
-										dataflowNodeEditorArray.get(i).NODE_HEIGHT));
-								if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
-									nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
+								width = dataflowNodeEditorArray.get(i).NODE_WIDTH;
+								height = dataflowNodeEditorArray.get(i).NODE_HEIGHT;
+								if (modelSize.equals("S")) {
+									width = Math.round(width/2);
+									height = Math.round(height/2);
 								}
-								if (dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation() > nodeBottomEdgeLocation) {
-									nodeBottomEdgeLocation = dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation();
+								if (modelSize.equals("L")) {
+									width = Math.round(width*3/2);
+									height = Math.round(height*3/2);
 								}
+//								dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
+//										originalPosition.x + distanceX,
+//										originalPosition.y + distanceY,
+//										dataflowNodeEditorArray.get(i).NODE_WIDTH,
+//										dataflowNodeEditorArray.get(i).NODE_HEIGHT));
+//								if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
+//									nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
+//								}
+//								if (dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation() > nodeBottomEdgeLocation) {
+//									nodeBottomEdgeLocation = dataflowNodeEditorArray.get(i).getNodeBottomEdgeLocation();
+//								}
+								dataflowNodeEditorArray.get(i).setBounds(
+									new Rectangle(originalPosition.x + distanceX, originalPosition.y + distanceY, width, height));
+								if ((originalPosition.x + distanceX + width) > nodeRightEdgeLocation) {
+									nodeRightEdgeLocation = originalPosition.x + distanceX + width;
+								}
+								if ((originalPosition.y + distanceY + height) > nodeBottomEdgeLocation) {
+									nodeBottomEdgeLocation = originalPosition.y + distanceY + height;
+								}
+								dataflowNodeEditorArray.get(i).updatePosition();
 
 								//Update DataflowLines//
 								for (int j = 0; j < dataflowLineEditorArray.size(); j++) {
@@ -13523,10 +14061,10 @@ public class Modeler extends JFrame {
 							}
 
 							//Move System Boundary//
-							int posX = dataflowBoundaryEditor.boundaryPosX + distanceX;
-							int posY = dataflowBoundaryEditor.boundaryPosY + distanceY;
-							int width = dataflowBoundaryEditor.boundaryWidth + 1;
-							int height = dataflowBoundaryEditor.boundaryHeight + 1;
+							posX = dataflowBoundaryEditor.boundaryPosX + distanceX;
+							posY = dataflowBoundaryEditor.boundaryPosY + distanceY;
+							width = dataflowBoundaryEditor.boundaryWidth + 1;
+							height = dataflowBoundaryEditor.boundaryHeight + 1;
 							dataflowBoundaryEditor.setBounds(posX, posY, width, height);
 							if (posX + width > nodeRightEdgeLocation) {
 								nodeRightEdgeLocation = posX + width;
@@ -13642,7 +14180,7 @@ public class Modeler extends JFrame {
 		private static final long serialVersionUID = 1L;
 		private org.w3c.dom.Element dataflowBoundaryElement_;
 		private JLabel jLabelName = new JLabel();
-		public int boundaryPosX, boundaryPosY, boundaryWidth, boundaryHeight;
+		private int boundaryPosX, boundaryPosY, boundaryWidth, boundaryHeight;
 
 		public DataflowBoundary(org.w3c.dom.Element element) {
 			super();
@@ -13654,16 +14192,16 @@ public class Modeler extends JFrame {
 			boundaryWidth = Integer.parseInt(workTokenizer.nextToken());
 			boundaryHeight = Integer.parseInt(workTokenizer.nextToken());
 			this.setLayout(null);
-			this.setBounds(new Rectangle(boundaryPosX, boundaryPosY, boundaryWidth+1, boundaryHeight+1));
+			//this.setBounds(new Rectangle(boundaryPosX, boundaryPosY, boundaryWidth+1, boundaryHeight+1));
 			this.setBorder(null);
 			this.setOpaque(false);
 			jLabelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE-2));
 			jLabelName.setText(currentMainTreeNode.getRoot().toString().replace("*", ""));
 			setSystemName();
-			updateColors();
 			if (!dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("0")) {
 				this.add(jLabelName,null);
 			}
+			setSizeAndColors();
 		}
 
 		public DataflowBoundary() {
@@ -13671,6 +14209,11 @@ public class Modeler extends JFrame {
 		}
 
 		private void setSystemName() {
+			if (isNormalColorConfigOnSubjectArea) {
+				jLabelName.setForeground(Color.LIGHT_GRAY);
+			} else {
+				jLabelName.setForeground(Color.DARK_GRAY);
+			}
 			if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("1")) {
 				jLabelName.setBounds(new Rectangle(15, 12, 300, 20));
 			}
@@ -13689,62 +14232,310 @@ public class Modeler extends JFrame {
 			}
 		}
 
-		public void setBounds(int x, int y, int w, int h) {
-			if (x > 0) {
-				boundaryPosX = x;
-			} else {
-				boundaryPosX = 0;
-			}
-			if (y > 0) {
-				boundaryPosY = y;
-			} else {
-				boundaryPosY = 0;
-			}
-			if (w > 51) {
-				boundaryWidth = w - 1;
-			} else {
-				boundaryWidth = 50;
-			}
-			if (h > 51) {
-				boundaryHeight = h - 1;
-			} else {
-				boundaryHeight = 50;
-			}
-			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
-			super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
-		} 
+//		public void setOriginalBoundsAccordingToScale(int x, int y, int w, int h) {
+//			int posX = x;
+//			int posY = y;
+//			int width = w;
+//			int height = h;
+//			if (modelSize.equals("S")) {
+//				posX = Math.round(posX / 2);
+//				posY = Math.round(posY / 2);
+//				width = Math.round(width / 2);
+//				height = Math.round(height / 2);
+//				jLabelName.setBounds(new Rectangle(7, height - 15, 150, 10));
+//			}
+//			if (modelSize.equals("M")) {
+//				jLabelName.setBounds(new Rectangle(15, height - 30, 300, 20));
+//			}
+//			if (modelSize.equals("L")) {
+//				posX = Math.round(posX /2 * 3);
+//				posY = Math.round(posY /2 * 3);
+//				width = Math.round(width /2 * 3);
+//				height = Math.round(height /2 * 3);
+//				jLabelName.setBounds(new Rectangle(22, height - 45, 450, 30));
+//			}
+//			if (posX > 0) {
+//				boundaryPosX = posX;
+//			} else {
+//				boundaryPosX = 0;
+//			}
+//			if (posY > 0) {
+//				boundaryPosY = posY;
+//			} else {
+//				boundaryPosY = 0;
+//			}
+//			if (width > 50) {
+//				boundaryWidth = width;
+//			} else {
+//				boundaryWidth = 50;
+//			}
+//			if (height > 50) {
+//				boundaryHeight = height;
+//			} else {
+//				boundaryHeight = 50;
+//			}
+////			if (x > 0) {
+////				boundaryPosX = x;
+////			} else {
+////				boundaryPosX = 0;
+////			}
+////			if (y > 0) {
+////				boundaryPosY = y;
+////			} else {
+////				boundaryPosY = 0;
+////			}
+////			if (w > 51) {
+////				boundaryWidth = w - 1;
+////			} else {
+////				boundaryWidth = 50;
+////			}
+////			if (h > 51) {
+////				boundaryHeight = h - 1;
+////			} else {
+////				boundaryHeight = 50;
+////			}
+////			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
+////			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
+////			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
+////			super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
+//			super.setBounds(posX, posY, width, height);
+//		}
 
-		public void setBounds(Rectangle rect) {
-			if (rect.x > 0) {
-				boundaryPosX = rect.x;
-			} else {
-				boundaryPosX = 0;
+		public void updatePositionAndSize(int x, int y, int width, int height) {
+			this.setBounds(x, y, width, height);
+
+			if (modelSize.equals("S")) {
+				if (x > 0) {
+					boundaryPosX = x*2;
+				} else {
+					boundaryPosX = 0;
+				}
+				if (y > 0) {
+					boundaryPosY = y*2;
+				} else {
+					boundaryPosY = 0;
+				}
+				if (width > 25) {
+					boundaryWidth = width*2;
+				} else {
+					boundaryWidth = 25;
+				}
+				if (height > 25) {
+					boundaryHeight = height*2;
+				} else {
+					boundaryHeight = 25;
+				}
 			}
-			if (rect.y > 0) {
-				boundaryPosY = rect.y;
-			} else {
-				boundaryPosY = 0;
+			if (modelSize.equals("M")) {
+				if (x > 0) {
+					boundaryPosX = x;
+				} else {
+					boundaryPosX = 0;
+				}
+				if (y > 0) {
+					boundaryPosY = y;
+				} else {
+					boundaryPosY = 0;
+				}
+				if (width > 50) {
+					boundaryWidth = width;
+				} else {
+					boundaryWidth = 50;
+				}
+				if (height > 50) {
+					boundaryHeight = height;
+				} else {
+					boundaryHeight = 50;
+				}
 			}
-			if (rect.width> 51) {
-				boundaryWidth = rect.width - 1;
-			} else {
-				boundaryWidth = 50;
+			if (modelSize.equals("L")) {
+				if (x > 0) {
+					boundaryPosX = x*2/3;
+				} else {
+					boundaryPosX = 0;
+				}
+				if (y > 0) {
+					boundaryPosY = y*2/3;
+				} else {
+					boundaryPosY = 0;
+				}
+				if (width > 75) {
+					boundaryWidth = width*2/3;
+				} else {
+					boundaryWidth = 75;
+				}
+				if (height > 75) {
+					boundaryHeight = height*2/3;
+				} else {
+					boundaryHeight = 75;
+				}
 			}
-			if (rect.height > 51) {
-				boundaryHeight = rect.height - 1;
-			} else {
-				boundaryHeight = 50;
-			}
-			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
-			super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
+			dataflowBoundaryElement_.setAttribute("BoundaryPosition", boundaryPosX + "," + boundaryPosY);
+			dataflowBoundaryElement_.setAttribute("BoundarySize", boundaryWidth + "," + boundaryHeight);
 		}
 
+//		public void setBoundsAccordingToScale(Rectangle rect) {
+//			int posX = rect.x;
+//			int posY = rect.y;
+//			int width = rect.width;
+//			int height = rect.height;
+//			if (modelSize.equals("S")) {
+//				posX = Math.round(posX / 2);
+//				posY = Math.round(posY / 2);
+//				width = Math.round(width / 2);
+//				height = Math.round(height / 2);
+//				jLabelName.setBounds(new Rectangle(7, height - 15, 150, 10));
+//				if (posX > 0) {
+//					boundaryPosX = posX*2;
+//				} else {
+//					boundaryPosX = 0;
+//				}
+//				if (posY > 0) {
+//					boundaryPosY = posY*2;
+//				} else {
+//					boundaryPosY = 0;
+//				}
+//				if (width > 25) {
+//					boundaryWidth = Math.round(width *2);
+//				} else {
+//					boundaryWidth = 25;
+//				}
+//				if (height > 25) {
+//					boundaryHeight = Math.round(height *2);
+//				} else {
+//					boundaryHeight = 25;
+//				}
+//			}
+//			if (modelSize.equals("M")) {
+//				jLabelName.setBounds(new Rectangle(15, height - 30, 300, 20));
+//				if (posX > 0) {
+//					boundaryPosX = posX;
+//				} else {
+//					boundaryPosX = 0;
+//				}
+//				if (posY > 0) {
+//					boundaryPosY = posY;
+//				} else {
+//					boundaryPosY = 0;
+//				}
+//				if (width > 50) {
+//					boundaryWidth = width;
+//				} else {
+//					boundaryWidth = 50;
+//				}
+//				if (height > 50) {
+//					boundaryHeight = height;
+//				} else {
+//					boundaryHeight = 50;
+//				}
+//			}
+//			if (modelSize.equals("L")) {
+//				posX = Math.round(posX /2 * 3);
+//				posY = Math.round(posY /2 * 3);
+//				width = Math.round(width /2 * 3);
+//				height = Math.round(height /2 * 3);
+//				jLabelName.setBounds(new Rectangle(22, height - 45, 450, 30));
+//				if (posX > 0) {
+//					boundaryPosX = posX /3 *2;
+//				} else {
+//					boundaryPosX = 0;
+//				}
+//				if (posY > 0) {
+//					boundaryPosY = posY /3 *2;
+//				} else {
+//					boundaryPosY = 0;
+//				}
+//				if (width > 75) {
+//					boundaryWidth = Math.round(width /3 *2);
+//				} else {
+//					boundaryWidth = 75;
+//				}
+//				if (height > 75) {
+//					boundaryHeight = Math.round(height /3 *2);
+//				} else {
+//					boundaryHeight = 75;
+//				}
+//			}
+////			if (posX > 0) {
+////				boundaryPosX = posX;
+////			} else {
+////				boundaryPosX = 0;
+////			}
+////			if (posY > 0) {
+////				boundaryPosY = posY;
+////			} else {
+////				boundaryPosY = 0;
+////			}
+////			if (width > 50) {
+////				boundaryWidth = width;
+////			} else {
+////				boundaryWidth = 50;
+////			}
+////			if (height > 50) {
+////				boundaryHeight = height;
+////			} else {
+////				boundaryHeight = 50;
+////			}
+////			if (rect.x > 0) {
+////				boundaryPosX = rect.x;
+////			} else {
+////				boundaryPosX = 0;
+////			}
+////			if (rect.y > 0) {
+////				boundaryPosY = rect.y;
+////			} else {
+////				boundaryPosY = 0;
+////			}
+////			if (rect.width> 51) {
+////				boundaryWidth = rect.width - 1;
+////			} else {
+////				boundaryWidth = 50;
+////			}
+////			if (rect.height > 51) {
+////				boundaryHeight = rect.height - 1;
+////			} else {
+////				boundaryHeight = 50;
+////			}
+////			jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
+////			dataflowBoundaryElement_.setAttribute("BoundaryPosition", Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
+////			dataflowBoundaryElement_.setAttribute("BoundarySize", Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
+////			super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
+//			super.setBounds(posX, posY, width, height);
+//		}
+
 		public Dimension getPreferredSizeOfParentPanel() {
-			return new Dimension(boundaryPosX + boundaryWidth + 5, boundaryPosY + boundaryHeight + 5);
+			Dimension dimension = null;
+			if (modelSize.equals("S")) {
+				dimension = new Dimension((boundaryPosX + boundaryWidth + 5)/2, (boundaryPosY + boundaryHeight + 5)/2);
+			}
+			if (modelSize.equals("M")) {
+				dimension = new Dimension(boundaryPosX + boundaryWidth + 5, boundaryPosY + boundaryHeight + 5);
+			}
+			if (modelSize.equals("L")) {
+				dimension = new Dimension((boundaryPosX + boundaryWidth + 5)/2*3, (boundaryPosY + boundaryHeight + 5)/2*3);
+			}
+			return dimension;
+		}
+
+		public void setSizeAndColors() {
+			int posX = boundaryPosX;
+			int posY = boundaryPosY;
+			int width = boundaryWidth;
+			int height = boundaryHeight;
+			if (modelSize.equals("S")) {
+				posX = Math.round(posX /2);
+				posY = Math.round(posY /2);
+				width = Math.round(width /2);
+				height = Math.round(height /2);
+			}
+			if (modelSize.equals("L")) {
+				posX = Math.round(posX /2 *3);
+				posY = Math.round(posY /2 *3);
+				width = Math.round(width /2 *3);
+				height = Math.round(height /2 *3);
+			}
+			this.setBounds(new Rectangle(posX, posY, width, height));
+			updateColors();
 		}
 
 		public void updateColors() {
@@ -13757,7 +14548,28 @@ public class Modeler extends JFrame {
 
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
+
 			Graphics2D g2 = (Graphics2D)g;
+			//int posX = boundaryPosX;
+			//int posY = boundaryPosY;
+			//int width = boundaryWidth;
+			//int height = boundaryHeight;
+			if (modelSize.equals("S")) {
+				//posX = Math.round(posX /2);
+				//posY = Math.round(posY /2);
+				//width = Math.round(width /2);
+				//height = Math.round(height /2);
+				g2.scale(0.5d,0.5d);
+			}
+			if (modelSize.equals("L")) {
+				//posX = Math.round(posX /2 *3);
+				//posY = Math.round(posY /2 *3);
+				//width = Math.round(width /2 *3);
+				//height = Math.round(height /2 *3);
+				g2.scale(1.5d, 1.5d);
+			}
+			//this.setBounds(new Rectangle(posX, posY, width, height));
+
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			if (isNormalColorConfigOnSubjectArea) {
 				g2.setPaint(new GradientPaint(5, 5, Color.WHITE, 10, 10, Color.LIGHT_GRAY));
@@ -13854,6 +14666,7 @@ public class Modeler extends JFrame {
 				g2.fillPolygon(x4,y4,3);
 			}
 			setSystemName();
+			//this.setBounds(new Rectangle(posX, posY, width, height));
 		}
 	} //End of DataflowBoundary//
 
@@ -13877,6 +14690,15 @@ public class Modeler extends JFrame {
 				super.paintComponent(g);
 				if (shapeOfArrow1 != null) {
 					Graphics2D g2 = (Graphics2D)g;
+					if (modelSize.equals("S")) {
+						g2.scale(0.5d,0.5d);
+					}
+					if (modelSize.equals("M")) {
+						g2.scale(1.0d,1.0d);
+					}
+					if (modelSize.equals("L")) {
+						g2.scale(1.5d,1.5d);
+					}
 					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					if (isNormalColorConfigOnSubjectArea) {
 						g2.setColor(Color.cyan);
@@ -13885,6 +14707,7 @@ public class Modeler extends JFrame {
 					}
 					g2.draw(shapeOfArrow1);
 					g2.fill(shapeOfArrow1);
+					g2.scale(1.0d,1.0d);
 				}
 			}
 		};
@@ -13894,6 +14717,15 @@ public class Modeler extends JFrame {
 				super.paintComponent(g);
 				if (shapeOfArrow2 != null) {
 					Graphics2D g2 = (Graphics2D)g;
+					if (modelSize.equals("S")) {
+						g2.scale(0.5d,0.5d);
+					}
+					if (modelSize.equals("M")) {
+						g2.scale(1.0d,1.0d);
+					}
+					if (modelSize.equals("L")) {
+						g2.scale(1.5d,1.5d);
+					}
 					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					if (isNormalColorConfigOnSubjectArea) {
 						g2.setColor(Color.cyan);
@@ -13902,6 +14734,7 @@ public class Modeler extends JFrame {
 					}
 					g2.draw(shapeOfArrow2);
 					g2.fill(shapeOfArrow2);
+					g2.scale(1.0d,1.0d);
 				}
 			}
 		};
@@ -13910,13 +14743,23 @@ public class Modeler extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D)g;
+				if (modelSize.equals("S")) {
+					g2.scale(0.5d,0.5d);
+				}
+				if (modelSize.equals("M")) {
+					g2.scale(1.0d,1.0d);
+				}
+				if (modelSize.equals("L")) {
+					g2.scale(1.5d,1.5d);
+				}
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				drawImage(g2);
+				g2.scale(1.0d,1.0d);
 			}
 		};
 		private JLabel jLabelArrowMoveGuide = new JLabel();
 		private JLabel jLabelPressed;
-		private JSpinner jSpinnerSlideNumber = new JSpinner();
+		//private JSpinner jSpinnerSlideNumber = new JSpinner();
 		private int arrowDirection1 = 0;
 		private int arrowDirection2 = 0;
 		private Point arrowLabelPoint1, arrowLabelPoint2;
@@ -13958,10 +14801,10 @@ public class Modeler extends JFrame {
 			//Setup slide number//
 			Integer num = new Integer(dataflowLineElement_.getAttribute("SlideNumber"));
 			slideNumber = num.intValue();
-			jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
-			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-			jSpinnerSlideNumber.setModel(spinnerNumberModel);
+//			jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
+//			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
+//			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
+//			jSpinnerSlideNumber.setModel(spinnerNumberModel);
 
 			//Setup imageType index//
 			imageType = dataflowLineElement_.getAttribute("ImageType");
@@ -13982,7 +14825,7 @@ public class Modeler extends JFrame {
 			//Setup Name of Flow//
 			jTextFieldFlowName.setForeground(Color.white);
 			jTextFieldFlowName.setText(dataflowLineElement_.getAttribute("Name"));
-			jTextFieldFlowName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			//jTextFieldFlowName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 			jTextFieldFlowName.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldFlowName.setEditable(false);
 			jTextFieldFlowName.setBorder(null);
@@ -13990,7 +14833,7 @@ public class Modeler extends JFrame {
 			jTextFieldFlowName.setName("jTextFieldFlowName");
 			jTextFieldFlowNameExt.setForeground(Color.white);
 			jTextFieldFlowNameExt.setText(dataflowLineElement_.getAttribute("NameExt"));
-			jTextFieldFlowNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			//jTextFieldFlowNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 			jTextFieldFlowNameExt.setHorizontalAlignment(SwingConstants.CENTER);
 			jTextFieldFlowNameExt.setEditable(false);
 			jTextFieldFlowNameExt.setBorder(null);
@@ -14030,6 +14873,8 @@ public class Modeler extends JFrame {
 
 		//Drawing terminals//
 		public void addArrows() {
+			removeArrows();
+			
 			arrowCordinateArray1 = dataflowNode1_.getArrowCordinates();
 			arrowDirectionArray1 = dataflowNode1_.getArrowDirections();
 			arrowCordinateArray2 = dataflowNode2_.getArrowCordinates();
@@ -14040,41 +14885,76 @@ public class Modeler extends JFrame {
 			arrowDirection2 = arrowDirectionArray2[terminalPosIndex2];
 
 			//Setup Arrow 1//
-			jPanelCanvas_.remove(jLabelArrow1);
 			if (showArrow1) {
 				shapeOfArrow1 = this.getShapeOfArrow(arrowDirection1);
 			}
-			jLabelArrow1.setBounds(new Rectangle(arrowLabelPoint1.x, arrowLabelPoint1.y, 15, 15));
+			if (modelSize.equals("S")) {
+				jLabelArrow1.setBounds(new Rectangle(arrowLabelPoint1.x, arrowLabelPoint1.y, 9, 9));
+			}
+			if (modelSize.equals("M")) {
+				jLabelArrow1.setBounds(new Rectangle(arrowLabelPoint1.x, arrowLabelPoint1.y, 15, 15));
+			}
+			if (modelSize.equals("L")) {
+				jLabelArrow1.setBounds(new Rectangle(arrowLabelPoint1.x, arrowLabelPoint1.y, 23, 23));
+			}
 			jPanelCanvas_.add(jLabelArrow1, null);
 
 			//Setup Arrow 2//
-			jPanelCanvas_.remove(jLabelArrow2);
 			if (showArrow2) {
 				shapeOfArrow2 = this.getShapeOfArrow(arrowDirection2);
 			}
-			jLabelArrow2.setBounds(new Rectangle(arrowLabelPoint2.x, arrowLabelPoint2.y, 15, 15));
+			if (modelSize.equals("S")) {
+				jLabelArrow2.setBounds(new Rectangle(arrowLabelPoint2.x, arrowLabelPoint2.y, 9, 9));
+			}
+			if (modelSize.equals("M")) {
+				jLabelArrow2.setBounds(new Rectangle(arrowLabelPoint2.x, arrowLabelPoint2.y, 15, 15));
+			}
+			if (modelSize.equals("L")) {
+				jLabelArrow2.setBounds(new Rectangle(arrowLabelPoint2.x, arrowLabelPoint2.y, 23, 23));
+			}
 			jPanelCanvas_.add(jLabelArrow2, null);
 
 			//Setup FlowName//
 			lineCordinates1 = this.getLineCordinates(arrowDirection1, arrowLabelPoint1, showArrow1);
 			lineCordinates2 = this.getLineCordinates(arrowDirection2, arrowLabelPoint2, showArrow2);
+			if (modelSize.equals("S")) {
+				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 7, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 11, 15, 15));
+			}
 			if (jTextFieldFlowNameExt.getText().equals("")) {
-				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 23, 30, 30));
-				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 120, 19));
-				adjustFontSizeOfTextField(jTextFieldFlowName, 14);
-				jPanelCanvas_.add(jTextFieldFlowName, null);
-				jSpinnerSlideNumber.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 18, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 18, 40, 16));
+				if (modelSize.equals("M")) {
+					jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 23, 30, 30));
+					jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 120, 19));
+					adjustFontSizeOfTextField(jTextFieldFlowName, MAIN_FONT_SIZE-2);
+					jPanelCanvas_.add(jTextFieldFlowName, null);
+				}
+				if (modelSize.equals("L")) {
+					jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 22, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 35, 45, 45));
+					jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 90, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 180, 29));
+					adjustFontSizeOfTextField(jTextFieldFlowName, MAIN_FONT_SIZE+2);
+					jPanelCanvas_.add(jTextFieldFlowName, null);
+				}
 			} else {
-				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 30, 30, 30));
-				jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 9, 120, 19));
-				adjustFontSizeOfTextField(jTextFieldFlowName, 14);
-				jTextFieldFlowNameExt.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 + 10, 120, 19));
-				adjustFontSizeOfTextField(jTextFieldFlowNameExt, 14);
-				jPanelCanvas_.add(jTextFieldFlowName, null);
-				jPanelCanvas_.add(jTextFieldFlowNameExt, null);
-				jSpinnerSlideNumber.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 20, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 23, 40, 16));
+				if (modelSize.equals("M")) {
+					jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 30, 30, 30));
+					jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 9, 120, 19));
+					adjustFontSizeOfTextField(jTextFieldFlowName, MAIN_FONT_SIZE-2);
+					jTextFieldFlowNameExt.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 60, (lineCordinates1[1].y + lineCordinates2[1].y)/2 + 10, 120, 19));
+					adjustFontSizeOfTextField(jTextFieldFlowNameExt, MAIN_FONT_SIZE-2);
+					jPanelCanvas_.add(jTextFieldFlowName, null);
+					jPanelCanvas_.add(jTextFieldFlowNameExt, null);
+				}
+				if (modelSize.equals("L")) {
+					jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 22, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 45, 45, 45));
+					jTextFieldFlowName.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 90, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 14, 180, 29));
+					adjustFontSizeOfTextField(jTextFieldFlowName, MAIN_FONT_SIZE+2);
+					jTextFieldFlowNameExt.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 90, (lineCordinates1[1].y + lineCordinates2[1].y)/2 + 15, 180, 29));
+					adjustFontSizeOfTextField(jTextFieldFlowNameExt, MAIN_FONT_SIZE+2);
+					jPanelCanvas_.add(jTextFieldFlowName, null);
+					jPanelCanvas_.add(jTextFieldFlowNameExt, null);
+				}
 			}
 			jPanelCanvas_.add(jLabelFlowImage, null);
+			updateColors();
 		}
 
 		//Terminal eraser//
@@ -14086,23 +14966,31 @@ public class Modeler extends JFrame {
 			jPanelCanvas_.remove(jLabelFlowImage);
 		}
 
-		public void setShowSlideNumber() {
-			if (!slideNumberShown) {
-				jPanelCanvas_.remove(jLabelFlowImage);
-				jPanelCanvas_.add(jSpinnerSlideNumber, null);
-				jPanelCanvas_.updateUI();
-				slideNumberShown = true;
+		public void setShowSlideNumber(boolean isToShow) {
+//			if (!slideNumberShown) {
+//				jPanelCanvas_.remove(jLabelFlowImage);
+//				jPanelCanvas_.add(jSpinnerSlideNumber, null);
+//				jPanelCanvas_.updateUI();
+//				slideNumberShown = true;
+//			}
+			if (isToShow) {
+				jTextFieldFlowName.setText(slideNumber+"");
+				jTextFieldFlowNameExt.setText("");
+			} else {
+				jTextFieldFlowName.setText(dataflowLineElement_.getAttribute("Name"));
+				jTextFieldFlowNameExt.setText(dataflowLineElement_.getAttribute("NameExt"));
 			}
+			jPanelCanvas_.updateUI();
 		}
 
-		public void setHideSlideNumber() {
-			if (slideNumberShown) {
-				jPanelCanvas_.add(jLabelFlowImage, null);
-				jPanelCanvas_.remove(jSpinnerSlideNumber);
-				jPanelCanvas_.updateUI();
-				slideNumberShown = false;
-			}
-		}
+//		public void setHideSlideNumber() {
+//			if (slideNumberShown) {
+//				jPanelCanvas_.add(jLabelFlowImage, null);
+//				jPanelCanvas_.remove(jSpinnerSlideNumber);
+//				jPanelCanvas_.updateUI();
+//				slideNumberShown = false;
+//			}
+//		}
 
 		public boolean hasSlideNumberShown() {
 			return slideNumberShown;
@@ -14135,9 +15023,9 @@ public class Modeler extends JFrame {
 			dataflowLineElement_.setAttribute("NameExt", jTextFieldFlowNameExt.getText());
 		}
 
-		public void updateSlideNumber() {
-			dataflowLineElement_.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
-		}
+//		public void updateSlideNumber() {
+//			dataflowLineElement_.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+//		}
 
 		public void setLinePositionIndex() {
 			Integer work = new Integer(dataflowLineElement_.getAttribute("TerminalPosIndex1"));
@@ -14532,180 +15420,567 @@ public class Modeler extends JFrame {
 			//
 			switch (arrowDirection) {
 			case 0: //North//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 7;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 7;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					//9
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x +  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 12;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x +  0;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 25;
+				if (modelSize.equals("M")) {
+					//15
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x +  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 25;
+				}
+				if (modelSize.equals("L")) {
+					//23
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 11;
+						lineTerminalPoint.y = arrowLabelPoint.y + 22;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 11;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x +  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 36;
+				}
 				break;
 			case 1: //NNE//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 9;
-					lineTerminalPoint.y = arrowLabelPoint.y + 10;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 6;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 5;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 11;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 11;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 22;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 9;
+						lineTerminalPoint.y = arrowLabelPoint.y + 10;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 22;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 16;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 16;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 33;
+				}
 				break;
 			case 2: //NE//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 5;
-					lineTerminalPoint.y = arrowLabelPoint.y + 9;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 3;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  10;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  10;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x -  20;
-				lineCurveControlPoint.y = lineTerminalPoint.y +  20;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 9;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  20;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  20;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 8;
+						lineTerminalPoint.y = arrowLabelPoint.y + 13;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  30;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  30;
+				}
 				break;
 			case 3: //EEN//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 4;
-					lineTerminalPoint.y = arrowLabelPoint.y + 5;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 2;
+						lineTerminalPoint.y = arrowLabelPoint.y + 3;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 6;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 22;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 11;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 22;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 11;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 6;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 33;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 17;
+				}
 				break;
 			case 4: //East//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 8;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 8;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 13;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  0;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 25;
-				lineCurveControlPoint.y = lineTerminalPoint.y +  0;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 25;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  0;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 37;
+					lineCurveControlPoint.y = lineTerminalPoint.y +  0;
+				}
 				break;
 			case 5: //EES//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 4;
-					lineTerminalPoint.y = arrowLabelPoint.y + 8;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 2;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 6;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 22;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 11;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 22;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 11;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 6;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 33;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 17;
+				}
 				break;
 			case 6: //SE//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 5;
-					lineTerminalPoint.y = arrowLabelPoint.y + 5;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 3;
+						lineTerminalPoint.y = arrowLabelPoint.y + 3;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 10;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 10;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 20;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 20;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 20;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 20;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 8;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 30;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 30;
+				}
 				break;
 			case 7: //SSE//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 8;
-					lineTerminalPoint.y = arrowLabelPoint.y + 4;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 2;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 6;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 11;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x - 11;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 22;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 8;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 22;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 12;
+						lineTerminalPoint.y = arrowLabelPoint.y + 6;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x - 17;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 33;
+				}
 				break;
 			case 8: //South//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 7;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 7;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 4;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 13;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x -  0;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 25;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 25;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 11;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 11;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x -  0;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 38;
+				}
 				break;
 			case 9: //SSW//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 5;
-					lineTerminalPoint.y = arrowLabelPoint.y + 4;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 3;
+						lineTerminalPoint.y = arrowLabelPoint.y + 2;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 6;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 11;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 11;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 22;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 22;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 8;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 17;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 33;
+				}
 				break;
 			case 10: //SW//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 9;
-					lineTerminalPoint.y = arrowLabelPoint.y + 5;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 3;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 10;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 10;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 20;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 20;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 9;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 20;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 20;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 30;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 30;
+				}
 				break;
 			case 11: //WWS//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 10;
-					lineTerminalPoint.y = arrowLabelPoint.y + 9;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 14;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 7;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 6;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 22;
-				lineCurveControlPoint.y = lineTerminalPoint.y - 11;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 10;
+						lineTerminalPoint.y = arrowLabelPoint.y + 9;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 22;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 11;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 15;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 21;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 33;
+					lineCurveControlPoint.y = lineTerminalPoint.y - 17;
+				}
 				break;
 			case 12: //West//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 14;
-					lineTerminalPoint.y = arrowLabelPoint.y + 8;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 8;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 7;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 4;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 13;
+					lineCurveControlPoint.y = lineTerminalPoint.y -  0;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 25;
-				lineCurveControlPoint.y = lineTerminalPoint.y -  0;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 25;
+					lineCurveControlPoint.y = lineTerminalPoint.y -  0;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 21;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 12;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 38;
+					lineCurveControlPoint.y = lineTerminalPoint.y -  0;
+				}
 				break;
 			case 13: //WWN//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 10;
-					lineTerminalPoint.y = arrowLabelPoint.y + 5;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 3;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 6;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 22;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 11;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 10;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 22;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 11;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 15;
+						lineTerminalPoint.y = arrowLabelPoint.y + 8;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 33;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 17;
+				}
 				break;
 			case 14: //NW//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 9;
-					lineTerminalPoint.y = arrowLabelPoint.y + 9;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 10;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 10;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 20;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 20;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 9;
+						lineTerminalPoint.y = arrowLabelPoint.y + 9;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 20;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 20;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 14;
+						lineTerminalPoint.y = arrowLabelPoint.y + 14;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 30;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 30;
+				}
 				break;
 			case 15: //NNW//
-				if (showArrow) {
-					lineTerminalPoint.x = arrowLabelPoint.x + 5;
-					lineTerminalPoint.y = arrowLabelPoint.y + 10;
-				} else {
-					lineTerminalPoint.x = arrowLabelPoint.x + 0;
-					lineTerminalPoint.y = arrowLabelPoint.y + 0;
+				if (modelSize.equals("S")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 3;
+						lineTerminalPoint.y = arrowLabelPoint.y + 5;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 6;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 11;
 				}
-				lineCurveControlPoint.x = lineTerminalPoint.x + 11;
-				lineCurveControlPoint.y = lineTerminalPoint.y + 22;
+				if (modelSize.equals("M")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 5;
+						lineTerminalPoint.y = arrowLabelPoint.y + 10;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 11;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 22;
+				}
+				if (modelSize.equals("L")) {
+					if (showArrow) {
+						lineTerminalPoint.x = arrowLabelPoint.x + 8;
+						lineTerminalPoint.y = arrowLabelPoint.y + 15;
+					} else {
+						lineTerminalPoint.x = arrowLabelPoint.x + 0;
+						lineTerminalPoint.y = arrowLabelPoint.y + 0;
+					}
+					lineCurveControlPoint.x = lineTerminalPoint.x + 17;
+					lineCurveControlPoint.y = lineTerminalPoint.y + 33;
+				}
 				break;
 			}
 			lineCordinates[0] = lineTerminalPoint;
@@ -14750,16 +16025,16 @@ public class Modeler extends JFrame {
 			currentMainTreeNode.activateContentsPane();
 		}
 
-		class jSpinnerSlideNumber_changeAdapter  implements ChangeListener {
-			DataflowLine adaptee;
-			jSpinnerSlideNumber_changeAdapter(DataflowLine adaptee) {
-				this.adaptee = adaptee;
-			}
-			public void stateChanged(ChangeEvent e) {
-				informationOnThisPageChanged = true;
-				updateSlideNumber();
-			}
-		}
+//		class jSpinnerSlideNumber_changeAdapter  implements ChangeListener {
+//			DataflowLine adaptee;
+//			jSpinnerSlideNumber_changeAdapter(DataflowLine adaptee) {
+//				this.adaptee = adaptee;
+//			}
+//			public void stateChanged(ChangeEvent e) {
+//				informationOnThisPageChanged = true;
+//				updateSlideNumber();
+//			}
+//		}
 
 		class jDataflowLine_mouseAdapter extends java.awt.event.MouseAdapter {
 			DataflowLine adaptee;
@@ -14814,8 +16089,6 @@ public class Modeler extends JFrame {
 		}
 
 		private void jDataflowLine_mouseExited(MouseEvent e) {
-			//jTextFieldFlowName.setForeground(Color.white);
-			//jTextFieldFlowNameExt.setForeground(Color.white);
 			updateColors();
 		}
 
@@ -14847,7 +16120,15 @@ public class Modeler extends JFrame {
 				}
 				terminalPosIndex = -1;
 				jLabelPressed.setBorder(null);
-				jLabelArrowMoveGuide.setBounds(new Rectangle(jLabelPressed.getBounds().x, jLabelPressed.getBounds().y, 15, 15));
+				if (modelSize.equals("S")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(jLabelPressed.getBounds().x, jLabelPressed.getBounds().y, 9, 9));
+				}
+				if (modelSize.equals("M")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(jLabelPressed.getBounds().x, jLabelPressed.getBounds().y, 15, 15));
+				}
+				if (modelSize.equals("L")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(jLabelPressed.getBounds().x, jLabelPressed.getBounds().y, 23, 23));
+				}
 				jPanelCanvas_.add(jLabelArrowMoveGuide, null);
 			}
 		}
@@ -14868,7 +16149,6 @@ public class Modeler extends JFrame {
 					arrowLabelPoint2 = arrowCordinateArray[terminalPosIndex2];
 					arrowDirection2 = arrowDirectionArray[terminalPosIndex2];
 					this.addArrows();
-					//
 					informationOnThisPageChanged = true;
 				}
 				jPanelCanvas_.repaint();
@@ -14903,7 +16183,15 @@ public class Modeler extends JFrame {
 						terminalPosIndex = i;
 					}
 				}
-				jLabelArrowMoveGuide.setBounds(new Rectangle(arrowCordinateArray[terminalPosIndex].x, arrowCordinateArray[terminalPosIndex].y, 15, 15));
+				if (modelSize.equals("S")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(arrowCordinateArray[terminalPosIndex].x, arrowCordinateArray[terminalPosIndex].y, 9, 9));
+				}
+				if (modelSize.equals("M")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(arrowCordinateArray[terminalPosIndex].x, arrowCordinateArray[terminalPosIndex].y, 15, 15));
+				}
+				if (modelSize.equals("L")) {
+					jLabelArrowMoveGuide.setBounds(new Rectangle(arrowCordinateArray[terminalPosIndex].x, arrowCordinateArray[terminalPosIndex].y, 23, 23));
+				}
 			}
 		}
 	} //End of Class DataflowLine//
@@ -20957,16 +22245,17 @@ public class Modeler extends JFrame {
 				jTextFieldSystemTermsSortKey.setText("");
 				jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
 				jTextFieldSystemTermsSortKey.setEditable(false);
-				jTextFieldSystemTermsHtmlFileName.setText("");
-				jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.control);
-				jTextFieldSystemTermsHtmlFileName.setEditable(false);
+				systemTermsHtmlFile = "";
+				jComboBoxSystemTermsHtmlFile.removeAllItems();
+				jComboBoxSystemTermsHtmlFile.setBackground(SystemColor.control);
+				jComboBoxSystemTermsHtmlFile.setEnabled(false);
+				jButtonSystemTermsHtmlFileEdit.setEnabled(false);
 				jTextFieldSystemTermsHeadder.setText("");
 				jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
 				jTextFieldSystemTermsHeadder.setEditable(false);
 				jTextAreaSystemTermsDescriptions.setText("");
 				jTextAreaSystemTermsDescriptions.setBackground(SystemColor.control);
 				jTextAreaSystemTermsDescriptions.setEditable(false);
-				jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
 				//
 				//Activate routine for ListSelectionChangeEvent//
 				tableSystemTermsListSelectChangeActivated = true;
@@ -21047,7 +22336,6 @@ public class Modeler extends JFrame {
 
 		private String activateContentsPaneForSubjectArea() {
 			NodeList dataflowNodeList, dataflowLineList;
-			int nodeRightEdgeLocation, nodeBottomEdgeLocation, panelWidth, panelHeight;
 			jLabelSubtitle.setText(((XeadTreeNode)this.getParent()).getName() + " - " + this.getName());
 			dataflowPageTitle = this.getName();
 			jTextFieldSubjectAreaName.setText(domNode_.getAttribute("Name"));
@@ -21076,6 +22364,7 @@ public class Modeler extends JFrame {
 			}
 			//
 			//Setup DataFlow-Diagram(DFD) panel//
+			isSlideNumberShown = false;
 			dataflowNodeList = domNode_.getElementsByTagName("DataflowNode");
 			dataflowLineList = domNode_.getElementsByTagName("DataflowLine");
 			//
@@ -21085,7 +22374,7 @@ public class Modeler extends JFrame {
 			jPanelSubjectAreaDataflowEditor1.remove(dataflowBoundaryEditor);
 			if (!domNode_.getAttribute("BoundarySetting").equals("H")) {
 				dataflowBoundaryEditor = new DataflowBoundary(domNode_);
-				jPanelSubjectAreaDataflowEditor1.setPreferredSize(dataflowBoundaryEditor.getPreferredSizeOfParentPanel());
+				//jPanelSubjectAreaDataflowEditor1.setPreferredSize(dataflowBoundaryEditor.getPreferredSizeOfParentPanel());
 				jPanelSubjectAreaDataflowEditor1.add(dataflowBoundaryEditor);
 			}
 			//
@@ -21109,27 +22398,28 @@ public class Modeler extends JFrame {
 				}
 				//
 				//Calculate preferred size of parent panel//
-				nodeRightEdgeLocation = dataflowNode.getNodeRightEdgeLocation();
-				nodeBottomEdgeLocation = dataflowNode.getNodeBottomEdgeLocation();
-				panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
-				panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
-				if (nodeRightEdgeLocation > panelWidth) {panelWidth = nodeRightEdgeLocation;}
-				if (nodeBottomEdgeLocation > panelHeight) {panelHeight = nodeBottomEdgeLocation;}
-				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth, panelHeight));
+//				nodeRightEdgeLocation = dataflowNode.getNodeRightEdgeLocation();
+//				nodeBottomEdgeLocation = dataflowNode.getNodeBottomEdgeLocation();
+//				panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
+//				panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
+//				if (nodeRightEdgeLocation > panelWidth) {panelWidth = nodeRightEdgeLocation;}
+//				if (nodeBottomEdgeLocation > panelHeight) {panelHeight = nodeBottomEdgeLocation;}
+//				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth, panelHeight));
 				//
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 			}
-			panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
-			panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
-			int widthIfBoundaryIsCentered = dataflowBoundaryEditor.boundaryPosX + dataflowBoundaryEditor.boundaryWidth + dataflowBoundaryEditor.boundaryPosX;
-			if (panelWidth > widthIfBoundaryIsCentered) {
-				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth + 30, panelHeight + 30));
-			} else {
-				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(widthIfBoundaryIsCentered, panelHeight + 30));
-			}
+			//resizeDataflow();
+//			panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
+//			panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
+//			int widthIfBoundaryIsCentered = dataflowBoundaryEditor.boundaryPosX + dataflowBoundaryEditor.boundaryWidth + dataflowBoundaryEditor.boundaryPosX;
+//			if (panelWidth > widthIfBoundaryIsCentered) {
+//				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth + 30, panelHeight + 30));
+//			} else {
+//				jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(widthIfBoundaryIsCentered, panelHeight + 30));
+//			}
 			//
-			//Set Process number according to slide number//
+			//Set Process number according to slide sequence//
 			int processNumber = 0;
 			for (int i = 0; i <= maxSlideNumber; i++) {
 				for (int j = 0; j < dataflowNodeEditorArray.size(); j++) {
@@ -21158,15 +22448,16 @@ public class Modeler extends JFrame {
 					}
 				}
 				dataflowLine = new DataflowLine(element, dataflowNode1, dataflowNode2, jPanelSubjectAreaDataflowEditor2, true);
-				dataflowLine.addArrows();
+				//dataflowLine.addArrows();
 				dataflowLineEditorArray.add(dataflowLine);
 				//
 				jProgressBar.setValue(jProgressBar.getValue()+1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 			}
 			jProgressBar.setValue(0);
-			jPanelSubjectAreaDataflowEditor2.repaint();
-			jPanelSubjectAreaDataflowEditor1.repaint();
+			//jPanelSubjectAreaDataflowEditor2.repaint();
+			//jPanelSubjectAreaDataflowEditor1.repaint();
+			resizeDataflow();
 			//
 			//Return name of the page to be shown//
 			String panelName = "jPanelSubjectArea";
@@ -23047,77 +24338,7 @@ public class Modeler extends JFrame {
 			jTextAreaFunctionDescriptions.setCaretPosition(0);
 
 			//Setup ComboBox of "DocFile"//
-			String work0, work1, work2; boolean isOkay; int posOfSeparator;
-			jComboBoxFunctionDocFile.removeAllItems();
-			functionDocFileList.clear();
-			functionDocFileDefaultList.clear();
-			functionDocFile = domNode_.getAttribute("DocFile");
-			File currentFile = new File(currentFileName);
-			if (!jTextFieldSystemDocFileFormat.getText().equals("") && !jTextFieldSystemDocFileFormat.getText().toUpperCase().equals("*NONE")) {
-				StringTokenizer workTokenizer = new StringTokenizer(jTextFieldSystemDocFileFormat.getText(), ";" );
-				while (workTokenizer.hasMoreTokens()) {
-					isOkay = false;
-					work0 = workTokenizer.nextToken();
-					work0 = work0.replace("&ID", domNode_.getAttribute("SortKey"));
-					work0 = work0.replace("&NAME", domNode_.getAttribute("Name"));
-					work1 = work0.replace("<CURRENT>", currentFile.getParent());
-					if (work1.startsWith("http:") || work1.startsWith("https:") || work1.startsWith("file:")) {
-						isOkay = true;
-					} else {
-						File docFile = new File(work1);
-						if (docFile.exists()) {
-							isOkay = true;
-						}
-					}
-					if (isOkay && !functionDocFileDefaultList.contains(work1)) {
-						functionDocFileDefaultList.add(work1);
-						posOfSeparator = work1.lastIndexOf(File.separator);
-						if (posOfSeparator > 0) {
-							if (work0.contains("<CURRENT>")) {
-								work2 = work1.substring(posOfSeparator, work1.length());
-							} else {
-								work2 = work1.substring(0, posOfSeparator-1);
-								posOfSeparator = work2.lastIndexOf(File.separator);
-								if (posOfSeparator > 0) {
-									work2 = work1.substring(posOfSeparator, work1.length());
-								}
-							}
-							jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>..." + work2);
-						} else {
-							jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>" + work1);
-						}
-					}
-				}
-			}
-			StringTokenizer workTokenizer = new StringTokenizer(functionDocFile, ";" );
-			while (workTokenizer.hasMoreTokens()) {
-				work0 = workTokenizer.nextToken();
-				work1 = work0.replace("<CURRENT>", currentFile.getParent());
-				if (!functionDocFileDefaultList.contains(work1)) {
-					functionDocFileList.add(work1);
-					posOfSeparator = work1.lastIndexOf(File.separator);
-					if (posOfSeparator > 0) {
-						if (work0.contains("<CURRENT>")) {
-							work2 = work1.substring(posOfSeparator, work1.length());
-						} else {
-							work2 = work1.substring(0, posOfSeparator-1);
-							posOfSeparator = work2.lastIndexOf(File.separator);
-							if (posOfSeparator > 0) {
-								work2 = work1.substring(posOfSeparator, work1.length());
-							}
-						}
-						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>..." + work2);
-					} else {
-						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>" + work1);
-					}
-				}
-			}
-			if (jComboBoxFunctionDocFile.getItemCount() == 0) {
-				jComboBoxFunctionDocFile.addItem("*None");
-				jComboBoxFunctionDocFile.setEnabled(false);
-			} else {
-				jComboBoxFunctionDocFile.setEnabled(true);
-			}
+			setupFunctionDocFileList(domNode_.getAttribute("DocFile"));
 
 			//Setup ComboBox of "FunctionType"//
 			sortableComboBoxModelFunctionType.removeAllElements();
@@ -26425,7 +27646,7 @@ public class Modeler extends JFrame {
 					if (!element.getAttribute("SortKey").equals(jTextFieldSystemTermsSortKey.getText())) {
 						valueOfFieldsChangedByTabbedPane = true;
 					}
-					if (!element.getAttribute("HtmlFileName").equals(jTextFieldSystemTermsHtmlFileName.getText())) {
+					if (!element.getAttribute("HtmlFileName").equals(systemTermsHtmlFile)) {
 						valueOfFieldsChangedByTabbedPane = true;
 					}
 					if (!element.getAttribute("Header").equals(jTextFieldSystemTermsHeadder.getText())) {
@@ -26440,7 +27661,7 @@ public class Modeler extends JFrame {
 						//
 						//Update DOM element//
 						element.setAttribute("SortKey", jTextFieldSystemTermsSortKey.getText());
-						element.setAttribute("HtmlFileName", jTextFieldSystemTermsHtmlFileName.getText());
+						element.setAttribute("HtmlFileName", systemTermsHtmlFile);
 						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsSortKey.getText(),selectedRow_jTableSystemTermsList,1);
 						element.setAttribute("Header", jTextFieldSystemTermsHeadder.getText());
 						tableModelSystemTermsList.setValueAt(jTextFieldSystemTermsHeadder.getText(),selectedRow_jTableSystemTermsList,2);
@@ -28426,6 +29647,59 @@ public class Modeler extends JFrame {
 		}
 	}
 
+	public class Blocker extends JComponent implements MouseInputListener {
+		private static final long serialVersionUID = 1L;
+	    private Cursor oldCursor;
+	    private KeyEventDispatcher dispatcher;
+
+	    public Blocker() {
+	        super();
+	        this.addMouseListener(this);
+	        this.addMouseMotionListener(this);
+	        this.dispatcher = new KeyEventDispatcher() {
+	            public boolean dispatchKeyEvent(KeyEvent ke) {
+	                return true;
+	        }};
+	        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+            .addKeyEventDispatcher(this.dispatcher);
+	    }
+	    public void block() {
+	        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+	             .addKeyEventDispatcher(this.dispatcher);
+	        this.oldCursor = this.getCursor();
+	        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	        this.setVisible(true);
+	    }
+	    public void unBlock() {
+	        this.setCursor(this.oldCursor);
+	        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+	            .removeKeyEventDispatcher(this.dispatcher);
+	        this.setVisible(false);
+	    }
+	    @Override
+	    protected void paintComponent(final Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g; 
+	        g2.setColor(Color.white); 
+	        g2.setComposite(
+	                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); 
+	        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+	    }
+	    @Override
+	    public void mouseClicked(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mouseEntered(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mouseExited(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mousePressed(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mouseReleased(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mouseDragged(MouseEvent e) { e.consume(); }
+	    @Override
+	    public void mouseMoved(MouseEvent e) { e.consume(); }
+	}
+
 	/**
 	 * Class of Custom Tree Renderer
 	 */
@@ -28515,9 +29789,9 @@ public class Modeler extends JFrame {
 	 * Method to adjust font size in text-field
 	 * @param textfield :text-field to be processed
 	 */
-	void adjustFontSizeOfTextField(Object textfield) {
-		adjustFontSizeOfTextField(textfield, 16);
-	}
+	//void adjustFontSizeOfTextField(Object textfield) {
+	//	adjustFontSizeOfTextField(textfield, 16);
+	//}
 
 	/**
 	 * Method to adjust font size in text-field
@@ -29247,73 +30521,203 @@ public class Modeler extends JFrame {
 		}
 	}
 
-	void jButtonFunctionDocFile_actionPerformed(ActionEvent e) {
-		String answer = JOptionPane.showInputDialog(jButtonFunctionDocFile, res.getString("S669"), functionDocFile);
+	void jButtonFunctionDocFileEdit_actionPerformed(ActionEvent e) {
+		String answer = JOptionPane.showInputDialog(jButtonFunctionDocFileEdit, res.getString("S669"), functionDocFile);
 		if (answer != null) {
-			functionDocFile = answer;
-			jComboBoxFunctionDocFile.removeAllItems();
-			functionDocFileList.clear();
-			if (functionDocFile.equals("")) {
-				jComboBoxFunctionDocFile.addItem("*None");
-			} else {
-				String work;
-				int posOfSeparator;
-				StringTokenizer workTokenizer = new StringTokenizer(functionDocFile, ";" );
-				while (workTokenizer.hasMoreTokens()) {
-					work = workTokenizer.nextToken();
-					functionDocFileList.add(work);
-					posOfSeparator = work.lastIndexOf(File.separator);
-					if (posOfSeparator > 0) {
-						work = work.substring(posOfSeparator, work.length());
-						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>..." + work);
-					} else {
-						jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>" + work);
-					}
-				}
-			}
-			if (jComboBoxFunctionDocFile.getItemCount() <= 1) {
-				jComboBoxFunctionDocFile.setEnabled(false);
-			} else {
-				jComboBoxFunctionDocFile.setEnabled(true);
-			}
+			setupFunctionDocFileList(answer);
 		}
 	}
 
-	void jComboBoxFunctionDocFile_mouseClicked(MouseEvent e) {
-		if (jComboBoxFunctionDocFile.getItemAt(0).equals("*None")) {
-			jButtonFunctionDocFile_actionPerformed(null);
-		} else {
-			String fileName = "";
-			if (functionDocFileList.size() > 0) {
-				fileName = functionDocFileList.get(jComboBoxFunctionDocFile.getSelectedIndex());
-			} else {
-				if (functionDocFileDefaultList.size() > 0) {
-					fileName = functionDocFileDefaultList.get(jComboBoxFunctionDocFile.getSelectedIndex());
+	void setupFunctionDocFileList(String fileNames) {
+		String work0, work1;
+		boolean isOkay;
+
+		functionDocFile = fileNames;
+		jComboBoxFunctionDocFile.removeAllItems();
+		functionDocFileList.clear();
+		functionDocFileDefaultList.clear();
+		File currentFile = new File(currentFileName);
+
+		if (!jTextFieldSystemDocFileFormat.getText().equals("") && !jTextFieldSystemDocFileFormat.getText().toUpperCase().equals("*NONE")) {
+			StringTokenizer workTokenizer = new StringTokenizer(jTextFieldSystemDocFileFormat.getText(), ";" );
+			while (workTokenizer.hasMoreTokens()) {
+				isOkay = false;
+				work0 = workTokenizer.nextToken();
+				work0 = work0.replace("&ID", jTextFieldFunctionSortKey.getText());
+				work0 = work0.replace("&NAME", jTextFieldFunctionName.getText());
+				work1 = work0.replace("<CURRENT>", currentFile.getParent());
+				if (work1.startsWith("http:") || work1.startsWith("https:") || work1.startsWith("file:")) {
+					isOkay = true;
+				} else {
+					File docFile = new File(work1);
+					if (docFile.exists()) {
+						isOkay = true;
+					}
+				}
+				if (isOkay && !functionDocFileDefaultList.contains(work0)) {
+					functionDocFileDefaultList.add(work0);
 				}
 			}
-			if (!fileName.equals("") && !fileName.equals("*None")) {
+		}
+
+		StringTokenizer workTokenizer = new StringTokenizer(functionDocFile, ";" );
+		while (workTokenizer.hasMoreTokens()) {
+			work0 = workTokenizer.nextToken();
+			if (!work0.equals("")) {
+				//work0 = work0.replace("<CURRENT>", currentFile.getParent());
+				if (!functionDocFileDefaultList.contains(work0)) {
+					functionDocFileList.add(work0);
+				}
+			}
+		}
+
+		int index = 0;
+		int totalCount = functionDocFileDefaultList.size() + functionDocFileList.size();
+		if (totalCount > 0) {
+			for (int i=0; i<functionDocFileDefaultList.size(); i++) {
+				index++;
+				work0 = functionDocFileDefaultList.get(i).replace("<CURRENT>","&lt;CURRENT&gt;");
+				jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>"
+						+ "(" + index + "/" + totalCount + ")" + work0);
+			}
+			for (int i=0; i<functionDocFileList.size(); i++) {
+				index++;
+				work0 = functionDocFileList.get(i).replace("<CURRENT>","&lt;CURRENT&gt;");
+				jComboBoxFunctionDocFile.addItem("<html><u><font color='blue'>"
+						+ "(" + index + "/" + totalCount + ")" + work0);
+			}
+			jComboBoxFunctionDocFile.setEnabled(true);
+		} else {
+			jComboBoxFunctionDocFile.addItem("*None");
+			jComboBoxFunctionDocFile.setEnabled(false);
+		}
+	}
+
+	void jButtonSystemTermsHtmlFileEdit_actionPerformed(ActionEvent e) {
+		String answer = JOptionPane.showInputDialog(jButtonSystemTermsHtmlFileEdit, res.getString("S669"), systemTermsHtmlFile);
+		if (answer != null) {
+			setupSystemTermsHtmlFileList(answer);
+//			systemTermsHtmlFile = answer;
+//			jComboBoxSystemTermsHtmlFile.removeAllItems();
+//			systemTermsHtmlFileList.clear();
+//			if (systemTermsHtmlFile.equals("")) {
+//				jComboBoxSystemTermsHtmlFile.addItem("*None");
+//			} else {
+//				int index = 0;
+//				String wrkStr;
+//				StringTokenizer workTokenizer = new StringTokenizer(systemTermsHtmlFile, ";" );
+//				int totalTokens = workTokenizer.countTokens();
+//				while (workTokenizer.hasMoreTokens()) {
+//					wrkStr = workTokenizer.nextToken();
+//					systemTermsHtmlFileList.add(wrkStr);
+//					wrkStr = wrkStr.replace("<CURRENT>","&lt;CURRENT&gt;");
+//					index++;
+//					jComboBoxSystemTermsHtmlFile.addItem("<html><u><font color='blue'>"
+//							+ "(" + index + "/" + totalTokens + ")" + wrkStr);
+//				}
+//			}
+//			if (jComboBoxSystemTermsHtmlFile.getItemCount() <= 1) {
+//				jComboBoxSystemTermsHtmlFile.setEnabled(false);
+//			} else {
+//				jComboBoxSystemTermsHtmlFile.setEnabled(true);
+//			}
+		}
+	}
+
+	void setupSystemTermsHtmlFileList(String fileNames) {
+		String wrkStr;
+		systemTermsHtmlFile = fileNames;
+		jComboBoxSystemTermsHtmlFile.removeAllItems();
+		systemTermsHtmlFileList.clear();
+
+		if (systemTermsHtmlFile.equals("")) {
+			jComboBoxSystemTermsHtmlFile.addItem("*None");
+		} else {
+			StringTokenizer workTokenizer = new StringTokenizer(systemTermsHtmlFile, ";" );
+			while (workTokenizer.hasMoreTokens()) {
+				wrkStr = workTokenizer.nextToken();
+				if (!wrkStr.equals("")) {
+					systemTermsHtmlFileList.add(wrkStr);
+				}
+			}
+		}
+
+		if (systemTermsHtmlFileList.size() > 0) {
+			int index = 0;
+			for (int i=0; i<systemTermsHtmlFileList.size(); i++) {
+				wrkStr = systemTermsHtmlFileList.get(i).replace("<CURRENT>","&lt;CURRENT&gt;");
+				index++;
+				jComboBoxSystemTermsHtmlFile.addItem("<html><u><font color='blue'>"
+						+ "(" + index + "/" + systemTermsHtmlFileList.size() + ")" + wrkStr);
+			}
+			jComboBoxSystemTermsHtmlFile.setEnabled(true);
+		} else {
+			jComboBoxSystemTermsHtmlFile.setEnabled(false);
+		}
+	}
+
+	void jComboBoxSystemTermsHtmlFile_mouseClicked(MouseEvent e) {
+		if (jComboBoxSystemTermsHtmlFile.getItemAt(0).equals("*None")) {
+			jButtonSystemTermsHtmlFileEdit_actionPerformed(null);
+		} else {
+			String fileName = "";
+			if (systemTermsHtmlFileList.size() > 0) {
+				fileName = systemTermsHtmlFileList.get(jComboBoxSystemTermsHtmlFile.getSelectedIndex());
 				try {
 					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					File currentFile = new File(currentFileName);
+					fileName = fileName.replace("<CURRENT>", currentFile.getParent());
 					if (fileName.startsWith("http:") || fileName.startsWith("https:") || fileName.startsWith("file:")) {
 						desktop.browse(new URI(fileName));
 					} else {
-						File currentFile = new File(currentFileName);
-						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
 						desktop.open(new File(fileName));
 					}
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(jComboBoxFunctionDocFile, "Invalid File Name:\n" + fileName);
+					JOptionPane.showMessageDialog(jComboBoxSystemTermsHtmlFile, "Invalid File Name:\n" + fileName);
 				} finally {
 					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		}
 	}
+	public void jComboBoxSystemTermsHtmlFile_mouseEntered(MouseEvent e) {
+		setCursor(htmlEditorKit.getLinkCursor());
+	}
+	public void jComboBoxSystemTermsHtmlFile_mouseExited(MouseEvent e) {
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
 
+	void jComboBoxFunctionDocFile_mouseClicked(MouseEvent e) {
+		if (jComboBoxFunctionDocFile.getItemAt(0).equals("*None")) {
+			jButtonFunctionDocFileEdit_actionPerformed(null);
+		} else {
+			ArrayList<String> workList = new ArrayList<String>();
+			workList.addAll(functionDocFileDefaultList);
+			workList.addAll(functionDocFileList);
+			if (workList.size() > 0) {
+				String fileName = workList.get(jComboBoxFunctionDocFile.getSelectedIndex());
+				if (!fileName.equals("") && !fileName.equals("*None")) {
+					try {
+						setCursor(new Cursor(Cursor.WAIT_CURSOR));
+						File currentFile = new File(currentFileName);
+						fileName = fileName.replace("<CURRENT>", currentFile.getParent());
+						if (fileName.startsWith("http:") || fileName.startsWith("https:") || fileName.startsWith("file:")) {
+							desktop.browse(new URI(fileName));
+						} else {
+							desktop.open(new File(fileName));
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(jComboBoxFunctionDocFile, "Invalid File Name:\n" + fileName);
+					} finally {
+						setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					}
+				}
+			}
+		}
+	}
 	public void jComboBoxFunctionDocFile_mouseEntered(MouseEvent e) {
 		setCursor(htmlEditorKit.getLinkCursor());
 	}
-
 	public void jComboBoxFunctionDocFile_mouseExited(MouseEvent e) {
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
@@ -29572,12 +30976,18 @@ public class Modeler extends JFrame {
 			//
 			int nodeRightEdgeLocation = 0;
 			int nodeBottomEdgeLocation = 0;
-			int originalPosX = dataflowBoundaryEditor.boundaryPosX;
-			int originalPosY = dataflowBoundaryEditor.boundaryPosY;
-			int posX = dataflowBoundaryEditor.boundaryPosX;
-			int posY = dataflowBoundaryEditor.boundaryPosY;
-			int width = dataflowBoundaryEditor.boundaryWidth + 1;
-			int height = dataflowBoundaryEditor.boundaryHeight + 1;
+//			int originalPosX = dataflowBoundaryEditor.boundaryPosX;
+//			int originalPosY = dataflowBoundaryEditor.boundaryPosY;
+//			int posX = dataflowBoundaryEditor.boundaryPosX;
+//			int posY = dataflowBoundaryEditor.boundaryPosY;
+//			int width = dataflowBoundaryEditor.boundaryWidth + 1;
+//			int height = dataflowBoundaryEditor.boundaryHeight + 1;
+			int originalPosX = dataflowBoundaryEditor.getBounds().x;
+			int originalPosY = dataflowBoundaryEditor.getBounds().y;
+			int posX = dataflowBoundaryEditor.getBounds().x;
+			int posY = dataflowBoundaryEditor.getBounds().y;
+			int width = dataflowBoundaryEditor.getBounds().width + 1;
+			int height = dataflowBoundaryEditor.getBounds().height + 1;
 			//
 			Point currentPoint = null;
 			if (boundaryResizeMode.equals("MOVE")) {
@@ -29607,7 +31017,7 @@ public class Modeler extends JFrame {
 				}
             }
 			//
-			dataflowBoundaryEditor.setBounds(posX, posY, width, height);
+			dataflowBoundaryEditor.updatePositionAndSize(posX, posY, width, height);
 			nodeRightEdgeLocation = posX + width;
 			nodeBottomEdgeLocation = posY + height;
 			//
@@ -29628,11 +31038,18 @@ public class Modeler extends JFrame {
 						//
 						//Change position of the specific DataflowNode//
 						originalPosition = dataflowNodeEditorArray.get(i).getLocation();
-						dataflowNodeEditorArray.get(i).setBounds(new Rectangle(
-								originalPosition.x + distanceX,
-								originalPosition.y + distanceY,
-								dataflowNodeEditorArray.get(i).NODE_WIDTH,
-								dataflowNodeEditorArray.get(i).NODE_HEIGHT));
+						width = dataflowNodeEditorArray.get(i).NODE_WIDTH;
+						height = dataflowNodeEditorArray.get(i).NODE_HEIGHT;
+						if (modelSize.equals("S")) {
+							width = Math.round(width/2);
+							height = Math.round(height/2);
+						}
+						if (modelSize.equals("L")) {
+							width = Math.round(width*3/2);
+							height = Math.round(height*3/2);
+						}
+						dataflowNodeEditorArray.get(i).setBounds(
+							new Rectangle(originalPosition.x + distanceX, originalPosition.y + distanceY, width, height));
 						if (dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation() > nodeRightEdgeLocation) {
 							nodeRightEdgeLocation = dataflowNodeEditorArray.get(i).getNodeRightEdgeLocation();
 						}
@@ -29660,14 +31077,6 @@ public class Modeler extends JFrame {
 					}
 				}
 			}
-			//
-			//Resize jPanelSubjectAreaDataflowEditor1//
-			int panelWidth = jPanelSubjectAreaDataflowEditor1.getPreferredSize().width;
-			int panelHeight = jPanelSubjectAreaDataflowEditor1.getPreferredSize().height;
-			if (nodeRightEdgeLocation > panelWidth) {panelWidth = nodeRightEdgeLocation;}
-			if (nodeBottomEdgeLocation > panelHeight) {panelHeight = nodeBottomEdgeLocation;}
-			jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension(panelWidth + 30, panelHeight + 30));
-			jPanelSubjectAreaDataflowEditor1.updateUI();
 		}
 	}
 	/**
@@ -29692,10 +31101,14 @@ public class Modeler extends JFrame {
 							dataflowNodeEditorArray.get(i).getBounds().intersects(jPanelSelectionGuide.getBounds()));
 				}
 			} else {
-				int posX = dataflowBoundaryEditor.boundaryPosX;
-				int posY = dataflowBoundaryEditor.boundaryPosY;
-				int width = dataflowBoundaryEditor.boundaryWidth + 1;
-				int height = dataflowBoundaryEditor.boundaryHeight + 1;
+//				int posX = dataflowBoundaryEditor.boundaryPosX;
+//				int posY = dataflowBoundaryEditor.boundaryPosY;
+//				int width = dataflowBoundaryEditor.boundaryWidth + 1;
+//				int height = dataflowBoundaryEditor.boundaryHeight + 1;
+				int posX = dataflowBoundaryEditor.getBounds().x;
+				int posY = dataflowBoundaryEditor.getBounds().y;
+				int width = dataflowBoundaryEditor.getBounds().width + 1;
+				int height = dataflowBoundaryEditor.getBounds().height + 1;
 				//
 				Point currentPoint = e.getPoint();
 				//
@@ -29771,37 +31184,108 @@ public class Modeler extends JFrame {
 	Rectangle setCursorForBoundaryResize(MouseEvent e) {
 		Rectangle returnRec = null;
 		boundaryResizeMode = "";
-		//
-		Rectangle recTopLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY,
-				dataflowBoundaryEditor.boundaryWidth+1, 4);
-		Rectangle recBottomLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY + dataflowBoundaryEditor.boundaryHeight -4,
-				dataflowBoundaryEditor.boundaryWidth+1, 4);
-		Rectangle recLeftLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY,
-				4, dataflowBoundaryEditor.boundaryHeight+1);
-		Rectangle recRightLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX + dataflowBoundaryEditor.boundaryWidth -4,
-				dataflowBoundaryEditor.boundaryPosY,
-				4, dataflowBoundaryEditor.boundaryHeight+1);
-		//
-		Rectangle recTopArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY,
-				dataflowBoundaryEditor.boundaryWidth+1, 20);
-		Rectangle recBottomArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY + dataflowBoundaryEditor.boundaryHeight -20,
-				dataflowBoundaryEditor.boundaryWidth+1, 20);
-		Rectangle recLeftArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY,
-				20, dataflowBoundaryEditor.boundaryHeight+1);
-		Rectangle recRightArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX + dataflowBoundaryEditor.boundaryWidth -20,
-				dataflowBoundaryEditor.boundaryPosY,
-				20, dataflowBoundaryEditor.boundaryHeight+1);
-		Rectangle recBoundary = new Rectangle(dataflowBoundaryEditor.boundaryPosX,
-				dataflowBoundaryEditor.boundaryPosY,
-				dataflowBoundaryEditor.boundaryWidth+1,
-				dataflowBoundaryEditor.boundaryHeight+1);
-		//
+		Rectangle recTopLine = null;
+		Rectangle recBottomLine = null;
+		Rectangle recLeftLine = null;
+		Rectangle recRightLine = null;
+		Rectangle recTopArea = null;
+		Rectangle recBottomArea = null;
+		Rectangle recLeftArea = null;
+		Rectangle recRightArea = null;
+		Rectangle recBoundary = null;
+
+//		if (modelSize.equals("S")) {
+//			recTopLine = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					dataflowBoundaryEditor.boundaryWidth/2+1, 2);
+//			recBottomLine = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2 + dataflowBoundaryEditor.boundaryHeight/2 -2,
+//					dataflowBoundaryEditor.boundaryWidth/2+1, 2);
+//			recLeftLine = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					2, dataflowBoundaryEditor.boundaryHeight/2+1);
+//			recRightLine = new Rectangle(dataflowBoundaryEditor.getBounds().x/2 + dataflowBoundaryEditor.boundaryWidth/2 -2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					2, dataflowBoundaryEditor.boundaryHeight/2+1);
+//			recTopArea = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					dataflowBoundaryEditor.boundaryWidth/2+1, 10);
+//			recBottomArea = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2 + dataflowBoundaryEditor.boundaryHeight/2 -10,
+//					dataflowBoundaryEditor.boundaryWidth/2+1, 10);
+//			recLeftArea = new Rectangle(dataflowBoundaryEditor.getBounds().x/2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					10, dataflowBoundaryEditor.boundaryHeight/2+1);
+//			recRightArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX/2 + dataflowBoundaryEditor.boundaryWidth/2 -10,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					10, dataflowBoundaryEditor.boundaryHeight/2+1);
+//			recBoundary = new Rectangle(dataflowBoundaryEditor.boundaryPosX/2,
+//					dataflowBoundaryEditor.boundaryPosY/2,
+//					dataflowBoundaryEditor.boundaryWidth/2+1,
+//					dataflowBoundaryEditor.boundaryHeight/2+1);
+//		}
+//		if (modelSize.equals("M")) {
+			recTopLine = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y,
+					dataflowBoundaryEditor.getBounds().width+1, 4);
+			recBottomLine = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y + dataflowBoundaryEditor.getBounds().height -4,
+					dataflowBoundaryEditor.getBounds().width+1, 4);
+			recLeftLine = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y,
+					4, dataflowBoundaryEditor.getBounds().height+1);
+			recRightLine = new Rectangle(dataflowBoundaryEditor.getBounds().x + dataflowBoundaryEditor.getBounds().width -4,
+					dataflowBoundaryEditor.getBounds().y,
+					4, dataflowBoundaryEditor.getBounds().height+1);
+
+			recTopArea = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y,
+					dataflowBoundaryEditor.getBounds().width+1, 20);
+			recBottomArea = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y + dataflowBoundaryEditor.getBounds().height -20,
+					dataflowBoundaryEditor.getBounds().width+1, 20);
+			recLeftArea = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y,
+					20, dataflowBoundaryEditor.getBounds().height+1);
+			recRightArea = new Rectangle(dataflowBoundaryEditor.getBounds().x + dataflowBoundaryEditor.getBounds().width -20,
+					dataflowBoundaryEditor.getBounds().y,
+					20, dataflowBoundaryEditor.getBounds().height+1);
+			recBoundary = new Rectangle(dataflowBoundaryEditor.getBounds().x,
+					dataflowBoundaryEditor.getBounds().y,
+					dataflowBoundaryEditor.getBounds().width+1,
+					dataflowBoundaryEditor.getBounds().height+1);
+//		}
+//		if (modelSize.equals("L")) {
+//			recTopLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					dataflowBoundaryEditor.boundaryWidth*3/2+1, 6);
+//			recBottomLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2 + dataflowBoundaryEditor.boundaryHeight*3/2 -6,
+//					dataflowBoundaryEditor.boundaryWidth*3/2+1, 6);
+//			recLeftLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					6, dataflowBoundaryEditor.boundaryHeight*3/2+1);
+//			recRightLine = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2 + dataflowBoundaryEditor.boundaryWidth*3/2 -6,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					6, dataflowBoundaryEditor.boundaryHeight*3/2+1);
+//			recTopArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					dataflowBoundaryEditor.boundaryWidth*3/2+1, 30);
+//			recBottomArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2 + dataflowBoundaryEditor.boundaryHeight*3/2 -30,
+//					dataflowBoundaryEditor.boundaryWidth*3/2+1, 30);
+//			recLeftArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					30, dataflowBoundaryEditor.boundaryHeight*3/2+1);
+//			recRightArea = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2 + dataflowBoundaryEditor.boundaryWidth*3/2 -30,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					30, dataflowBoundaryEditor.boundaryHeight*3/2+1);
+//			recBoundary = new Rectangle(dataflowBoundaryEditor.boundaryPosX*3/2,
+//					dataflowBoundaryEditor.boundaryPosY*3/2,
+//					dataflowBoundaryEditor.boundaryWidth*3/2+1,
+//					dataflowBoundaryEditor.boundaryHeight*3/2+1);
+//		}
+
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		if (recTopLine.contains(e.getPoint())) {
 			setCursor(new Cursor(Cursor.N_RESIZE_CURSOR));
@@ -29833,7 +31317,7 @@ public class Modeler extends JFrame {
 				returnRec = recBoundary;
 			}
 		}
-		//
+
 		return returnRec;
 	}
 
@@ -32125,7 +33609,6 @@ public class Modeler extends JFrame {
 	void jTableSystemTermsList_valueChanged(ListSelectionEvent e) {
 		if (tableSystemTermsListSelectChangeActivated) {
 			if (selectedRow_jTableSystemTermsList != jTableSystemTermsList.getSelectedRow()) {
-				//
 				//Update fields of the row previously selected and refresh list//
 				if (selectedRow_jTableSystemTermsList > -1) {
 					currentMainTreeNode.updateFieldsForSystem();
@@ -32146,46 +33629,44 @@ public class Modeler extends JFrame {
 				jTextAreaSystemTermsDescriptions.setEditable(true);
 				jTextAreaSystemTermsDescriptions.setCaretPosition(0);
 
-				jTextFieldSystemTermsHtmlFileName.setText((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,4));
-				jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.window);
-				jTextFieldSystemTermsHtmlFileName.setEditable(true);
-				if (jTextFieldSystemTermsHtmlFileName.getText().equals("")) {
-					jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
-				} else {
-					try {
-						String fileName = "";
-						jScrollPaneSystemTermsDescriptions.getViewport().removeAll();
-						jScrollPaneSystemTermsDescriptions.getViewport().add(jEditorPaneSystemTermsDescriptions, null);
-						htmlFileName = jTextFieldSystemTermsHtmlFileName.getText();
-						if (htmlFileName.startsWith("http://")) {
-							fileName = htmlFileName;
-						} else {
-							if (htmlFileName.startsWith("file:")) {
-								fileName = htmlFileName;
-							} else {
-								if (!htmlFileName.contains("/") && !htmlFileName.contains(File.separator)) {
-									File xeadFile = new File(currentFileName);
-									fileName = "file:///" + xeadFile.getParent() + File.separator + htmlFileName;
-								} else {
-									fileName = "file:///" + htmlFileName;
-								}
-							}
-						}
-						jEditorPaneSystemTermsDescriptions.setPage(fileName);
-					} catch (Exception ex) {
-					}
-				}
+//				String wrkStr;
+//				jComboBoxSystemTermsHtmlFile.removeAllItems();
+//				jComboBoxSystemTermsHtmlFile.setBackground(SystemColor.window);
+//				systemTermsHtmlFileList.clear();
+//				systemTermsHtmlFile = (String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,4);
+//				if (systemTermsHtmlFile != null && !systemTermsHtmlFile.equals("")) {
+//					int index = 0;
+//					StringTokenizer workTokenizer = new StringTokenizer(systemTermsHtmlFile, ";" );
+//					int totalTokens = workTokenizer.countTokens();
+//					while (workTokenizer.hasMoreTokens()) {
+//						wrkStr = workTokenizer.nextToken();
+//						systemTermsHtmlFileList.add(wrkStr);
+//						wrkStr = wrkStr.replace("<CURRENT>","&lt;CURRENT&gt;");
+//						index++;
+//						jComboBoxSystemTermsHtmlFile.addItem("<html><u><font color='blue'>"
+//								+ "(" + index + "/" + totalTokens + ")" + wrkStr);
+//					}
+//				}
+//				if (jComboBoxSystemTermsHtmlFile.getItemCount() == 0) {
+//					jComboBoxSystemTermsHtmlFile.addItem("*None");
+//					jComboBoxSystemTermsHtmlFile.setEnabled(false);
+//				} else {
+//					jComboBoxSystemTermsHtmlFile.setEnabled(true);
+//				}
+				jComboBoxSystemTermsHtmlFile.setBackground(SystemColor.window);
+				setupSystemTermsHtmlFileList((String)tableModelSystemTermsList.getValueAt(selectedRow_jTableSystemTermsList,4));
+				jButtonSystemTermsHtmlFileEdit.setEnabled(true);
 			}
 		}
 		if (selectedRow_jTableSystemTermsList == -1) {
-			//
 			//Clear and lock edit-panel//
 			jTextFieldSystemTermsSortKey.setText("");
 			jTextFieldSystemTermsSortKey.setBackground(SystemColor.control);
 			jTextFieldSystemTermsSortKey.setEditable(false);
-			jTextFieldSystemTermsHtmlFileName.setText("");
-			jTextFieldSystemTermsHtmlFileName.setBackground(SystemColor.control);
-			jTextFieldSystemTermsHtmlFileName.setEditable(false);
+			jComboBoxSystemTermsHtmlFile.removeAllItems();
+			jComboBoxSystemTermsHtmlFile.setBackground(SystemColor.control);
+			jComboBoxSystemTermsHtmlFile.setEnabled(false);
+			jButtonSystemTermsHtmlFileEdit.setEnabled(false);
 			jTextFieldSystemTermsHeadder.setText("");
 			jTextFieldSystemTermsHeadder.setBackground(SystemColor.control);
 			jTextFieldSystemTermsHeadder.setEditable(false);
@@ -33274,7 +34755,15 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("ID", Integer.toString(id + 1));
 			newElement.setAttribute("Type", "");
 			newElement.setAttribute("Name", res.getString("S2274"));
-			newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
+			if (modelSize.equals("S")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x*2 + "," + dataflowNodePosition.y*2);
+			}
+			if (modelSize.equals("M")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
+			}
+			if (modelSize.equals("L")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x*2/3 + "," + dataflowNodePosition.y*2/3);
+			}
 			newElement.setAttribute("SlideNumber", "01");
 			boolean executed = dialogDataflowNode.request("Add", newElement, dataflowNodeEditorArray, dataflowLineEditorArray);
 			if (executed) {
@@ -34452,20 +35941,15 @@ public class Modeler extends JFrame {
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToShowSlideNumber_actionPerformed(ActionEvent e) {
+		isSlideNumberShown = !isSlideNumberShown;
 		for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
-			if (dataflowNodeEditorArray.get(i).hasSlideNumberShown()) {
-				dataflowNodeEditorArray.get(i).setHideSlideNumber();
-			} else {
-				dataflowNodeEditorArray.get(i).setShowSlideNumber();
-			}
+			dataflowNodeEditorArray.get(i).setShowSlideNumber(isSlideNumberShown);
 		}
 		for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
-			if (dataflowLineEditorArray.get(i).hasSlideNumberShown()) {
-				dataflowLineEditorArray.get(i).setHideSlideNumber();
-			} else {
-				dataflowLineEditorArray.get(i).setShowSlideNumber();
-			}
+			dataflowLineEditorArray.get(i).setShowSlideNumber(isSlideNumberShown);
 		}
+		jPanelSubjectAreaDataflowEditor1.repaint();
+		jPanelSubjectAreaDataflowEditor2.repaint();
 	}
 
 	void resizeDatamodel() {
@@ -34513,11 +35997,58 @@ public class Modeler extends JFrame {
 		jPanelDatamodel.updateUI();
 	}
 
+	void resizeDataflow() {
+		int boxRightEdgeLocation = 0;
+		int boxBottomEdgeLocation = 0;
+		int panelWidth = 100;
+		int panelHeight = 100;
+		Rectangle rec;
+
+		for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+			jPanelSubjectAreaDataflowEditor2.add(dataflowNodeEditorArray.get(i), null);
+			rec = dataflowNodeEditorArray.get(i).setSizeAndColors();
+			boxRightEdgeLocation = rec.x + rec.width;
+			if (boxRightEdgeLocation > panelWidth) {
+				panelWidth = boxRightEdgeLocation;
+			}
+			boxBottomEdgeLocation = rec.y + rec.height;
+			if (boxBottomEdgeLocation > panelHeight) {
+				panelHeight = boxBottomEdgeLocation;
+			}
+		}
+
+		for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+			dataflowLineEditorArray.get(i).addArrows();
+		}
+
+//		jPanelSubjectAreaDataflowEditor1.remove(dataflowBoundaryEditor);
+//		if (!currentMainTreeNode.getElement().getAttribute("BoundarySetting").equals("H")) {
+//			dataflowBoundaryEditor = new DataflowBoundary(currentMainTreeNode.getElement());
+//			jPanelSubjectAreaDataflowEditor1.add(dataflowBoundaryEditor);
+//		}
+		dataflowBoundaryEditor.setSizeAndColors();
+		boxRightEdgeLocation = dataflowBoundaryEditor.getBounds().x + dataflowBoundaryEditor.getBounds().width;
+		if (boxRightEdgeLocation > panelWidth) {
+			panelWidth = boxRightEdgeLocation;
+		}
+		boxBottomEdgeLocation = dataflowBoundaryEditor.getBounds().y + dataflowBoundaryEditor.getBounds().height;
+		if (boxBottomEdgeLocation > panelHeight) {
+			panelHeight = boxBottomEdgeLocation;
+		}
+
+		jPanelSubjectAreaDataflowEditor1.setPreferredSize(new Dimension((int)panelWidth*120/100, (int)panelHeight*150/100));
+
+		jProgressBar.setValue(0);
+		jPanelSubjectAreaDataflowEditor2.repaint();
+		jPanelSubjectAreaDataflowEditor1.repaint();
+	}
+
 	/**
 	 * Event Handler for jMenuItemComponentToConfigColors in case item selected
 	 * @param e :Action Event
 	 */
 	void jMenuItemComponentToConfigColors_actionPerformed(ActionEvent e) {
+
 		if (currentMainTreeNode.getType().equals("TableList")) {
 			boolean isChanged = informationOnThisPageChanged;
 			currentMainTreeNode.updateFields();
@@ -34540,7 +36071,11 @@ public class Modeler extends JFrame {
 				}
 			}
 		}
+
 		if (currentMainTreeNode.getType().equals("SubjectArea")) {
+			boolean isChanged = informationOnThisPageChanged;
+			currentMainTreeNode.updateFields();
+
 			boolean isProcessed = dialogConfigColors.requestForSubjectArea();
 			if (isProcessed) {
 				if (isNormalColorConfigOnSubjectArea) {
@@ -34552,14 +36087,21 @@ public class Modeler extends JFrame {
 					jPanelSubjectAreaDataflowSlideShow.setBackground(Color.WHITE);
 					jPanelSubjectAreaDataflowSlideShow1.setBackground(Color.WHITE);
 				}
-				for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
-					dataflowLineEditorArray.get(i).updateColors();
+//				for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+//					dataflowLineEditorArray.get(i).updateColors();
+//				}
+//				for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+//					dataflowNodeEditorArray.get(i).updateColors();
+//				}
+//				dataflowBoundaryEditor.updateColors();
+				//jPanelSubjectAreaDataflowEditor1.updateUI();
+				if (isChanged) {
+					currentMainTreeNode.activateContentsPane();
+				} else {
+					resizeDataflow();
+					isSlideNumberShown = true;
+					jMenuItemComponentToShowSlideNumber_actionPerformed(null);
 				}
-				for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
-					dataflowNodeEditorArray.get(i).updateColors();
-				}
-				dataflowBoundaryEditor.updateColors();
-				jPanelSubjectAreaDataflowEditor1.updateUI();
 			}
 		}
 	}
@@ -34644,10 +36186,10 @@ public class Modeler extends JFrame {
 		jPanelSubjectAreaDataflowSlideShow2.removeAll();
 
 		//Create ArrayList of DataflowNodes//
-		int leftEdgePos = dataflowBoundarySlideShow.boundaryPosX;
-		int rightEdgePos = dataflowBoundarySlideShow.boundaryPosX + dataflowBoundarySlideShow.boundaryWidth;
-		int topEdgePos = dataflowBoundarySlideShow.boundaryPosY;
-		int bottomEdgePos = dataflowBoundarySlideShow.boundaryPosY + dataflowBoundarySlideShow.boundaryHeight;
+		int leftEdgePos = dataflowBoundarySlideShow.getBounds().x;
+		int rightEdgePos = dataflowBoundarySlideShow.getBounds().x + dataflowBoundarySlideShow.getBounds().width;
+		int topEdgePos = dataflowBoundarySlideShow.getBounds().y;
+		int bottomEdgePos = dataflowBoundarySlideShow.getBounds().y + dataflowBoundarySlideShow.getBounds().height;
 		dataflowSlideNumber = 0;
 		dataflowSlideTotalNumber = 0;
 		DataflowNode dataflowNode = null;
@@ -34656,6 +36198,7 @@ public class Modeler extends JFrame {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			org.w3c.dom.Element element = (org.w3c.dom.Element)nodeList.item(i);
 			dataflowNode = new DataflowNode(element, jPanelSubjectAreaDataflowSlideShow1, jPanelSubjectAreaDataflowSlideShow2, false);
+			dataflowNode.setSizeAndColors();
 			dataflowNode.setVisible(false);
 			jPanelSubjectAreaDataflowSlideShow2.add(dataflowNode, null);
 			dataflowNodeSlideShowArray.add(dataflowNode);
@@ -39836,13 +41379,37 @@ class Modeler_jTableFunctionIOList_mouseMotionAdapter extends java.awt.event.Mou
 		adaptee.jTableFunctionIOList_mouseDragged(e);
 	}
 }
-class Modeler_jButtonFunctionDocFile_actionAdapter implements java.awt.event.ActionListener {
+class Modeler_jButtonSystemTermsHtmlFileEdit_actionAdapter implements java.awt.event.ActionListener {
 	Modeler adaptee;
-	Modeler_jButtonFunctionDocFile_actionAdapter(Modeler adaptee) {
+	Modeler_jButtonSystemTermsHtmlFileEdit_actionAdapter(Modeler adaptee) {
 		this.adaptee = adaptee;
 	}
 	public void actionPerformed(ActionEvent e) {
-		adaptee.jButtonFunctionDocFile_actionPerformed(e);
+		adaptee.jButtonSystemTermsHtmlFileEdit_actionPerformed(e);
+	}
+}
+class Modeler_jButtonFunctionDocFileEdit_actionAdapter implements java.awt.event.ActionListener {
+	Modeler adaptee;
+	Modeler_jButtonFunctionDocFileEdit_actionAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent e) {
+		adaptee.jButtonFunctionDocFileEdit_actionPerformed(e);
+	}
+}
+class Modeler_jComboBoxSystemTermsHtmlFile_mouseAdapter extends java.awt.event.MouseAdapter {
+	Modeler adaptee;
+	Modeler_jComboBoxSystemTermsHtmlFile_mouseAdapter(Modeler adaptee) {
+		this.adaptee = adaptee;
+	}
+	public void mouseClicked(MouseEvent e) {
+		adaptee.jComboBoxSystemTermsHtmlFile_mouseClicked(e);
+	}
+	public void mouseEntered(MouseEvent e) {
+		adaptee.jComboBoxSystemTermsHtmlFile_mouseEntered(e);
+	}
+	public void mouseExited(MouseEvent e) {
+		adaptee.jComboBoxSystemTermsHtmlFile_mouseExited(e);
 	}
 }
 class Modeler_jComboBoxFunctionDocFile_mouseAdapter extends java.awt.event.MouseAdapter {
