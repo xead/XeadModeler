@@ -249,6 +249,7 @@ public class DialogDataflowNode extends JDialog {
 				} else {
 					jComboBoxEventPos.setSelectedIndex(1);
 				}
+
 			} else {
 				if (element.getAttribute("RoleID").equals("")) {
 					jTextFieldLabel.setText(element.getAttribute("Name"));
@@ -261,6 +262,7 @@ public class DialogDataflowNode extends JDialog {
 					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n"));
 					jTextAreaDescriptions.setBackground(Color.white);
 					jTextAreaDescriptions.setEditable(true);
+
 				} else {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", element.getAttribute("RoleID"), null);
 					jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
@@ -352,51 +354,51 @@ public class DialogDataflowNode extends JDialog {
 			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
 			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
 			if (newSlideNumber != oldSlideNumber) {
-				int diff = newSlideNumber - oldSlideNumber;
-				int wrkInt;
-				boolean isToCheck = false;
-				for (int i = 0; i < nodeArray.size(); i++) {
-					if (nodeArray.get(i).getElement() != null
-							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
-						if (wrkInt > oldSlideNumber) {
-							isToCheck = true;
-							break;
-						}
-					}
-				}
-				if (!isToCheck) {
-					for (int i = 0; i < lineArray.size(); i++) {
-						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-						if (wrkInt > oldSlideNumber) {
-							isToCheck = true;
-							break;
-						}
-					}
-				}
-				if (isToCheck) {
-					int rtn = JOptionPane.showOptionDialog(this, res.getString("DialogDataflowLine34"),
-							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
-					if (rtn == JOptionPane.YES_OPTION) {
-						for (int i = 0; i < nodeArray.size(); i++) {
-							if (nodeArray.get(i).getElement() != null
-									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
-								if (wrkInt > oldSlideNumber) {
-									wrkInt = wrkInt + diff;
-									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
-								}
-							}
-						}
-						for (int i = 0; i < lineArray.size(); i++) {
-							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-							if (wrkInt > oldSlideNumber) {
-								wrkInt = wrkInt + diff;
-								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
-							}
-						}
-					}
-				}
+//				int diff = newSlideNumber - oldSlideNumber;
+//				int wrkInt;
+//				boolean isToCheck = false;
+//				for (int i = 0; i < nodeArray.size(); i++) {
+//					if (nodeArray.get(i).getElement() != null
+//							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+//						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+//						if (wrkInt > oldSlideNumber) {
+//							isToCheck = true;
+//							break;
+//						}
+//					}
+//				}
+//				if (!isToCheck) {
+//					for (int i = 0; i < lineArray.size(); i++) {
+//						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+//						if (wrkInt > oldSlideNumber) {
+//							isToCheck = true;
+//							break;
+//						}
+//					}
+//				}
+//				if (isToCheck) {
+//					int rtn = JOptionPane.showOptionDialog(this, res.getString("DialogDataflowLine34"),
+//							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+//					if (rtn == JOptionPane.YES_OPTION) {
+//						for (int i = 0; i < nodeArray.size(); i++) {
+//							if (nodeArray.get(i).getElement() != null
+//									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
+//								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+//								if (wrkInt > oldSlideNumber) {
+//									wrkInt = wrkInt + diff;
+//									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+//								}
+//							}
+//						}
+//						for (int i = 0; i < lineArray.size(); i++) {
+//							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
+//							if (wrkInt > oldSlideNumber) {
+//								wrkInt = wrkInt + diff;
+//								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+//							}
+//						}
+//					}
+//				}
 				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
 			}
 			//

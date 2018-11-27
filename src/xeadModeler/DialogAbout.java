@@ -47,7 +47,12 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String FORMAT_VERSION  = "1.2";
 	public static final String COPYRIGHT = "Copyright 2018 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M43";
+	public static final String FULL_VERSION = "V1.R4.M44";
+	// 1.4.44での変更点
+	//･ファイル名を円マークでパス指定できるようにした
+	//･業務フローのサイズ制御に関する細かいバグを修正した
+	//･業務フローのスライド順序を編集しやすくした
+	//
 	// 1.4.43での変更点
 	//･機能定義と「用語とルール」に関する外部ファイルの扱い仕様を改善した
 	//･広範囲にわたってレイアウトを改善した

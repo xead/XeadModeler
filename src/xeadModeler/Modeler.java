@@ -606,21 +606,88 @@ public class Modeler extends JFrame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D)g;
+//			if (isToShowGridsOnSubjectArea) {
+//				if (isNormalColorConfigOnSubjectArea) {
+//					g2.setColor(GRID_COLOR1);
+//				} else {
+//					g2.setColor(GRID_COLOR2);
+//				}
+//				int gridPos = 8;
+//				while (gridPos < 2500) {
+//					g2.draw(new Line2D.Double(gridPos, 0, gridPos, 2500));
+//					gridPos = gridPos + 16;
+//				}
+//				gridPos = 8;
+//				while (gridPos < 2000) {
+//					g2.draw(new Line2D.Double(0, gridPos, 2000, gridPos));
+//					gridPos = gridPos + 16;
+//				}
+//			}
 			if (isToShowGridsOnSubjectArea) {
 				if (isNormalColorConfigOnSubjectArea) {
 					g2.setColor(GRID_COLOR1);
 				} else {
 					g2.setColor(GRID_COLOR2);
 				}
-				int gridPos = 8;
-				while (gridPos < 2500) {
-					g2.draw(new Line2D.Double(gridPos, 0, gridPos, 2500));
-					gridPos = gridPos + 16;
+				if (modelSize.equals("S")) {
+					int gridPos = 4;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 8;
+					}
+					gridPos = 4;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 8;
+					}
 				}
-				gridPos = 8;
-				while (gridPos < 2000) {
-					g2.draw(new Line2D.Double(0, gridPos, 2000, gridPos));
-					gridPos = gridPos + 16;
+				if (modelSize.equals("M")) {
+					int gridPos = 8;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 16;
+					}
+					gridPos = 8;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 16;
+					}
+				}
+				if (modelSize.equals("L")) {
+					int gridPos = 12;
+					int height = this.getPreferredSize().height + 100;
+					if (height < 2000) {
+						height = 2000;
+					}
+					int width = this.getPreferredSize().width + 100;
+					if (width < 2500) {
+						width = 2500;
+					}
+					while (gridPos < width) {
+						g2.draw(new Line2D.Double(gridPos, 0, gridPos, height));
+						gridPos = gridPos + 24;
+					}
+					gridPos = 12;
+					while (gridPos < height) {
+						g2.draw(new Line2D.Double(0, gridPos, width, gridPos));
+						gridPos = gridPos + 24;
+					}
 				}
 			}
 		}
@@ -1972,7 +2039,7 @@ public class Modeler extends JFrame {
 		jMenuItemComponentToJump.setText(res.getString("S874"));
 		jMenuItemComponentToStartSlideShow.setText(res.getString("S875"));
 		jMenuItemComponentToShowInstance.setText(res.getString("S885"));
-		jMenuItemComponentToShowSlideNumber.setText(res.getString("S876"));
+		jMenuItemComponentToShowSlideNumber.setText(res.getString("S876")+"(M)");
 		jMenuItemComponentToAlignTables.setText(res.getString("S877"));
 		jMenuItemComponentToConfigColors.setText(res.getString("S882"));
 		jMenuItemComponentToCaptureImage.setText(res.getString("S878"));
@@ -5970,7 +6037,7 @@ public class Modeler extends JFrame {
 				fileName_ = file.getParent() + File.separator + fileName_;
 			}
 		}
-		//fileName_ = fileName_.replaceAll("\\", File.separator);
+		fileName_ = fileName_.replaceAll("\\\\", "/");
 
 		if (synchFileMap.containsKey(fileName_)) {
 			document = synchFileMap.get(fileName_);
@@ -6009,6 +6076,7 @@ public class Modeler extends JFrame {
 					}
 				}
 				//fileNameWithPath = fileNameWithPath.replaceAll("\\", File.separator);
+				fileNameWithPath = fileNameWithPath.replaceAll("\\\\", "/");
 				try {
 					domParser.parse(new InputSource(new FileInputStream(fileNameWithPath)));
 					document = domParser.getDocument();
@@ -6055,6 +6123,7 @@ public class Modeler extends JFrame {
 						res.getString("S813"));
 			}
 			currentFileFolder = file.getParent();
+			jFileChooser = new JFileChooser(currentFileFolder);
 			lastModifyTime = file.lastModified();
 
 			//Parse file in XML Format and setup Document//
@@ -6918,6 +6987,7 @@ public class Modeler extends JFrame {
 				if (pastingDomElement.getTagName().equals("DataflowNode")) {jMenuItemComponentToPaste.setEnabled(true);}
 			}
 			jPopupMenuComponent.addSeparator();
+			jMenuItemComponentToShowSlideNumber.setEnabled(modelSize.equals("M"));
 			jPopupMenuComponent.add(jMenuItemComponentToShowSlideNumber);
 			jPopupMenuComponent.add(jMenuItemComponentToStartSlideShow);
 			jPopupMenuComponent.add(jMenuItemComponentToConfigColors);
@@ -8549,6 +8619,7 @@ public class Modeler extends JFrame {
 							setCursor(new Cursor(Cursor.WAIT_CURSOR));
 							String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
 							//newFolder = newFolder.replaceAll("\\", File.separator);
+							newFolder = newFolder.replaceAll("\\\\", "/");
 							File newFolderDir = new File(newFolder);
 							if (!newFolderDir.exists()) {
 								newFolderDir.mkdir();
@@ -11621,7 +11692,8 @@ public class Modeler extends JFrame {
 		private JLabel jTextFieldNodeNameExt = new JLabel();
 		private JLabel[] jLabelEvent = new JLabel[3];
 		private JLabel jLabelRole = new JLabel();
-		private JLabel jLabelNumber = new JLabel();
+		private JTextField jTextFieldNumber = new JTextField();
+		private JTextField jTextFieldSlideNumber = new JTextField();
 		private String nodeType;
 		private JPanel jPanelCanvas2;
 		private JPanel jPanelMoveGuide = new JPanel();
@@ -11635,8 +11707,8 @@ public class Modeler extends JFrame {
 		private int nodePosY = 0;
 		private int originalGuidePosX = 0;
 		private int originalGuidePosY = 0;
-		private int slideNumber = 0;
-		private int processNumber =0;
+		//private int slideNumber = 0;
+		//private int processNumber =0;
 		private String taskID = "";
 		private JPopupMenu jPopupMenuDataflowNode = new JPopupMenu();
 		private JMenuItem jMenuItemDataflowNodeJump = new JMenuItem(res.getString("S2870"));
@@ -11685,11 +11757,9 @@ public class Modeler extends JFrame {
 			jTextFieldNodeNameExt.setBorder(null);
 			jTextFieldNodeNameExt.setOpaque(false);
 			jTextFieldNodeNameExt.setName("jTextFieldNodeNameExt");
-			Integer num = new Integer(dataflowNodeElement_.getAttribute("SlideNumber"));
-			slideNumber = num.intValue();
-//			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-//			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-//			jSpinnerSlideNumber.setModel(spinnerNumberModel);
+			//Integer num = new Integer(dataflowNodeElement_.getAttribute("SlideNumber"));
+			//slideNumber = num.intValue();
+			jTextFieldSlideNumber.setText(dataflowNodeElement_.getAttribute("SlideNumber"));
 			boolean validNodeType = false;
 			String strwork = dataflowNodeElement_.getAttribute("Descriptions");
 			if (strwork.equals("")) {
@@ -11698,9 +11768,24 @@ public class Modeler extends JFrame {
 				strwork = getLayoutedString(strwork, "<br>");
 				jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
 			}
-			jLabelNumber.setHorizontalAlignment(SwingConstants.CENTER);
-			jLabelNumber.setForeground(Color.lightGray);
-			this.add(jLabelNumber,null);
+			jTextFieldNumber.setHorizontalAlignment(SwingConstants.CENTER);
+			jTextFieldNumber.setBorder(null);
+			jTextFieldNumber.setOpaque(false);
+			jTextFieldNumber.setForeground(Color.lightGray);
+			jTextFieldNumber.setEditable(false);
+			this.add(jTextFieldNumber,null);
+			jTextFieldSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			jTextFieldSlideNumber.setHorizontalAlignment(SwingConstants.CENTER);
+			jTextFieldSlideNumber.setOpaque(true);
+			jTextFieldSlideNumber.setBackground(Color.blue);
+			jTextFieldSlideNumber.setForeground(Color.white);
+			jTextFieldSlideNumber.setCaretColor(Color.white);
+			jTextFieldSlideNumber.setBorder(null);
+			jTextFieldSlideNumber.addFocusListener(new FocusAdapter() {
+				@Override public void focusGained(FocusEvent e) {
+					((JTextField)e.getComponent()).selectAll();
+				}
+			});
 
 			///////////////////////////////////////
 			// Setup components by its node-type //
@@ -11902,8 +11987,8 @@ public class Modeler extends JFrame {
 				adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
 				jLabelRole.setBounds(new Rectangle(8, 59, 135, 19));
 				adjustFontSizeOfTextField(jLabelRole, MAIN_FONT_SIZE);
-				jLabelNumber.setBounds(new Rectangle(8, 99, 135, 15));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(55, 37, 40, 16));
+				jTextFieldNumber.setBounds(new Rectangle(8, 99, 135, 15));
+				jTextFieldSlideNumber.setBounds(new Rectangle(60, 99, 30, 19));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(12, 26, 50, 25));
 				}
@@ -12005,21 +12090,21 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Subject")) {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
-				jLabelNumber.setForeground(Color.black);
+				jTextFieldNumber.setForeground(Color.black);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(140, 10, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(140, 10, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(11, 12, 150, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(140, 10, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(140, 10, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(140, 10, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(11, 1, 150, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(11, 20, 150, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(140, 10, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(64, 0, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(4, 7, 75, 12));
 				}
@@ -12035,19 +12120,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(60, 20, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(60, 20, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 39, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(60, 20, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(60, 10, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(60, 10, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 29, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 48, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(60, 10, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 15, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(1, 15, 35, 16));
 				}
@@ -12063,19 +12148,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(10, 10, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(10, 10, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 27, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(40, 10, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(10, 0, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(10, 0, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 15, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 34, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(40, 0, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(12, 10, 25, 15));
 				}
@@ -12090,21 +12175,21 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Drum")) {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
-				jLabelNumber.setForeground(Color.darkGray);
+				jTextFieldNumber.setForeground(Color.darkGray);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(0, 3, 100, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 3, 100, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 32, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 3, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(0, 3, 100, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 3, 100, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 22, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 41, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 3, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 4, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(7, 10, 35, 20));
 				}
@@ -12120,19 +12205,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(5, 52, 100, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 52, 100, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(10, 70, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(40, 52, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(5, 40, 100, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 40, 100, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(10, 58, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 77, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(40, 40, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(31, 17, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(1, 16, 49, 35));
 				}
@@ -12148,19 +12233,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(100, 35, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(100, 35, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(35, 52, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(100, 35, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(100, 30, 30, 15));
+					jTextFieldNumber.setBounds(new Rectangle(100, 30, 30, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(35, 47, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(35, 66, 100, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(100, 30, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(50, 4, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(10, 10, 25, 30));
 				}
@@ -12176,19 +12261,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(0, 24, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 24, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(30, 24, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(0, 12, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 12, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 31, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(30, 12, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(9, 17, 18, 17));
 				}
@@ -12203,21 +12288,21 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Casher")) {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
-				jLabelNumber.setForeground(Color.darkGray);
+				jTextFieldNumber.setForeground(Color.darkGray);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(5, 10, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 10, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(5, 50, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 10, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(5, 10, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 10, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(5, 32, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(5, 51, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 10, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 14, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(12, 15, 25, 20));
 				}
@@ -12232,21 +12317,21 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Safe")) {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
-				jLabelNumber.setForeground(Color.darkGray);
+				jTextFieldNumber.setForeground(Color.darkGray);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(30, 30, 40, 15));
+					jTextFieldNumber.setBounds(new Rectangle(30, 30, 40, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 49, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 30, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(30, 20, 40, 15));
+					jTextFieldNumber.setBounds(new Rectangle(30, 20, 40, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 30, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 49, 70, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 20, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(12, 11, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(5, 13, 22, 17));
 				}
@@ -12260,21 +12345,21 @@ public class Modeler extends JFrame {
 			if (nodeType.equals("Sofa")) {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
-				jLabelNumber.setForeground(Color.black);
+				jTextFieldNumber.setForeground(Color.black);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(0, 17, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 17, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 35, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(30, 17, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(0, 5, 90, 15));
+					jTextFieldNumber.setBounds(new Rectangle(0, 5, 90, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(0, 25, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(0, 44, 90, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(30, 17, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(28, 14, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(7, 15, 32, 15));
 				}
@@ -12289,19 +12374,19 @@ public class Modeler extends JFrame {
 				validNodeType = true;
 				this.remove(jTextFieldNodeNameExt);
 				if (jTextFieldNodeNameExt.getText().equals("")) {
-					jLabelNumber.setBounds(new Rectangle(5, 20, 77, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 20, 77, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(10, 40, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE);
+					jTextFieldSlideNumber.setBounds(new Rectangle(28, 20, 30, 19));
 				} else {
-					jLabelNumber.setBounds(new Rectangle(5, 5, 77, 15));
+					jTextFieldNumber.setBounds(new Rectangle(5, 5, 77, 15));
 					jTextFieldNodeName.setBounds(new Rectangle(10, 24, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeName, MAIN_FONT_SIZE-2);
 					jTextFieldNodeNameExt.setBounds(new Rectangle(10, 43, 77, 19));
 					adjustFontSizeOfTextField(jTextFieldNodeNameExt, MAIN_FONT_SIZE-2);
 					this.add(jTextFieldNodeNameExt, null);
+					jTextFieldSlideNumber.setBounds(new Rectangle(35, 77, 30, 19));
 				}
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(30, 10, 40, 16));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(9, 13, 29, 22));
 				}
@@ -12313,11 +12398,10 @@ public class Modeler extends JFrame {
 				}
 			}
 			if (!validNodeType) {
-				jLabelNumber.setBounds(new Rectangle(0, 30, 90, 15));
+				jTextFieldNumber.setBounds(new Rectangle(0, 30, 90, 15));
 				jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
 				jTextFieldNodeName.setBounds(new Rectangle(0, 50, 90, 19));
-				//jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-				//jSpinnerSlideNumber.setBounds(new Rectangle(18, 19, 40, 16));
+				jTextFieldSlideNumber.setBounds(new Rectangle(30, 30, 30, 19));
 				if (modelSize.equals("S")) {
 					jPanelMouseActionSensor.setBounds(new Rectangle(10, 10, 25, 25));
 				}
@@ -12358,8 +12442,7 @@ public class Modeler extends JFrame {
 		}
 
 		public void setNumber(int number) {
-			processNumber = number;
-			jLabelNumber.setText(Integer.toString(number));
+			jTextFieldNumber.setText(Integer.toString(number));
 		}
 
 		public org.w3c.dom.Element getElement() {
@@ -12367,39 +12450,33 @@ public class Modeler extends JFrame {
 		}
 
 		public void setShowSlideNumber(boolean isToShow) {
-//			if (!slideNumberIsShown) {
-//				this.add(jSpinnerSlideNumber,null);
-//				this.updateUI();
-//				jSpinnerSlideNumber.paintImmediately(new Rectangle(0,0,jSpinnerSlideNumber.getWidth(), jSpinnerSlideNumber.getHeight()));
-//				slideNumberIsShown = true;
-//			}
 			if (isToShow) {
-				if (nodeType.equals("Process")) {
-					jLabelNumber.setText(slideNumber+"");
-				} else {
-					jLabelNumber.setText(slideNumber+"");
-					this.add(jLabelNumber);
-				}
+				this.add(jTextFieldSlideNumber);
+				this.remove(jTextFieldNumber);
+				
 			} else {
-				if (nodeType.equals("Process")) {
-					jLabelNumber.setText(processNumber+"");
-				} else {
-					this.remove(jLabelNumber);
-				}
+				this.remove(jTextFieldSlideNumber);
+				this.add(jTextFieldNumber);
+				try {
+					int newNumber = 1;
+					int originalNumber = 1;
+					newNumber = Integer.parseInt(jTextFieldSlideNumber.getText());
+					originalNumber = Integer.parseInt(dataflowNodeElement_.getAttribute("SlideNumber"));
+					if (newNumber != originalNumber) {
+						informationOnThisPageChanged = true;
+						dataflowNodeElement_.setAttribute("SlideNumber", jTextFieldSlideNumber.getText());
+					}
+				} catch (NumberFormatException e) {}
 			}
 			this.updateUI();
 		}
 
-//		public void setHideSlideNumber() {
-//			if (slideNumberIsShown) {
-//				this.remove(jSpinnerSlideNumber);
-//				this.updateUI();
-//				slideNumberIsShown = false;
-//			}
-//		}
-
 		public int getSlideNumber() {
-			return slideNumber;
+			int number = 1;
+			try {
+				number = Integer.parseInt(jTextFieldSlideNumber.getText());
+			} catch (NumberFormatException e) {}
+			return number;
 		}
 
 		public int getNodePosX() {
@@ -12425,13 +12502,13 @@ public class Modeler extends JFrame {
 					jTextFieldNodeNameExt.setForeground(Color.WHITE);
 					jLabelID.setForeground(Color.lightGray);
 					jLabelRole.setForeground(Color.lightGray);
-					jLabelNumber.setForeground(Color.lightGray);
+					jTextFieldNumber.setForeground(Color.lightGray);
 				} else {
 					jTextFieldNodeName.setForeground(Color.BLACK);
 					jTextFieldNodeNameExt.setForeground(Color.BLACK);
 					jLabelID.setForeground(Color.BLACK);
 					jLabelRole.setForeground(Color.BLACK);
-					jLabelNumber.setForeground(Color.BLACK);
+					jTextFieldNumber.setForeground(Color.BLACK);
 				}
 			} else {
 				jTextFieldNodeName.setForeground(Color.WHITE);
@@ -14678,10 +14755,11 @@ public class Modeler extends JFrame {
 		private org.w3c.dom.Element dataflowLineElement_;
 		private DataflowNode dataflowNode1_, dataflowNode2_;
 		private int terminalPosIndex, terminalPosIndex1, terminalPosIndex2;
-		private int slideNumber;
+		//private int slideNumber;
 		private Shape shapeOfArrow1 = null;
 		private Shape shapeOfArrow2 = null;
 		private JPanel jPanelCanvas_;
+		private JTextField jTextFieldSlideNumber = new JTextField();
 		private JTextField jTextFieldFlowName = new JTextField();
 		private JTextField jTextFieldFlowNameExt = new JTextField();
 		private JLabel jLabelArrow1 = new JLabel() {
@@ -14799,12 +14877,14 @@ public class Modeler extends JFrame {
 			jTextFieldFlowNameExt.setFocusable(true);
 
 			//Setup slide number//
-			Integer num = new Integer(dataflowLineElement_.getAttribute("SlideNumber"));
-			slideNumber = num.intValue();
-//			jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
-//			jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-//			SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-//			jSpinnerSlideNumber.setModel(spinnerNumberModel);
+			//Integer num = new Integer(dataflowLineElement_.getAttribute("SlideNumber"));
+			//slideNumber = num.intValue();
+			jTextFieldSlideNumber.setText(dataflowLineElement_.getAttribute("SlideNumber"));
+			jTextFieldSlideNumber.addFocusListener(new FocusAdapter() {
+				@Override public void focusGained(FocusEvent e) {
+					((JTextField)e.getComponent()).selectAll();
+				}
+			});
 
 			//Setup imageType index//
 			imageType = dataflowLineElement_.getAttribute("ImageType");
@@ -14821,6 +14901,15 @@ public class Modeler extends JFrame {
 			jLabelArrowMoveGuide.setLayout(null);
 			jLabelArrowMoveGuide.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			jLabelArrowMoveGuide.setOpaque(false);
+
+			//Setup Slide Number//
+			jTextFieldSlideNumber.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
+			jTextFieldSlideNumber.setHorizontalAlignment(SwingConstants.CENTER);
+			jTextFieldSlideNumber.setOpaque(true);
+			jTextFieldSlideNumber.setBackground(Color.blue);
+			jTextFieldSlideNumber.setForeground(Color.white);
+			jTextFieldSlideNumber.setCaretColor(Color.white);
+			jTextFieldSlideNumber.setBorder(null);
 
 			//Setup Name of Flow//
 			jTextFieldFlowName.setForeground(Color.white);
@@ -14917,8 +15006,11 @@ public class Modeler extends JFrame {
 			//Setup FlowName//
 			lineCordinates1 = this.getLineCordinates(arrowDirection1, arrowLabelPoint1, showArrow1);
 			lineCordinates2 = this.getLineCordinates(arrowDirection2, arrowLabelPoint2, showArrow2);
+			jTextFieldSlideNumber.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 15, (lineCordinates1[1].y + lineCordinates2[1].y)/2, 30, 19));
 			if (modelSize.equals("S")) {
 				jLabelFlowImage.setBounds(new Rectangle((lineCordinates1[1].x + lineCordinates2[1].x)/2 - 7, (lineCordinates1[1].y + lineCordinates2[1].y)/2 - 11, 15, 15));
+				jTextFieldFlowName.setBounds(0,0,0,0);
+				jTextFieldFlowNameExt.setBounds(0,0,0,0);
 			}
 			if (jTextFieldFlowNameExt.getText().equals("")) {
 				if (modelSize.equals("M")) {
@@ -14967,37 +15059,41 @@ public class Modeler extends JFrame {
 		}
 
 		public void setShowSlideNumber(boolean isToShow) {
-//			if (!slideNumberShown) {
-//				jPanelCanvas_.remove(jLabelFlowImage);
-//				jPanelCanvas_.add(jSpinnerSlideNumber, null);
-//				jPanelCanvas_.updateUI();
-//				slideNumberShown = true;
-//			}
 			if (isToShow) {
-				jTextFieldFlowName.setText(slideNumber+"");
-				jTextFieldFlowNameExt.setText("");
+				jPanelCanvas_.remove(jTextFieldFlowName);
+				jPanelCanvas_.remove(jTextFieldFlowNameExt);
+				jPanelCanvas_.add(jTextFieldSlideNumber);
 			} else {
-				jTextFieldFlowName.setText(dataflowLineElement_.getAttribute("Name"));
-				jTextFieldFlowNameExt.setText(dataflowLineElement_.getAttribute("NameExt"));
+				try {
+					int newNumber = 1;
+					int originalNumber = 1;
+					newNumber = Integer.parseInt(jTextFieldSlideNumber.getText());
+					originalNumber = Integer.parseInt(dataflowLineElement_.getAttribute("SlideNumber"));
+					if (newNumber != originalNumber) {
+						informationOnThisPageChanged = true;
+						dataflowLineElement_.setAttribute("SlideNumber", jTextFieldSlideNumber.getText());
+					}
+				} catch (NumberFormatException e) {}
+
+				jPanelCanvas_.remove(jTextFieldSlideNumber);
+				jPanelCanvas_.add(jTextFieldFlowName);
+				if (!jTextFieldFlowNameExt.getText().equals("")) {
+					jPanelCanvas_.add(jTextFieldFlowNameExt);
+				}
 			}
 			jPanelCanvas_.updateUI();
 		}
-
-//		public void setHideSlideNumber() {
-//			if (slideNumberShown) {
-//				jPanelCanvas_.add(jLabelFlowImage, null);
-//				jPanelCanvas_.remove(jSpinnerSlideNumber);
-//				jPanelCanvas_.updateUI();
-//				slideNumberShown = false;
-//			}
-//		}
 
 		public boolean hasSlideNumberShown() {
 			return slideNumberShown;
 		}
 
 		public int getSlideNumber() {
-			return slideNumber;
+			int number = 1;
+			try {
+				number = Integer.parseInt(jTextFieldSlideNumber.getText());
+			} catch (NumberFormatException e) {}
+			return number;
 		}
 
 		public void setVisible(boolean flag) {
@@ -18107,6 +18203,7 @@ public class Modeler extends JFrame {
 									}
 								}
 								//synchFileName = synchFileName.replaceAll("\\", File.separator);
+								synchFileName = synchFileName.replaceAll("\\\\", "/");
 								if (synchFileName.equals(currentFileName)) {
 									jLabelSynchFile.setText("*Referred");
 									break;
@@ -23651,6 +23748,7 @@ public class Modeler extends JFrame {
 									}
 								}
 								//fileName = fileName.replaceAll("\\", File.separator);
+								fileName = fileName.replaceAll("\\\\", "/");
 								if (fileName.equals(currentFileName)) {
 									workList = document.getElementsByTagName("System");
 									systemElement = (org.w3c.dom.Element)workList.item(0);
@@ -25907,7 +26005,16 @@ public class Modeler extends JFrame {
 					Point pointOfFrame = getModelerPosition();
 					int positionX = e.getX() - viewPosition.x - pointOfCanvas.x + pointOfFrame.x - 60;
 					int positionY = e.getY() - viewPosition.y - pointOfCanvas.y + pointOfFrame.y - 15;
-					newElement.setAttribute("Position", positionX + "," + positionY);
+					if (modelSize.equals("S")) {
+						newElement.setAttribute("Position", positionX*2 + "," + positionY*2);
+					}
+					if (modelSize.equals("M")) {
+						newElement.setAttribute("Position", positionX + "," + positionY);
+					}
+					if (modelSize.equals("L")) {
+						newElement.setAttribute("Position", positionX*2/3 + "," + positionY*2/3);
+					}
+					//newElement.setAttribute("Position", positionX + "," + positionY);
 					newElement.setAttribute("SlideNumber", "1");
 					newElement.setAttribute("Type", "Process");
 					newElement.setAttribute("TaskID", domNode_.getAttribute("ID"));
@@ -27720,6 +27827,15 @@ public class Modeler extends JFrame {
 		private boolean[] updateFieldsForSubjectArea() {
 			boolean valueOfFieldsChanged = informationOnThisPageChanged;
 			boolean valueOfSortKeyChanged = false;
+			if (isSlideNumberShown) {
+				for (int i = 0; i < dataflowNodeEditorArray.size(); i++) {
+					dataflowNodeEditorArray.get(i).setShowSlideNumber(false);
+				}
+				for (int i = 0; i < dataflowLineEditorArray.size(); i++) {
+					dataflowLineEditorArray.get(i).setShowSlideNumber(false);
+				}
+				valueOfFieldsChanged = informationOnThisPageChanged;
+			}
 			if (!domNode_.getAttribute("Name").equals(jTextFieldSubjectAreaName.getText())) {
 				valueOfFieldsChanged = true;
 			}
@@ -35187,7 +35303,15 @@ public class Modeler extends JFrame {
 			newElement.setAttribute("Type", pastingDomElement.getAttribute("Type"));
 			newElement.setAttribute("Name", pastingDomElement.getAttribute("Name"));
 			newElement.setAttribute("NameExt", pastingDomElement.getAttribute("NameExt"));
-			newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
+			if (modelSize.equals("S")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x*2 + "," + dataflowNodePosition.y*2);
+			}
+			if (modelSize.equals("M")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
+			}
+			if (modelSize.equals("L")) {
+				newElement.setAttribute("Position", dataflowNodePosition.x*2/3 + "," + dataflowNodePosition.y*2/3);
+			}
 			newElement.setAttribute("SlideNumber", pastingDomElement.getAttribute("SlideNumber"));
 			currentMainTreeNode.getElement().appendChild(newElement);
 			currentMainTreeNode.updateFields();
@@ -36281,7 +36405,7 @@ public class Modeler extends JFrame {
 		if ((bottomEdgePos - topEdgePos) < dimDialog.height) {
 			posY = (dimDialog.height - (bottomEdgePos - topEdgePos))/2 - topEdgePos;
 		}
-		jPanelSubjectAreaDataflowSlideShow1.setLocation(posX, posY);
+		jPanelSubjectAreaDataflowSlideShow1.setLocation(posX, posY - 40);
 		jLabelDataflowSlideShowPageGuide.setText(res.getString("S1846") + dataflowPageTitle + res.getString("S1847") + dataflowSlideNumber + " / " + dataflowSlideTotalNumber + ")");
 		jDialogDataflowSlideShow.setVisible(true);
 	}
