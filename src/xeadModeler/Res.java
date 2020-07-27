@@ -586,6 +586,7 @@ public class Res extends java.util.ListResourceBundle {
 		{ "S196", "Section List" },
 		{ "S198", "Section Name" },
 		{ "S201", "ID(seq.)" },
+		{ "S202", "Form ID" },
 		{ "S204", "Descriptions" },
 		{ "S206", "Table Type List" },
 		{ "S208", "Table Type" },

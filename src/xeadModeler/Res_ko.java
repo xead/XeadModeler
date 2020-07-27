@@ -586,6 +586,7 @@ public class Res_ko extends java.util.ListResourceBundle {
 		{"S196","부문리스트"},
 		{"S198","부문명"},
 		{"S201","ID(Seq.)"},
+		{"S202","Form ID" },
 		{"S204","설명"},
 		{"S206","테이블종류리스트"},
 		{"S208","테이블종류명"},

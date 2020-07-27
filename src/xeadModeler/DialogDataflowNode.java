@@ -152,10 +152,11 @@ public class DialogDataflowNode extends JDialog {
 
 	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
-		//
+
 		jComboBoxEventPos.setEnabled(false);
 		jComboBoxEventPos.removeAllItems();
-		//
+
+		//Setup components according to action and type(1)
 		if (element.getAttribute("Type").equals("Process")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode14"));
 			jLabel6.setEnabled(true);
@@ -198,7 +199,7 @@ public class DialogDataflowNode extends JDialog {
 		if (element.getAttribute("Type").equals("Basket")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode18"));
 		}
-		//
+
 		panelMain.removeAll();
 		panelMain.add(jLabel2, null);
 		panelMain.add(jTextFieldLabel, null);
@@ -213,8 +214,8 @@ public class DialogDataflowNode extends JDialog {
 		panelMain.add(jButtonOK, null);
 		panelMain.add(jButtonCancel, null);
 		panelMain.getRootPane().setDefaultButton(jButtonOK);
-		//
-		//Setup components according to action and type//
+
+		//Setup components according to action and type(2)
 		if (action.equals("Add")) {
 			this.setTitle(res.getString("DialogDataflowNode15"));
 			jTextFieldLabel.setText(element.getAttribute("Name"));
@@ -228,10 +229,12 @@ public class DialogDataflowNode extends JDialog {
 			jTextAreaDescriptions.setEditable(true);
 			jComboBoxType.setSelectedIndex(0);
 			panelMain.add(jComboBoxType, null);
+
 		} else {
 			this.setTitle(res.getString("DialogDataflowNode16"));
-			panelMain.add(jTextFieldType, null);
+
 			if (element.getAttribute("Type").equals("Process")) {
+				panelMain.add(jTextFieldType, null);
 				this.setTitle(res.getString("DialogDataflowNode17"));
 				Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", element.getAttribute("TaskID"), null);
 				jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
@@ -251,6 +254,8 @@ public class DialogDataflowNode extends JDialog {
 				}
 
 			} else {
+				panelMain.add(jComboBoxType, null);
+
 				if (element.getAttribute("RoleID").equals("")) {
 					jTextFieldLabel.setText(element.getAttribute("Name"));
 					jTextFieldLabel.setBackground(Color.white);
@@ -278,7 +283,7 @@ public class DialogDataflowNode extends JDialog {
 			}
 		}
 		jTextAreaDescriptions.setCaretPosition(0);
-		//
+
 		//Create spinner with specified default//
 		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(defaultValue, 1, 30, 1);
@@ -288,7 +293,7 @@ public class DialogDataflowNode extends JDialog {
 		jSpinnerSlideNumber.setBounds(new Rectangle(140, 102, 50, 25));
 		jSpinnerSlideNumber.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		panelMain.add(jSpinnerSlideNumber, null);
-		//
+
 		//Setup dialog and show//
 		Dimension dlgSize = this.getPreferredSize();
 		Dimension frmSize = frame_.getSize();
@@ -296,9 +301,10 @@ public class DialogDataflowNode extends JDialog {
 		this.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
 		this.pack();
 		this.setVisible(true);
-		//
-		//Update and return parameter value//
+
+		//Update DOM element and return parameter value//
 		if (buttonOKIsPressed) {
+
 			if (element.getAttribute("Type").equals("Process")) {
 				if (jComboBoxEventPos.getSelectedIndex() == 0) {
 					element.setAttribute("EventPos", "L");
@@ -306,102 +312,52 @@ public class DialogDataflowNode extends JDialog {
 				if (jComboBoxEventPos.getSelectedIndex() == 1) {
 					element.setAttribute("EventPos", "R");
 				}
+
 			} else {
-				//
-				//Update DOM element//
 				element.setAttribute("Name", jTextFieldLabel.getText());
 				element.setAttribute("NameExt", jTextFieldLabelExt.getText());
 				element.setAttribute("Descriptions", Modeler.concatLinesWithTokenOfEOL(jTextAreaDescriptions.getText()));
-				//
-				if (action.equals("Add")) {
-					if (jComboBoxType.getSelectedIndex() == 0) {
-						element.setAttribute("Type", "Ledger");
-					}
-					if (jComboBoxType.getSelectedIndex() == 1) {
-						element.setAttribute("Type", "Drum");
-					}
-					if (jComboBoxType.getSelectedIndex() == 2) {
-						element.setAttribute("Type", "Store1");
-					}
-					if (jComboBoxType.getSelectedIndex() == 3) {
-						element.setAttribute("Type", "Store2");
-					}
-					if (jComboBoxType.getSelectedIndex() == 4) {
-						element.setAttribute("Type", "Tray");
-					}
-					if (jComboBoxType.getSelectedIndex() == 5) {
-						element.setAttribute("Type", "Folder");
-					}
-					if (jComboBoxType.getSelectedIndex() == 6) {
-						element.setAttribute("Type", "Subject");
-					}
-					if (jComboBoxType.getSelectedIndex() == 7) {
-						element.setAttribute("Type", "Casher");
-					}
-					if (jComboBoxType.getSelectedIndex() == 8) {
-						element.setAttribute("Type", "Safe");
-					}
-					if (jComboBoxType.getSelectedIndex() == 9) {
-						element.setAttribute("Type", "Sofa");
-					}
-					if (jComboBoxType.getSelectedIndex() == 10) {
-						element.setAttribute("Type", "Basket");
-					}
+				if (jComboBoxType.getSelectedIndex() == 0) {
+					element.setAttribute("Type", "Ledger");
+				}
+				if (jComboBoxType.getSelectedIndex() == 1) {
+					element.setAttribute("Type", "Drum");
+				}
+				if (jComboBoxType.getSelectedIndex() == 2) {
+					element.setAttribute("Type", "Store1");
+				}
+				if (jComboBoxType.getSelectedIndex() == 3) {
+					element.setAttribute("Type", "Store2");
+				}
+				if (jComboBoxType.getSelectedIndex() == 4) {
+					element.setAttribute("Type", "Tray");
+				}
+				if (jComboBoxType.getSelectedIndex() == 5) {
+					element.setAttribute("Type", "Folder");
+				}
+				if (jComboBoxType.getSelectedIndex() == 6) {
+					element.setAttribute("Type", "Subject");
+				}
+				if (jComboBoxType.getSelectedIndex() == 7) {
+					element.setAttribute("Type", "Casher");
+				}
+				if (jComboBoxType.getSelectedIndex() == 8) {
+					element.setAttribute("Type", "Safe");
+				}
+				if (jComboBoxType.getSelectedIndex() == 9) {
+					element.setAttribute("Type", "Sofa");
+				}
+				if (jComboBoxType.getSelectedIndex() == 10) {
+					element.setAttribute("Type", "Basket");
 				}
 			}
-			//
-			//element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+
 			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
 			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
 			if (newSlideNumber != oldSlideNumber) {
-//				int diff = newSlideNumber - oldSlideNumber;
-//				int wrkInt;
-//				boolean isToCheck = false;
-//				for (int i = 0; i < nodeArray.size(); i++) {
-//					if (nodeArray.get(i).getElement() != null
-//							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-//						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
-//						if (wrkInt > oldSlideNumber) {
-//							isToCheck = true;
-//							break;
-//						}
-//					}
-//				}
-//				if (!isToCheck) {
-//					for (int i = 0; i < lineArray.size(); i++) {
-//						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-//						if (wrkInt > oldSlideNumber) {
-//							isToCheck = true;
-//							break;
-//						}
-//					}
-//				}
-//				if (isToCheck) {
-//					int rtn = JOptionPane.showOptionDialog(this, res.getString("DialogDataflowLine34"),
-//							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
-//					if (rtn == JOptionPane.YES_OPTION) {
-//						for (int i = 0; i < nodeArray.size(); i++) {
-//							if (nodeArray.get(i).getElement() != null
-//									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-//								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
-//								if (wrkInt > oldSlideNumber) {
-//									wrkInt = wrkInt + diff;
-//									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
-//								}
-//							}
-//						}
-//						for (int i = 0; i < lineArray.size(); i++) {
-//							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-//							if (wrkInt > oldSlideNumber) {
-//								wrkInt = wrkInt + diff;
-//								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
-//							}
-//						}
-//					}
-//				}
 				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
 			}
-			//
+
 			if (action.equals("Add")) {
 				frame_.currentMainTreeNode.getElement().appendChild(element);
 			}
@@ -441,10 +397,6 @@ class KanjiTextArea extends JTextArea {
 			Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.KANJI};
 			getInputContext().setCharacterSubsets(subsets);
 		}
-		//if (lang.equals("ko")) {
-		//  Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.HANJA};
-		//  getInputContext().setCharacterSubsets(subsets);
-		//}
 		if (lang.equals("zh")) {
 			Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.TRADITIONAL_HANZI};
 			getInputContext().setCharacterSubsets(subsets);

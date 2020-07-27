@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2018 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2019 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -45,9 +45,21 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2018 DBC Ltd.";
+	public static final String COPYRIGHT = "Copyright 2020 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M44";
+	public static final String FULL_VERSION = "V1.R4.M47";
+	// 1.4.47での変更点
+	//･DFD上のプロセス以外のノードタイプを変更できるようにした
+	//･データモデルのパネルレイアウトを改善した
+	//･Linux系OSでも使えるように、一部のコンテキストメニューの起動ステップを修正した
+	//
+	// 1.4.46での変更点
+	//･DDLの外部キー制約を独立させた（DDL一覧を用いたテーブル一括作成エラーを回避するため）
+	//
+	// 1.4.45での変更点
+	//･機能別入出力定義にフォームIDを設け、画像ファイル名の探索ロジックをフォームIDに連動させた
+	//･上記変更にともなってヘルプやチュートリアルの該当部分を改定した
+	//
 	// 1.4.44での変更点
 	//･ファイル名を円マークでパス指定できるようにした
 	//･業務フローのサイズ制御に関する細かいバグを修正した

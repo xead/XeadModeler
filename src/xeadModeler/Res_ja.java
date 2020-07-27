@@ -585,6 +585,7 @@ public class Res_ja extends java.util.ListResourceBundle {
 		{ "S196", "部門一覧" },
 		{ "S198", "部門名" },
 		{ "S201", "ID(一覧順)" },
+		{ "S202", "フォームID" },
 		{ "S204", "説明" },
 		{ "S206", "テーブルタイプ一覧" },
 		{ "S208", "テーブルタイプ名" },
