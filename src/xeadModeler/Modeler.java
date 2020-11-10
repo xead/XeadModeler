@@ -21501,6 +21501,7 @@ public class Modeler extends JFrame {
 					newElementChild1 = domDocument.createElement("IOPanel");
 					newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
 					newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
+					newElementChild1.setAttribute("FormID", element1.getAttribute("FormID"));
 					newElementChild1.setAttribute("ImageText", element1.getAttribute("ImageText"));
 					newElementChild1.setAttribute("Background", element1.getAttribute("Background"));
 					newElementChild1.setAttribute("Size", element1.getAttribute("Size"));
@@ -21540,6 +21541,7 @@ public class Modeler extends JFrame {
 					newElementChild1 = domDocument.createElement("IOSpool");
 					newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
 					newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
+					newElementChild1.setAttribute("FormID", element1.getAttribute("FormID"));
 					newElementChild1.setAttribute("ImageText", element1.getAttribute("ImageText"));
 					newElementChild1.setAttribute("Background", element1.getAttribute("Background"));
 					newElementChild1.setAttribute("Size", element1.getAttribute("Size"));
@@ -21612,6 +21614,7 @@ public class Modeler extends JFrame {
 				lastID = getLastIDOfFunctionIO(domNode_);
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", pastingElement.getAttribute("Name") + res.getString("S3951"));
+				newElement.setAttribute("FormID", pastingElement.getAttribute("FormID"));
 				newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
 				newElement.setAttribute("ImageText", pastingElement.getAttribute("ImageText"));
 				newElement.setAttribute("Background", pastingElement.getAttribute("Background"));
@@ -21650,6 +21653,7 @@ public class Modeler extends JFrame {
 				lastID = getLastIDOfFunctionIO(domNode_);
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", pastingElement.getAttribute("Name") + res.getString("S3951"));
+				newElement.setAttribute("FormID", pastingElement.getAttribute("FormID"));
 				newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
 				newElement.setAttribute("ImageText", pastingElement.getAttribute("ImageText"));
 				newElement.setAttribute("Background", pastingElement.getAttribute("Background"));
@@ -25584,6 +25588,7 @@ public class Modeler extends JFrame {
 				lastID = getLastIDOfFunctionIO(currentMainTreeNode.getElement());
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", domNode_.getAttribute("Name"));
+				newElement.setAttribute("FormID", domNode_.getAttribute("FormID"));
 				newElement.setAttribute("Descriptions", domNode_.getAttribute("Descriptions"));
 				newElement.setAttribute("ImageText", domNode_.getAttribute("ImageText"));
 				newElement.setAttribute("Background", domNode_.getAttribute("Background"));
@@ -25632,6 +25637,7 @@ public class Modeler extends JFrame {
 				lastID = getLastIDOfFunctionIO(currentMainTreeNode.getElement());
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", domNode_.getAttribute("Name"));
+				newElement.setAttribute("FormID", domNode_.getAttribute("FormID"));
 				newElement.setAttribute("Descriptions", domNode_.getAttribute("Descriptions"));
 				newElement.setAttribute("ImageText", domNode_.getAttribute("ImageText"));
 				newElement.setAttribute("Background", domNode_.getAttribute("Background"));

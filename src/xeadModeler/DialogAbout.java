@@ -52,6 +52,7 @@ public class DialogAbout extends JDialog implements ActionListener {
 	//･DFD上のプロセス以外のノードタイプを変更できるようにした
 	//･データモデルのパネルレイアウトを改善した
 	//･Linux系OSでも使えるように、一部のコンテキストメニューの起動ステップを修正した
+	//･#IOPanelとIOSpoolのノードをコピーする際にFormIDもコピーされるようにした
 	//
 	// 1.4.46での変更点
 	//･DDLの外部キー制約を独立させた（DDL一覧を用いたテーブル一括作成エラーを回避するため）
