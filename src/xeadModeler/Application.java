@@ -61,7 +61,7 @@ public class Application {
 		splashScreen.pack();
 		splashScreen.setLocationRelativeTo(null);
 		EventQueue.invokeLater(new Runnable() {
-			@Override public void run() {
+			public void run() {
 				showSplash();
 			}
 		});
