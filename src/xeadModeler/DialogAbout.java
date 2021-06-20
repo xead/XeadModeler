@@ -45,14 +45,22 @@ public class DialogAbout extends JDialog implements ActionListener {
 	public static final String APPLICATION_NAME = "X-TEA Modeler 1.4";
 	public static final String PRODUCT_NAME = "X-TEA Modeler";
 	public static final String FORMAT_VERSION  = "1.2";
-	public static final String COPYRIGHT = "Copyright 2020 DBC Ltd.";
+	public static final String COPYRIGHT = "Copyright 2021 DBC Ltd.";
 	public static final String URL_DBC = "http://dbc.in.coocan.jp/";
-	public static final String FULL_VERSION = "V1.R4.M47";
+	public static final String FULL_VERSION = "V1.R4.M49";
+	// 1.4.49での変更点
+	//・Java11環境向けにJComboBoxとJListについて総称型に設定した
+	//・Java11環境向けにOutputFormatとXMLSerializerをLS系に置き換えた
+	//
+	// 1.4.48での変更点
+	//･IOPanelとIOSpoolのノードをコピーする際にFormIDもコピーされるようにした
+	//･差異分析レポートでIDの重複チェックを組み込むとともに、IOTableのPositionの扱いを改善した
+	//･DDLのインポート機能を改善した
+	//
 	// 1.4.47での変更点
 	//･DFD上のプロセス以外のノードタイプを変更できるようにした
 	//･データモデルのパネルレイアウトを改善した
 	//･Linux系OSでも使えるように、一部のコンテキストメニューの起動ステップを修正した
-	//･#IOPanelとIOSpoolのノードをコピーする際にFormIDもコピーされるようにした
 	//
 	// 1.4.46での変更点
 	//･DDLの外部キー制約を独立させた（DDL一覧を用いたテーブル一括作成エラーを回避するため）

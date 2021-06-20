@@ -1,7 +1,7 @@
 package xeadModeler;
 
 /*
- * Copyright (c) 2018 WATANABE kozo <qyf05466@nifty.com>,
+ * Copyright (c) 2021 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  *
  * This file is part of XEAD Modeler.
@@ -61,8 +61,10 @@ import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+//import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+//import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.*;
 
 public class Modeler extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -499,8 +501,8 @@ public class Modeler extends JFrame {
 	private JLabel jLabelSystemDataTypeSortKey = new JLabel();
 	private JTextField jTextFieldSystemDataTypeSortKey = new JTextField();
 	private JLabel jLabelSystemDataTypeBasicType = new JLabel();
-	private DefaultComboBoxModel comboBoxModelDataTypeBasicType = new DefaultComboBoxModel();
-	private JComboBox jComboBoxSystemDataTypeBasicType = new JComboBox(comboBoxModelDataTypeBasicType);
+	private DefaultComboBoxModel<String> comboBoxModelDataTypeBasicType = new DefaultComboBoxModel<String>();
+	private JComboBox<String> jComboBoxSystemDataTypeBasicType = new JComboBox<String>(comboBoxModelDataTypeBasicType);
 	private JLabel jLabelSystemDataTypeLength = new JLabel();
 	private JTextField jTextFieldSystemDataTypeLength = new JTextField();
 	private JLabel jLabelSystemDataTypeDecimal = new JLabel();
@@ -546,7 +548,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelSystemTermsSortKey = new JLabel();
 	private JTextField jTextFieldSystemTermsSortKey = new JTextField();
 	private JLabel jLabelSystemTermsHtmlFile = new JLabel();
-	private JComboBox jComboBoxSystemTermsHtmlFile = new JComboBox();
+	private JComboBox<String> jComboBoxSystemTermsHtmlFile = new JComboBox<String>();
 	private String systemTermsHtmlFile = "";
 	private ArrayList<String> systemTermsHtmlFileList = new ArrayList<String>();
 	private JButton jButtonSystemTermsHtmlFileEdit = new JButton();
@@ -597,7 +599,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelSubjectAreaSortKey = new JLabel();
 	private JTextField jTextFieldSubjectAreaSortKey = new JTextField();
 	private JLabel jLabelSubjectAreaBoundarySetting = new JLabel();
-	private JComboBox jComboBoxSubjectAreaBoundarySetting = new JComboBox();
+	private JComboBox<String> jComboBoxSubjectAreaBoundarySetting = new JComboBox<String>();
 	private boolean isChangedByUser = false;
 	private KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
 	public boolean isSlideNumberShown = false;
@@ -765,7 +767,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelRoleName = new JLabel();
 	private KanjiTextField jTextFieldRoleName = new KanjiTextField();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelDepartment = new SortableXeadTreeNodeComboBoxModel();
-	private JComboBox jComboBoxDepartment = new JComboBox(sortableComboBoxModelDepartment);
+	private JComboBox<String> jComboBoxDepartment = new JComboBox<String>(sortableComboBoxModelDepartment);
 	private TableModelReadOnlyList tableModelTaskList = new TableModelReadOnlyList();
 	private JTable jTableTaskList = new JTable(tableModelTaskList);
 	private int selectedRow_jTableTaskList;
@@ -791,14 +793,14 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldTaskEvent = new KanjiTextField();
 	private JLabel jLabelTaskType = new JLabel();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTaskType = new SortableXeadTreeNodeComboBoxModel();
-	private JComboBox jComboBoxTaskType = new JComboBox(sortableComboBoxModelTaskType);
+	private JComboBox<String> jComboBoxTaskType = new JComboBox<String>(sortableComboBoxModelTaskType);
 	private JLabel jLabelTaskDescriptions = new JLabel();
 	private JLabel jLabelTaskName = new JLabel();
 	private KanjiTextField jTextFieldTaskName = new KanjiTextField();
 	private JTextField jTextFieldTaskSortKey = new JTextField();
 	private JLabel jLabelSubjectAreaWithThisTask = new JLabel();
 	private DefaultListModel listModelSubjectAreaWithThisTask = new DefaultListModel();
-	private JList jListSubjectAreaWithThisTask = new JList(listModelSubjectAreaWithThisTask);
+	private JList<String> jListSubjectAreaWithThisTask = new JList<String>(listModelSubjectAreaWithThisTask);
 	private JScrollPane jScrollPaneSubjectAreaWithThisTask = new JScrollPane();
 	private ArrayList<String> subjectAreaIDList = new ArrayList<String>();
 	private JScrollPane jScrollPaneTaskDescriptions = new JScrollPane();
@@ -1155,7 +1157,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelTableName = new JLabel();
 	private JLabel jLabelTableAlias = new JLabel();
 	private JPanel jPanelTable2 = new JPanel();
-	private JComboBox jComboBoxTableType = new JComboBox(sortableComboBoxModelTableType);
+	private JComboBox<String> jComboBoxTableType = new JComboBox<String>(sortableComboBoxModelTableType);
 	private JLabel jLabelTablePK = new JLabel();
 	private KanjiTextField jTextFieldTableName = new KanjiTextField();
 	private JTextField jTextFieldTableAlias = new JTextField();
@@ -1326,13 +1328,13 @@ public class Modeler extends JFrame {
 	private KanjiTextField jTextFieldFunctionParameters = new KanjiTextField();
 	private KanjiTextField jTextFieldFunctionReturn = new KanjiTextField();
 	private JTextField jTextFieldFunctionSortKey = new JTextField();
-	private JComboBox jComboBoxFunctionDocFile = new JComboBox();
+	private JComboBox<String> jComboBoxFunctionDocFile = new JComboBox<String>();
 	private String functionDocFile = "";
 	private ArrayList<String> functionDocFileList = new ArrayList<String>();
 	private ArrayList<String> functionDocFileDefaultList = new ArrayList<String>();
 	private JButton jButtonFunctionDocFileEdit = new JButton();
 	private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
-	private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
+	private JComboBox<String> jComboBoxFunctionType = new JComboBox<String>(sortableComboBoxModelFunctionType);
 	private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
 	private KanjiTextField jTextFieldFunctionSummary = new KanjiTextField();
 	private JLabel jLabelFunctionType = new JLabel();
@@ -1460,7 +1462,7 @@ public class Modeler extends JFrame {
 	private JLabel jLabelIOTablePK = new JLabel();
 	private JTextField jTextFieldIOTablePK = new JTextField();
 	private JLabel jLabelIOTablePosition = new JLabel();
-	private JComboBox jComboBoxIOTablePosition = new JComboBox();
+	private JComboBox<String> jComboBoxIOTablePosition = new JComboBox<String>();
 	private JLabel jLabelIOTableDescriptions = new JLabel();
 	private KanjiTextArea jTextAreaIOTableDescriptions = new KanjiTextArea();
 	private JPanel jPanelIOTable3 = new JPanel();
@@ -1602,8 +1604,8 @@ public class Modeler extends JFrame {
 			////////////////////////
 			String version = System.getProperty("java.version");
 			if (!version.startsWith("1.7.") && !version.startsWith("1.8.")) {
-				JOptionPane.showMessageDialog(null, res.getString("S5") + version + res.getString("S6"));
-				System.exit(0);
+				//JOptionPane.showMessageDialog(null, res.getString("S5") + version + res.getString("S6"));
+				//System.exit(0);
 			}
 
 			///////////////////////////
@@ -8647,7 +8649,6 @@ public class Modeler extends JFrame {
 						try{
 							setCursor(new Cursor(Cursor.WAIT_CURSOR));
 							String newFolder = backupFolder.replace("<CURRENT>", currentFileFolder);
-							//newFolder = newFolder.replaceAll("\\", File.separator);
 							newFolder = newFolder.replaceAll("\\\\", "/");
 							File newFolderDir = new File(newFolder);
 							if (!newFolderDir.exists()) {
@@ -8656,13 +8657,22 @@ public class Modeler extends JFrame {
 							backupFileName = currentFileName.replace(".xead", getStringValueOfDateTime("withTime") + ".xead");
 							backupFileName = backupFileName.replace(currentFileFolder, newFolder);
 							FileOutputStream fileOutputStream = new FileOutputStream(backupFileName);
-							OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
-							Writer writer = new BufferedWriter(outputStreamWriter);
-							OutputFormat outputFormat = new OutputFormat(domDocumentSaved);
-							outputFormat.setEncoding("UTF-8");
-							XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
-							xmlSerializer.serialize(domDocumentSaved.getDocumentElement());
-							writer.close();
+//							OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+//							Writer writer = new BufferedWriter(outputStreamWriter);
+//							OutputFormat outputFormat = new OutputFormat(domDocumentSaved);
+//							outputFormat.setEncoding("UTF-8");
+//							XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
+//							xmlSerializer.serialize(domDocumentSaved.getDocumentElement());
+//							writer.close();
+							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+							DOMImplementationLS domImpLS = (DOMImplementationLS)registry.getDOMImplementation("LS 3.0");
+							LSOutput output = domImpLS.createLSOutput();
+					        output.setByteStream(fileOutputStream);
+							output.setEncoding("UTF-8");
+							LSSerializer serializer = domImpLS.createLSSerializer();
+							serializer.write(domDocumentSaved, output);
+							fileOutputStream.close();
+
 						} catch(Exception ex){
 							JOptionPane.showMessageDialog(this, res.getString("S1149") + "\n" + backupFileName);
 							ex.printStackTrace();
@@ -8684,14 +8694,23 @@ public class Modeler extends JFrame {
 				}
 				arrangeOrderOfDomElement();
 
-				OutputFormat outputFormat = new OutputFormat(domDocument);
-				outputFormat.setEncoding("UTF-8");
-				FileOutputStream fileOutStream = new FileOutputStream(currentFileName);
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutStream, "UTF-8");
-				Writer writer = new BufferedWriter(outputStreamWriter);
-				XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
-				xmlSerializer.serialize(domDocument.getDocumentElement());
-				writer.close();
+//				OutputFormat outputFormat = new OutputFormat(domDocument);
+//				outputFormat.setEncoding("UTF-8");
+//				FileOutputStream fileOutStream = new FileOutputStream(currentFileName);
+//				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutStream, "UTF-8");
+//				Writer writer = new BufferedWriter(outputStreamWriter);
+//				XMLSerializer xmlSerializer = new XMLSerializer(writer, outputFormat);
+//				xmlSerializer.serialize(domDocument.getDocumentElement());
+//				writer.close();
+				FileOutputStream fileOutputStream = new FileOutputStream(currentFileName);
+				DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+				DOMImplementationLS domImpLS = (DOMImplementationLS)registry.getDOMImplementation("LS 3.0");
+				LSOutput output = domImpLS.createLSOutput();
+		        output.setByteStream(fileOutputStream);
+				output.setEncoding("UTF-8");
+				LSSerializer serializer = domImpLS.createLSSerializer();
+				serializer.write(domDocument, output);
+				fileOutputStream.close();
 
 				file = new File(currentFileName);
 				lastModifyTime = file.lastModified();

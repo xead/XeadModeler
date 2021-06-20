@@ -35,7 +35,9 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
 import org.apache.xerces.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -61,8 +63,8 @@ public class DialogImportXEAD extends JDialog {
 	private JButton jButtonCancel = new JButton();
 	private SortableXeadNodeComboBoxModel comboBoxModelBlockFrom = new SortableXeadNodeComboBoxModel();
 	private SortableXeadNodeComboBoxModel comboBoxModelBlockInto = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxBlockFrom = new JComboBox(comboBoxModelBlockFrom);
-	private JComboBox jComboBoxBlockInto = new JComboBox(comboBoxModelBlockInto);
+	private JComboBox<String> jComboBoxBlockFrom = new JComboBox<String>(comboBoxModelBlockFrom);
+	private JComboBox<String> jComboBoxBlockInto = new JComboBox<String>(comboBoxModelBlockInto);
 	private JTextArea jTextArea1 = new JTextArea();
 	private JLabel jLabel4 = new JLabel();
 	private JTextField jTextFieldImportFileName = new JTextField();

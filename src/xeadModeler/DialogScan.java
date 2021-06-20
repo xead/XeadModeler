@@ -93,9 +93,9 @@ public class DialogScan extends JDialog {
 	private JCheckBox jCheckBoxFunction = new JCheckBox();
 	private JCheckBox jCheckBoxAll = new JCheckBox();
 	private SortableXeadNodeComboBoxModel comboBoxModelRoles = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxRoles = new JComboBox(comboBoxModelRoles);
+	private JComboBox<String> jComboBoxRoles = new JComboBox<String>(comboBoxModelRoles);
 	private SortableXeadNodeComboBoxModel comboBoxModelSubsystems = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxSubsystems = new JComboBox(comboBoxModelSubsystems);
+	private JComboBox<String> jComboBoxSubsystems = new JComboBox<String>(comboBoxModelSubsystems);
 	private TableModelScanResult tableModelScanResult = new TableModelScanResult();
 	private JTable jTableScanResult = new JTable(tableModelScanResult);
 	private TableColumn column0, column1, column2, column3, column4, column5, column6;

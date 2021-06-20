@@ -35,8 +35,10 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import org.w3c.dom.*;
 
 public class DialogImportSQL extends JDialog {
@@ -50,17 +52,19 @@ public class DialogImportSQL extends JDialog {
 	private JButton jButtonStart = new JButton();
 	private JButton jButtonClose = new JButton();
 	private SortableXeadNodeComboBoxModel comboBoxModelSubsystem = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxSubsystem = new JComboBox(comboBoxModelSubsystem);
+	private JComboBox<String> jComboBoxSubsystem = new JComboBox<String>(comboBoxModelSubsystem);
 	private JTextArea jTextArea1 = new JTextArea();
 	private JTextField jTextFieldImportFileName = new JTextField();
 	private FontMetrics metrics = null;
 	private JCheckBox jCheckBoxDataTypeControl = new JCheckBox();
 	private JCheckBox jCheckBoxShowControl = new JCheckBox();
-	private JCheckBox jCheckBoxTableNameControl = new JCheckBox();
-	private JCheckBox jCheckBoxFieldNameControl = new JCheckBox();
-	private JCheckBox jCheckBoxCommentControl = new JCheckBox();
+	//private JCheckBox jCheckBoxTableNameControl = new JCheckBox();
+	//private JCheckBox jCheckBoxFieldNameControl = new JCheckBox();
+	//private JCheckBox jCheckBoxCommentControl = new JCheckBox();
+	private JLabel jLabel3 = new JLabel();
+	private JComboBox<String> jComboBoxCommentControl = new JComboBox<String>();
 
-	private int tableIDCounter = 0;
+	//private int tableIDCounter = 0;
 	private String textFileName = "";
 	private String importResult = "";
 	private Modeler frame_;
@@ -231,41 +235,52 @@ public class DialogImportSQL extends JDialog {
 		jLabel1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel1.setText(res.getString("DialogImportSQL02"));
-		jLabel1.setBounds(new Rectangle(5, 12, 170, 20));
+		jLabel1.setBounds(new Rectangle(5, 12, 180, 20));
 		jTextFieldImportFileName.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jTextFieldImportFileName.setBounds(new Rectangle(180, 9, 280, 25));
+		jTextFieldImportFileName.setBounds(new Rectangle(190, 9, 280, 25));
 		jTextFieldImportFileName.setEditable(false);
 		metrics = jTextFieldImportFileName.getFontMetrics(jTextFieldImportFileName.getFont());
 
 		jLabel2.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
 		jLabel2.setText(res.getString("DialogImportSQL03"));
-		jLabel2.setBounds(new Rectangle(5, 43, 170, 20));
-		jComboBoxSubsystem.setBounds(new Rectangle(180, 40, 280, 25));
+		jLabel2.setBounds(new Rectangle(5, 43, 180, 20));
+		jComboBoxSubsystem.setBounds(new Rectangle(190, 40, 280, 25));
 		jComboBoxSubsystem.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jComboBoxSubsystem.addActionListener(new DialogImportSQL_jComboBoxSubsystem_actionAdapter(this));
 
-		jCheckBoxTableNameControl.setBounds(new Rectangle(9, 71, 460, 25));
-		jCheckBoxTableNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jCheckBoxTableNameControl.setText(res.getString("DialogImportSQL12"));
-		jCheckBoxTableNameControl.setSelected(true);
 
-		jCheckBoxCommentControl.setBounds(new Rectangle(9, 102, 460, 25));
-		jCheckBoxCommentControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jCheckBoxCommentControl.setText(res.getString("DialogImportSQL14"));
-		jCheckBoxCommentControl.setSelected(true);
+		jLabel3.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
+		jLabel3.setText(res.getString("DialogImportSQL12"));
+		jLabel3.setBounds(new Rectangle(5, 74, 180, 20));
+		jComboBoxCommentControl.setBounds(new Rectangle(190, 71, 280, 25));
+		jComboBoxCommentControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+		jComboBoxCommentControl.addItem(res.getString("DialogImportSQL13"));
+		jComboBoxCommentControl.addItem(res.getString("DialogImportSQL14"));
+		jComboBoxCommentControl.addItem(res.getString("DialogImportSQL15"));
+		
+//		jCheckBoxTableNameControl.setBounds(new Rectangle(9, 71, 460, 25));
+//		jCheckBoxTableNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+//		jCheckBoxTableNameControl.setText(res.getString("DialogImportSQL12"));
+//		jCheckBoxTableNameControl.setSelected(true);
+//
+//		jCheckBoxCommentControl.setBounds(new Rectangle(9, 102, 460, 25));
+//		jCheckBoxCommentControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+//		jCheckBoxCommentControl.setText(res.getString("DialogImportSQL14"));
+//		jCheckBoxCommentControl.setSelected(true);
+//
+//		jCheckBoxFieldNameControl.setBounds(new Rectangle(9, 133, 460, 25));
+//		jCheckBoxFieldNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
+//		jCheckBoxFieldNameControl.setText(res.getString("DialogImportSQL13"));
+//		jCheckBoxFieldNameControl.setSelected(true);
 
-		jCheckBoxFieldNameControl.setBounds(new Rectangle(9, 133, 460, 25));
-		jCheckBoxFieldNameControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
-		jCheckBoxFieldNameControl.setText(res.getString("DialogImportSQL13"));
-		jCheckBoxFieldNameControl.setSelected(true);
-
-		jCheckBoxDataTypeControl.setBounds(new Rectangle(9, 164, 460, 25));
+		jCheckBoxDataTypeControl.setBounds(new Rectangle(9, 102, 460, 25));
 		jCheckBoxDataTypeControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxDataTypeControl.setText(res.getString("DialogImportSQL10"));
 		jCheckBoxDataTypeControl.setSelected(true);
 
-		jCheckBoxShowControl.setBounds(new Rectangle(9, 195, 460, 25));
+		jCheckBoxShowControl.setBounds(new Rectangle(9, 133, 460, 25));
 		jCheckBoxShowControl.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jCheckBoxShowControl.setText(res.getString("DialogImportSQL11"));
 		jCheckBoxShowControl.setSelected(true);
@@ -273,32 +288,34 @@ public class DialogImportSQL extends JDialog {
 
 		jTextArea1.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jTextArea1.setEditable(true);
-		jTextArea1.setBounds(new Rectangle(9, 226, 455, 100));
+		jTextArea1.setBounds(new Rectangle(9, 164, 465, 162));
 		jTextArea1.setText(res.getString("DialogImportSQL04"));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setBorder(BorderFactory.createLoweredBevelBorder());
 
-		jProgressBar.setBounds(new Rectangle(20, 335, 200, 27));
-		jButtonStart.setBounds(new Rectangle(20, 335, 200, 27));
+		jProgressBar.setBounds(new Rectangle(25, 335, 290, 27));
+		jButtonStart.setBounds(new Rectangle(25, 335, 290, 27));
 		jButtonStart.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonStart.setText(res.getString("DialogImportSQL05"));
 		jButtonStart.addActionListener(new DialogImportSQL_jButtonStart_actionAdapter(this));
 		jButtonStart.setEnabled(false);
-		jButtonClose.setBounds(new Rectangle(330, 335, 110, 27));
+		jButtonClose.setBounds(new Rectangle(345, 335, 110, 27));
 		jButtonClose.setFont(new java.awt.Font(frame_.mainFontName, 0, Modeler.MAIN_FONT_SIZE));
 		jButtonClose.setText(res.getString("DialogImportSQL06"));
 		jButtonClose.addActionListener(new DialogImportSQL_jButtonClose_actionAdapter(this));
 
 		panelMain.setLayout(null);
-		panelMain.setPreferredSize(new Dimension(473, 373));
+		panelMain.setPreferredSize(new Dimension(483, 373));
 		panelMain.setBorder(BorderFactory.createEtchedBorder());
 		panelMain.add(jLabel1, null);
 		panelMain.add(jLabel2, null);
 		panelMain.add(jTextFieldImportFileName, null);
 		panelMain.add(jComboBoxSubsystem, null);
-		panelMain.add(jCheckBoxTableNameControl, null);
-		panelMain.add(jCheckBoxCommentControl, null);
-		panelMain.add(jCheckBoxFieldNameControl, null);
+		panelMain.add(jLabel3, null);
+		panelMain.add(jComboBoxCommentControl, null);
+//		panelMain.add(jCheckBoxTableNameControl, null);
+//		panelMain.add(jCheckBoxCommentControl, null);
+//		panelMain.add(jCheckBoxFieldNameControl, null);
 		panelMain.add(jCheckBoxDataTypeControl, null);
 		panelMain.add(jCheckBoxShowControl, null);
 		panelMain.add(jTextArea1, null);
@@ -361,7 +378,7 @@ public class DialogImportSQL extends JDialog {
 		numberOfTablesCreated = 0;
 		numberOfTableRelationshipsCreated = 0;
 		itemsOfArray = -1;
-		tableIDCounter = 0;
+		//tableIDCounter = 0;
 		itemsOfHideFieldArray = -1;
 
 		try {
@@ -423,7 +440,8 @@ public class DialogImportSQL extends JDialog {
 				}
 				br.close();
 			} catch (IOException ex) {}
-			String statements = buffer.toString().toUpperCase();
+			//String statements = buffer.toString().toUpperCase();
+			String statements = buffer.toString();
 
 			if (jCheckBoxShowControl.isSelected()) {
 				setupHideFieldNameArray();
@@ -439,7 +457,7 @@ public class DialogImportSQL extends JDialog {
 			int posOfFirstBracket = 0;
 			int posWork = 0;
 			while (scanStartFrom < statements.length()) {
-				posOfCREATE_TABLE = statements.indexOf("CREATE TABLE ", scanStartFrom);
+				posOfCREATE_TABLE = statements.toUpperCase().indexOf("CREATE TABLE ", scanStartFrom);
 				if (posOfCREATE_TABLE >= 0) {
 					posOfFirstBracket = statements.indexOf("(", posOfCREATE_TABLE);
 					if (posOfFirstBracket > 0) {
@@ -542,12 +560,12 @@ public class DialogImportSQL extends JDialog {
 		tableElement.setAttribute("ID", Integer.toString(lastID + 1));
 		tableElement.setAttribute("Name", tableName);
 
-		if (jCheckBoxTableNameControl.isSelected()) {
-			tableIDCounter++;
-			tableElement.setAttribute("SortKey", "T" + getFormatted3ByteString(tableIDCounter) + "0");
-		} else {
+//		if (jCheckBoxTableNameControl.isSelected()) {
+//			tableIDCounter++;
+//			tableElement.setAttribute("SortKey", "T" + getFormatted3ByteString(tableIDCounter) + "0");
+//		} else {
 			tableElement.setAttribute("SortKey", tableName);
-		}
+//		}
 		tableElement.setAttribute("SubsystemID", subsystemID);
 		tableElement.setAttribute("Descriptions", "");
 		tableElement.setAttribute("TableTypeID", defaultTableTypeID);
@@ -627,7 +645,7 @@ public class DialogImportSQL extends JDialog {
 		////////////////////////////
 		if (primaryKeyFieldID.equals("")) {
 			for (i = 0; i <= itemsOfArray; i++) {
-				if (fieldArray[i].indexOf("PRIMARY KEY", 0) >= 0) {
+				if (fieldArray[i].toUpperCase().indexOf("PRIMARY KEY", 0) >= 0) {
 					setKeyFieldOfTheKey(primaryKeyElement, tableElement, fieldArray[i]);
 					break;
 				}
@@ -643,7 +661,7 @@ public class DialogImportSQL extends JDialog {
 		//Create SK and FK //
 		/////////////////////
 		for (i = 0; i <= itemsOfArray; i++) {
-			if (fieldArray[i].indexOf("UNIQUE", 0) >= 0 && fieldArray[i].indexOf("PRIMARY KEY", 0) == -1) {
+			if (fieldArray[i].toUpperCase().indexOf("UNIQUE", 0) >= 0 && fieldArray[i].indexOf("PRIMARY KEY", 0) == -1) {
 				createSecondaryKeyDefinition(tableElement, fieldArray[i]);
 			}
 		}
@@ -669,7 +687,7 @@ public class DialogImportSQL extends JDialog {
 		////////////////
 		//Get NOT NULL//
 		////////////////
-		if (fieldAttrString.indexOf("NOT NULL", 0) > 0) {
+		if (fieldAttrString.toUpperCase().indexOf("NOT NULL", 0) > 0) {
 			notNullValue = "true";
 		}
 
@@ -679,7 +697,7 @@ public class DialogImportSQL extends JDialog {
 		defaultValue = "";
 		int posStart = 0;
 		int posEnd = 0;
-		int i = fieldAttrString.indexOf(" DEFAULT ", 0);
+		int i = fieldAttrString.toUpperCase().indexOf(" DEFAULT ", 0);
 		if (i > 0) {
 			for (int j=i+8; j < fieldAttrString.length(); j++) {
 				if (posStart == 0 && !fieldAttrString.substring(j,j+1).equals(" ")) {
@@ -701,7 +719,7 @@ public class DialogImportSQL extends JDialog {
 		commentValue = "";
 		posStart = 0;
 		posEnd = 0;
-		i = fieldAttrString.indexOf(" COMMENT ", 0);
+		i = fieldAttrString.toUpperCase().indexOf(" COMMENT ", 0);
 		if (i > 0) {
 			for (int j=i+9; j < fieldAttrString.length(); j++) {
 				if (posStart == 0 && !fieldAttrString.substring(j,j+1).equals("'")) {
@@ -728,19 +746,27 @@ public class DialogImportSQL extends JDialog {
 			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
 		}
 		fieldElement.setAttribute("ID", Integer.toString(lastID + 1));
-		if (jCheckBoxCommentControl.isSelected()) {
+//		if (jCheckBoxCommentControl.isSelected()) {
+//			fieldElement.setAttribute("Name", commentValue);
+//			fieldElement.setAttribute("Descriptions", "");
+//		} else {
+//			fieldElement.setAttribute("Name", fieldNameValue);
+//			fieldElement.setAttribute("Descriptions", commentValue);
+//		}
+		if (jComboBoxCommentControl.getSelectedIndex() == 0) {
 			fieldElement.setAttribute("Name", commentValue);
 			fieldElement.setAttribute("Descriptions", "");
-		} else {
+		}
+		if (jComboBoxCommentControl.getSelectedIndex() == 1) {
 			fieldElement.setAttribute("Name", fieldNameValue);
 			fieldElement.setAttribute("Descriptions", commentValue);
 		}
 		fieldElement.setAttribute("SortKey", getFormatted3ByteString(sortKey) + "0");
-		if (jCheckBoxFieldNameControl.isSelected()) {
+		//if (jCheckBoxFieldNameControl.isSelected()) {
 			fieldElement.setAttribute("Alias", fieldNameValue);
-		} else {
-			fieldElement.setAttribute("Alias", "");
-		}
+		//} else {
+		//	fieldElement.setAttribute("Alias", "");
+		//}
 		fieldElement.setAttribute("AttributeType", "NATIVE");
 		fieldElement.setAttribute("DataTypeID", getDataTypeID(fieldAttrString));
 		fieldElement.setAttribute("ShowOnModel", "true");
@@ -756,7 +782,7 @@ public class DialogImportSQL extends JDialog {
 		fieldElement.setAttribute("Default", defaultValue);
 		tableElement.appendChild(fieldElement);
 
-		if (fieldAttrString.indexOf("PRIMARY KEY", 0) > 0) {
+		if (fieldAttrString.toUpperCase().indexOf("PRIMARY KEY", 0) > 0) {
 			primaryKeyFieldID = fieldElement.getAttribute("ID");
 		}
 	}

@@ -53,7 +53,7 @@ public class DialogCreateTableStatement extends JDialog {
 	private JLabel jLabelSectionMark = new JLabel();
 	private JTextField jTextFieldSectionMark = new JTextField();
 	//private JCheckBox jCheckBoxWithComment = new JCheckBox();
-	private JComboBox jComboBoxWithComment = new JComboBox();
+	private JComboBox<String> jComboBoxWithComment = new JComboBox<String>();
 	private JCheckBox jCheckBoxIgnoreFKConstraints = new JCheckBox();
 	private JCheckBox jCheckBoxIgnoreWarnings = new JCheckBox();
 	private JCheckBox jCheckBoxConvertCamel = new JCheckBox();

@@ -52,9 +52,9 @@ public class DialogDataflowNode extends JDialog {
 	private JLabel jLabel1Ext = new JLabel();
 	private KanjiTextField jTextFieldLabelExt = new KanjiTextField();
 	private JLabel jLabel2 = new JLabel();
-	private JComboBox jComboBoxType = new JComboBox();
+	private JComboBox<String> jComboBoxType = new JComboBox<String>();
 	private JTextField jTextFieldType = new JTextField();
-	private JComboBox jComboBoxEventPos = new JComboBox();
+	private JComboBox<String> jComboBoxEventPos = new JComboBox<String>();
 	private JLabel jLabel4 = new JLabel();
 	private JLabel jLabel5 = new JLabel();
 	private JLabel jLabel6 = new JLabel();

@@ -419,6 +419,22 @@ public class DialogToListChangesOfFiles extends JDialog {
 		}
 	}
 
+	boolean hasNoDuplicatedID(NodeList nodeList) {
+		org.w3c.dom.Element workElement;
+		ArrayList<String> idList = new ArrayList<String>();
+		boolean hasNone = true;
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)nodeList.item(i);
+			if (idList.contains(workElement.getAttribute("SortKey"))) {
+				buffer.append("\n" + workElement.getAttribute("SortKey") + res.getString("DialogToListChangesOfFiles39"));
+				hasNone = false;
+			} else {
+				idList.add(workElement.getAttribute("SortKey"));
+			}
+		}
+		return hasNone;
+	}
+
 	void listChangesOfDataflow() {
 		NodeList newElementList, oldElementList;
 		String tagName;
@@ -435,14 +451,16 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Descriptions");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
-
-		////////////////////////////////////////
-		// Set message if with no differences //
-		////////////////////////////////////////
-		if (countOfChanges == workCount) {
-			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+			
+			////////////////////////////////////////
+			// Set message if with no differences //
+			////////////////////////////////////////
+			if (countOfChanges == workCount) {
+				buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			}
 		}
 	}
 
@@ -463,8 +481,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Descriptions");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		}
 
 		//////////
 		// Task //
@@ -478,8 +498,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("RoleID");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		}
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -506,14 +528,16 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("DatamodelDescriptions");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
 
-		////////////////////////////////////////
-		// Set message if with no differences //
-		////////////////////////////////////////
-		if (countOfChanges == workCount) {
-			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			////////////////////////////////////////
+			// Set message if with no differences //
+			////////////////////////////////////////
+			if (countOfChanges == workCount) {
+				buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			}
 		}
 	}
 
@@ -538,14 +562,16 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("SubsystemID");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
 
-		////////////////////////////////////////
-		// Set message if with no differences //
-		////////////////////////////////////////
-		if (countOfChanges == workCount) {
-			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			////////////////////////////////////////
+			// Set message if with no differences //
+			////////////////////////////////////////
+			if (countOfChanges == workCount) {
+				buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			}
 		}
 	}
 
@@ -1561,14 +1587,16 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("SubsystemID");
 		oldElementList = systemElementOld.getElementsByTagName(tagName);
 		newElementList = systemElementNew.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
+		if (hasNoDuplicatedID(newElementList)) {
+			checkIfNewElementChangedOrAdded(newElementList, oldElementList, attrList, tagName, "Name");
+			checkIfNewElementDeleted(newElementList, oldElementList, tagName, "Name");
 
-		////////////////////////////////////////
-		// Set message if with no differences //
-		////////////////////////////////////////
-		if (countOfChanges == workCount) {
-			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			////////////////////////////////////////
+			// Set message if with no differences //
+			////////////////////////////////////////
+			if (countOfChanges == workCount) {
+				buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+			}
 		}
 	}
 
@@ -2529,11 +2557,13 @@ public class DialogToListChangesOfFiles extends JDialog {
 			tableID1 = getSortKeyAccordingToID("TableID", newElementWork.getAttribute("TableID"), systemElementNew);
 			tableCRUD1 = getTableCRUD(newElementWork);
 			isNotFound = true;
+
 			for (int j = 0; j < oldElementList.getLength(); j++) {
 				oldElementWork = (org.w3c.dom.Element)oldElementList.item(j);
 				tableID2 = getSortKeyAccordingToID("TableID", oldElementWork.getAttribute("TableID"), systemElementOld);
 				tableCRUD2 = getTableCRUD(oldElementWork);
-				if (tableID1.equals(tableID2) && tableCRUD1.equals(tableCRUD2)) {
+				if (tableID1.equals(tableID2) && tableCRUD1.equals(tableCRUD2)
+						&& oldElementWork.getAttribute("Position").equals(newElementWork.getAttribute("Position"))) {
 
 					elementLabel = functionLabel + res.getString("DialogToListChangesOfFiles20")
 							+ elementName + " " + tableID1 + "(" + tableCRUD1 + ")";

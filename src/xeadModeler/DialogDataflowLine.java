@@ -47,7 +47,7 @@ public class DialogDataflowLine extends JDialog {
 	private static ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
 	private JPanel panelMain = new JPanel();
 	private JLabel jLabel1 = new JLabel();
-	private JComboBox jComboBoxNode1 = new JComboBox();
+	private JComboBox<String> jComboBoxNode1 = new JComboBox<String>();
 	private ButtonGroup buttonGroupArrowStyle = new ButtonGroup();
 	private JLabel jLabel2 = new JLabel();
 	private JPanel jPanel1 = new JPanel();
@@ -85,7 +85,7 @@ public class DialogDataflowLine extends JDialog {
 	private KanjiTextField jTextFieldNameExt = new KanjiTextField();
 	private JLabel jLabel4 = new JLabel();
 	private JLabel jLabel5 = new JLabel();
-	private JComboBox jComboBoxNode2 = new JComboBox();
+	private JComboBox<String> jComboBoxNode2 = new JComboBox<String>();
 	private boolean buttonOKIsPressed = false;
 	private Modeler frame_;
 	private JLabel jLabel6 = new JLabel();

@@ -35,8 +35,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
@@ -64,11 +66,11 @@ public class DialogDocuments extends JDialog {
 	private JRadioButton jRadioButtonFunction = new JRadioButton();
 	private ButtonGroup buttonGroup = new ButtonGroup();
 	private SortableXeadNodeComboBoxModel comboBoxModelSubsystems = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxSubsystems = new JComboBox(comboBoxModelSubsystems);
+	private JComboBox<String> jComboBoxSubsystems = new JComboBox<String>(comboBoxModelSubsystems);
 	private SortableXeadNodeComboBoxModel comboBoxModelFunctions = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxFunctions = new JComboBox(comboBoxModelFunctions);
+	private JComboBox<String> jComboBoxFunctions = new JComboBox<String>(comboBoxModelFunctions);
 	private SortableXeadNodeComboBoxModel comboBoxModelTables = new SortableXeadNodeComboBoxModel();
-	private JComboBox jComboBoxTables = new JComboBox(comboBoxModelTables);
+	private JComboBox<String> jComboBoxTables = new JComboBox<String>(comboBoxModelTables);
 	private JTextArea jTextArea1 = new JTextArea();
 	private JButton jButtonStart = new JButton();
 	private JProgressBar jProgressBar = new JProgressBar();
@@ -94,6 +96,7 @@ public class DialogDocuments extends JDialog {
 	private int countOfElementArray1 = -1;
 	private XeadNode[] elementArray2 = new XeadNode[1000];
 	private int countOfElementArray2 = -1;
+	private String errorFunctionNames = "";
 
 	private XSSFFont fontTitle = null;
 	private XSSFFont fontHeader1 = null;
@@ -220,7 +223,8 @@ public class DialogDocuments extends JDialog {
 		XeadNode node;
 		fileName_ = fileName;
 		xlsFileName = "";
-
+		errorFunctionNames = "";
+		
 		comboBoxModelSubsystems.removeAllElements();
 		subsystemList = frame_.domDocument.getElementsByTagName("Subsystem");
 		for (int i = 0; i < subsystemList.getLength(); i++) {
@@ -369,7 +373,7 @@ public class DialogDocuments extends JDialog {
 			} else {
 				if (countOfDefinitions > 0) {
 					countOfDefinitions = countOfDefinitions - countOfErrors;
-					JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName + "\n" + countOfErrors + res.getString("DialogDocuments12"));
+					JOptionPane.showMessageDialog(this.getContentPane(), countOfDefinitions + res.getString("DialogDocuments11") + "\n" + xlsFileName + "\n" + countOfErrors + res.getString("DialogDocuments12") + errorFunctionNames);
 				} else {
 					JOptionPane.showMessageDialog(null, "No elements found to be processed.");
 				}
@@ -516,6 +520,7 @@ public class DialogDocuments extends JDialog {
 			setupTableKeyDetails(sheet, element);
 		}
 		catch (Exception ex) {
+			errorFunctionNames = errorFunctionNames + "\n" + "(" + element.getAttribute("SortKey") + ")" + element.getAttribute("Name") + "\n" + ex.getMessage() + "\n" + ex.toString();
 			countOfErrors++;
 		}
 	}
